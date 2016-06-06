@@ -1,4 +1,4 @@
 .DS_Store
 *.pyc
 pathtoassets.js
-node_models/*
+node_modules/*
