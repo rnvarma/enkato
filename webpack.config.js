@@ -6,15 +6,15 @@ var pathtoassets = require('./pathtoassets')
 module.exports = {
   context: __dirname,
 
-  entry: pathtoassets + '/js/index', // entry point of our app. assets/js/index.js should require other js modules and dependencies it needs
+  entry: './assets/js/index', // entry point of our app. assets/js/index.js should require other js modules and dependencies it needs
 
   output: {
-      path: path.resolve(pathtoassets + '/bundles/'),
+      path: path.resolve(pathtoassets + '/assets/bundles/'),
       filename: "[name]-[hash].js",
   },
 
   plugins: [
-    new BundleTracker({filename: './webpack-stats.json'}),
+    new BundleTracker({filename: pathtoassets + '/webpack-stats.json'}),
   ],
 
   module: {
