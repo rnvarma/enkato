@@ -4,3 +4,4 @@ django-webpack-loader==0.3.0
 djangorestframework==3.3.3
 Markdown==2.6.6
 wheel==0.26.0
+django-shortuuidfield==0.1.3
