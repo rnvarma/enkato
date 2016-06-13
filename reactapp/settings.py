@@ -20,6 +20,7 @@ TEMPLATES_DIR = os.path.join(ASSETS_DIR, 'templates')
 HOME_DIR = os.path.join(BASE_DIR, 'home')
 BACKEND_DIR = os.path.join(BASE_DIR, 'backend')
 AUTH_DIR = os.path.join(BASE_DIR, 'authentication')
+CLASS_DIR = os.path.join(BASE_DIR, 'classroom')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -46,7 +47,8 @@ INSTALLED_APPS = [
     'webpack_loader',
     'home',
     'backend',
-    'authentication'
+    'authentication',
+    'classroom'
 ]
 
 MIDDLEWARE_CLASSES = [

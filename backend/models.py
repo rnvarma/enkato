@@ -32,7 +32,7 @@ class CustomUser(models.Model):
 class Classroom(models.Model):
     uuid = ShortUUIDField(editable=False)
     timestamp = models.DateTimeField(default=timezone.now) # when created
-    creator = models.ManyToManyField(CustomUser, related_name="created_classrooms")
+    creators = models.ManyToManyField(CustomUser, related_name="created_classrooms")
     tas = models.ManyToManyField(CustomUser, related_name="ta_classrooms")
     students = models.ManyToManyField(CustomUser, related_name="student_classrooms")
     name = models.CharField(max_length=100, default="")

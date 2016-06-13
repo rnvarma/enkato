@@ -8,8 +8,11 @@ module.exports = {
 
   entry: {
     homepage: './assets/js/home/homepage/HomePage.jsx',
+    educator: './assets/js/home/creator/Educator.jsx',
     register: './assets/js/authentication/register/Register.jsx',
-    login: './assets/js/authentication/login/Login.jsx'
+    login: './assets/js/authentication/login/Login.jsx',
+    createclass: './assets/js/classroom/createclass/CreateClass.jsx',
+    classroom: './assets/js/classroom/classroom/Classroom.jsx'
   },
 
   output: {
