@@ -5,4 +5,4 @@ from django.http import JsonResponse
 
 class HomePage(View):
     def get(self, request):
-        return render(request, 'index.html')
+        return render(request, 'home/splashpage.html')

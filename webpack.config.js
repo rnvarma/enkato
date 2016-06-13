@@ -6,7 +6,10 @@ var pathtoassets = require('./pathtoassets')
 module.exports = {
   context: __dirname,
 
-  entry: './assets/js/index', // entry point of our app. assets/js/index.js should require other js modules and dependencies it needs
+  entry: {
+    homepage: './assets/js/home/homepage/HomePage.jsx',
+    register: './assets/js/authentication/register/Register.jsx'
+  },
 
   output: {
       path: path.resolve(pathtoassets + '/assets/bundles/'),
