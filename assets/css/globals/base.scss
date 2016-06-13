@@ -1,0 +1,10 @@
+@import 'colors.scss';
+
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.form-control {
+    border-radius: 0px;
+    border: 1px solid $form-control-border-color;
+}
