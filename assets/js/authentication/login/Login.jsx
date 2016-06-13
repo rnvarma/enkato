@@ -8,7 +8,7 @@ var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
 
 var NavBar = require('js/globals/NavBar');
-var RegistrationForm = require('js/authentication/register/RegistrationForm');
+var LoginForm = require('js/authentication/login/LoginForm');
 
 function getCookie(name) {
   var cookieValue = null;
@@ -26,10 +26,10 @@ function getCookie(name) {
   return cookieValue;
 }
 
-var Register = React.createClass({
-    onFormSubmit: function(data) {
+var Login = React.createClass({
+    onFormSubmit: function (data) {
         $.ajax({
-          url: "/register",
+          url: "/login",
           dataType: 'json',
           type: 'POST',
           data: data,
@@ -40,7 +40,7 @@ var Register = React.createClass({
           success: function(data) {
             console.log(data);
             if (data.status) {
-                window.location.href = "/login";
+                window.location.href = "/";
             } else {
                 console.log("sad face");
             }
@@ -53,11 +53,11 @@ var Register = React.createClass({
     render: function() {
         return (
             <div>
-                <NavBar active="register"/>
+                <NavBar active="login" />
                 <Row>
                     <Col lg={4} lgOffset={4} md={6} mdOffset={3} sm={8} smOffset={2} xs={10} xsOffset={1}>
-                        <h1 className="page-header">Register</h1>
-                        <RegistrationForm onFormSubmit={this.onFormSubmit} />
+                        <h1 className="page-header">Login</h1>
+                        <LoginForm onFormSubmit={this.onFormSubmit} />
                     </Col>
                 </Row>
             </div>
@@ -65,4 +65,4 @@ var Register = React.createClass({
     }
 })
 
-ReactDOM.render(<Register />, document.getElementById('page-anchor'))
+ReactDOM.render(<Login />, document.getElementById('page-anchor'))

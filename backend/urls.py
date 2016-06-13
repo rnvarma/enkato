@@ -4,5 +4,5 @@ from django.contrib import admin
 from backend.views import *
 
 urlpatterns = [
-    # url(r'^1/allcomments$', AllComments.as_view())
+    url(r'^1/userdata$', UserData.as_view())
 ]
