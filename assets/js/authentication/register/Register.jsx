@@ -16,7 +16,8 @@ var Register = React.createClass({
             <div>
                 <NavBar active="register"/>
                 <Row>
-                    <Col md={6} mdOffset={3} sm={8} smOffset={2} xs={10} xsOffset={1}>
+                    <Col lg={4} lgOffset={4} md={6} mdOffset={3} sm={8} smOffset={2} xs={10} xsOffset={1}>
+                        <h1 className="page-header">Register</h1>
                         <RegistrationForm />
                     </Col>
                 </Row>

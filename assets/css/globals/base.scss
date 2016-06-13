@@ -1,10 +1,31 @@
 @import 'colors.scss';
 
 body {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .form-control {
     border-radius: 0px;
     border: 1px solid $form-control-border-color;
+}
+
+.btn {
+    border-radius: 0px;
+    padding: 10px 12px;
+    min-width: 160px;
+    font-size: 14px;
+
+    &:focus {
+        outline: 0 !important;
+    }
+
+    &:active {
+        outline: 0 !important;
+    }
+}
+
+.btn-default {
+    background-color: $yn-green;
+    color: white;
+    text-transform: uppercase;
 }

@@ -13,18 +13,45 @@ var ControlLabel = require('react-bootstrap').ControlLabel;
 var InputGroup = require('react-bootstrap').InputGroup;
 
 module.exports = React.createClass({
+    getInitialState: function() {
+        return {
+            first_name: '',
+            last_name: '',
+            email: '',
+            user_name: '',
+            password: ''
+        }
+    },
+    onFirstNameChange: function(e) {
+        this.setState({first_name: e.target.value})
+    },
+    onLastNameChange: function(e) {
+        this.setState({first_name: e.target.value})
+    },
+    onEmailChange: function(e) {
+        this.setState({first_name: e.target.value})
+    },
+    onUserNameChange: function(e) {
+        this.setState({first_name: e.target.value})
+    },
+    onPasswordChange: function(e) {
+        this.setState({first_name: e.target.value})
+    },
+    onSubmit: function(e) {
+        e.preventDefault();
+    },
     render: function() {
         return (
-            <Form horizontal>
+            <Form horizontal onSubmit={this.onSubmit}>
                 <FormGroup controlId="first-name">
                     <Col componentClass={ControlLabel} sm={2}>
                         First Name
                     </Col>
                     <Col sm={10}>
                         <InputGroup>
-                            <FormControl type="text" placeholder="Your first name..." />
+                            <FormControl onChange={this.onNameChange} type="text" placeholder="First Name" />
                             <InputGroup.Addon>
-                                <FontAwesome name='envelope' />
+                                <FontAwesome name='pencil' />
                             </InputGroup.Addon>
                         </InputGroup>
                     </Col>
@@ -34,7 +61,12 @@ module.exports = React.createClass({
                         Last Name
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="text" placeholder="Your last name..." />
+                        <InputGroup>
+                            <FormControl type="text" placeholder="Last Name" />
+                            <InputGroup.Addon>
+                                <FontAwesome name='pencil' />
+                            </InputGroup.Addon>
+                        </InputGroup>
                     </Col>
                 </FormGroup>
                 <FormGroup controlId="user-name">
@@ -42,7 +74,12 @@ module.exports = React.createClass({
                         User Name
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="text" placeholder="Pick a username..." />
+                        <InputGroup>
+                            <FormControl type="text" placeholder="User Name" />
+                            <InputGroup.Addon>
+                                <FontAwesome name='user' />
+                            </InputGroup.Addon>
+                        </InputGroup>
                     </Col>
                 </FormGroup>
                 <FormGroup controlId="email">
@@ -50,15 +87,33 @@ module.exports = React.createClass({
                         Email
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="email" placeholder="Any valid email..." />
+                        <InputGroup>
+                            <FormControl type="text" placeholder="Email" />
+                            <InputGroup.Addon>
+                                <FontAwesome name='envelope' />
+                            </InputGroup.Addon>
+                        </InputGroup>
                     </Col>
                 </FormGroup>
                 <FormGroup controlId="password">
                     <Col componentClass={ControlLabel} sm={2}>
-                        First Name
+                        Password
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="password" placeholder="Your password..." />
+                        <InputGroup>
+                            <FormControl type="text" placeholder="Password" />
+                            <InputGroup.Addon>
+                                <FontAwesome name='lock' />
+                            </InputGroup.Addon>
+                        </InputGroup>
+                    </Col>
+                </FormGroup>
+
+                <FormGroup>
+                    <Col sm={10} smOffset={2}>
+                        <Button type="submit">
+                            Submit
+                        </Button>
                     </Col>
                 </FormGroup>
             </Form>
