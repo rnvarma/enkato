@@ -4,7 +4,6 @@ var React = require('react')
 
 module.exports = React.createClass({
     render: function() {
-        console.log(this.props)
         var thumbnails = this.props.images;
         var i = 0;
         var t_html = thumbnails.map(function(thumbnail) {

@@ -37,9 +37,10 @@ fake_data = {
       description: 'This is a short description of what Unit 2: Molecular Biology is about. Amazon\'s office is really old-school and I really need some more caffeine',
       num_videos: 3,
       order: 1,
-      video: [
+      videos: [
         {
           name: 'The Mitochondria is the Power House of the Cell',
+
           creator: {
             username: 'Photo Synthesis',
             user_id: 2
@@ -47,7 +48,8 @@ fake_data = {
           duration: 670,
           upload_time: '',
           num_views: 6,
-          thumnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg"
+          thumbnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg",
+          order: 1
         }, {
           name: 'The Mitochondria is the Power House of the Cell',
           creator: {
@@ -57,7 +59,8 @@ fake_data = {
           duration: 670,
           upload_time: '',
           num_views: 6,
-          thumnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg"
+          thumbnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg",
+          order: 2
         }, {
           name: 'The Mitochondria is the Power House of the Cell',
           creator: {
@@ -67,7 +70,8 @@ fake_data = {
           duration: 670,
           upload_time: '',
           num_views: 6,
-          thumnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg"
+          thumbnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg",
+          order: 3
         } 
       ]
     }, {
@@ -85,7 +89,8 @@ fake_data = {
           duration: 670,
           upload_time: '',
           num_views: 6,
-          thumnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg"
+          thumbnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg",
+          order: 1
         }, {
           name: 'The Mitochondria is the Power House of the Cell',
           creator: {
@@ -95,7 +100,8 @@ fake_data = {
           duration: 670,
           upload_time: '',
           num_views: 6,
-          thumnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg"
+          thumbnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg",
+          order: 2
         }, {
           name: 'The Mitochondria is the Power House of the Cell',
           creator: {
@@ -105,14 +111,16 @@ fake_data = {
           duration: 670,
           upload_time: '',
           num_views: 6,
-          thumnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg"
+          thumbnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg",
+          order: 3
         } 
       ]
     }, {
       name: 'Evolution',
       description: 'This is a short description of what Unit 2: Molecular Biology is about. Amazon\'s office is really old-school and I really need some more caffeine',
       num_videos: 12,
-      order: 3
+      order: 3,
+      videos: []
     }, {
       name: 'Molecular Biology',
       description: 'This is a short description of what Unit 2: Molecular Biology is about. Amazon\'s office is really old-school and I really need some more caffeine',
@@ -128,7 +136,8 @@ fake_data = {
           duration: 670,
           upload_time: '',
           num_views: 6,
-          thumnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg"
+          thumbnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg",
+          order: 1
         }, {
           name: 'The Mitochondria is the Power House of the Cell',
           creator: {
@@ -138,7 +147,8 @@ fake_data = {
           duration: 670,
           upload_time: '',
           num_views: 6,
-          thumnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg"
+          thumbnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg",
+          order: 2
         }, {
           name: 'The Mitochondria is the Power House of the Cell',
           creator: {
@@ -148,14 +158,16 @@ fake_data = {
           duration: 670,
           upload_time: '',
           num_views: 6,
-          thumnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg"
+          thumbnail: "http://b.vimeocdn.com/ts/487/543/48754357_200.jpg",
+          order: 3
         } 
       ]
     }, {
       name: 'Evolution',
       description: 'This is a short description of what Unit 2: Molecular Biology is about. Amazon\'s office is really old-school and I really need some more caffeine',
       num_videos: 12,
-      order: 5
+      order: 5,
+      videos: []
     }
   ],
   num_tas : 2,
@@ -187,7 +199,6 @@ var Classroom = React.createClass({
         // });
     },
     render: function() {
-        console.log(this.state)
         return (
             <Row>
                 <NavBar />

@@ -11,8 +11,10 @@
         cursor: pointer;
     }
 
-    .title {
-        font-weight: 800;
+    &.active {
+        .title {
+            font-weight: 800;
+        }
     }
 
     .description {

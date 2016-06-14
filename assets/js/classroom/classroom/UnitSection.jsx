@@ -27,7 +27,9 @@ module.exports = React.createClass({
                         changeActiveUnit={this.changeActiveUnit}/>
                 </Col>
                 <Col md={6} sm={6}>
-                    <UnitVideoList data={this.props.data} />
+                    <UnitVideoList
+                        data={this.props.data}
+                        active={this.state.active}/>
                 </Col>
                 <Col md={3} sm={3}>
                     <QuestionArea data={this.props.data} />

@@ -22,7 +22,7 @@ module.exports = React.createClass({
                             <FontAwesome name='book' />
                         </div>
                         <div className="text">
-                            {this.props.data.num_tas} units
+                            {this.props.data.num_units} units
                         </div>
                     </div>
                     <div className="stat">
@@ -30,7 +30,7 @@ module.exports = React.createClass({
                             <FontAwesome name='youtube-play' />
                         </div>
                         <div className="text">
-                            {this.props.data.num_tas} videos
+                            {this.props.data.num_videos} videos
                         </div>
                     </div>
                 </div>
