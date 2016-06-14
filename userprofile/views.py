@@ -5,5 +5,4 @@ from django.http import JsonResponse
 
 class LoadProfile(View):
     def get(self, request):
-        print("yay")
         return render(request, 'userprofile/profile.html')

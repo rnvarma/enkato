@@ -12,7 +12,7 @@ var Button = require('react-bootstrap').Button;
 var ControlLabel = require('react-bootstrap').ControlLabel;
 var InputGroup = require('react-bootstrap').InputGroup;
 
-var internationalCollegeList = require('js/userprofile/profile_forms/collegeList');
+//var internationalCollegeList = require('js/userprofile/profile_forms/collegeList');
 
 module.exports = React.createClass({
     getInitialState: function() {

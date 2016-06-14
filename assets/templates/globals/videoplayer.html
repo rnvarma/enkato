@@ -1,0 +1,12 @@
+{% extends 'globals/base.html' %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}Youniversity{% endblock %}
+
+{% block content %}
+    <div id="page-anchor"></div>
+{% endblock %}
+
+{% block js %}
+    {% render_bundle 'videoplayer' %}
+{% endblock %}
