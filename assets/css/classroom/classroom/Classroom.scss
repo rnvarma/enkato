@@ -1,0 +1,13 @@
+@import '../../globals/colors.scss';
+
+body {
+    background-color: $bg-grey;
+}
+
+.classroom-page-container {
+    background-color: white;
+}
+
+.content {
+    margin: 0 -15px;
+}
