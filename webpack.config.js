@@ -8,7 +8,8 @@ module.exports = {
 
   entry: {
     homepage: './assets/js/home/homepage/HomePage.jsx',
-    register: './assets/js/authentication/register/Register.jsx'
+    register: './assets/js/authentication/register/Register.jsx',
+    profile: './assets/js/userprofile/profile/Profile.jsx',
   },
 
   output: {

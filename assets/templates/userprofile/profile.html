@@ -1,0 +1,10 @@
+{% extends 'globals/base.html' %}
+{% load render_bundle from webpack_loader %}
+
+{% block content %}
+    <div id="page-anchor"></div>
+{% endblock %}
+
+{% block js %}
+    {% render_bundle 'profile' %}
+{% endblock %}

@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^', include('home.urls')),
     url(r'^', include('authentication.urls')),
     url(r'^', include('backend.urls')),
+    url(r'^', include('userprofile.urls')),
 ]
