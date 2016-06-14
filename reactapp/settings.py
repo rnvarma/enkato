@@ -45,10 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'webpack_loader',
+    'youniversity',
     'home',
     'backend',
     'authentication',
-    'classroom'
+    'classroom',
 ]
 
 MIDDLEWARE_CLASSES = [
