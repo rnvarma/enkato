@@ -26,6 +26,8 @@ module.exports = React.createClass({
 })
 """
 
+importCommand = "var %s = require('js/%s/%s/%s');"
+
 class Command(BaseCommand):
     help = "create a new react component -- initializes jsx + scss"
 
@@ -47,6 +49,7 @@ class Command(BaseCommand):
         jsx_file = open(jsx_path, "w+")
         jsx_file.write(baseJSX % (options["name"], camelCaseName, options["name"]))
         jsx_file.close()
+        print importCommand % (options["name"], options["app"], options["endpoint"], options["name"])
         
 
 

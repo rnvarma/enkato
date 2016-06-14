@@ -36,6 +36,7 @@ fake_data = {
       name: 'Molecular Biology',
       description: 'This is a short description of what Unit 2: Molecular Biology is about. Amazon\'s office is really old-school and I really need some more caffeine',
       num_videos: 3,
+      order: 1,
       video: [
         {
           name: 'The Mitochondria is the Power House of the Cell',
@@ -73,6 +74,7 @@ fake_data = {
       name: 'Molecular Biology',
       description: 'This is a short description of what Unit 2: Molecular Biology is about. Amazon\'s office is really old-school and I really need some more caffeine',
       num_videos: 3,
+      order: 2,
       videos: [
         {
           name: 'The Mitochondria is the Power House of the Cell',
@@ -109,11 +111,13 @@ fake_data = {
     }, {
       name: 'Evolution',
       description: 'This is a short description of what Unit 2: Molecular Biology is about. Amazon\'s office is really old-school and I really need some more caffeine',
-      num_videos: 12
+      num_videos: 12,
+      order: 3
     }, {
       name: 'Molecular Biology',
       description: 'This is a short description of what Unit 2: Molecular Biology is about. Amazon\'s office is really old-school and I really need some more caffeine',
       num_videos: 3,
+      order: 4,
       videos: [
         {
           name: 'The Mitochondria is the Power House of the Cell',
@@ -150,7 +154,8 @@ fake_data = {
     }, {
       name: 'Evolution',
       description: 'This is a short description of what Unit 2: Molecular Biology is about. Amazon\'s office is really old-school and I really need some more caffeine',
-      num_videos: 12
+      num_videos: 12,
+      order: 5
     }
   ],
   num_tas : 2,
