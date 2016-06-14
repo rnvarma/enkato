@@ -24,3 +24,7 @@ class CreateClass(View):
 class ClassroomPage(View):
     def get(self, request, c_id):
         return render(request, 'classroom/classroom.html', {'c_id': c_id})
+
+class UploadVideoToClass(View):
+    def get(self, request, c_id):
+        return render(request, 'classroom/upload_video.html', {'c_id': c_id})

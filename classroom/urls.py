@@ -5,5 +5,6 @@ from classroom.views import *
 
 urlpatterns = [
     url(r'^createclass$', CreateClass.as_view()),
-    url(r'^c/(?P<c_id>[a-zA-Z0-9_.-]+)', ClassroomPage.as_view())
+    url(r'^c/(?P<c_id>[a-zA-Z0-9_.-]+)$', ClassroomPage.as_view()),
+    url(r'^c/(?P<c_id>[a-zA-Z0-9_.-]+)/uploadvideo$', UploadVideoToClass.as_view())
 ]

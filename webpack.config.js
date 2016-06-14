@@ -12,7 +12,8 @@ module.exports = {
     register: './assets/js/authentication/register/Register.jsx',
     login: './assets/js/authentication/login/Login.jsx',
     createclass: './assets/js/classroom/createclass/CreateClass.jsx',
-    classroom: './assets/js/classroom/classroom/Classroom.jsx'
+    classroom: './assets/js/classroom/classroom/Classroom.jsx',
+    uploadvideo: './assets/js/classroom/uploadvideo/UploadVideo.jsx'
   },
 
   output: {

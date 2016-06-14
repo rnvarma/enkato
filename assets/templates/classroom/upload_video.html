@@ -1,13 +1,12 @@
 {% extends 'globals/base.html' %}
 {% load render_bundle from webpack_loader %}
 
-{% block title %}Classroom - Youniversity{% endblock %}
+{% block title %}Upload Video - Youniversity{% endblock %}
 
 {% block content %}
     <div id="page-anchor"></div>
-    <div type="hidden" id="c_id" data-cid="{{ c_id }}"></div>
 {% endblock %}
 
 {% block js %}
-    {% render_bundle 'classroom' %}
+    {% render_bundle 'uploadvideo' %}
 {% endblock %}
