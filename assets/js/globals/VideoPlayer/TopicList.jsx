@@ -23,11 +23,19 @@ var TopicNode = React.createClass({
         this.props.handleTopicClick(this.props.id)
     },
     render:function(){
-        return(
-            <div className="topicNode" onClick={this.handleTopicClick}>
-                {this.props.name}
-            </div>
-        )
+        if(this.props.isCurrentTopic){
+            return(
+                <div id="selectedTopicNode" className="topicNode" onClick={this.handleTopicClick}>
+                    {this.props.name}
+                </div>
+            )
+        } else {
+            return(
+                <div className="topicNode" onClick={this.handleTopicClick}>
+                    {this.props.name}
+                </div>
+            )
+        }
     }
 });
 

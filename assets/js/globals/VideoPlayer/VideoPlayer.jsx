@@ -29,7 +29,7 @@ var topicObjList = [
         name: "How Dynamic Web Servers Work",
         time: 40,
         id: 2,
-        isCurrentTopic: false,
+        isCurrentTopic: true,
     },
     {
         name: "Hard to Learn with Guide",
@@ -42,11 +42,92 @@ var topicObjList = [
         time: 100,
         id: 4,
         isCurrentTopic: false,
+    },
+    {
+        name: "Django knowledge extends to other aspects of life",
+        time: 2,
+        id: 5,
+        isCurrentTopic: false,
+    },
+    {
+        name: "How Dynamic Web Servers Work",
+        time: 40,
+        id: 6,
+        isCurrentTopic: false,
+    },
+    {
+        name: "Hard to Learn with Guide",
+        time: 60,
+        id: 7,
+        isCurrentTopic: false,
+    },
+    {
+        name: "djangoproject.com",
+        time: 100,
+        id: 8,
+        isCurrentTopic: false,
+    },
+    {
+        name: "What Django is",
+        time: 2,
+        id: 9,
+        isCurrentTopic: false,
+    },
+    {
+        name: "How Dynamic Web Servers Work",
+        time: 40,
+        id: 10,
+        isCurrentTopic: false,
+    },
+    {
+        name: "Hard to Learn with Guide",
+        time: 60,
+        id: 11,
+        isCurrentTopic: false,
+    },
+    {
+        name: "djangoproject.com",
+        time: 100,
+        id: 12,
+        isCurrentTopic: false,
+    },
+    {
+        name: "Django knowledge extends to other aspects of life",
+        time: 2,
+        id: 13,
+        isCurrentTopic: false,
+    },
+    {
+        name: "How Dynamic Web Servers Work",
+        time: 40,
+        id: 14,
+        isCurrentTopic: false,
+    },
+    {
+        name: "Hard to Learn with Guide",
+        time: 60,
+        id: 15,
+        isCurrentTopic: false,
+    },
+    {
+        name: "djangoproject.com",
+        time: 100,
+        id: 16,
+        isCurrentTopic: false,
     }
 ]
 
 
-
+function updateCurrentTopic(targetKey, topicList){
+    for(var i=0; i<topicList.length; i++){
+        if(topicList[i].id == targetKey){
+            topicList[i].isCurrentTopic = true;
+        } else {
+            topicList[i].isCurrentTopic = false;
+        }
+    }
+    return topicList;
+}
 
 var VideoPlayer = React.createClass({
     loadCommentsFromServer: function(){
@@ -58,12 +139,15 @@ var VideoPlayer = React.createClass({
     componentDidMount: function() {
         this.loadCommentsFromServer();
     },
-
-    
     handleTopicClick:function(targetKey){
-        console.log(targetKey);
-    },
+        //First, set the new currentTopic
+        this.setState({
+            topicObjList:updateCurrentTopic(targetKey, this.state.topicObjList)
+        })
 
+        //Second, Make API call to update video state
+
+    },
     render: function() {
         return ( 
             <Row>
