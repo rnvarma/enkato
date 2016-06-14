@@ -1,14 +1,15 @@
 require('bootstrap-loader');
-require("css/globals/base.scss")
+require("css/globals/base.scss");
 
 var React = require('react')
 var ReactDOM = require('react-dom')
 
 var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
+var Button = require('react-bootstrap').Button;
 
 var NavBar = require('js/globals/NavBar');
-var RegistrationForm = require('js/authentication/register/RegistrationForm');
+var CreateClassForm = require('js/classroom/createclass/CreateClassForm');
 
 function getCookie(name) {
   var cookieValue = null;
@@ -26,10 +27,10 @@ function getCookie(name) {
   return cookieValue;
 }
 
-var Register = React.createClass({
+var Create = React.createClass({
     onFormSubmit: function(data) {
         $.ajax({
-          url: "/register",
+          url: "/createclass",
           dataType: 'json',
           type: 'POST',
           data: data,
@@ -40,7 +41,7 @@ var Register = React.createClass({
           success: function(data) {
             console.log(data);
             if (data.status) {
-                window.location.href = "/login";
+                window.location.href = "/c/" + data.c_id;
             } else {
                 console.log("sad face");
             }
@@ -53,11 +54,11 @@ var Register = React.createClass({
     render: function() {
         return (
             <div>
-                <NavBar active="register"/>
+                <NavBar />
                 <Row>
-                    <Col lg={4} lgOffset={4} md={6} mdOffset={3} sm={8} smOffset={2} xs={10} xsOffset={1}>
-                        <h1 className="page-header">Register</h1>
-                        <RegistrationForm onFormSubmit={this.onFormSubmit} />
+                    <Col md={6} mdOffset={3} sm={8} smOffset={2} xs={10} xsOffset={1}>
+                        <h1 className="page-header">Create a Classroom</h1>
+                        <CreateClassForm onFormSubmit={this.onFormSubmit}/>
                     </Col>
                 </Row>
             </div>
@@ -65,4 +66,4 @@ var Register = React.createClass({
     }
 })
 
-ReactDOM.render(<Register />, document.getElementById('page-anchor'))
+ReactDOM.render(<Create />, document.getElementById('page-anchor'))

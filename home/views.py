@@ -6,3 +6,7 @@ from django.http import JsonResponse
 class HomePage(View):
     def get(self, request):
         return render(request, 'home/splashpage.html')
+
+class EducatorPage(View):
+    def get(self, request):
+        return render(request, 'home/educator.html')
