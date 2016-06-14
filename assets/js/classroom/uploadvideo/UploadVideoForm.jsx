@@ -26,6 +26,7 @@ module.exports = React.createClass({
     },
     onSubmit: function(e) {
         e.preventDefault();
+        this.props.onFormSubmit(this.state);
     },
     render: function() {
         return (
