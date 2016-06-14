@@ -1,5 +1,11 @@
+@import '../../globals/mixins.scss';
 
 .fourImagePanel {
+
+    @include respond-to(xsmall) {
+        margin: -2%;
+    }
+
     .imageContainer {
         display: inline;
         

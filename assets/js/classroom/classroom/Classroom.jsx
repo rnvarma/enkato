@@ -25,6 +25,9 @@ fake_data = {
     {
       username: 'rvarma',
       user_id: 1
+    }, {
+      username: 'ashleyhlai',
+      user_id: 2
     }
   ],
   description: 'This is a general introduction to biology. You should expect to learn so many things from this introductory course.',

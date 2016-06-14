@@ -3,6 +3,10 @@
 .classInfo {
     font-size: 16px; 
 
+    @include respond-to(xsmall) {
+        margin-top: 20px;
+    }
+
     .name {
         font-weight: 800;
         font-size: 24px;
@@ -10,17 +14,17 @@
 
     .creators {
         margin-bottom: 10px;
-        color: black;
     }
 
     .creatorName {
         font-weight: 800;
+        color: black;
     }
 
     .description {
         @include respond-to(xsmall) {
             width: 100%;
-        }
+        } 
         @include respond-to(small) {
             width: 100%;
         }
@@ -28,7 +32,7 @@
             width: 75%;
         }
         @include respond-to(large) {
-            width: 50%;
+            width: 60%;
         }
     }
 }

@@ -7,7 +7,7 @@ module.exports = React.createClass({
         var creators = this.props.data.creators.map(function(user) {
             return (
                 <a key={user.user_id} className="creatorName" href={"/userprofile/" + user.user_id}>
-                    {user.username},
+                    {user.username}, 
                 </a>
             )
         })
