@@ -1,0 +1,23 @@
+
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.unitButton {
+    padding: 15px;
+    border: 1px solid $bg-grey;
+
+    &:hover {
+        background-color: $hover-grey;
+        cursor: pointer;
+    }
+
+    &.active {
+        .title {
+            font-weight: 800;
+        }
+    }
+
+    .description {
+        margin-top: 5px;
+    }
+}
