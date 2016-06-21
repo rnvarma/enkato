@@ -1,0 +1,21 @@
+@import '../colors.scss';
+
+
+.controlBar{ 
+    height:10%;
+    width:100%;
+    background-color:$grey-control-bar-bg-color;
+    .playButton{
+        margin-left:35px;
+        margin-top:2vh;
+        color:white;
+        font-size:4vh;
+    }
+    .playButton:hover{
+        cursor:pointer;
+    } 
+    .videoTime{
+        color:white;
+        margin-left:15px;
+    }
+}

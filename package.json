@@ -8,7 +8,7 @@
   },
   "author": "rohan varma",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "babel": "^6.5.2",
     "babel-core": "^6.9.1",
     "babel-loader": "^6.2.4",
@@ -35,6 +35,38 @@
     "url-loader": "^0.5.7",
     "vimeo": "^1.2.0",
     "webpack": "^1.13.1",
-    "webpack-bundle-tracker": "0.0.93"
+    "webpack-bundle-tracker": "0.0.93",
+    "youtube-iframe": "^1.0.2"
+  },
+  "dependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-react": "^6.5.0",
+    "bootstrap-loader": "^1.0.10",
+    "bootstrap-sass": "^3.3.6",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
+    "fs": "0.0.2",
+    "graceful-fs": "^4.1.4",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "imports-loader": "^0.6.5",
+    "jquery": "^2.2.4",
+    "node-sass": "^3.7.0",
+    "postcss-loader": "^0.9.1",
+    "react": "^15.1.0",
+    "react-bootstrap": "^0.29.4",
+    "react-dom": "^15.1.0",
+    "react-fontawesome": "^1.1.0",
+    "resolve-url": "^0.2.1",
+    "resolve-url-loader": "^1.4.3",
+    "sass-loader": "^3.2.0",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "vimeo": "^1.2.0",
+    "webpack": "^1.13.1",
+    "webpack-bundle-tracker": "0.0.93",
+    "youtube-iframe": "^1.0.2"
   }
 }

@@ -1,5 +1,5 @@
 require('bootstrap-loader');
-require("css/globals/VideoPlayer")
+require("css/globals/VideoPlayer/TopicList")
 
 var React = require('react')
 var ReactDOM = require('react-dom')
@@ -20,7 +20,7 @@ var InputGroup = require('react-bootstrap').InputGroup;
 
 var TopicNode = React.createClass({
     handleTopicClick:function(){
-        this.props.handleTopicClick(this.props.id)
+        this.props.handleTopicClick(this.props.id, this.props.time)
     },
     render:function(){
         if(this.props.isCurrentTopic){

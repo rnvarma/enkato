@@ -1,5 +1,6 @@
 require('bootstrap-loader');
-require("css/globals/VideoPlayer")
+require("css/globals/VideoPlayer/Video")
+
 
 var React = require('react')
 var ReactDOM = require('react-dom')
@@ -18,9 +19,10 @@ var InputGroup = require('react-bootstrap').InputGroup;
 
 
 module.exports = React.createClass({
+    componentDidMount:function(){
+        this.props.initializePlayer();
+    },
     render:function(){
-        return(
-            <iframe src="https://player.vimeo.com/video/170644954" width="100%" height="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-        )
+        return this.props.renderVideo();
     }
 });

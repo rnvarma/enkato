@@ -1,39 +1,24 @@
-@import './mixins.scss';
-
-body{
-
-}
+@import '../mixins.scss';
+@import '../colors.scss';
 
 
-.topicButtonColumn{
-    height:100%;
-    background-color:#FFFFFF;
-}
-
-.video{
-    height:90%;
-}
-
-.videoNavigator{
-    background-color:green;
-    height:10%;
-}
-
-.topicList{
+.topicList{ 
     height:100%;
     overflow-y: scroll;
+    width:100%;
 }
 
 .topicNode{
     width:100%;
-    background-color:#FBFBFB;
-    border-color: #F7F7F7;
+    background-color:$grey-topic-button;
+    border-color: $grey-topic-button-section-bg;
     border-width:1px;
     border-style:solid;
     overflow: hidden;
     margin:2px;
     white-space: nowrap;
     text-overflow: ellipsis;
+    color:$grey-topic-button-text;
     @include respond-to(xsmall) {
         font-size:7vh;
         padding:1vh;
@@ -57,7 +42,7 @@ body{
 }
 
 .topicNode:hover{
-    background-color:#F3F3F3;
+    background-color:$grey-topic-button-section-bg-hover;
     cursor:pointer;
 }
 

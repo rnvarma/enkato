@@ -1,5 +1,6 @@
 {% extends 'globals/base.html' %}
 {% load render_bundle from webpack_loader %}
+{% load staticfiles %}
 
 {% block title %}Youniversity{% endblock %}
 
@@ -8,5 +9,8 @@
 {% endblock %}
 
 {% block js %}
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <!--script src="{% static 'js/globals/VideoPlayer/YoutubeAPIHandler.js' %}"></script-->
     {% render_bundle 'videoplayer' %}
 {% endblock %}
