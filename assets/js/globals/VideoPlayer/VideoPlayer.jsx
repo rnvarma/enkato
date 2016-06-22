@@ -5,9 +5,9 @@ var ReactDOM = require('react-dom')
 var TopicList = require('js/globals/videoPlayer/TopicList')
 var Video = require('js/globals/videoPlayer/Video')
 var ControlBar = require('js/globals/videoPlayer/ControlBar')
-var Player = require('js/globals/videoPlayer/Player')
-var YouTubeIframeLoader = require('youtube-iframe');
-
+var Player = require('js/globals/videoPlayer/Player');
+var Row = require('react-bootstrap').Row;
+var Col = require('react-bootstrap').Col;
 
 
 

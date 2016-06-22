@@ -2,6 +2,8 @@ require('bootstrap-loader');
 require("css/globals/VideoPlayer/Video")
 var React = require('react')
 var ReactDOM = require('react-dom')
+var YouTubeIframeLoader = require('youtube-iframe');
+
 var player;
 
 
@@ -13,18 +15,18 @@ function onPlayerStateChange(event) {
   console.log("onStateChange")
 }
 
-function getPlayer(){
-    return new YT.Player('player', {
-        height: '100%',
-        width: '100%',
-        videoId: 'EU8L9SMH8K0',
-        playerVars: { 'autoplay': 1, 'controls': 1 },
-        events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-            }
-        })
-}
+// function getPlayer(){
+//     return new YT.Player('player', {
+//         height: '100%',
+//         width: '100%',
+//         videoId: 'EU8L9SMH8K0',
+//         playerVars: { 'autoplay': 1, 'controls': 1 },
+//         events: {
+//             'onReady': onPlayerReady,
+//             'onStateChange': onPlayerStateChange
+//             }
+//         })
+// }
 
 module.exports = {
     /*
@@ -115,14 +117,28 @@ module.exports = {
         return player.setVolume(vol*100)
     },
 
+    componentDidMount: function() {
+        console.log("hey----------------------")
+        var loadPlayer = function(YT) {
+            console.log
+            player = new YT.Player('player', {
+                height: '100%',
+                width: '100%',
+                videoId: 'M7lc1UVf-VE',
+                autoplay: 1,
+            });
+        }
+        YouTubeIframeLoader.load(loadPlayer)
+    },
+
 
     initializePlayer:function(){
-        console.log("initializePlayer")
+        // console.log("initializePlayer")
 
-        setTimeout(function(){
-            player=getPlayer();
-            playerReady=true;
-        }, 1000)
+        // setTimeout(function(){
+        //     player=getPlayer();
+        //     playerReady=true;
+        // }, 1000)
 
     },
 
