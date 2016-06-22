@@ -9,8 +9,6 @@ var Player = require('js/globals/videoPlayer/Player');
 var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
 
-
-
 var topicObjList = [
     {
         name: "What Django is",
@@ -87,9 +85,9 @@ var VideoPlayer = React.createClass({
         this.setState({percentDone:0})
     },
     updateCurrentTime: function(){
-        var seconds = Math.round(Player.getCurrentTime())
+        var seconds = Math.round(this.state.Player.getCurrentTime())
         this.setState({currentTime:styleTime(seconds)})
-        var percentDone = (seconds/Player.getDuration())*100
+        var percentDone = (seconds / this.state.Player.getDuration())*100
         this.setState({percentDone:percentDone})
         this.setState({
             topicObjList:updateCurrentTopicOnTime(seconds, this.state.topicObjList)
@@ -101,6 +99,7 @@ var VideoPlayer = React.createClass({
             isPlaying:false, 
             currentTime:"0:00",
             percentDone:0,
+            Player: new Player('kDyJN7qQETA')
         };
     },
     componentDidMount: function() {
@@ -108,8 +107,8 @@ var VideoPlayer = React.createClass({
         setInterval(this.updateCurrentTime, this.props.pollInterval)
     },
     handleScrub: function(percentOfOne) {
-        var duration=Player.getDuration();
-        Player.seekTo(duration*percentOfOne)
+        var duration = this.state.Player.getDuration();
+        this.state.Player.seekTo(duration*percentOfOne)
     },
     handleTopicClick:function(targetKey, time){
         //First, set the new currentTopic
@@ -117,16 +116,16 @@ var VideoPlayer = React.createClass({
             topicObjList:updateCurrentTopicOnKey(targetKey, this.state.topicObjList)
         })
         //Second, Make API call to update video state
-        Player.seekTo(time)
+        this.state.Player.seekTo(time)
     },
     handlePlayPauseClick: function(){
         //Set the local state and make the API call
         if(this.state.isPlaying){
             this.setState({isPlaying:false});
-            Player.pause();
+            this.state.Player.pause();
         } else{
             this.setState({isPlaying:true})
-            Player.play();
+            this.state.Player.play();
         }
     },
     render: function() {
@@ -135,23 +134,19 @@ var VideoPlayer = React.createClass({
                 <Col className="topicButtonColumn" md={3}>
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
-                        handleTopicClick={this.handleTopicClick}
-                    />
+                        handleTopicClick={this.handleTopicClick}/>
                 </Col>
                 <Col md={9}>
                     <Video 
-                        renderVideo={Player.renderVideo} 
-                        initializePlayer={Player.initializePlayer}
-                    />
+                        renderVideo={this.state.Player.renderVideo}/>
                     <ControlBar 
                         isPlaying={this.state.isPlaying}
                         topicObjList={topicObjList}
-                        getDuration={Player.getDuration}
+                        getDuration={this.state.Player.getDuration}
                         handlePlayPauseClick={this.handlePlayPauseClick}
                         handleScrub={this.handleScrub}
                         currentTime={this.state.currentTime}
-                        percentDone={this.state.percentDone}
-                    />
+                        percentDone={this.state.percentDone}/>
                 </Col>
             </Row>
         )

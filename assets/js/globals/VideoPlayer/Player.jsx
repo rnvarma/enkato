@@ -4,46 +4,41 @@ var React = require('react')
 var ReactDOM = require('react-dom')
 var YouTubeIframeLoader = require('youtube-iframe');
 
-var player;
+module.exports = function (videoId) {
 
+    this.player;
+    this.videoId = videoId;
 
+    this.init = function(videoId) {
+        var this2 = this
+        var loadPlayer = function(YT) {
+            this2.player = new YT.Player('player', {
+                height: '100%',
+                width: '100%',
+                videoId: videoId,
+                autoplay: 1,
+            });
+            console.log(this2.player)
+        }
+        YouTubeIframeLoader.load(loadPlayer)
+    }
+    this.init(this.videoId)
 
-function onPlayerReady(event) {
-}
-
-function onPlayerStateChange(event) {
-  console.log("onStateChange")
-}
-
-// function getPlayer(){
-//     return new YT.Player('player', {
-//         height: '100%',
-//         width: '100%',
-//         videoId: 'EU8L9SMH8K0',
-//         playerVars: { 'autoplay': 1, 'controls': 1 },
-//         events: {
-//             'onReady': onPlayerReady,
-//             'onStateChange': onPlayerStateChange
-//             }
-//         })
-// }
-
-module.exports = {
     /*
     *Plays Video
     */
-    play:function(){
-        player.playVideo();
-        console.log(" play video")
-    },
+    this.play = function(){
+        if (!this.player) return;
+        return this.player.playVideo();
+    }
 
     /*
     * Pauses Video
     */
-    pause:function(){
-        player.pauseVideo();
-        console.log("pause")
-    },
+    this.pause = function(){
+        if (!this.player) return;
+        return this.player.pauseVideo();
+    }
 
     /*
     * Determines whether or not video is paused
@@ -52,100 +47,75 @@ module.exports = {
     *   False if video is paused
     *   True otherwise
     */
-    paused:function(){
-        console.log("paused")
-        return (player.getPlayerState==2)
-    },
+    this.paused = function(){
+        if (!this.player) return;
+        return (this.player.getPlayerState==2)
+    }
 
     /*
     * Seeks video to given number of seconds
     *
     * Param: int seconds
     */
-    seekTo:function(seconds){
-        console.log("seekTo:" + seconds)
-        player.seekTo(seconds)
-    },
+    this.seekTo = function(seconds){
+        if (!this.player) return;
+        return this.player.seekTo(seconds)
+    }
 
     /*
     * Returns current time in video
     *
     * Return: int seconds
     */
-    getCurrentTime:function(){
-        console.log("getCurrentTime")
-        return player.getCurrentTime()
-    },
+    this.getCurrentTime = function(){
+        if (!this.player || !this.player.getCurrentTime) return 0;
+        return this.player.getCurrentTime()
+    }
 
     /*
     * Returns the duration in seconds of the currently playing video
     *
     * Return: int seconds
     */
-    getDuration:function(){
-        console.log("getDuration")
-        return player.getDuration()
-    },
+    this.getDuration = function(){
+        if (!this.player || !this.player.getDuration) return 0;
+        return this.player.getDuration()
+    }
 
     /*
     * Returns the embed code for the currently loaded/playing video
     * 
     * Return: String embedCode
     */
-    getVideoEmbedCode:function(){
-        console.log("getVideoEmbedCode")
-        return player.getVideoEmbedCode();
-    },
+    this.getVideoEmbedCode = function(){
+        if (!this.player) return "";
+        return this.player.getVideoEmbedCode();
+    }
 
     /*
     * Returns the URL for the current video
     *
     * Return: String url
     */
-    getVideoURL:function(){
-        console.log("getVideoURL")
-        return player.getVideoURL();
-    },
+    this.getVideoURL = function(){
+        if (!this.player) return "";
+        return this.player.getVideoURL();
+    }
 
     /*
     * Sets the Volume
     *
     * Param: Accepts integer from 0 to 1 -- inclusive
     */
-    setVolume:function(vol){
-        console.log("setVolume")
-        return player.setVolume(vol*100)
-    },
-
-    componentDidMount: function() {
-        console.log("hey----------------------")
-        var loadPlayer = function(YT) {
-            console.log
-            player = new YT.Player('player', {
-                height: '100%',
-                width: '100%',
-                videoId: 'M7lc1UVf-VE',
-                autoplay: 1,
-            });
-        }
-        YouTubeIframeLoader.load(loadPlayer)
-    },
-
-
-    initializePlayer:function(){
-        // console.log("initializePlayer")
-
-        // setTimeout(function(){
-        //     player=getPlayer();
-        //     playerReady=true;
-        // }, 1000)
-
-    },
+    this.setVolume = function(vol){
+        if (!this.player) return;
+        return this.player.setVolume(vol*100)
+    }
 
     /*
     * Renders Video Frame
     */
-    renderVideo:function(){
+    this.renderVideo = function(){
         return(
             <div className="iframeWrapper">
                 <div id="player"></div>

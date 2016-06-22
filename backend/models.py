@@ -100,7 +100,7 @@ class Video(models.Model):
     classroom = models.ForeignKey(Classroom, related_name="videos")
     unit = models.ForeignKey(Unit, related_name="videos")
     order = models.IntegerField(default=0) # order within the unit
-    source = models.CharField(max_length=200, default="") # youtuve, vimeo, custom, etc
+    source = models.CharField(max_length=200, default="") # youtube, vimeo, custom, etc
     vid_link = models.CharField(max_length=200, blank=True, null=True) # if not custom
     name = models.CharField(max_length=200, default="")
     description = models.TextField(default="")
