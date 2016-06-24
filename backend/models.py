@@ -131,6 +131,12 @@ class Playlist(models.Model):
 #                                   Video MODELS                                      #
 # =================================================================================== #
 
+class Tag(models.Model):
+    name = models.CharField(max_length=100, default="")
+
+    def __str__(self):
+        return self.name
+
 class Video(models.Model):
     uuid = ShortUUIDField(editable=False)
     timestamp = models.DateTimeField(default=timezone.now) # when created
@@ -145,6 +151,10 @@ class Video(models.Model):
     
     def __str__(self):
         return self.name
+
+class VideoTag(models.Model):
+    video = models.ForeignKey(Video, related_name="tags")
+    tag = models.ForeignKey(Tag, related_name="videos")
 
 class ClassroomVideo(models.Model):
     video = models.OneToOneField(Video, related_name="classroom_video")
