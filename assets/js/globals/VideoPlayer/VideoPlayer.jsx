@@ -33,9 +33,58 @@ var topicObjList = [
         time: 100,
         id: 4,
         isCurrentTopic: false,
+    },
+    {
+        name: "What Django is",
+        time: 200,
+        id: 5,
+        isCurrentTopic: false,
+    },
+    {
+        name: "How Dynamic Web Servers Work",
+        time: 300,
+        id: 6,
+        isCurrentTopic: false,
+    },
+    {
+        name: "Hard to Learn with Guide",
+        time: 400,
+        id: 7,
+        isCurrentTopic: false,
+    },
+    {
+        name: "djangoproject.com",
+        time: 500,
+        id: 8,
+        isCurrentTopic: false,
+    },
+    {
+        name: "What Django is",
+        time: 600,
+        id: 9,
+        isCurrentTopic: false,
+    },
+    {
+        name: "How Dynamic Web Servers Work",
+        time: 700,
+        id: 10,
+        isCurrentTopic: false,
+    },
+    {
+        name: "Hard to Learn with Guide",
+        time: 800,
+        id: 11,
+        isCurrentTopic: false,
+    },
+    {
+        name: "djangoproject.com",
+        time: 900,
+        id: 12,
+        isCurrentTopic: false,
     }
 ]
 
+pollInterval=100
 
 
 function updateCurrentTopicOnKey(targetKey, topicList){
@@ -83,6 +132,8 @@ var VideoPlayer = React.createClass({
         this.setState({isPlaying:true})
         this.setState({currentTime:"0:00"})
         this.setState({percentDone:0})
+        // var temp = $(".videoDiv").height()-$('.ControlBar').height()
+
     },
     updateCurrentTime: function(){
         var seconds = Math.round(this.state.Player.getCurrentTime())
@@ -99,12 +150,24 @@ var VideoPlayer = React.createClass({
             isPlaying:false, 
             currentTime:"0:00",
             percentDone:0,
-            Player: new Player('kDyJN7qQETA')
+            Player: new Player(this.props.videoID),
+            videoDivHeight: 0,
+            videoDivWidth: 0
         };
+    },
+    setWindowSize: function(){
+        this.setState({
+            videoDivHeight: $(".videoDiv").height()
+        });
+        this.setState({
+            videoDivWidth: $(".videoDiv").width()
+        });
     },
     componentDidMount: function() {
         this.loadCommentsFromServer();
-        setInterval(this.updateCurrentTime, this.props.pollInterval)
+        this.setWindowSize();
+        window.onresize=this.setWindowSize;
+        setInterval(this.updateCurrentTime, pollInterval)
     },
     handleScrub: function(percentOfOne) {
         var duration = this.state.Player.getDuration();
@@ -130,16 +193,19 @@ var VideoPlayer = React.createClass({
     },
     render: function() {
         return ( 
-            <Row classname="ynVideoPlayer">
-                <Col className="topicButtonColumn" md={3}>
+            <div classname="ynVideoPlayer">
+                <div className="topicButtonColumn">
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
                         handleTopicClick={this.handleTopicClick}/>
-                </Col>
-                <Col md={9}>
+                </div>
+                <div className="videoDiv">
                     <Video 
-                        renderVideo={this.state.Player.renderVideo}/>
+                        renderVideo={this.state.Player.renderVideo}
+                        videoDivHeight={this.state.videoDivHeight}
+                        controlBarHeight={$('.ControlBar').height()}/>
                     <ControlBar 
+                        className="ControlBar"
                         isPlaying={this.state.isPlaying}
                         topicObjList={topicObjList}
                         getDuration={this.state.Player.getDuration}
@@ -147,11 +213,15 @@ var VideoPlayer = React.createClass({
                         handleScrub={this.handleScrub}
                         currentTime={this.state.currentTime}
                         percentDone={this.state.percentDone}/>
-                </Col>
-            </Row>
+                </div>
+            </div>
         )
     }
 })
 
 
-ReactDOM.render(<VideoPlayer pollInterval={100}/>, document.getElementById('page-anchor'))
+ReactDOM.render(
+    <VideoPlayer 
+    videoID="xaZdt2isEKM"/>, 
+    document.getElementById('page-anchor')
+)

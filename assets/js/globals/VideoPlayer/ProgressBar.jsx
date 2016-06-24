@@ -4,7 +4,6 @@ var React = require('react')
 var ReactDOM = require('react-dom')
 
 
-
 function updateProgressBar(percentComplete){
     $(".watched").width(percentComplete + "%");
     $(".notWatched").width((100 - percentComplete) + "%");
