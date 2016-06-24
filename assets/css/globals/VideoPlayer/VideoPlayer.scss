@@ -1,9 +1,19 @@
 @import '../mixins.scss';
 @import '../colors.scss';
 
- 
+
 .ynVideoPlayer{
-    .topicButtonColumn{
-        height:100%;
-    }
+    overflow: hidden;
+}
+
+.topicButtonColumn{
+    float: left;
+    height:100%;
+    width:25%;
+}
+.videoDiv{
+    float: right;
+    width: 75%;
+    margin:0px;
+    height:100%;
 }

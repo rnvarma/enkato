@@ -8,44 +8,27 @@ var ProgressBar = require('js/globals/videoPlayer/ProgressBar')
 
 module.exports = React.createClass({
     render:function(){
+        var playOrPause;
         if(this.props.isPlaying){
-            return(
-                <div className="controlBar">
-                    <ProgressBar 
-                        handleScrub={this.props.handleScrub}
-                        getDuration={this.props.getDuration}
-                        topicObjList={this.props.topicObjList}
-                        percentDone={this.props.percentDone}
-                    />
-                    <Row>
-                        <FontAwesome 
-                            className="playButton" 
-                            name="pause" 
-                            onClick={this.props.handlePlayPauseClick}
-                        /> 
-                        <span className="videoTime">{this.props.currentTime}</span>
-                    </Row>
-                </div>
-            )
-        } else {
-            return(
-                <div className="controlBar">
-                    <ProgressBar 
-                        handleScrub={this.props.handleScrub}
-                        getDuration={this.props.getDuration}
-                        topicObjList={this.props.topicObjList}
-                        percentDone={this.props.percentDone}
-                    />
-                    <Row>
-                        <FontAwesome 
-                            className="playButton" 
-                            name="play" 
-                            onClick={this.props.handlePlayPauseClick}
-                        /> 
-                        <span className="videoTime">{this.props.currentTime}</span>
-                    </Row>
-                </div>
-            )
+            playOrPause = "play"
+        }else{
+            playOrPause="pause"
         }
+        return(
+                <div className="controlBar">
+                    <ProgressBar 
+                        handleScrub={this.props.handleScrub}
+                        getDuration={this.props.getDuration}
+                        topicObjList={this.props.topicObjList}
+                        percentDone={this.props.percentDone}/>
+                    <Row>
+                        <FontAwesome 
+                            className="playButton" 
+                            name={playOrPause}
+                            onClick={this.props.handlePlayPauseClick}/> 
+                        <span className="videoTime">{this.props.currentTime}</span>
+                    </Row>
+                </div>
+            )
     }
 });

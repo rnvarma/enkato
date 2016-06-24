@@ -16,9 +16,8 @@ module.exports = function (videoId) {
                 height: '100%',
                 width: '100%',
                 videoId: videoId,
-                autoplay: 1,
+                playerVars: { 'autoplay': 1, 'controls': 0 },
             });
-            console.log(this2.player)
         }
         YouTubeIframeLoader.load(loadPlayer)
     }
@@ -117,9 +116,7 @@ module.exports = function (videoId) {
     */
     this.renderVideo = function(){
         return(
-            <div className="iframeWrapper">
-                <div id="player"></div>
-            </div>
+            <div id="player"></div>
         )
     }
 }

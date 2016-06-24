@@ -2,7 +2,7 @@ require('bootstrap-loader');
 require("css/globals/VideoPlayer/TopicList")
 var React = require('react')
 var ReactDOM = require('react-dom')
-
+var ScrollArea = require('react-scrollbar')
 
 
 var TopicNode = React.createClass({
@@ -45,9 +45,9 @@ module.exports = React.createClass({
             );
         },this);
         return(
-            <div className="topicList">
+            <ScrollArea className="topicList">
                 {topicNodes}
-            </div>
+            </ScrollArea>
         )
     }
 });
