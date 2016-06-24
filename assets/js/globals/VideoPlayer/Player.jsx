@@ -48,7 +48,7 @@ module.exports = function (videoId) {
     */
     this.paused = function(){
         if (!this.player) return;
-        return (this.player.getPlayerState==2)
+        return (this.player.getPlayerState()==2)
     }
 
     /*
