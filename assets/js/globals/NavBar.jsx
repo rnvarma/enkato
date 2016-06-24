@@ -16,7 +16,7 @@ module.exports = React.createClass({
             user_id: 0
         }
     },
-    componentDidMount: function() {
+    componentWillMount: function() {
         $.ajax({
           url: "/1/userdata",
           dataType: 'json',
@@ -65,7 +65,7 @@ module.exports = React.createClass({
                 <Navbar.Header>
                   <Navbar.Brand>
                     <a href="/">
-                        <span className="logo-you">you</span><span className="logo-niversity">niversity</span>
+                        <span className="logo-you">structabl</span><span className="logo-niversity"></span>
                     </a>
                   </Navbar.Brand>
                   <Navbar.Toggle />

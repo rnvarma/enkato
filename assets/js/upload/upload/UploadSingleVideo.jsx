@@ -1,34 +1,33 @@
 require('bootstrap-loader');
 require("css/globals/NavBar.scss")
 
+require("css/upload/upload/UploadSingleVideo.scss");
+
 var React = require('react')
 var ReactDOM = require('react-dom')
 
 var NavBar = require('js/globals/NavBar');
+var getCookie = require('js/globals/GetCookie')
 var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
-// var UpdateUserInfoForm = require('js/userprofile/profile_forms/UpdateUserInfoForm');
 
-var Profile = React.createClass({
-    componentWillMount: function() {
+
+var UploadSingleVideo = React.createClass({
+    onFormSubmit: function(data) {
 
     },
     render: function() {
         return (
-            <div>
+            <div className="uploadSingleVideo">
                 <NavBar />
                 <Row>
                     <Col md={8} sm={10} xs={12}>
-                        <a href="/upload">Upload a video</a>
+                        
                     </Col>
                 </Row>
             </div>
         )
     }
-});
+})
 
-
-
-
-
-ReactDOM.render(<Profile />, document.getElementById('page-anchor'))
+ReactDOM.render(<UploadSingleVideo />, document.getElementById('page-anchor'))

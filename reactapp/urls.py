@@ -23,5 +23,9 @@ urlpatterns = [
     url(r'^', include('authentication.urls')),
     url(r'^', include('userprofile.urls')),
     url(r'^', include('classroom.urls')),
+<<<<<<< HEAD
     url(r'^', include('singlevideo.urls')),
+=======
+    url(r'^', include('upload.urls')),
+>>>>>>> a16eeba5cae8c791329e04ed6b6169323c2db088
 ]
