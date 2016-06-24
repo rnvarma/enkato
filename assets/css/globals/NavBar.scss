@@ -1,4 +1,3 @@
-
 @import 'colors.scss';
 @import 'mixins.scss';
 
@@ -20,11 +19,7 @@
         margin-left: 25px;
     }
 
-    .logo-you {
-        color: $yn-green;
-    }
-
-    .logo-niversity {
-        color: $yn-dark-grey;
+    .logo {
+        color: $structabl-blue;
     }
 }

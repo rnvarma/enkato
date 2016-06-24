@@ -11,7 +11,7 @@ baseSCSS = """
 """
 
 baseJSX = """
-require("css/classroom/classroom/%s.scss");
+require("css/%s/%s/%s.scss");
 
 var React = require('react')
 
@@ -47,7 +47,7 @@ class Command(BaseCommand):
 
         jsx_path = "assets/js" + os.sep + spec_path + ".jsx"
         jsx_file = open(jsx_path, "w+")
-        jsx_file.write(baseJSX % (options["name"], camelCaseName, options["name"]))
+        jsx_file.write(baseJSX % (options["app"], options["endpoint"], options["name"], camelCaseName, options["name"]))
         jsx_file.close()
         print importCommand % (options["name"], options["app"], options["endpoint"], options["name"])
         

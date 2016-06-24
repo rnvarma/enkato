@@ -16,7 +16,7 @@ module.exports = {
     classroom: './assets/js/classroom/classroom/Classroom.jsx',
     singlevideo: './assets/js/singlevideo/singlevideoview/SingleVideoPage.jsx',
     upload: './assets/js/upload/upload/UploadSingleVideo.jsx',
-    
+    createseries: './assets/js/series/create/CreateSeries.jsx'
   },
 
   output: {

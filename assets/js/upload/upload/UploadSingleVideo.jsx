@@ -21,8 +21,8 @@ var UploadSingleVideo = React.createClass({
             <div className="uploadSingleVideo">
                 <NavBar />
                 <Row>
-                    <Col md={8} sm={10} xs={12}>
-                        
+                    <Col md={8} mdOffset={2} sm={10} smOffset={1} xs={12}>
+                        Upload
                     </Col>
                 </Row>
             </div>

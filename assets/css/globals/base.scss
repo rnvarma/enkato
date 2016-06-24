@@ -1,19 +1,28 @@
 @import 'colors.scss';
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif !important;
+    background-color: $structabl-bg-blue;
 }
 
 .form-control {
-    border-radius: 0px;
-    border: 1px solid $form-control-border-color;
+    border-radius: 3px;
+    border: 1px solid $structabl-bg-blue;
+}
+
+form label {
+    color: $structabl-blue;
 }
 
 .btn {
-    border-radius: 0px;
-    padding: 10px 12px;
-    min-width: 160px;
+    border-radius: 4px;
     font-size: 14px;
+
+    &:hover {
+        border: 1px solid $structabl-red;
+        color: $structabl-red;
+        background-color: white;
+    }
 
     &:focus {
         outline: 0 !important;
@@ -25,7 +34,12 @@ body {
 }
 
 .btn-default {
-    background-color: $yn-green;
+    background-color: $structabl-red;
     color: white;
     text-transform: uppercase;
 }
+
+.modal-backdrop.in {
+    opacity: 0.2;
+}
+
