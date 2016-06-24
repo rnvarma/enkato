@@ -6,8 +6,6 @@ var TopicList = require('js/globals/videoPlayer/TopicList')
 var Video = require('js/globals/videoPlayer/Video')
 var ControlBar = require('js/globals/videoPlayer/ControlBar')
 var Player = require('js/globals/videoPlayer/Player');
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
 
 var topicObjList = [
     {
@@ -126,7 +124,7 @@ function styleTime(time){
 }
 
 
-var VideoPlayer = React.createClass({
+module.exports  = React.createClass({
     loadCommentsFromServer: function(){
         this.setState({topicObjList:topicObjList})
         this.setState({isPlaying:true})
@@ -135,13 +133,19 @@ var VideoPlayer = React.createClass({
         // var temp = $(".videoDiv").height()-$('.ControlBar').height()
 
     },
-    updateCurrentTime: function(){
+    updateCurrentState: function(){
+        //set time
         var seconds = Math.round(this.state.Player.getCurrentTime())
         this.setState({currentTime:styleTime(seconds)})
         var percentDone = (seconds / this.state.Player.getDuration())*100
         this.setState({percentDone:percentDone})
         this.setState({
             topicObjList:updateCurrentTopicOnTime(seconds, this.state.topicObjList)
+        })
+        //set isplaying
+        var playing = !this.state.Player.paused();
+        this.setState({
+            isPlaying: playing
         })
     },
     getInitialState: function() {
@@ -152,7 +156,8 @@ var VideoPlayer = React.createClass({
             percentDone:0,
             Player: new Player(this.props.videoID),
             videoDivHeight: 0,
-            videoDivWidth: 0
+            videoDivWidth: 0,
+            ynPlayerHeight:0
         };
     },
     setWindowSize: function(){
@@ -162,12 +167,16 @@ var VideoPlayer = React.createClass({
         this.setState({
             videoDivWidth: $(".videoDiv").width()
         });
+        this.setState({
+            ynPlayerHeight:$(".ynVideoPlayer").width()/2
+        })
     },
     componentDidMount: function() {
         this.loadCommentsFromServer();
         this.setWindowSize();
         window.onresize=this.setWindowSize;
-        setInterval(this.updateCurrentTime, pollInterval)
+        //updates time and playing
+        setInterval(this.updateCurrentState, pollInterval)
     },
     handleScrub: function(percentOfOne) {
         var duration = this.state.Player.getDuration();
@@ -193,7 +202,9 @@ var VideoPlayer = React.createClass({
     },
     render: function() {
         return ( 
-            <div classname="ynVideoPlayer">
+            <div 
+                classname="ynVideoPlayer" 
+                >
                 <div className="topicButtonColumn">
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
@@ -220,8 +231,8 @@ var VideoPlayer = React.createClass({
 })
 
 
-ReactDOM.render(
-    <VideoPlayer 
-    videoID="xaZdt2isEKM"/>, 
-    document.getElementById('page-anchor')
-)
+// ReactDOM.render(
+//     <VideoPlayer 
+//     videoID="xaZdt2isEKM"/>, 
+//     document.getElementById('page-anchor')
+// )
