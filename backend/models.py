@@ -23,7 +23,7 @@ class CustomUser(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, default=0, related_name="customuser")
     
     def __str__(self):
-        return self.name
+        return self.first_name + " " + self.last_name
 
 # =================================================================================== #
 #                               CLASSROOM MODELS                                      #
@@ -32,7 +32,7 @@ class CustomUser(models.Model):
 class Classroom(models.Model):
     uuid = ShortUUIDField(editable=False)
     timestamp = models.DateTimeField(default=timezone.now) # when created
-    creators = models.ManyToManyField(CustomUser, related_name="created_classrooms")
+    creator = models.ForeignKey(CustomUser, related_name="created_classrooms")
     tas = models.ManyToManyField(CustomUser, related_name="ta_classrooms")
     students = models.ManyToManyField(CustomUser, related_name="student_classrooms")
     name = models.CharField(max_length=100, default="")
@@ -77,6 +77,43 @@ class Unit(models.Model):
 #                                   Playlist MODELS                                   #
 # =================================================================================== #
 
+class Series(models.Model):
+    uuid = ShortUUIDField(editable=False)
+    timestamp = models.DateTimeField(default=timezone.now) # when created
+    creator = models.ForeignKey(CustomUser, related_name="created_series")
+    tas = models.ManyToManyField(CustomUser, related_name="ta_series")
+    students = models.ManyToManyField(CustomUser, related_name="student_series")
+    name = models.CharField(max_length=100, default="")
+    description = models.TextField(default="", blank=True, null=True)
+    is_private = models.BooleanField(default=False)
+    access_code = models.CharField(max_length=100, default="")
+    avg_rating = models.IntegerField(default=0) # x.y * 10 = xy
+    avg_length_videos = models.IntegerField(default=0) # number of seconds
+    avg_topics_videos = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name
+
+# class rating systems
+# - basic star-rating feedback
+# - number of students enrolled
+# - time before responding to questions
+# - topics indexed per video
+# - amount of videos, average length of video
+class SeriesFeedback(models.Model):
+    timestamp = models.DateTimeField(default=timezone.now) # when made
+    user = models.ForeignKey(CustomUser, related_name="series_feedbacks")
+    series = models.ForeignKey(Series, related_name="series_feedbacks")
+    stars = models.IntegerField(default=1)
+    comment = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.user.first_name + ": " + self.classroom.name
+
+# =================================================================================== #
+#                                   Playlist MODELS                                   #
+# =================================================================================== #
+
 class Playlist(models.Model):
     uuid = ShortUUIDField(editable=False)
     timestamp = models.DateTimeField(default=timezone.now) # when created
@@ -97,19 +134,28 @@ class Playlist(models.Model):
 class Video(models.Model):
     uuid = ShortUUIDField(editable=False)
     timestamp = models.DateTimeField(default=timezone.now) # when created
-    classroom = models.ForeignKey(Classroom, related_name="videos")
-    unit = models.ForeignKey(Unit, related_name="videos")
-    order = models.IntegerField(default=0) # order within the unit
     source = models.CharField(max_length=200, default="") # youtube, vimeo, custom, etc
-    vid_link = models.CharField(max_length=200, blank=True, null=True) # if not custom
+    vid_id = models.CharField(max_length=200, blank=True, null=True) # if not custom
     name = models.CharField(max_length=200, default="")
     description = models.TextField(default="")
     thumbnail = models.CharField(max_length=200, default="")
     duration = models.IntegerField(default=0)
     num_views = models.IntegerField(default=0)
+    creator = models.ForeignKey(CustomUser, related_name="video_uploads")
     
     def __str__(self):
         return self.name
+
+class ClassroomVideo(models.Model):
+    video = models.OneToOneField(Video, related_name="classroom_video")
+    classroom = models.ForeignKey(Classroom, related_name="videos")
+    unit = models.ForeignKey(Unit, related_name="videos")
+    order = models.IntegerField(default=0) # order within the unit
+
+class SeriesVideo(models.Model):
+    video = models.OneToOneField(Video, related_name="series_video")
+    series = models.ForeignKey(Series, related_name="videos")
+    order = models.IntegerField(default=0) # order within the series
 
 class PlaylistVideo(models.Model):
     video = models.ForeignKey(Video, related_name="playlists")

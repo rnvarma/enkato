@@ -3,6 +3,6 @@ from django.views.generic.base import View
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
-class UserProfile(View):
+class UploadVideo(View):
     def get(self, request):
-        return render(request, 'userprofile/profile.html')
+        return render(request, 'upload/upload.html')
