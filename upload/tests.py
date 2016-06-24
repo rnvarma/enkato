@@ -14,6 +14,9 @@ class UploadVideoTest(TestCase):
         cu = CustomUser(user=user)
         cu.save()
 
+    def tearDown(self):
+        self.client.logout()
+
     def test_anonymous_user(self):
         response = self.client.get('/upload', follow=True)
         self.assertRedirects(response, '/login?next=/upload')

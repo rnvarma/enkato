@@ -9,6 +9,8 @@ from backend.models import *
 
 class Login(View):
     def get(self, request):
+        if request.user.is_anonymous() == False:
+            return HttpResponseRedirect('/')
         return render(request, 'authentication/login.html')
 
     def post(self, request):
@@ -18,14 +20,19 @@ class Login(View):
             login(request, user)
             return JsonResponse({'status': True})
         else:
-            return JsonResponse({'status': False})
+            return JsonResponse({'status': False, 'issue': 'Incorrect username or password'})
 
 
 class Register(View):
     def get(self, request):
+        if request.user.is_anonymous() == False:
+            return HttpResponseRedirect('/')
         return render(request, 'authentication/register.html')
 
     def post(self, request):
+        user = User.objects.filter(username=request.POST.get('user_name'))
+        if user.exists():
+            return JsonResponse({'status': False, 'issue': 'Username already exists'})
         new_user = User.objects.create_user(
             request.POST.get('user_name'),
             request.POST.get('email'),
@@ -48,6 +55,8 @@ class Register(View):
 
 class Logout(View):
     def get(self, request):
+        if request.user.is_anonymous():
+            return HttpResponseRedirect('/')
         logout(request)
         return HttpResponseRedirect("/login")
 

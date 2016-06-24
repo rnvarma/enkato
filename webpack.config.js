@@ -14,14 +14,9 @@ module.exports = {
     login: './assets/js/authentication/login/Login.jsx',
     createclass: './assets/js/classroom/createclass/CreateClass.jsx',
     classroom: './assets/js/classroom/classroom/Classroom.jsx',
-<<<<<<< HEAD
-    uploadvideo: './assets/js/classroom/uploadvideo/UploadVideo.jsx',
-    //videoplayer: './assets/js/globals/VideoPlayer/VideoPlayer.jsx',
     singlevideo: './assets/js/singlevideo/singlevideoview/SingleVideoPage.jsx',
-=======
     upload: './assets/js/upload/upload/UploadSingleVideo.jsx',
-    videoplayer: './assets/js/globals/VideoPlayer/VideoPlayer.jsx'
->>>>>>> a16eeba5cae8c791329e04ed6b6169323c2db088
+    
   },
 
   output: {
