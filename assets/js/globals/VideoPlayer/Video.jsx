@@ -13,6 +13,6 @@ module.exports = React.createClass({
                 className="iframeWrapper">
                 {this.props.renderVideo()}
             </div>
-            )
+        )
     }
 });

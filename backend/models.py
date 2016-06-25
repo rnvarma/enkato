@@ -146,6 +146,7 @@ class Video(models.Model):
     name = models.CharField(max_length=200, default="")
     description = models.TextField(default="")
     thumbnail = models.CharField(max_length=200, default="")
+    #seconds
     duration = models.IntegerField(default=0)
     num_views = models.IntegerField(default=0)
     creator = models.ForeignKey(CustomUser, related_name="video_uploads")

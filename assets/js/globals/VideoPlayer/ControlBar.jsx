@@ -10,9 +10,9 @@ module.exports = React.createClass({
     render:function(){
         var playOrPause;
         if(this.props.isPlaying){
-            playOrPause = "play"
+            playOrPause = "pause"
         }else{
-            playOrPause="pause"
+            playOrPause="play"
         }
         return(
                 <div className="controlBar">
