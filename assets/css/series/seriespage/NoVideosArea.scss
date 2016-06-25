@@ -10,6 +10,11 @@
     color: $structabl-blue;
     font-weight: 800;
 
+    &.hasVideos {
+        padding-top: 15px;
+        padding-bottom: 45px;
+    }
+
     .addVideo {
         margin-top: 15px;
     }

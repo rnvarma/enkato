@@ -54,9 +54,12 @@ module.exports = React.createClass({
         });
     },
     render: function() {
+        var hasVideos = (this.props.data.videos.length > 0)
+        var title = hasVideos ? "Add more videos to this series." : "This series is currently empty."
+        var overAllClass = hasVideos ? "noVideosArea hasVideos" : "noVideosArea"
         return (
-            <div className="noVideosArea">
-                <div>This series is currently empty.</div>
+            <div className={overAllClass}>
+                <div>{title}</div>
                 <div className="addVideo">
                     <Button onClick={this.open} className="addVideoBtn structabl-blue">Import Video(s)</Button>
                     <Modal show={this.state.showModal} onHide={this.close}>

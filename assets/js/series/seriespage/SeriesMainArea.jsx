@@ -14,7 +14,14 @@ module.exports = React.createClass({
                                 data={this.props.data}
                                 reloadPageData={this.props.reloadPageData}/>
         } else {
-            var video_area = <SeriesVideoList data={this.props.data}/>
+            var video_area = (
+                <div>
+                    <SeriesVideoList data={this.props.data}/>
+                    <NoVideosArea
+                        data={this.props.data}
+                        reloadPageData={this.props.reloadPageData}/>
+                </div>
+            )
         }
         return (
             <div className="seriesMainArea">
