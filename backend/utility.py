@@ -6,6 +6,10 @@ import string
 API_KEY = "AIzaSyCy8238lONTrmV2DdyDpBViFoqke3wuk7A"
 BASE_URL = "https://www.googleapis.com/youtube/v3/videos?"
 
+def capitalize(s):
+    if not len(s): return ""
+    return s[0].upper() + s[1:] 
+
 def getYTIdFromURL(url):
     yt_id = url.split("v=")[1].split("&")[0]
     return yt_id

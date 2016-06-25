@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from backend.models import *
+from backend.utility import *
 
 class Serializer(object):
     @staticmethod
@@ -15,6 +16,7 @@ class Serializer(object):
         data = {}
         data["username"] = user.username
         data["user_id"] = user.id
+        data["name"] = capitalize(user.first_name) + " " + capitalize(user.last_name)
         return data
 
     @staticmethod
@@ -24,6 +26,16 @@ class Serializer(object):
         data["description"] = cls.description
         data["is_private"] = cls.is_private
         data["creators"] = map(Serializer.serialize_user, cls.creators.all())
+        return data
+
+    @staticmethod
+    def serialize_series(series):
+        data = {}
+        data["name"] = series.name
+        data["description"] = series.description
+        data["image"] = series.image
+        data["creator"] = Serializer.serialize_user(series.creator)
+        data["num_videos"] = len(series.videos.all())
         return data
 
 class UserData(APIView):
@@ -47,7 +59,8 @@ class ClassroomData(APIView):
 class SeriesData(APIView):
     def get(self, request, s_id):
         series = Series.objects.get(uuid=s_id)
-        
+        series_data = Serializer.serialize_series(series)
+        return Response(series_data)
 
 
 
