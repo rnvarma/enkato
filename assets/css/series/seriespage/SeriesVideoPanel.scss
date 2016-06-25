@@ -1,0 +1,80 @@
+
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.seriesVideoPanel {
+    position: relative;
+    padding: 15px 0px;
+    border-bottom: 1px solid $structabl-bg-blue;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:first-of-type {
+        padding-top: 0px;
+    }
+
+    &:last-of-type {
+        border-bottom: none;
+    }
+
+    .left {
+        align: left;
+
+        .order {
+            display: inline-block;
+            vertical-align: top;
+            padding: 0px 5px;
+            margin-top: 17px;
+            font-weight: 800;
+            color: $structabl-blue;
+        }
+
+        .thumbnailArea {
+            display: inline-block;
+            vertical-align: top;
+            padding: 0px 10px;
+
+            .thumbnailImg {
+                width: 100px;
+            }
+        }
+
+        .info {
+            display: inline-block;
+            vertical-align: top;
+            padding-left: 20px;
+            margin-top: 10px;
+
+            .name {
+                font-weight: 800;
+                color: $structabl-blue;
+            }
+
+            .creator {
+                margin-top: 3px;
+            }
+        }
+    }
+
+    .right {
+        position: absolute;
+        right: 0;
+        top: 33px;
+        color: $structabl-blue;
+
+        .numViews {
+            display: inline-block;
+            padding-right: 10px;
+            border-right: 1px solid $structabl-blue; 
+        }
+
+        .time {
+            display: inline-block;
+            font-weight: 800;
+            padding-left: 10px;
+            padding-right: 30px;
+        }
+    }
+}
