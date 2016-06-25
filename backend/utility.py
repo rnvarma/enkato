@@ -19,6 +19,18 @@ def convertSecondsToTime(s):
     seconds = s % 60
     return "%02d:%02d" % (minutes, seconds)
 
+def sanetizeTime(s):
+    minutes = s / 60
+    seconds = s % 60
+    hours = minutes / 60
+    minutes = minutes % 60
+    if (not hours and not minutes):
+        return "%ds" % seconds
+    elif (not hours):
+        return "%dm" % minutes
+    else:
+        return "%dh %dm" % (hours, minutes)
+
 def convertYTDurationToSeconds(yt_dur):
     seconds = 0
     times = yt_dur[2:]
@@ -78,6 +90,12 @@ def getYTMetaData(yt_id):
     result["duration"] = convertYTDurationToSeconds(yt_duration)
     return result
 
-
+def getURLSFromStringList(urls):
+    urls = urls.splitlines()
+    urls = map(lambda l: l.split(","), urls)
+    url_list = []
+    map(lambda l: url_list.extend(l), urls)
+    url_list = filter(lambda s: s, url_list)
+    return url_list
 
 

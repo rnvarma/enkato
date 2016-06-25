@@ -10,9 +10,9 @@ module.exports = React.createClass({
     render: function() {
         img_src = this.props.data.image || '/static/imgs/blank_thumbnail.png'
         if (this.props.data.videos.length == 0) {
-            var video_area = <NoVideosArea />
+            var video_area = <NoVideosArea data={this.props.data}/>
         } else {
-            var video_area = <SeriesVideoList />
+            var video_area = <SeriesVideoList data={this.props.data}/>
         }
         return (
             <div className="seriesMainArea">
@@ -36,7 +36,7 @@ module.exports = React.createClass({
                                 {this.props.data.num_videos} videos
                             </div>
                             <div className="num-mins">
-                                {this.props.data.total_len} minutes
+                                {this.props.data.total_len}
                             </div>
                         </div>
                     </div>
