@@ -11,19 +11,6 @@ var ControlLabel = require('react-bootstrap').ControlLabel;
 var InputGroup = require('react-bootstrap').InputGroup;
 
 module.exports = React.createClass({
-    getInitialState: function () {
-        return {
-            name: '',
-            description: '',
-            categories: []
-        }
-    },
-    onNameChange: function(e) {
-        this.setState({name: e.target.value})
-    },
-    onDescriptionChange: function (e) {
-        this.setState({description: e.target.value})
-    },
     onSubmit: function (e) {
         e.preventDefault()
         this.props.onFormSubmit(this.state);
@@ -36,7 +23,7 @@ module.exports = React.createClass({
                         Name
                     </Col>
                     <Col sm={9}>
-                        <FormControl onChange={this.onNameChange} type="text" placeholder="Enter a series name." />
+                        <FormControl onChange={this.props.onNameChange} type="text" placeholder="Enter a series name." />
                     </Col>
                 </FormGroup>
                 <FormGroup controlId="password">
@@ -44,10 +31,9 @@ module.exports = React.createClass({
                         Description
                     </Col>
                     <Col sm={9}>
-                        <FormControl onChange={this.onDescriptionChange} componentClass="textarea" type="text" placeholder="Enter your description." />
+                        <FormControl onChange={this.props.onDescriptionChange} componentClass="textarea" type="text" placeholder="Enter your description." />
                     </Col>
                 </FormGroup>
-                <Button onClick={this.close}>Close</Button>
             </Form>
         )
     }

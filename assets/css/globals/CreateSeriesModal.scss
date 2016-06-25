@@ -7,6 +7,11 @@
     }
 }
 
+.modal-content {
+    border: none;
+    box-shadow: none;
+}
+
 .modal-header {
     background-color: $structabl-blue;
     border-top-left-radius: 4px;

@@ -1,0 +1,14 @@
+{% extends 'globals/base.html' %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}Create Classroom - Youniversity{% endblock %}
+
+{% block content %}
+    <div id="page-anchor"></div>
+    {{ s_id }}
+    <div id="s_id" data-sid={{ s_id }} type="hidden"></div>
+{% endblock %}
+
+{% block js %}
+    {% render_bundle 'seriespage' %}
+{% endblock %}
