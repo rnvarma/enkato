@@ -10,9 +10,18 @@ module.exports = React.createClass({
     render: function() {
         img_src = this.props.data.image || '/static/imgs/blank_thumbnail.png'
         if (this.props.data.videos.length == 0) {
-            var video_area = <NoVideosArea data={this.props.data}/>
+            var video_area = <NoVideosArea
+                                data={this.props.data}
+                                reloadPageData={this.props.reloadPageData}/>
         } else {
-            var video_area = <SeriesVideoList data={this.props.data}/>
+            var video_area = (
+                <div>
+                    <SeriesVideoList data={this.props.data}/>
+                    <NoVideosArea
+                        data={this.props.data}
+                        reloadPageData={this.props.reloadPageData}/>
+                </div>
+            )
         }
         return (
             <div className="seriesMainArea">

@@ -27,7 +27,7 @@ var SeriesPage = React.createClass({
             total_len: 0
         }
     },
-    componentDidMount: function() {
+    loadPageData: function() {
         $.ajax({
           url: "/1/s/" + $("#s_id").attr("data-sid"),
           dataType: 'json',
@@ -40,6 +40,9 @@ var SeriesPage = React.createClass({
           }.bind(this)
         });
     },
+    componentDidMount: function() {
+        this.loadPageData()
+    },
     render: function() {
         return (
             <div>
@@ -51,7 +54,8 @@ var SeriesPage = React.createClass({
                         </Col>
                         <Col md={10}>
                             <SeriesMainArea
-                                data={this.state}/>
+                                data={this.state}
+                                reloadPageData={this.loadPageData}/>
                         </Col>
                     </Row>
                 </div>

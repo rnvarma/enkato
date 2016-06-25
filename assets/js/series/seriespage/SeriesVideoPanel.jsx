@@ -9,6 +9,11 @@ module.exports = React.createClass({
     },
     render: function() {
         var video = this.props.video;
+        if (video.order == 0) {
+            var rightClass = "right first";
+        } else {
+            var rightClass = "right";
+        }
         return (
             <div className="seriesVideoPanel" onClick={this.onClick}>
                 <div className="left">
@@ -27,7 +32,7 @@ module.exports = React.createClass({
                         </div>
                     </div>
                 </div>
-                <div className="right">
+                <div className={rightClass}>
                     <div className="numViews">
                         {video.num_views} views
                     </div>
