@@ -42,7 +42,8 @@ module.exports = React.createClass({
           success: function(data) {
             console.log(data);
             if (data.status) {
-                window.location.href = "/s/" + this.props.data.s_id;
+                this.close()
+                this.props.reloadPageData()
             } else {
                 console.log("sad face");
             }

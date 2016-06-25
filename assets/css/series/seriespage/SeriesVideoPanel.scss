@@ -64,6 +64,10 @@
         top: 33px;
         color: $structabl-blue;
 
+        &.first {
+            top: 23px;
+        }
+
         .numViews {
             display: inline-block;
             padding-right: 10px;
