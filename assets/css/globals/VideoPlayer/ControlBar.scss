@@ -18,4 +18,14 @@
         color:white;
         margin-left:15px;
     }
+    .playbackRate{
+        color:white;
+        margin:12px;
+        margin-right:70px;
+        font-weight:600;
+        float: right;
+    }
+    .playbackRate:hover{
+        cursor:pointer;
+    }
 }
