@@ -241,6 +241,6 @@ module.exports  = React.createClass({
 
 // ReactDOM.render(
 //     <VideoPlayer 
-//     videoID="xaZdt2isEKM"/>, 
+//     videoUUID="xaZdt2isEKM"/>, 
 //     document.getElementById('page-anchor')
 // )
