@@ -1,9 +1,11 @@
-
 @import 'colors.scss';
 @import 'mixins.scss';
 
 .navbar {
     border-radius: 0px;
+    margin-bottom: 0px;
+    background-color: white;
+    border: none;
 
     .nav {
         font-weight: 800;
@@ -20,11 +22,7 @@
         margin-left: 25px;
     }
 
-    .logo-you {
-        color: $yn-green;
-    }
-
-    .logo-niversity {
-        color: $yn-dark-grey;
+    .logo {
+        color: $structabl-blue;
     }
 }

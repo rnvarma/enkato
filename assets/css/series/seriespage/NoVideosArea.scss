@@ -1,0 +1,16 @@
+
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.noVideosArea {
+    background-color: white;
+    padding: 80px 50px;
+    text-align: center;
+    font-size: 20px;
+    color: $structabl-blue;
+    font-weight: 800;
+
+    .addVideo {
+        margin-top: 15px;
+    }
+}

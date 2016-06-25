@@ -8,6 +8,8 @@ var NavItem = require('react-bootstrap').NavItem;
 var MenuItem = require('react-bootstrap').MenuItem;
 var NavDropdown = require('react-bootstrap').NavDropdown;
 
+var CreateSeriesModal = require('js/globals/CreateSeriesModal')
+
 module.exports = React.createClass({
     getInitialState: function() {
         return {
@@ -48,6 +50,7 @@ module.exports = React.createClass({
         if (this.state.logged_in) {
             var RightBar = (
                 <Nav pullRight>
+                    <CreateSeriesModal />
                     <NavItem eventKey={2} href="/logout">Logout</NavItem>
                     <NavItem eventKey={1} href="/userprofile">{this.state.username}</NavItem>
                 </Nav>
@@ -65,7 +68,7 @@ module.exports = React.createClass({
                 <Navbar.Header>
                   <Navbar.Brand>
                     <a href="/">
-                        <span className="logo-you">structabl</span><span className="logo-niversity"></span>
+                        <span className="logo">structabl</span>
                     </a>
                   </Navbar.Brand>
                   <Navbar.Toggle />

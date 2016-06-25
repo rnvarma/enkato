@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'backend',
     'authentication',
     'classroom',
-    'upload'
+    'upload',
+    'series'
 ]
 
 MIDDLEWARE_CLASSES = [

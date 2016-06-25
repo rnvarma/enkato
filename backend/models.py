@@ -90,6 +90,7 @@ class Series(models.Model):
     avg_rating = models.IntegerField(default=0) # x.y * 10 = xy
     avg_length_videos = models.IntegerField(default=0) # number of seconds
     avg_topics_videos = models.IntegerField(default=0)
+    image = models.CharField(max_length=300, default="")
 
     def __str__(self):
         return self.name
