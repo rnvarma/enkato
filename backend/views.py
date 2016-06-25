@@ -43,3 +43,11 @@ class ClassroomData(APIView):
         classroom = Classroom.objects.get(uuid=c_id)
         class_data = Serializer.serialize_class(classroom)
         return Response(class_data)
+
+class SeriesData(APIView):
+    def get(self, request, s_id):
+        series = Series.objects.get(uuid=s_id)
+        
+
+
+
