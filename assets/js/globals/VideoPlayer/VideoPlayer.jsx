@@ -102,6 +102,7 @@ function updateCurrentTopicOnKey(targetKey, topicList){
 * this should be dealt with when adding new topics
 */
 function updateCurrentTopicOnTime(seconds, topicList){
+    if(topicList.length==0) return []
     var setTrue = false;
     for(var i=0; i<topicList.length; i++){
         topicList[i].isCurrentTopic = false
@@ -123,7 +124,6 @@ function styleTime(time){
     return Math.round((time-30)/60) + ":" + seconds;
 }
 
-
 module.exports  = React.createClass({
     loadDataFromServer: function(){
         console.log("loadDataFromServer")
@@ -135,7 +135,7 @@ module.exports  = React.createClass({
           success: function(data) {
             this.setState({Player: new Player(data.videoID)})
             this.setState({topicObjList:data.topicList})
-
+            console.log(this.state.Player.getPlaybackRate())
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -148,6 +148,7 @@ module.exports  = React.createClass({
         this.setState({currentTime:styleTime(seconds)})
         var percentDone = (seconds / this.state.Player.getDuration())*100
         this.setState({percentDone:percentDone})
+        
         this.setState({
             topicObjList:updateCurrentTopicOnTime(seconds, this.state.topicObjList)
         })
@@ -157,6 +158,7 @@ module.exports  = React.createClass({
             isPlaying: playing
         })
         this.setWindowSize()
+
     },
     getInitialState: function() {
         return {

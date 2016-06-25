@@ -118,6 +118,26 @@ module.exports = function (videoId) {
     }
 
     /*
+    * Sets the Playback Rate
+    *
+    * Param: Accepts integers - 0.25, 0.5, 1, 1.5, 2
+    */
+    this.setPlaybackRate = function(rate){
+        if (!this.player || !this.player.setPlaybackRate) return;
+        return this.player.setPlaybackRate(rate)
+    }
+
+    /*
+    * Gets the Playback Rate
+    *
+    * Return: integers - 0.25, 0.5, 1, 1.5, 2
+    */
+    this.getPlaybackRate = function(){
+        if (!this.player) return;
+        return this.player.getPlaybackRate()
+    }
+
+    /*
     * Renders Video Frame
     */
     this.renderVideo = function(){
