@@ -19,3 +19,17 @@
         margin-top: 15px;
     }
 }
+
+
+.annotating {
+    .modal-dialog {
+        width: 75%;
+    }
+
+    .modal-body {
+        background-color: $structabl-bg-blue;
+        padding: 0px;
+        max-height: 600px;
+        height: 75%;
+    }
+}

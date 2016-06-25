@@ -54,11 +54,15 @@ class UploadVideoToSeries(View):
         for url in url_list:
             videos.append(uploadYTVideo(url, creator))
 
+        curr_order_num = 0
+        if series.videos.all().count() > 0:
+            curr_order_num = series.videos.all().order_by("-order")[0].order + 1
+
         for (i, video) in enumerate(videos):
             series_video = SeriesVideo(
                 series=series,
                 video=video,
-                order=i
+                order=i + curr_order_num
             )
             series_video.save()
         return JsonResponse({'status': True})

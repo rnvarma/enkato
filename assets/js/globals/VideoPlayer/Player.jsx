@@ -29,6 +29,11 @@ module.exports = function (videoId) {
     }
     this.init(this.videoId)
 
+    this.destroy = function() {
+        if (!this.player) return;
+        this.player.destroy();
+    }
+
     /*
     *Plays Video
     */
@@ -142,7 +147,7 @@ module.exports = function (videoId) {
     */
     this.renderVideo = function(){
         return(
-            <div id="player"></div>
+            <div id="player" data-vid={this.videoId}></div>
         )
     }
 }

@@ -6,84 +6,7 @@ var TopicList = require('js/globals/videoPlayer/TopicList')
 var Video = require('js/globals/videoPlayer/Video')
 var ControlBar = require('js/globals/videoPlayer/ControlBar')
 var Player = require('js/globals/videoPlayer/Player');
-
-var topicObjList = [
-    {
-        name: "What Django is",
-        time: 2,
-        id: 1,
-        isCurrentTopic: false,
-    },
-    {
-        name: "How Dynamic Web Servers Work",
-        time: 40,
-        id: 2,
-        isCurrentTopic: false,
-    },
-    {
-        name: "Hard to Learn with Guide",
-        time: 60,
-        id: 3,
-        isCurrentTopic: false,
-    },
-    {
-        name: "djangoproject.com",
-        time: 100,
-        id: 4,
-        isCurrentTopic: false,
-    },
-    {
-        name: "What Django is",
-        time: 200,
-        id: 5,
-        isCurrentTopic: false,
-    },
-    {
-        name: "How Dynamic Web Servers Work",
-        time: 300,
-        id: 6,
-        isCurrentTopic: false,
-    },
-    {
-        name: "Hard to Learn with Guide",
-        time: 400,
-        id: 7,
-        isCurrentTopic: false,
-    },
-    {
-        name: "djangoproject.com",
-        time: 500,
-        id: 8,
-        isCurrentTopic: false,
-    },
-    {
-        name: "What Django is",
-        time: 600,
-        id: 9,
-        isCurrentTopic: false,
-    },
-    {
-        name: "How Dynamic Web Servers Work",
-        time: 700,
-        id: 10,
-        isCurrentTopic: false,
-    },
-    {
-        name: "Hard to Learn with Guide",
-        time: 800,
-        id: 11,
-        isCurrentTopic: false,
-    },
-    {
-        name: "djangoproject.com",
-        time: 900,
-        id: 12,
-        isCurrentTopic: false,
-    }
-]
-
 pollInterval=100
-
 
 function updateCurrentTopicOnKey(targetKey, topicList){
     for(var i=0; i<topicList.length; i++){
@@ -125,17 +48,18 @@ function styleTime(time){
 }
 
 module.exports  = React.createClass({
-    loadDataFromServer: function(){
+    loadDataFromServer: function(v_id){
         console.log("loadDataFromServer")
         $.ajax({
-          //ZwPhbBrXMzndAFATkyzUrE
-          url: "/1/v/" + this.props.videoUUID,
+          url: "/1/v/" + v_id,
           dataType: 'json',
           cache: false,
           success: function(data) {
+            if (this.state.Player)
+                this.state.Player.destroy();
             this.setState({Player: new Player(data.videoID)})
             this.setState({topicObjList:data.topicList})
-            console.log(this.state.Player.getPlaybackRate())
+            this.forceUpdate();
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -169,6 +93,7 @@ module.exports  = React.createClass({
             Player: null,
             videoDivHeight: 0,
             videoDivWidth: 0,
+            uuid: this.props.videoUUID,
         };
     },
     setWindowSize: function(){
@@ -180,7 +105,7 @@ module.exports  = React.createClass({
         });
     },
     componentDidMount: function() {
-        this.loadDataFromServer();
+        this.loadDataFromServer(this.props.videoUUID);
         this.setWindowSize();
         this.setState({isPlaying:true})
         this.setState({currentTime:"0:00"})
@@ -211,6 +136,13 @@ module.exports  = React.createClass({
             this.state.Player.play();
         }
     },
+    componentWillReceiveProps: function(nextProps) {
+        if (this.state.uuid != nextProps.videoUUID) {
+            // $(".videoDiv").remove();
+            this.setState({uuid: nextProps.videoUUID})
+            this.loadDataFromServer(nextProps.videoUUID);
+        }
+    },
     render: function() {
         if(this.state.Player==null) return <div>loading...</div>
         return ( 
@@ -228,7 +160,7 @@ module.exports  = React.createClass({
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}
-                        topicObjList={topicObjList}
+                        topicObjList={this.state.topicObjList}
                         getDuration={this.state.Player.getDuration}
                         handlePlayPauseClick={this.handlePlayPauseClick}
                         handleScrub={this.handleScrub}
@@ -239,10 +171,3 @@ module.exports  = React.createClass({
         )
     }
 })
-
-
-// ReactDOM.render(
-//     <VideoPlayer 
-//     videoUUID="xaZdt2isEKM"/>, 
-//     document.getElementById('page-anchor')
-// )

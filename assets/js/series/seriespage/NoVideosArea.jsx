@@ -8,12 +8,14 @@ var Button = require('react-bootstrap').Button;
 var Modal = require('react-bootstrap').Modal;
 var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 var AddVideoToSeriesForm = require('js/series/seriespage/AddVideoToSeriesForm');
+var AnnotateVideosForSeries = require('js/series/seriespage/AnnotateVideosForSeries');
 
 module.exports = React.createClass({
     getInitialState: function() {
         return {
             showModal: false,
-            urls: ""
+            urls: "",
+            annotating: false
         }
     },
     close: function() {
@@ -42,8 +44,8 @@ module.exports = React.createClass({
           success: function(data) {
             console.log(data);
             if (data.status) {
-                this.close()
                 this.props.reloadPageData()
+                this.setState({annotating: true})
             } else {
                 console.log("sad face");
             }
@@ -57,18 +59,32 @@ module.exports = React.createClass({
         var hasVideos = (this.props.data.videos.length > 0)
         var title = hasVideos ? "Add more videos to this series." : "This series is currently empty."
         var overAllClass = hasVideos ? "noVideosArea hasVideos" : "noVideosArea"
+
+        var modalTitle = this.state.annotating ? "Annotation" : "Import Videos(s)"
+        var modalClass = this.state.annotating ? "annotating" : ""
+
+        if (this.state.annotating) {
+          var modalBody = (
+            <AnnotateVideosForSeries
+                data={this.props.data}/>
+          )
+        } else {
+          var modalBody = (
+            <AddVideoToSeriesForm 
+                onURLAdded={this.onURLAdded}/>
+          )
+        } 
         return (
             <div className={overAllClass}>
                 <div>{title}</div>
                 <div className="addVideo">
                     <Button onClick={this.open} className="addVideoBtn structabl-blue">Import Video(s)</Button>
-                    <Modal show={this.state.showModal} onHide={this.close}>
+                    <Modal className={modalClass} show={this.state.showModal} onHide={this.close}>
                       <Modal.Header closeButton>
-                        <Modal.Title>Import Video(s)</Modal.Title>
+                        <Modal.Title>{modalTitle}</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                        <AddVideoToSeriesForm 
-                            onURLAdded={this.onURLAdded}/>
+                        {modalBody}
                       </Modal.Body>
                       <Modal.Footer>
                         <Button className="structabl-blue" onClick={this.close}>Cancel</Button>

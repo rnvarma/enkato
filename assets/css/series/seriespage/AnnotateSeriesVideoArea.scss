@@ -1,0 +1,22 @@
+
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.annotateSeriesVideoArea {
+    display: inline-block;
+    vertical-align: top;
+    width: 80%;
+    padding: 30px;
+    height: 100%;
+
+    .name {
+        font-size: 20px;
+        font-weight: 800;
+        color: $structabl-blue;
+    }
+
+    .video {
+        height: 75%;
+        max-height: 500px;
+    }
+}
