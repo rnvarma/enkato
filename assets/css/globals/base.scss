@@ -14,9 +14,14 @@ form label {
     color: $structabl-blue;
 }
 
-.btn {
+.btn.structabl-red.btn-default {
     border-radius: 4px;
     font-size: 14px;
+
+    background-color: $structabl-red;
+    color: white;
+    text-transform: uppercase;
+    border: 1px solid $structabl-red
 
     &:hover {
         border: 1px solid $structabl-red;
@@ -33,10 +38,28 @@ form label {
     }
 }
 
-.btn-default {
-    background-color: $structabl-red;
+.btn.structabl-blue.btn-default {
+    border-radius: 4px;
+    font-size: 14px;
+
+    background-color: $structabl-blue;
     color: white;
     text-transform: uppercase;
+    border: 1px solid $structabl-blue;
+
+    &:hover {
+        border: 1px solid $structabl-blue;
+        color: $structabl-blue;
+        background-color: white;
+    }
+
+    &:focus {
+        outline: 0 !important;
+    }
+
+    &:active {
+        outline: 0 !important;
+    }
 }
 
 .modal-backdrop.in {

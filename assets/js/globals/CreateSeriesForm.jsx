@@ -6,7 +6,6 @@ var Form = require('react-bootstrap').Form;
 var FormGroup = require('react-bootstrap').FormGroup;
 var Col = require('react-bootstrap').Col;
 var FormControl = require('react-bootstrap').FormControl;
-var Button = require('react-bootstrap').Button;
 var ControlLabel = require('react-bootstrap').ControlLabel;
 var InputGroup = require('react-bootstrap').InputGroup;
 

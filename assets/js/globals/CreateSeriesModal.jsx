@@ -61,7 +61,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <li className="createSeriesModal">
-                <Button className="createBtn" eventKey={3} onClick={this.open}>Create</Button>
+                <Button className="createBtn structabl-red" eventKey={3} onClick={this.open}>Create</Button>
                 <Modal show={this.state.showModal} onHide={this.close}>
                   <Modal.Header closeButton>
                     <Modal.Title>Create a New Series</Modal.Title>
