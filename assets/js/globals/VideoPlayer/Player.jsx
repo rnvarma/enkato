@@ -16,7 +16,13 @@ module.exports = function (videoId) {
                 height: '100%',
                 width: '100%',
                 videoId: videoId,
-                playerVars: { 'autoplay': 1, 'controls': 0 },
+                playerVars: { 
+                    'rel': 0, 
+                    'autoplay': 1, 
+                    'controls': 0,
+                    'fs': 0,
+                    'iv_load_policy': 3
+                },
             });
         }
         YouTubeIframeLoader.load(loadPlayer)
@@ -47,7 +53,7 @@ module.exports = function (videoId) {
     *   True otherwise
     */
     this.paused = function(){
-        if (!this.player) return;
+        if (!this.player || !this.player.getPlayerState) return;
         return (this.player.getPlayerState()==2)
     }
 

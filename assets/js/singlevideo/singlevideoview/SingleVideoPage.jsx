@@ -32,7 +32,7 @@ var SingleVideoPage = React.createClass({
             <NavBar/>
             <Row className="videoPlayerWrapper">
               <Col mdOffset={1} md={10}>
-                <VideoPlayer videoID={this.props.videoID}/>
+                <VideoPlayer videoUUID={this.props.videoUUID}/>
               </Col>
             </Row>
           </div>
@@ -41,7 +41,7 @@ var SingleVideoPage = React.createClass({
 })
 
 ReactDOM.render(<SingleVideoPage 
-    videoID={$("#v_id").attr("data-vid")}/>, 
+    videoUUID={$("#v_uuid").attr("data-vuuid")}/>, 
     document.getElementById('page-anchor')
 )
 

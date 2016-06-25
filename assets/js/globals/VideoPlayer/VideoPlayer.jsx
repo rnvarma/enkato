@@ -125,13 +125,22 @@ function styleTime(time){
 
 
 module.exports  = React.createClass({
-    loadCommentsFromServer: function(){
-        this.setState({topicObjList:topicObjList})
-        this.setState({isPlaying:true})
-        this.setState({currentTime:"0:00"})
-        this.setState({percentDone:0})
-        // var temp = $(".videoDiv").height()-$('.ControlBar').height()
+    loadDataFromServer: function(){
+        console.log("loadDataFromServer")
+        $.ajax({
+          //ZwPhbBrXMzndAFATkyzUrE
+          url: "/1/v/" + this.props.videoUUID,
+          dataType: 'json',
+          cache: false,
+          success: function(data) {
+            this.setState({Player: new Player(data.videoID)})
+            this.setState({topicObjList:data.topicList})
 
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
     },
     updateCurrentState: function(){
         //set time
@@ -147,6 +156,7 @@ module.exports  = React.createClass({
         this.setState({
             isPlaying: playing
         })
+        this.setWindowSize()
     },
     getInitialState: function() {
         return {
@@ -154,10 +164,9 @@ module.exports  = React.createClass({
             isPlaying:false, 
             currentTime:"0:00",
             percentDone:0,
-            Player: new Player(this.props.videoID),
+            Player: null,
             videoDivHeight: 0,
             videoDivWidth: 0,
-            ynPlayerHeight:0
         };
     },
     setWindowSize: function(){
@@ -167,13 +176,13 @@ module.exports  = React.createClass({
         this.setState({
             videoDivWidth: $(".videoDiv").width()
         });
-        this.setState({
-            ynPlayerHeight:$(".ynVideoPlayer").width()/2
-        })
     },
     componentDidMount: function() {
-        this.loadCommentsFromServer();
+        this.loadDataFromServer();
         this.setWindowSize();
+        this.setState({isPlaying:true})
+        this.setState({currentTime:"0:00"})
+        this.setState({percentDone:0})
         window.onresize=this.setWindowSize;
         //updates time and playing
         setInterval(this.updateCurrentState, pollInterval)
@@ -201,17 +210,16 @@ module.exports  = React.createClass({
         }
     },
     render: function() {
+        if(this.state.Player==null) return <div>loading...</div>
         return ( 
-            <div 
-                classname="ynVideoPlayer" 
-                >
+            <div className="ynVideoPlayer">
                 <div className="topicButtonColumn">
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
                         handleTopicClick={this.handleTopicClick}/>
                 </div>
                 <div className="videoDiv">
-                    <Video 
+                    <Video
                         renderVideo={this.state.Player.renderVideo}
                         videoDivHeight={this.state.videoDivHeight}
                         controlBarHeight={$('.ControlBar').height()}/>
