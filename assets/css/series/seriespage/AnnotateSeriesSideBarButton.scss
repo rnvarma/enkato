@@ -1,0 +1,28 @@
+
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.annotateSeriesSideBarButton {
+    padding: 10px 20px;
+
+    &:first-of-type {
+        padding-top: 20px;
+    }
+
+    &:last-of-type {
+        padding-bottom: 20px;
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: $grey-hover;
+    }
+
+    &.active {
+        background-color: $grey-hover;
+    }
+
+    .image {
+        width: 100%;
+    }
+}
