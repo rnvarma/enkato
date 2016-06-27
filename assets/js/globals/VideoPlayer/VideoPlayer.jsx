@@ -233,7 +233,9 @@ module.exports  = React.createClass({
                         handlePlayPauseClick={this.handlePlayPauseClick}
                         handleScrub={this.handleScrub}
                         currentTime={this.state.currentTime}
-                        percentDone={this.state.percentDone}/>
+                        percentDone={this.state.percentDone}
+                        setPlaybackRate={this.state.Player.setPlaybackRate}
+                        playerContext={this.state.Player.getContext()}/>
                 </div>
             </div>
         )

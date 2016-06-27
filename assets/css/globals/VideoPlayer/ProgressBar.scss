@@ -6,13 +6,13 @@
     .watched{
         height:10px;
         width:0%;
-        background-color:$yn-green;
+        background-color:$structabl-red;
         float:left;
     }
     .notWatched{
         height:10px;
         width:100%;
-        background-color: $grey-progress-bar-not-watched;
+        background-color: white;
         float:right;
     }
 }

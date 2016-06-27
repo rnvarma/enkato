@@ -37,6 +37,10 @@ module.exports = function (videoId) {
         return this.player.playVideo();
     }
 
+    this.getContext = function(){
+        return this;
+    }
+
     /*
     * Pauses Video
     */
@@ -122,9 +126,10 @@ module.exports = function (videoId) {
     *
     * Param: Accepts integers - 0.25, 0.5, 1, 1.5, 2
     */
-    this.setPlaybackRate = function(rate){
-        if (!this.player || !this.player.setPlaybackRate) return;
-        return this.player.setPlaybackRate(rate)
+    this.setPlaybackRate = function(rate, this2){
+        if(!this2) this2 = this;
+        if (!this2.player) return;
+        return this2.player.setPlaybackRate(rate)
     }
 
     /*
