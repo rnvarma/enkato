@@ -1,5 +1,5 @@
 
-require('css/testingGrounds/QuizAddingForm/quizaddingform.scss')
+require('css/globals/QuizAddingForm/quizaddingform.scss')
 var React = require('react')
 var ReactDOM = require('react-dom')
 var FontAwesome = require('react-fontawesome');
@@ -14,7 +14,7 @@ var SingleQuizForm = require('js/testinggrounds/QuizAddingForm/SingleQuizForm.js
 
 
 
-var QuizAddingFormWrapper = React.createClass({
+module.exports = React.createClass({
     setChoiceList: function(choiceList, questionNumber){
         var tempQuestionList=this.state.questions
         tempQuestionList[questionNumber-1].choiceList = choiceList
@@ -163,8 +163,3 @@ var ScrollButtonNode = React.createClass({
         )
     }
 })
-
-
-ReactDOM.render(<QuizAddingFormWrapper/>, 
-    document.getElementById('page-anchor')
-)
