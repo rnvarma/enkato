@@ -1,0 +1,66 @@
+@import '../mixins.scss';
+@import '../colors.scss';
+
+.editableTopicNode{
+    width:100%;
+    background-color: white;
+    border-bottom: 1px solid $structabl-bg-blue;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color:$structabl-blue;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 16px;
+    transition: border-bottom 0.4s;
+
+    &.active {
+        background-color: #FDFDFE;
+        border-bottom: 5px solid $structabl-blue;
+    }
+
+    &:hover {
+        background-color:$structabl-bg-blue;
+        cursor:pointer;
+    }
+
+    &.hover {
+        .delete {
+            display: inline-block;
+        }
+    }
+
+    input {
+        width: calc(100% - 50px - 20px);
+        background-color: transparent;
+        border: none;
+
+        &:active, &:focus {
+            border: none;
+            outline: none;
+        }
+
+
+    }
+
+    .time {
+        display: inline-block;
+        width: 50px;
+        font-weight: normal;
+    }
+
+    .delete {
+        display: none;
+        width: 24px;
+        font-size: 17px;
+        font-weight: 100;
+        padding: 3px;
+        border-radius: 20px;
+        text-align: center;
+
+
+        &:hover {
+            background-color: white;
+        }
+    }
+}

@@ -1,0 +1,33 @@
+
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.profileSeriesPanelCol {
+    padding: 10px;
+    padding-top: 0px;
+    padding-left: 0px;
+
+    .profileSeriesPanel {
+        background-color: white;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        .thumbnailArea {
+            .image {
+                width: 50%;
+                display: inline-block;
+            }
+        }
+
+        .seriesInfo {
+            padding: 20px;
+
+            .name {
+                font-weight: bold;
+                color: $structabl-blue;
+            }
+        }
+    }
+}

@@ -20,10 +20,14 @@
     }
 }
 
+.toggleAnnotating {
+    display: none;
+}
 
 .annotating {
     .modal-dialog {
-        width: 75%;
+        width: 90%;
+        transition: width 1s
     }
 
     .modal-body {
@@ -31,5 +35,22 @@
         padding: 0px;
         max-height: 600px;
         height: 75%;
+    }
+
+    .toggleAnnotating {
+        display: inherit;
+        float: left;
+        border-radius: 0px !important;
+        color: $structabl-blue;
+        background-color: white;
+        margin: 0px !important;
+
+        &.active {
+            background-color: $structabl-blue;
+            color: white;
+        }
+
+        &.quizzes {
+        }
     }
 }
