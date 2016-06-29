@@ -15,7 +15,8 @@ module.exports = React.createClass({
         return {
             showModal: false,
             urls: "",
-            annotating: false
+            annotating: false,
+            quizMode: false,
         }
     },
     close: function() {
@@ -54,6 +55,12 @@ module.exports = React.createClass({
           }.bind(this)
         });
     },
+    toggleToTopicMode: function() {
+      this.setState({quizMode: false})
+    },
+    toggleToQuizMode: function() {
+      this.setState({quizMode: true})
+    },
     render: function() {
         var hasVideos = (this.props.data.videos.length > 0)
         var title = hasVideos ? "Add more videos to this series." : "This series is currently empty."
@@ -86,6 +93,11 @@ module.exports = React.createClass({
                         {modalBody}
                       </Modal.Body>
                       <Modal.Footer>
+                        <Button
+                          className={"toggleAnnotating topics" + (this.state.quizMode ? "" : " active")}
+                          onClick={this.toggleToTopicMode}>Topics</Button>
+                        <Button className={"toggleAnnotating quizzes" + (this.state.quizMode ? " active" : "")}
+                          onClick={this.toggleToQuizMode}>Quizzing</Button>
                         <Button className="structabl-blue" onClick={this.close}>Cancel</Button>
                         <Button className="structabl-red">Back</Button>
                         <Button className="structabl-red" onClick={this.onFormSubmit}>Next</Button>

@@ -98,4 +98,14 @@ def getURLSFromStringList(urls):
     url_list = filter(lambda s: s, url_list)
     return url_list
 
+def getSeriesThumbnails(series):
+    series_videos = series.videos.all()
+    thumbnails = []
+    num_videos = series_videos.count()
+    if (num_videos > 0): thumbnails.append(series_videos[0].video.thumbnail)
+    if (num_videos > 1): thumbnails.append(series_videos[1].video.thumbnail)
+    if (num_videos > 2): thumbnails.append(series_videos[2].video.thumbnail)
+    if (num_videos > 3): thumbnails.append(series_videos[3].video.thumbnail)
+    return thumbnails
+
 

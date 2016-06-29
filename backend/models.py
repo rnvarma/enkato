@@ -21,7 +21,8 @@ class CustomUser(models.Model):
     employment_status = models.CharField(max_length=200, default="")
     employer_name = models.CharField(max_length=200, default="")
     user = models.OneToOneField(settings.AUTH_USER_MODEL, default=0, related_name="customuser")
-    
+    image = models.CharField(max_length=300, default="")
+
     def __str__(self):
         return self.first_name + " " + self.last_name
 

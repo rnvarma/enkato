@@ -20,6 +20,16 @@ class Serializer(object):
         return data
 
     @staticmethod
+    def serialize_userprofiledata(user):
+        data = {}
+        data["username"] = user.username
+        data["user_id"] = user.id
+        data["name"] = capitalize(user.first_name) + " " + capitalize(user.last_name)
+        data["bio"] = user.bio
+        data["image"] = user.image
+        return data
+
+    @staticmethod
     def serialize_class(cls):
         data = {}
         data["name"] = cls.name
@@ -31,11 +41,13 @@ class Serializer(object):
     @staticmethod
     def serialize_series(series):
         data = {}
+        data["uuid"] = series.uuid
         data["name"] = series.name
         data["description"] = series.description
         data["image"] = series.image
         data["creator"] = Serializer.serialize_user(series.creator)
         data["num_videos"] = len(series.videos.all())
+        data["thumbnails"] = getSeriesThumbnails(series)
         series_videos = series.videos.all().order_by("order")
         total_time = 0
         for series_video in series_videos:
@@ -63,6 +75,7 @@ class Serializer(object):
         data["num_views"] = video.num_views
         data["order"] = video.order if 'order' in video.__dict__ else 0
         return data
+
     @staticmethod
     def serialize_topic(topic):
         data = {}
@@ -83,6 +96,14 @@ class UserData(APIView):
             cu = request.user.customuser
             data = Serializer.serialize_user(cu)
             data["logged_in"] = True
+        return Response(data)
+
+class UserProfileData(APIView):
+    def get(self, request, u_id):
+        cu = CustomUser.objects.get(id=u_id)
+        data = {}
+        data["userdata"] = Serializer.serialize_userprofiledata(cu)
+        data["series"] = map(Serializer.serialize_series, cu.created_series.all())
         return Response(data)
 
 class ClassroomData(APIView):

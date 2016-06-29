@@ -4,5 +4,5 @@ from django.contrib import admin
 from userprofile.views import *
 
 urlpatterns = [
-    url(r'^userprofile$', UserProfile.as_view()),
+    url(r'^userprofile/(?P<u_id>[a-zA-Z0-9_.-]*)$', UserProfile.as_view()),
 ]
