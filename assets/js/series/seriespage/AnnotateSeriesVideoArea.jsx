@@ -2,7 +2,7 @@
 require("css/series/seriespage/AnnotateSeriesVideoArea.scss");
 
 var React = require('react')
-var VideoPlayer = require('js/globals/VideoPlayer/VideoPlayer');
+var EditVideoPlayer = require('js/globals/EditVideoPlayer/EditVideoPlayer');
 
 module.exports = React.createClass({
     render: function() {
@@ -12,7 +12,7 @@ module.exports = React.createClass({
                     {this.props.currentVideo.name}
                 </div>
                 <div className="video">
-                    <VideoPlayer
+                    <EditVideoPlayer
                         videoUUID={this.props.currentVideo.uuid}/>
                 </div>
             </div>

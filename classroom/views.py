@@ -5,13 +5,6 @@ from django.http import JsonResponse
 
 from backend.models import *
 
-
-class LoadVideoWrapper(View):
-    def get(self, request):
-        return render(request, 'globals/videoplayer.html')
-
-
-
 class CreateClass(View):
     def get(self, request):
         return render(request, 'classroom/create.html')

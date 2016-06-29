@@ -28,7 +28,7 @@ module.exports = React.createClass({
         this.setState({urls: e.target.value});
     },
     onFormSubmit: function(e) {
-        if (!this.state.urls) return;
+        if (!this.state.urls) this.setState({annotating: true});
         data = {
             urls: this.state.urls
         }
@@ -42,7 +42,6 @@ module.exports = React.createClass({
             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
           },
           success: function(data) {
-            console.log(data);
             if (data.status) {
                 this.props.reloadPageData()
                 this.setState({annotating: true})

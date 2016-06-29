@@ -1,0 +1,6 @@
+@import '../mixins.scss';
+@import '../colors.scss';
+
+.editableTopicList {
+    height: calc(100% - 50px);
+}

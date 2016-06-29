@@ -23,7 +23,8 @@
 
 .annotating {
     .modal-dialog {
-        width: 75%;
+        width: 90%;
+        transition: width 1s
     }
 
     .modal-body {

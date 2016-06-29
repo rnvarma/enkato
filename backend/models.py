@@ -195,7 +195,7 @@ class Topic(models.Model):
     time = models.IntegerField(default=0) # seconds count into video
     name = models.CharField(max_length=200, default="")
     description = models.TextField(default="")
-    num_clicks = models.IntegerField(default="")
+    num_clicks = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name

@@ -61,7 +61,16 @@ class Serializer(object):
         data["duration_san"] = sanetizeTime(video.duration)
         data["creator"] = Serializer.serialize_user(video.creator)
         data["num_views"] = video.num_views
-        data["order"] = video.order
+        data["order"] = video.order if 'order' in video.__dict__ else 0
+        return data
+    @staticmethod
+    def serialize_topic(topic):
+        data = {}
+        data["name"] = topic.name
+        data["time"] = topic.time
+        data["time_clean"] = convertSecondsToTime(topic.time)
+        data["id"] = topic.uuid
+        data["isCurrentTopic"] = False #used in frontend
         return data
 
 class UserData(APIView):
@@ -88,5 +97,15 @@ class SeriesData(APIView):
         series_data = Serializer.serialize_series(series)
         return Response(series_data)
 
+class VideoData(View):
+    def get(self, request, v_uuid):
+        video = Video.objects.get(uuid=v_uuid)
+        topicList = video.topics.all().order_by('time')
+        frontendTList = map(Serializer.serialize_topic, topicList)
+        return JsonResponse({
+            'videoID':video.vid_id,
+            'topicList':frontendTList,
+            'videoData': Serializer.serialize_video(video)
+        })
 
 

@@ -17,7 +17,7 @@ module.exports = {
     singlevideo: './assets/js/singlevideo/singlevideoview/SingleVideoPage.jsx',
     upload: './assets/js/upload/upload/UploadSingleVideo.jsx',
     createseries: './assets/js/series/create/CreateSeries.jsx',
-    seriespage: './assets/js/series/seriespage/SeriesPage.jsx'
+    seriespage: './assets/js/series/seriespage/SeriesPage.jsx',
   },
 
   output: {

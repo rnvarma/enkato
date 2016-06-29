@@ -1,0 +1,20 @@
+@import '../mixins.scss';
+@import '../colors.scss';
+
+
+.ynVideoPlayer{
+    overflow: hidden;
+    background-color:$white;
+}
+
+.topicButtonColumn{
+    float: left;
+    height:100%;
+    width:25%;
+}
+.videoDiv{
+    float: right;
+    width: 75%;
+    margin:0px;
+    height:100%;
+}
