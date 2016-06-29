@@ -10,8 +10,7 @@ import json
 
 # Create your views here.
 class SingleVideoPage(View):
-    def get(self, request, v_uuid):
-        print(v_uuid)
+    def get(self, request,v_uuid):
         return render(request, 'singlevideo/singlevideo.html', {'v_uuid':v_uuid})
 
 class AddTopic(View):

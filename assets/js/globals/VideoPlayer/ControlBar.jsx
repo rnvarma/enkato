@@ -18,7 +18,7 @@ module.exports = React.createClass({
         this.setState({isShowingSpeedChanger:false})
     },
     getInitialState: function(){
-        return{
+        return {
             playBackSpeed:'1x',
             isShowingSpeedChanger:false
         }
