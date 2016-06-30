@@ -27,7 +27,8 @@ module.exports = React.createClass({
                     currentVideo={this.state.currentVideo}/>
                 <AnnotateSeriesVideoArea
                     data={this.props.data}
-                    currentVideo={this.state.currentVideo}/>
+                    currentVideo={this.state.currentVideo}
+                    quizMode={this.props.quizMode}/>
             </div>
         )
     }

@@ -72,7 +72,8 @@ module.exports = React.createClass({
         if (this.state.annotating) {
           var modalBody = (
             <AnnotateVideosForSeries
-                data={this.props.data}/>
+                data={this.props.data}
+                quizMode={this.state.quizMode}/>
           )
         } else {
           var modalBody = (

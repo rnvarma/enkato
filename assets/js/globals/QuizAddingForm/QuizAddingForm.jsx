@@ -1,6 +1,7 @@
 
 require('css/globals/QuizAddingForm/quizaddingform.scss')
 var React = require('react')
+var getCookie = require('js/globals/GetCookie')
 var ReactDOM = require('react-dom')
 var FontAwesome = require('react-fontawesome');
 var Form = require('react-bootstrap').Form;
@@ -10,11 +11,52 @@ var FormControl = require('react-bootstrap').FormControl;
 var ControlLabel = require('react-bootstrap').ControlLabel;
 var InputGroup = require('react-bootstrap').InputGroup;
 var FontAwesome = require('react-fontawesome');
-var SingleQuizForm = require('js/testinggrounds/QuizAddingForm/SingleQuizForm.jsx')
+var SingleQuizForm = require('js/globals/QuizAddingForm/SingleQuizForm.jsx')
+var ScrollArea = require('react-scrollbar')
 
 
 
 module.exports = React.createClass({
+    loadDataFromServer: function(vuuid){
+        console.log("loadDataFromServer")
+        console.log(vuuid)
+        $.ajax({
+          url: "/api/quizdata/" + vuuid,
+          dataType: 'json',
+          cache: false,
+          success: function(data) {
+            this.setState({questions:data.questions})
+            this.setState({numQuestions:data.numQuestions})
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
+    },
+    saveDataToServer: function(){
+        console.log("saveDataToServer")
+
+        var data = {
+            'questions': JSON.stringify(this.state.questions)
+        }
+
+        $.ajax({
+          url: "/v/" + this.state.uuid + "/updatequiz",
+          dataType: 'json',
+          type: 'POST',
+          data: data,
+          beforeSend: function (xhr) {
+            xhr.withCredentials = true;
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          },
+          success: function(data) {
+            console.log("yay we done")
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
+    },
     setChoiceList: function(choiceList, questionNumber){
         var tempQuestionList=this.state.questions
         tempQuestionList[questionNumber-1].choiceList = choiceList
@@ -36,7 +78,21 @@ module.exports = React.createClass({
     },
     scrollTo: function(idNum){
         console.log(idNum+"---------")
-        $('html, body').animate({scrollTop: $("#"+idNum+"q").offset().top}, 500);
+        $('.quizAddingForm').animate({scrollTop: $("#"+idNum+"q").offset().top}, 500);
+    },
+    componentDidMount: function(){
+        this.setState({uuid: this.props.videoUUID})
+        this.loadDataFromServer(this.props.videoUUID);
+        $(window).unload(this.saveDataToServer)
+    },
+    componentWillReceiveProps: function(nextProps) {
+        console.log("----------------")
+
+        if (this.state.uuid != nextProps.videoUUID) {
+            this.saveDataToServer()
+            this.setState({uuid: nextProps.videoUUID})
+            this.loadDataFromServer(nextProps.videoUUID);
+        }
     },
     getInitialState:function(){
         return {
@@ -45,9 +101,11 @@ module.exports = React.createClass({
                 choiceList:[{choiceText:"", keyCode:"abc"}],
                 shouldRefocus:false,
                 currentFocus:0,
-                keyCode:1
+                keyCode:1,
+                new:true
             }],
-            numQuestions:1
+            numQuestions:1,
+            uuid:''
         }
     },
     addQuestion: function(){
@@ -60,16 +118,16 @@ module.exports = React.createClass({
                 choiceList:[{choiceText:"", keyCode:"abc"}],
                 shouldRefocus:false,
                 currentFocus:0,
-                keyCode:n
+                keyCode:n,
+                new:true
         })
         this.setState({questions:tempQuestionList})
         //have to set delay for this to scroll properly, but won't work for now.
         //this.scrollTo(n) 
     },
     render: function(){
-        console.log(this.state)
         return(
-            <div>
+            <div className="quizAddingForm">
                 <div className="questionNumberButtons">
                     <ScrollButtonList 
                         scrollToFromButton={this.scrollToFromButton}
@@ -101,7 +159,8 @@ var QuizFormsList = React.createClass({
                     handleQuizQuestionChange={this2.props.handleQuizQuestionChange}
                     setShouldRefocus={this2.props.setShouldRefocus}
                     setChoiceList={this2.props.setChoiceList}
-                    question={question}/>
+                    question={question}
+                    questionText={question.quizQuestionText}/>
             )
         })
         return(
@@ -142,7 +201,8 @@ var QuizFormNode = React.createClass({
                     choiceList={this.props.question.choiceList}
                     handleQuizQuestionChange={this.props.handleQuizQuestionChange}
                     setShouldRefocus={this.props.setShouldRefocus}
-                    setChoiceList={this.props.setChoiceList}/>
+                    setChoiceList={this.props.setChoiceList}
+                    questionText={this.props.questionText}/>
             </div>
         )
     }

@@ -74,6 +74,7 @@ module.exports = React.createClass({
         return (
             <div className="indi-quiz-form">
                 <QuizQuestion 
+                    questionText={this.props.questionText}
                     handleQuizQuestionChange={this.handleQuizQuestionChange}/>
                 <MCChoiceList 
                     addNewChoice ={this.addNewChoice}
@@ -113,6 +114,7 @@ var QuizQuestion = React.createClass({
                     className="question-input"
                     type="text"
                     placeholder="Question"
+                    value={this.props.questionText}
                     onChange={this.handleQuestionTextChange}/>
             </Row>
         )
@@ -178,7 +180,8 @@ var MCChoiceNode = React.createClass({
                         type="text"
                         placeholder={placeholder}
                         onChange={this.handleChoiceTextChange}
-                        id={this.props.keyCode}/>
+                        id={this.props.keyCode}
+                        value={this.props.choiceText}/>
                     <FontAwesome 
                         className="timesIcon"
                         name='times'
