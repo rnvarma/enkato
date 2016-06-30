@@ -38,14 +38,14 @@ module.exports = React.createClass({
     render: function() {
         var active = this.props.active;
         var LoginButton = active == "login" ? (
-          <NavItem eventKey={1} className="active" href="/login">SIGN UP</NavItem>
+          <NavItem eventKey={1} className="active" href="/login">SIGN IN</NavItem>
         ) : (
-          <NavItem eventKey={1} href="/login">SIGN UP</NavItem>
+          <NavItem eventKey={1} href="/login">SIGN IN</NavItem>
         )
         var RegisterButton = active == "register" ? (
-          <NavItem eventKey={2} className="active" href="/register">SIGN IN</NavItem>
+          <NavItem eventKey={2} className="active" href="/register">SIGN UP</NavItem>
         ) : (
-          <NavItem eventKey={2} href="/register">SIGN IN</NavItem>
+          <NavItem eventKey={2} href="/register">SIGN UP</NavItem>
         )
         if (this.state.logged_in) {
             var RightBar = (
@@ -58,8 +58,8 @@ module.exports = React.createClass({
         } else {
             var RightBar = (
                 <Nav pullRight>
-                    {LoginButton}
                     {RegisterButton}
+                    {LoginButton}
                 </Nav>
             )
         }
@@ -68,7 +68,7 @@ module.exports = React.createClass({
                 <Navbar.Header>
                   <Navbar.Brand>
                     <a href="/">
-                        <span className="logo">enkato</span>
+                        <span className="logo"><img className="headerLogo" src="/static/imgs/enkato_logo.png" /></span>
                     </a>
                   </Navbar.Brand>
                   <Navbar.Toggle />

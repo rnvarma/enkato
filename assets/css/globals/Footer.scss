@@ -10,9 +10,9 @@
         vertical-align: top;
         width: 30%;
 
-        font-size: 30px;
-        font-weight: bold;
-        color: $structabl-blue;
+        .logo {
+            width: 150px;
+        }
     }
 
     .footerPart {
@@ -21,9 +21,6 @@
         width: 17%;
 
         .title {
-            font-weight: bold;
-            font-size: 16px;
-            color: $structabl-blue;
         }
 
         .itemsList {

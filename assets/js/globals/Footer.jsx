@@ -7,7 +7,7 @@ module.exports = React.createClass({
         return (
             <div className="footer">
                 <div className="name">
-                    enkato
+                    <img src="/static/imgs/enkato_logo.png" className="logo"/>
                 </div>
                 <div className="footerPart">
                     <div className="title">
