@@ -129,4 +129,33 @@ class VideoData(View):
             'videoData': Serializer.serialize_video(video)
         })
 
+class QuizData(APIView):
+    def get(self, request, v_uuid):
+        video = Video.objects.get(uuid=v_uuid)
+        quizQs=video.quiz_questions.all()
+        questions = []
+        lenList = len(quizQs)
+        for i in range(lenList):
+            quizQ = quizQs[i]
+            currQuiz = {}
+            currQuiz["shouldRefocus"] = False
+            currQuiz["currentFocus"] = 0
+            currQuiz["keyCode"] = i+1
+            currQuiz["quizQuestionText"] = quizQ.question_text
+            currQuiz["new"] = False
+            mcChoices=quizQ.mc_responses.all()
+            tempChoiceList = []
+            for choice in mcChoices:
+                elem = {}
+                elem["choiceText"] = choice.choice_text
+                elem["keyCode"] = str(choice.id)
+                tempChoiceList.append(elem)
+            currQuiz["choiceList"] = tempChoiceList
+            questions.append(currQuiz)
+        numQuestions=lenList
+        return JsonResponse({
+            'questions':questions,
+            'numQuestions':numQuestions
+            })
+
 

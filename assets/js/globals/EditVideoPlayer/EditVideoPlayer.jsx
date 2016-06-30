@@ -110,9 +110,12 @@ module.exports = React.createClass({
           dataType: 'json',
           cache: false,
           success: function(data) {
-            if (this.state.Player)
+            if (this.state.Player){
                 this.syncTopics();
-                if (this.state.Player) this.state.Player.destroy();
+                if (this.state.Player){
+                    this.state.Player.destroy();
+                }
+            }
             this.setState({Player: new Player(data.videoID)})
             this.setState({topicObjList:data.topicList})
             this.forceUpdate();
@@ -244,6 +247,7 @@ module.exports = React.createClass({
             videoDivHeight: 0,
             videoDivWidth: 0,
             uuid: "BPrvNe8wzY6kMYZKE2TqbN",
+            pollingInterval:null
         };
     },
     setWindowSize: function(){
@@ -255,15 +259,22 @@ module.exports = React.createClass({
         });
     },
     componentDidMount: function() {
-        this.loadDataFromServer("BPrvNe8wzY6kMYZKE2TqbN");
         this.setWindowSize();
         this.setState({isPlaying:true})
         this.setState({currentTime:"0:00"})
         this.setState({percentDone:0})
         window.onresize=this.setWindowSize;
         //updates time and playing
-        setInterval(this.updateCurrentState, pollInterval)
+        this.setState({
+            pollInterval:setInterval(this.updateCurrentState, pollInterval)
+        });
         $(window).unload(this.syncTopics)
+    },
+    componentWillMount:function(){
+        this.loadDataFromServer("BPrvNe8wzY6kMYZKE2TqbN");
+    },
+    componentWillUnmount: function(){
+        clearInterval(this.state.pollInterval)
     },
     handleScrub: function(percentOfOne) {
         var duration = this.state.Player.getDuration();

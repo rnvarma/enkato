@@ -48,7 +48,31 @@ class EditVideoTesting(View):
         return render(request, 'edit_video.html')
 
 
-
+class UpdateQuiz(View):
+    def post(self, request, v_uuid):
+        video = Video.objects.get(uuid=v_uuid)
+        questions_json = request.POST.get('questions')
+        questions = json.loads(questions_json)
+        count = 0
+        for q in questions:
+            if(not q["new"]): continue
+            qObj = QuizQuestion(
+                video=video,
+                order=count,
+                question_text=q["quizQuestionText"],
+                question_type="mc"
+            )
+            qObj.save()
+            for choice in q["choiceList"]:
+                cObj = MCChoice(
+                    quiz_question=qObj,
+                    choice_text=choice["choiceText"],
+                    is_correct=False #ahhhhh
+                )
+                cObj.save()
+            count+=1
+        
+        return JsonResponse({'status': True})
 
 
 
