@@ -38,14 +38,14 @@ module.exports = React.createClass({
     render: function() {
         var active = this.props.active;
         var LoginButton = active == "login" ? (
-          <NavItem eventKey={1} className="active" href="/login">Login</NavItem>
+          <NavItem eventKey={1} className="active" href="/login">SIGN UP</NavItem>
         ) : (
-          <NavItem eventKey={1} href="/login">Login</NavItem>
+          <NavItem eventKey={1} href="/login">SIGN UP</NavItem>
         )
         var RegisterButton = active == "register" ? (
-          <NavItem eventKey={2} className="active" href="/register">Register</NavItem>
+          <NavItem eventKey={2} className="active" href="/register">SIGN IN</NavItem>
         ) : (
-          <NavItem eventKey={2} href="/register">Register</NavItem>
+          <NavItem eventKey={2} href="/register">SIGN IN</NavItem>
         )
         if (this.state.logged_in) {
             var RightBar = (

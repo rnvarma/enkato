@@ -139,7 +139,7 @@ var HomePage = React.createClass({
                         <Col sm={8} smOffset={2} xs={12} md={6} mdOffset={6}>
                             <div className="content">
                                 <div className="title">
-                                    Becoming a <span className="bold">enkato educator</span> is easy.
+                                    Becoming an <span className="bold">enkato educator</span> is easy.
                                 </div>
                                 <div className="text">
                                     Organize educational videos in public or private classrooms, collaborate with teaching assistants to address questions, analyze student interaction, and create custom quizzes.
