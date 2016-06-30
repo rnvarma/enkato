@@ -68,7 +68,7 @@ module.exports = React.createClass({
                 <Navbar.Header>
                   <Navbar.Brand>
                     <a href="/">
-                        <span className="logo">structabl</span>
+                        <span className="logo">enkato</span>
                     </a>
                   </Navbar.Brand>
                   <Navbar.Toggle />

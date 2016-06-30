@@ -1,0 +1,119 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.homePage {
+    .header {
+        background-image: url("/static/imgs/splash_page.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        .left {
+            display: inline-block;
+            vertical-align: top;
+            width: 50%;
+            color: white;
+            padding: 150px 100px;
+            padding-right: 70px;
+
+            .logo {
+                font-size: 40px;
+            }
+
+            .sub-logo {
+                font-size: 20px;
+                margin-top: 20px
+            }
+        }
+
+        .right {
+            display: inline-block;
+            vertical-align: top;
+            width: 50%;
+
+            padding: 75px 175px;
+
+            .signUpTitle {
+                margin-bottom: 15px;
+                font-size: 20px;
+                color: white;
+            }
+        }
+    }
+
+    .studentBenefits {
+        background-color: white;
+        padding-bottom: 100px;
+
+        .left {
+            .text {
+                font-size: 35px;
+                padding-top: 75px;
+                padding-left: 75px;
+            }
+
+            .imageArea {
+                margin-top: 25px;
+                width: 90%;
+
+                img {
+                    width: 85%;
+                }
+            }
+        }
+
+        .right {
+            padding-top: 75px;
+
+            .info {
+                padding-bottom: 50px;
+
+                .icon {
+                    display: inline-block;
+                    vertical-align: top;
+                    background-color: $kato-green;
+                    text-align: center;
+                    font-size: 25px;
+                    border-radius: 31px;
+                    width: 50px;
+                    height: 50px;
+                    padding-top: 13px;
+                    color: white;
+                }
+
+                .textArea {
+                    display: inline-block;
+                    vertical-align: top;
+                    width: 80%;
+                    margin-left: 20px;
+
+                    .title {
+                        font-weight: bold;
+                        font-size: 20px;
+                    }
+                }
+            }
+        }
+    }
+
+    .katoGirl {
+        background-image: url("/static/imgs/katogirl.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        .content {
+            padding: 100px;
+
+            .title {
+                font-size: 35px;
+            }
+
+            .text {
+                margin-top: 20px;
+            }
+
+            .button {
+                margin-top: 20px;
+            }
+        }
+    }
+}
