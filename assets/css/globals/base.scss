@@ -10,6 +10,10 @@ body {
     border: 1px solid $structabl-bg-blue;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 form label {
     color: $structabl-blue;
 }
@@ -25,6 +29,30 @@ form label {
     &:hover {
         border: 1px solid $structabl-red;
         color: $structabl-red;
+        background-color: white;
+    }
+
+    &:focus {
+        outline: 0 !important;
+    }
+
+    &:active {
+        outline: 0 !important;
+    }
+}
+
+.btn.greenBtn.btn-default {
+    border-radius: 4px;
+    font-size: 14px;
+    text-transform: uppercase;
+
+    background-color: $kato-green;
+    color: white;
+    border: 1px solid $kato-green;
+
+    &:hover {
+        border: 1px solid $kato-green;
+        color: $kato-green;
         background-color: white;
     }
 

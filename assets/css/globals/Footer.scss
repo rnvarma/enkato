@@ -1,0 +1,37 @@
+@import '../globals/colors.scss';
+@import '../globals/mixins.scss';
+
+.footer {
+    background-color: white;
+    padding: 70px;
+
+    .name {
+        display: inline-block;
+        vertical-align: top;
+        width: 30%;
+
+        font-size: 30px;
+        font-weight: bold;
+        color: $structabl-blue;
+    }
+
+    .footerPart {
+        display: inline-block;
+        vertical-align: top;
+        width: 17%;
+
+        .title {
+            font-weight: bold;
+            font-size: 16px;
+            color: $structabl-blue;
+        }
+
+        .itemsList {
+            margin-top: 10px;
+
+            .item {
+                color: grey;
+            }
+        }
+    }
+}
