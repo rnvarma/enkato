@@ -90,7 +90,7 @@ module.exports = React.createClass({
           )
         } else {
           var modalBody = (
-            <AddVideoToSeriesForm 
+            <AddVideoToSeriesForm  
                 onURLAdded={this.onURLAdded}/>
           )
         } 

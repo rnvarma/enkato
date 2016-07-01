@@ -21,7 +21,7 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className="annotateVideosForSeries">
-                <AnnotateSeriesSideBar
+                <AnnotateSeriesSideBar 
                     data={this.props.data}
                     updateCurrVideo={this.updateCurrVideo}
                     currentVideo={this.state.currentVideo}/>
