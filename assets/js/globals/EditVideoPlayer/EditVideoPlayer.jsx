@@ -166,6 +166,8 @@ module.exports = React.createClass({
                 topicList.push(data.newTopic);
                 this.sortTopicListByTime(topicList)
                 this.setState({topicObjList: topicList});
+                //focus on new topic
+                $('#' + data.newTopic.id).focus()
             } else {
                 console.log("sad face");
             }

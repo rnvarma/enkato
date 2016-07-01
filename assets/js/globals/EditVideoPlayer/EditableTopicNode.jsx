@@ -51,7 +51,8 @@ module.exports = React.createClass({
                         value={this.props.topic.name}
                         onChange={this.onNameChange}
                         onFocus={this.onInputFocus}
-                        onBlur={this.onInputBlur}/>
+                        onBlur={this.onInputBlur}
+                        id={this.props.id}/>
                     <FontAwesome
                         className="delete"
                         name='close'
