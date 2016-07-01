@@ -86,6 +86,25 @@ class Serializer(object):
         data["isCurrentTopic"] = False #used in frontend
         return data
 
+    @staticmethod
+    def serialize_quiz_question(quizQ):
+        data = {}
+        data["shouldRefocus"] = False
+        data["currentFocus"] = 0
+        data["quizQuestionText"] = quizQ.question_text
+        data["new"] = False
+        data["choiceList"] = map(Serializer.serialize_quiz_choice, quizQ.mc_responses.all())
+        data["id"] = quizQ.id
+        return data
+
+    @staticmethod
+    def serialize_quiz_choice(choice):
+        data = {}
+        data["text"] = choice.choice_text
+        data["id"] = choice.id
+        data["is_correct"] = choice.is_correct
+        return data
+
 class UserData(APIView):
     def get(self, request):
         if request.user.is_anonymous():
@@ -132,30 +151,11 @@ class VideoData(View):
 class QuizData(APIView):
     def get(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
-        quizQs=video.quiz_questions.all()
-        questions = []
-        lenList = len(quizQs)
-        for i in range(lenList):
-            quizQ = quizQs[i]
-            currQuiz = {}
-            currQuiz["shouldRefocus"] = False
-            currQuiz["currentFocus"] = 0
-            currQuiz["keyCode"] = i+1
-            currQuiz["quizQuestionText"] = quizQ.question_text
-            currQuiz["new"] = False
-            mcChoices=quizQ.mc_responses.all()
-            tempChoiceList = []
-            for choice in mcChoices:
-                elem = {}
-                elem["choiceText"] = choice.choice_text
-                elem["keyCode"] = str(choice.id)
-                tempChoiceList.append(elem)
-            currQuiz["choiceList"] = tempChoiceList
-            questions.append(currQuiz)
-        numQuestions=lenList
+        quizQs = video.quiz_questions.all()
+        questions = map(Serializer.serialize_quiz_question, quizQs)
         return JsonResponse({
-            'questions':questions,
-            'numQuestions':numQuestions
-            })
+            'questions': questions,
+            'numQuestions': quizQs.count()
+        })
 
 
