@@ -62,8 +62,8 @@ var SeriesPage = React.createClass({
             success: function(data) {
                 var stateData = this.state.data;
                 /* update state.data */
-                $.extend(true, stateData, data)
-            this.setState({ data: stateData });
+                $.extend(true, stateData, data);
+                this.setState({ data: stateData });
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -71,7 +71,7 @@ var SeriesPage = React.createClass({
         });
     },
     componentDidMount: function() {
-        this.loadPageData()
+        this.loadPageData();
     },
     render: function() {
         return (
