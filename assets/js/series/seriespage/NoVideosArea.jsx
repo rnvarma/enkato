@@ -25,13 +25,26 @@ module.exports = React.createClass({
     open: function() {
         this.setState({showModal: true})
     },
+    onBackClick: function(){
+      if(this.state.annotating){
+        this.setState({annotating:false})
+      } else {
+        this.close()
+      }
+    },
     onURLAdded: function(e) {
         this.setState({urls: e.target.value});
     },
     onFormSubmit: function(e) {
-        if (!this.state.urls) this.setState({annotating: true});
+        if (!this.state.urls){
+          this.setState({annotating: true});
+        }
         data = {
             urls: this.state.urls
+        }
+        if(this.state.annotating){
+          this.close()
+          return
         }
         $.ajax({
           url: "/upload/s/" + this.props.data.s_id,
@@ -100,7 +113,7 @@ module.exports = React.createClass({
                         <Button className={"toggleAnnotating quizzes" + (this.state.quizMode ? " active" : "")}
                           onClick={this.toggleToQuizMode}>Quizzing</Button>
                         <Button className="structabl-blue" onClick={this.close}>Cancel</Button>
-                        <Button className="structabl-red">Back</Button>
+                        <Button className="structabl-red" onClick={this.onBackClick}>Back</Button>
                         <Button className="structabl-red" onClick={this.onFormSubmit}>Next</Button>
                       </Modal.Footer>
                     </Modal>

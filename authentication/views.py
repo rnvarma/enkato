@@ -51,6 +51,8 @@ class Register(View):
         )
         cu.save()
 
+        #login(request, user)
+
         return JsonResponse({'status': True})
 
 class Logout(View):

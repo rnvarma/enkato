@@ -305,38 +305,38 @@ module.exports = React.createClass({
             this.loadDataFromServer(nextProps.videoUUID);
         }
     },
+    playInContext: function(context){
+        this.state.Player.play()
+    },
     render: function() {
         if(this.state.Player==null) return <div>loading...</div>
         return (
-            <div>
-                <div className="editVideoArea">
-                    <div className="ynVideoPlayer">
-                        <div className="topicButtonColumn">
-                            <EditableTopicList 
-                                topicObjList={this.state.topicObjList} 
-                                handleTopicClick={this.handleTopicClick}
-                                updateName={this.updateTopicName}
-                                addNewTopic={this.addNewTopic}
-                                handleTopicDelete={this.handleTopicDelete}/>
-                        </div>
-                        <div className="videoDiv">
-                            <Video
-                                renderVideo={this.state.Player.renderVideo}
-                                videoDivHeight={this.state.videoDivHeight}
-                                controlBarHeight={$('.ControlBar').height()}/>
-                            <ControlBar 
-                                className="ControlBar"
-                                isPlaying={this.state.isPlaying}
-                                topicObjList={this.state.topicObjList}
-                                getDuration={this.state.Player.getDuration}
-                                handlePlayPauseClick={this.handlePlayPauseClick}
-                                handleScrub={this.handleScrub}
-                                currentTime={this.state.currentTime}
-                                percentDone={this.state.percentDone}/>
-                        </div>
+                <div className="ynVideoPlayer">
+                    <div className="topicButtonColumn">
+                        <EditableTopicList 
+                            topicObjList={this.state.topicObjList} 
+                            handleTopicClick={this.handleTopicClick}
+                            updateName={this.updateTopicName}
+                            addNewTopic={this.addNewTopic}
+                            handleTopicDelete={this.handleTopicDelete}
+                            playVideo={this.playInContext}/>
+                    </div>
+                    <div className="videoDiv">
+                        <Video
+                            renderVideo={this.state.Player.renderVideo}
+                            videoDivHeight={this.state.videoDivHeight}
+                            controlBarHeight={$('.ControlBar').height()}/>
+                        <ControlBar 
+                            className="ControlBar"
+                            isPlaying={this.state.isPlaying}
+                            topicObjList={this.state.topicObjList}
+                            getDuration={this.state.Player.getDuration}
+                            handlePlayPauseClick={this.handlePlayPauseClick}
+                            handleScrub={this.handleScrub}
+                            currentTime={this.state.currentTime}
+                            percentDone={this.state.percentDone}/>
                     </div>
                 </div>
-            </div>
         )
     }
 })
