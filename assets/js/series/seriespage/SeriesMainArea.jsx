@@ -42,7 +42,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="stats">
                             <div className="creator">
-                                <a href={"/u/" + this.props.data.creator.user_id}>{this.props.data.creator.name}</a>
+                                <a href={"/userprofile/" + this.props.data.creator.user_id}>{this.props.data.creator.name}</a>
                             </div>
                             <div className="num-videos">
                                 {this.props.data.num_videos} videos
