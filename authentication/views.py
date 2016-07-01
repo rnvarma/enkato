@@ -42,6 +42,7 @@ class Register(View):
         new_user.last_name = request.POST.get('last_name')
         new_user.save()
 
+
         cu = CustomUser(
             email= request.POST.get('email'),
             first_name= request.POST.get('first_name'),
@@ -50,6 +51,10 @@ class Register(View):
             user=new_user
         )
         cu.save()
+
+        user = authenticate(username=request.POST.get('user_name'),
+                            password=request.POST.get('password'))
+        login(request, user)
 
         return JsonResponse({'status': True})
 

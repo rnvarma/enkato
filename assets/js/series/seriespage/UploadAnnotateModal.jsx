@@ -119,6 +119,11 @@ module.exports = React.createClass({
                         {modalInfo.body} 
                     </Modal.Body>
                     <Modal.Footer>
+                        <Button
+                            className={"toggleAnnotating topics" + (this.props.quizMode ? "" : " active")}
+                            onClick={this.props.setTopicMode}>Topics</Button>
+                        <Button className={"toggleAnnotating quizzes" + (this.props.quizMode ? " active" : "")}
+                                onClick={this.props.setQuizMode}>Quizzing</Button>
                         <Button className="structabl-blue" onClick={this.props.close}>Cancel</Button>
                         <Button className="structabl-red" onClick={this.onBack}>Back</Button>
                         <Button className="structabl-red" onClick={this.onNext}>{nextText}</Button>

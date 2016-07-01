@@ -12,10 +12,12 @@ module.exports = React.createClass({
             return (
                 <EditableTopicNode
                     key={topic.id}
+                    id={topic.id}
                     topic={topic}
                     handleTopicClick={this.props.handleTopicClick}
                     updateName={this.props.updateName}
-                    handleTopicDelete={this.props.handleTopicDelete}/>
+                    handleTopicDelete={this.props.handleTopicDelete}
+                    playVideo={this.props.playVideo}/>
             );
         },this);
         return(

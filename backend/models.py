@@ -151,6 +151,7 @@ class Video(models.Model):
     duration = models.IntegerField(default=0)
     num_views = models.IntegerField(default=0)
     creator = models.ForeignKey(CustomUser, related_name="video_uploads")
+    question_counter = models.IntegerField(default=0)
     
     def __str__(self):
         return self.name

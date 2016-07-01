@@ -23,7 +23,10 @@ class AddTopic(View):
             time=int(time)
         )
         newTopic.save()
-        return JsonResponse({'status': True, 'newTopic': Serializer.serialize_topic(newTopic)})
+        return JsonResponse({
+            'status': True, 
+            'newTopic': Serializer.serialize_topic(newTopic)
+        })
 
 class UpdateTopics(View):
     def post(self, request, v_uuid):
@@ -55,24 +58,63 @@ class UpdateQuiz(View):
         questions = json.loads(questions_json)
         count = 0
         for q in questions:
-            if(not q["new"]): continue
-            qObj = QuizQuestion(
-                video=video,
-                order=count,
-                question_text=q["quizQuestionText"],
-                question_type="mc"
-            )
-            qObj.save()
+            qObj = QuizQuestion.objects.get(id=q["id"])
+            qObj.question_text = q["quizQuestionText"]
             for choice in q["choiceList"]:
-                cObj = MCChoice(
-                    quiz_question=qObj,
-                    choice_text=choice["choiceText"],
-                    is_correct=False #ahhhhh
-                )
+                cObj = MCChoice.objects.get(id=choice["id"])
+                cObj.choice_text = choice["text"]
                 cObj.save()
+            qObj.save()
             count+=1
         
         return JsonResponse({'status': True})
+
+class AddQuizQuestion(View):
+    def post(self, request, v_uuid):
+        video = Video.objects.get(uuid=v_uuid)
+        q_count = video.question_counter
+        new_question = QuizQuestion(
+            video=video,
+            order=q_count,
+            question_type="mc"
+        )
+        new_question.save()
+        video.question_counter += 1
+        video.save()
+        return JsonResponse({
+            'status': True,
+            'new_question': Serializer.serialize_quiz_question(new_question)
+        })
+
+class AddQuizOption(View):
+    def post(self, request, v_uuid):
+        video = Video.objects.get(uuid=v_uuid)
+        q_id = request.POST.get('qid')
+        question = QuizQuestion.objects.get(id=q_id)
+        new_choice = MCChoice(
+            quiz_question=question
+        )
+        new_choice.save()
+        new_choice_data = Serializer.serialize_quiz_choice(new_choice)
+        new_choice_data["focus"] = True
+
+        return JsonResponse({
+            'status': True,
+            'new_choice': new_choice_data
+        })
+
+class DeleteQuizOption(View):
+    def post(self, request, v_uuid):
+        q_id = request.POST.get('qid')
+        c_id = request.POST.get('cid')
+        choice = MCChoice.objects.get(id=c_id)
+        choice.delete()
+
+        return JsonResponse({
+            'status': True,
+            'cid': c_id,
+            'qid': q_id
+        })
 
 
 

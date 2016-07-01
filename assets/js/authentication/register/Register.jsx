@@ -40,12 +40,13 @@ var Register = React.createClass({
           success: function(data) {
             console.log(data);
             if (data.status) {
-                window.location.href = "/login";
+                window.location.href = "/";
             } else {
-                console.log("sad face");
+                alert(data.issue)
             }
           }.bind(this),
           error: function(xhr, status, err) {
+            alert(err.toString())
             console.error(this.props.url, status, err.toString());
           }.bind(this)
         });
