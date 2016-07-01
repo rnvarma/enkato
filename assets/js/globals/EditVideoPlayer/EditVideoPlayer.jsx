@@ -18,25 +18,6 @@ var Player = require('js/globals/videoPlayer/Player');
 var EditableTopicList = require('js/globals/EditVideoPlayer/EditableTopicList')
 var pollInterval = 100;
 
-var fakeTopicData = [
-    {
-        name: 'test1',
-        time: 40,
-        id: 0,
-        isCurrentTopic: true,
-    },{
-        name: 'test2',
-        time: 140,
-        id: 1,
-        isCurrentTopic: false,
-    },{
-        name: 'test3',
-        time: 240,
-        id: 2,
-        isCurrentTopic: false,
-    },
-]
-
 function updateCurrentTopicOnKey(targetKey, topicList){
     for(var i=0; i<topicList.length; i++){
         if(topicList[i].id == targetKey){
@@ -246,7 +227,7 @@ module.exports = React.createClass({
             Player: null,
             videoDivHeight: 0,
             videoDivWidth: 0,
-            uuid: "BPrvNe8wzY6kMYZKE2TqbN",
+            uuid: "",
             pollingInterval:null
         };
     },
