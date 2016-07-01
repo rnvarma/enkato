@@ -18,3 +18,11 @@
     margin:0px;
     height:100%;
 }
+
+.ControlBar{
+    position:relative;
+}
+
+.playbackPopover{
+    right:35 !important;//overrides this one field
+}

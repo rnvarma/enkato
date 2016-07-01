@@ -31,27 +31,34 @@ module.exports = React.createClass({
     handleHoverOff: function(e) {
         this.setState({hovering: false})
     },
+    submitForm: function(e){
+        e.preventDefault()
+        this.props.playVideo()
+    },
     render: function() {
         return (
-            <div
-                className={"editableTopicNode" + (this.state.editing ? " active" : "")
-                                               + (this.state.hovering ? " hover" : "")}
-                onClick={this.handleTopicClick}
-                onMouseEnter={this.handleHoverOn}
-                onMouseLeave={this.handleHoverOff}>
-                <div className="time">
-                    {this.props.topic.time_clean}
+            <form onSubmit={this.submitForm}>
+                <div
+                    className={"editableTopicNode" + (this.state.editing ? " active" : "")
+                                                   + (this.state.hovering ? " hover" : "")}
+                    onClick={this.handleTopicClick}
+                    onMouseEnter={this.handleHoverOn}
+                    onMouseLeave={this.handleHoverOff}>
+                    <div className="time">
+                        {this.props.topic.time_clean}
+                    </div>
+                    <input
+                        value={this.props.topic.name}
+                        onChange={this.onNameChange}
+                        onFocus={this.onInputFocus}
+                        onBlur={this.onInputBlur}/>
+                    <FontAwesome
+                        className="delete"
+                        name='close'
+                        onClick={this.deleteTopic}/>
                 </div>
-                <input
-                    value={this.props.topic.name}
-                    onChange={this.onNameChange}
-                    onFocus={this.onInputFocus}
-                    onBlur={this.onInputBlur}/>
-                <FontAwesome
-                    className="delete"
-                    name='close'
-                    onClick={this.deleteTopic}/>
-            </div>
+                <div type="submit"></div>
+            </form>
         )
     }
 })

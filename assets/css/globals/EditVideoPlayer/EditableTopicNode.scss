@@ -12,11 +12,12 @@
     padding: 10px 15px;
     font-weight: bold;
     font-size: 16px;
-    transition: border-bottom 0.4s;
+    //transition: border-bottom 0.1s;
 
     &.active {
         background-color: #FDFDFE;
-        border-bottom: 5px solid $structabl-blue;
+        margin-bottom:-4px; //so the bar doesnt move
+        border-bottom: 4px solid $structabl-blue;
     }
 
     &:hover {

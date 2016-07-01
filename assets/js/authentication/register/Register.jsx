@@ -40,7 +40,7 @@ var Register = React.createClass({
           success: function(data) {
             console.log(data);
             if (data.status) {
-                window.location.href = "/login";
+                window.location.href = "/";
             } else {
                 console.log("sad face");
             }

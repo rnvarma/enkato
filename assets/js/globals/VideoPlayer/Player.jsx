@@ -27,7 +27,7 @@ module.exports = function (videoId) {
         }
         YouTubeIframeLoader.load(loadPlayer)
     }
-    this.init(this.videoId)
+    this.init(this.videoId) 
 
     this.destroy = function() {
         if (!this.player) return;
@@ -38,7 +38,10 @@ module.exports = function (videoId) {
     *Plays Video
     */
     this.play = function(){
+        console.log("im playing")
+        console.log(this)
         if (!this.player) return;
+        console.log("im playing2")
         return this.player.playVideo();
     }
 
