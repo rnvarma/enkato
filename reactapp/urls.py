@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^', include('singlevideo.urls')),
     url(r'^', include('upload.urls')),
     url(r'^', include('series.urls')),
+    url(r'^', include('userdashboard.urls')),
     url(r'^', include('testinggrounds.urls')),
 ]
