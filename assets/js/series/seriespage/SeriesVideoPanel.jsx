@@ -18,7 +18,7 @@ module.exports = React.createClass({
             <div className="seriesVideoPanel" onClick={this.onClick}>
                 <div className="left">
                     <div className="order">
-                        {video.order}
+                        {video.order+1}
                     </div>
                     <div className="thumbnailArea">
                         <img src={video.thumbnail} className="thumbnailImg"/>

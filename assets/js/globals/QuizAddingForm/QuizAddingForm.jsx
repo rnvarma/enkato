@@ -174,6 +174,7 @@ module.exports = React.createClass({
         });
     },
     addQuestion: function() {
+        data = this.state;
         $.ajax({
           url: "/v/" + this.state.uuid + "/addquizquestion",
           dataType: 'json',

@@ -7,33 +7,63 @@ var React = require('react')
 var ReactDOM = require('react-dom')
 
 var NavBar = require('js/globals/NavBar');
-var getCookie = require('js/globals/GetCookie')
 var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
 
 var SeriesSideBar = require('js/series/seriespage/SeriesSideBar');
 var SeriesMainArea = require('js/series/seriespage/SeriesMainArea');
+var UploadAnnotateModal = require('js/series/seriespage/UploadAnnotateModal');
 
 var SeriesPage = React.createClass({
     getInitialState: function() {
         return {
-            s_id: $("#s_id").attr("data-sid"),
-            name: '',
-            description: '',
-            image: '',
-            videos: [],
-            creator: {},
-            num_videos: 0,
-            total_len: 0
+            data: {
+                s_id: $("#s_id").attr("data-sid"),
+                name: '',
+                description: '',
+                image: '',
+                videos: [],
+                creator: {},
+                num_videos: 0,
+                total_len: 0,
+            },
+            urls: "",
+            show: false,
+            annotateMode: false,
+            quizMode: false
         }
+    },
+    openModal: function(annotating) {
+        this.setState({ show: true, annotateMode: annotating });
+    },
+    closeModal: function() {
+        this.setState({ show: false });
+    },
+    onURLImport: function(event) {
+        this.setState({ urls: event.target.value });
+    },
+    setAnnotateMode: function(bool) {
+        this.setState({ annotateMode: bool });
+    },
+    setTopicMode: function() {
+        this.setState({ quizMode: false });
+    },
+    setQuizMode: function() {
+        this.setState({ quizMode: true });
+    },
+    setUrls: function(newUrls) {
+        this.setState({ urls: newUrls });
     },
     loadPageData: function() {
         $.ajax({
-          url: "/1/s/" + $("#s_id").attr("data-sid"),
+          url: "/1/s/" + this.state.data.s_id,
           dataType: 'json',
           cache: false,
-          success: function(data) {
-            this.setState(data);
+            success: function(data) {
+                var stateData = this.state.data;
+                /* update state.data */
+                $.extend(true, stateData, data)
+            this.setState({ data: stateData });
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -54,10 +84,19 @@ var SeriesPage = React.createClass({
                         </Col>
                         <Col md={10}>
                             <SeriesMainArea
-                                data={this.state}
-                                reloadPageData={this.loadPageData}/>
+                                openModal={this.openModal}
+                                data={this.state.data}
+                            />
                         </Col>
                     </Row>
+                    <UploadAnnotateModal
+                        {...this.state}
+                        close={this.closeModal}
+                        setTopicMode={this.setTopicMode} setQuizMode={this.setQuizMode}
+                        setAnnotateMode={this.setAnnotateMode} setUrls={this.setUrls}
+                        onURLImport={this.onURLImport}
+                        reloadPageData={this.loadPageData}
+                    />
                 </div>
             </div>
         )
