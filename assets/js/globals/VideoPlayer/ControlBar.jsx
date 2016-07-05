@@ -54,7 +54,7 @@ module.exports = React.createClass({
                         <FontAwesome 
                             className="playButton" 
                             name={playOrPause}
-                            onClick={this.props.handlePlayPauseClick}/> 
+                            />
                         <span className="videoTime">{this.props.currentTime}</span>
                         <Popover placement='top' className="playbackPopover">
                             <div 
