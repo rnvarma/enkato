@@ -17,11 +17,12 @@ export default class SeriesMainArea extends React.Component {
         const img_src = this.props.data.image || '/static/imgs/blank_thumbnail.png'
         if (this.props.data.videos.length == 0) {
             var video_area = <NoVideosArea
-            data={this.props.data}
-            reloadPageData={this.props.reloadPageData}
-            openModal={this.props.openModal} />
+                                 data={this.props.data}
+                                 reloadPageData={this.props.reloadPageData}
+                                 openModal={this.props.openModal}
+                             />
 
-            var annotateVideosButton = ""
+            var annotateVideosButton = "";
         } else {
             var video_area = (
                 <div>
@@ -33,10 +34,12 @@ export default class SeriesMainArea extends React.Component {
                 </div>
             )
             var annotateVideosButton =  (
-                <Button onClick={this.props.openModal.bind(null, true)}>
-                    Annotate Video(s)
-                </Button>
-                )
+                <div className="tool-area">
+                    <Button onClick={this.props.openModal.bind(null, true)}>
+                        Annotate Video(s)
+                    </Button>
+                </div>
+            );
         }
         return (
             <div className="seriesMainArea">
@@ -62,8 +65,8 @@ export default class SeriesMainArea extends React.Component {
                                 {this.props.data.total_len}
                             </div>
                         </div>
-                        {annotateVideosButton}
                     </div>
+                    {annotateVideosButton}
                 </div>
                 {video_area}
             </div>
