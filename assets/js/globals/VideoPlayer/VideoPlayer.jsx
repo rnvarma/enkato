@@ -1,11 +1,13 @@
 require('bootstrap-loader'); 
 require("css/globals/VideoPlayer/VideoPlayer")
-var React = require('react')
-var ReactDOM = require('react-dom')
-var TopicList = require('js/globals/videoPlayer/TopicList')
-var Video = require('js/globals/videoPlayer/Video')
-var ControlBar = require('js/globals/videoPlayer/ControlBar')
-var Player = require('js/globals/videoPlayer/Player');
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import TopicList from 'js/globals/videoPlayer/TopicList';
+import Video from 'js/globals/videoPlayer/Video';
+import ControlBar from 'js/globals/videoPlayer/ControlBar';
+import Player from 'js/globals/videoPlayer/Player';
 
 // How often the video player checks the video's state
 const pollInterval = 100;
@@ -20,7 +22,6 @@ function updateCurrentTopicOnKey(targetKey, topicList){
     }
     return topicList;
 }
-
 
 /*
 * ASSUMES LIST IS SORTED BY TIME
