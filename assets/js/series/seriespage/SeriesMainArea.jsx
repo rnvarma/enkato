@@ -34,7 +34,7 @@ export default class SeriesMainArea extends React.Component {
                 </div>
             )
             var annotateVideosButton =  (
-                <div className="tool-area">
+                <div className="annotate-box">
                     <Button onClick={this.props.openModal.bind(null, true)}>
                         Annotate Video(s)
                     </Button>
@@ -64,9 +64,9 @@ export default class SeriesMainArea extends React.Component {
                             <div className="num-mins">
                                 {this.props.data.total_len}
                             </div>
+                            {annotateVideosButton}
                         </div>
                     </div>
-                    {annotateVideosButton}
                 </div>
                 {video_area}
             </div>
