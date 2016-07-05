@@ -6,8 +6,6 @@ require("css/series/seriespage/SeriesPage.scss");
 var React = require('react')
 var ReactDOM = require('react-dom')
 
-var $ = require('jQuery');
-
 var NavBar = require('js/globals/NavBar');
 var Row = require('react-bootstrap').Row;
 import { Col } from 'react-bootstrap';
