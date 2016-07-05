@@ -18,7 +18,7 @@ module.exports = {
     upload: './assets/js/upload/upload/UploadSingleVideo.jsx',
     createseries: './assets/js/series/create/CreateSeries.jsx',
     seriespage: './assets/js/series/seriespage/SeriesPage.jsx',
-    quizaddingform: './assets/js/testinggrounds/QuizAddingForm/QuizAddingForm.jsx'
+    quizaddingform: './assets/js/testinggrounds/QuizAddingForm/QuizAddingForm.jsx',
   },
 
   output: {

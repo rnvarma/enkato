@@ -9,8 +9,11 @@ var AnnotateSeriesVideoArea = require('js/series/seriespage/AnnotateSeriesVideoA
 module.exports = React.createClass({
     getInitialState: function() {
         return {
-            currentVideo: this.props.data.videos[0]
+            currentVideo: null
         }
+    },
+    componentWillReceiveProps: function(nextProps) {
+        this.setState({ currentVideo: nextProps.data.videos[0] });
     },
     updateCurrVideo: function(id) {
         for (var i = 0; this.props.data.videos; i++) {
@@ -19,9 +22,12 @@ module.exports = React.createClass({
         this.setState({currentVideo: this.props.data.videos[i]});
     },
     render: function() {
+        if(this.state.currentVideo == null){
+            return <div> loading... </div>
+        }
         return (
             <div className="annotateVideosForSeries">
-                <AnnotateSeriesSideBar
+                <AnnotateSeriesSideBar 
                     data={this.props.data}
                     updateCurrVideo={this.updateCurrVideo}
                     currentVideo={this.state.currentVideo}/>
@@ -32,4 +38,4 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+});

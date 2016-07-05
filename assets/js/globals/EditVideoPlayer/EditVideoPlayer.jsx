@@ -166,6 +166,8 @@ module.exports = React.createClass({
                 topicList.push(data.newTopic);
                 this.sortTopicListByTime(topicList)
                 this.setState({topicObjList: topicList});
+                //focus on new topic
+                $('#' + data.newTopic.id).focus()
             } else {
                 console.log("sad face");
             }
@@ -252,7 +254,7 @@ module.exports = React.createClass({
         $(window).unload(this.syncTopics)
     },
     componentWillMount:function(){
-        this.loadDataFromServer("BPrvNe8wzY6kMYZKE2TqbN");
+        this.loadDataFromServer(this.props.videoUUID);
     },
     componentWillUnmount: function(){
         clearInterval(this.state.pollInterval)
@@ -283,8 +285,8 @@ module.exports = React.createClass({
         if (this.state.uuid != nextProps.videoUUID) {
             // $(".videoDiv").remove();
             this.setState({uuid: nextProps.videoUUID})
-            this.loadDataFromServer(nextProps.videoUUID);
         }
+        this.loadDataFromServer(nextProps.videoUUID)
     },
     playInContext: function(context){
         this.state.Player.play()

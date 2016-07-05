@@ -3,6 +3,7 @@ import urllib
 import json
 import string
 
+# API docs: https://developers.google.com/youtube/v3/docs/videos
 API_KEY = "AIzaSyCy8238lONTrmV2DdyDpBViFoqke3wuk7A"
 BASE_URL = "https://www.googleapis.com/youtube/v3/videos?"
 
@@ -11,7 +12,17 @@ def capitalize(s):
     return s[0].upper() + s[1:] 
 
 def getYTIdFromURL(url):
-    yt_id = url.split("v=")[1].split("&")[0]
+    """ Gets video id from url or returns None if the id doesn't seem right """
+
+    # TODO: Add proper validation for the 24 different possible YouTube strings
+    # http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex
+
+    yt_id = None
+    if "v=" in url:
+        yt_id = url.split("v=")[1].split("&")[0]
+        if len(yt_id) < 11:
+            yt_id = None
+
     return yt_id
 
 def convertSecondsToTime(s):
@@ -49,10 +60,12 @@ def convertYTDurationToSeconds(yt_dur):
     return seconds
 
 def getDataFromURL(base_url, params):
-    data = None
-    params_str = urllib.urlencode(params)
+    """ Contacts api at base_url with params and returns data retrieved """
+
+    params_str = urllib.urlencode(params) # encodes into GET parameters
     request_url = base_url + params_str
     response = urllib.urlopen(request_url)
+
     # first read the response from the response object
     data = response.read()
     # now decode it from bytes to string
@@ -60,43 +73,46 @@ def getDataFromURL(base_url, params):
     # now parse the string into a python object of dictionaries and lists
     data = json.loads(data)
     response.close()
+
     return data
 
-"""
-returns:
-{
-    name: "",
-    description: "",
-    thumbnail: "",
-    tags: [],
-    duration: 0
-}
-"""
 def getYTMetaData(yt_id):
-    result = {}
-    params = {}
-    params["id"] = yt_id
-    params["part"] = "snippet,contentDetails"
-    params["key"] = API_KEY
-    data = getDataFromURL(BASE_URL, params)
-    if not data["pageInfo"]["totalResults"]: return None
-    video_data = data["items"][0]
-    metadata = video_data["snippet"]
-    result["name"] = metadata["title"]
-    result["description"] = metadata["description"]
-    result["thumbnail"] = metadata["thumbnails"]["medium"]["url"]
-    result["tags"] = metadata["tags"]
-    yt_duration = video_data["contentDetails"]["duration"]
-    result["duration"] = convertYTDurationToSeconds(yt_duration)
-    return result
+    """ See https://developers.google.com/youtube/v3/docs/videos for API details """
 
-def getURLSFromStringList(urls):
-    urls = urls.splitlines()
-    urls = map(lambda l: l.split(","), urls)
-    url_list = []
-    map(lambda l: url_list.extend(l), urls)
-    url_list = filter(lambda s: s, url_list)
-    return url_list
+    params = {
+        'id': yt_id,
+        'part': "snippet,contentDetails",
+        'key': API_KEY
+    }
+
+    data = getDataFromURL(BASE_URL, params)
+    if not data['pageInfo']['totalResults']: return None # no results
+
+    # search by id will only yield one result
+    video_data = data['items'][0]
+
+    return {
+        'name': video_data['snippet']['title'],
+        'description': video_data['snippet']['description'],
+        'thumbnail': video_data['snippet']['thumbnails']['medium']['url'],
+        'tags': video_data['snippet']['tags'],
+        'duration': convertYTDurationToSeconds(video_data['contentDetails']['duration'])
+    }
+
+def getStringsFromStringList(strings):
+    """ Supports string seperated by new lines or commas """
+
+    strings = strings.splitlines()
+    strings = map(lambda l: l.split(","), strings) # in case commas are involved
+
+    # flatten strings in case some were actually comma seperated
+    string_list = []
+    map(lambda l: string_list.extend(l), strings)
+
+    # remove empty string
+    string_list = filter(lambda s: s, string_list)
+
+    return string_list
 
 def getSeriesThumbnails(series):
     series_videos = series.videos.all()

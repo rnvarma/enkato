@@ -23,7 +23,10 @@ class AddTopic(View):
             time=int(time)
         )
         newTopic.save()
-        return JsonResponse({'status': True, 'newTopic': Serializer.serialize_topic(newTopic)})
+        return JsonResponse({
+            'status': True, 
+            'newTopic': Serializer.serialize_topic(newTopic)
+        })
 
 class UpdateTopics(View):
     def post(self, request, v_uuid):

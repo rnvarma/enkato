@@ -1,9 +1,8 @@
 require("css/authentication/register/RegistrationForm.scss")
 
 var React = require('react')
-
 var FontAwesome = require('react-fontawesome');
-
+ 
 var Form = require('react-bootstrap').Form;
 var FormGroup = require('react-bootstrap').FormGroup;
 var Col = require('react-bootstrap').Col;
