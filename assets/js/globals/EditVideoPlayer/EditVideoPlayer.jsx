@@ -117,6 +117,7 @@ module.exports = React.createClass({
         this.setState({topicObjList: topicList});
     },
     syncTopics: function() {
+        console.log(this.state.topicObjList)
         var data = {
             'topics': JSON.stringify(this.state.topicObjList)
         }
@@ -261,6 +262,7 @@ module.exports = React.createClass({
     },
     componentWillUnmount: function(){
         clearInterval(this.state.pollInterval)
+        this.syncTopics();
     },
     handleScrub: function(percentOfOne) {
         var duration = this.state.Player.getDuration();
