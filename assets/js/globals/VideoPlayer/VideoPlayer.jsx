@@ -6,7 +6,9 @@ var TopicList = require('js/globals/videoPlayer/TopicList')
 var Video = require('js/globals/videoPlayer/Video')
 var ControlBar = require('js/globals/videoPlayer/ControlBar')
 var Player = require('js/globals/videoPlayer/Player');
-pollInterval=100
+
+// How often the video player checks the video's state
+const pollInterval = 100;
 
 function updateCurrentTopicOnKey(targetKey, topicList){
     for(var i=0; i<topicList.length; i++){
@@ -40,7 +42,7 @@ function updateCurrentTopicOnTime(seconds, topicList){
 }
 
 function styleTime(time){
-    seconds = time%60
+    let seconds = time%60
     if(seconds<10)
         seconds = "0"+seconds
     //floors the round
