@@ -75,6 +75,12 @@ module.exports = React.createClass({
         var height = $("#" + idNum + "q").height()
         var scrollTop = height * index
         $(".quizAddingForm").animate({scrollTop: scrollTop}, 500);
+        var tempQuestionList = this.state.questions
+        for (var i = 0; i < tempQuestionList.length; i++) {
+          tempQuestionList[i].active = false;
+        }
+        tempQuestionList[index].active = true
+        this.setState({questions: tempQuestionList})
     },
     componentDidMount: function(){
         this.setState({uuid: this.props.videoUUID})

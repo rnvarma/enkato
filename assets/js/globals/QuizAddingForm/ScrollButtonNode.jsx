@@ -11,7 +11,7 @@ module.exports = React.createClass({
         return(
             <div 
                 onClick={this.onClick}
-                className="singleNumberButton">
+                className={"singleNumberButton" + (this.props.active ? " active" : "")}>
                 {this.props.order}
             </div>
         )
