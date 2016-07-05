@@ -7,12 +7,11 @@ var React = require('react')
 var ReactDOM = require('react-dom')
 
 var NavBar = require('js/globals/NavBar');
-var Row = require('react-bootstrap').Row;
-import { Col } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 
-var SeriesSideBar = require('js/series/seriespage/SeriesSideBar');
+import SeriesSideBar from 'js/series/seriespage/SeriesSideBar';
 import SeriesMainArea from 'js/series/seriespage/SeriesMainArea';
-var UploadAnnotateModal = require('js/series/seriespage/UploadAnnotateModal');
+import UploadAnnotateModal from 'js/series/seriespage/UploadAnnotateModal';
 
 var SeriesPage = React.createClass({
     getInitialState: function() {
