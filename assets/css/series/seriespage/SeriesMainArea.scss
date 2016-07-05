@@ -62,14 +62,15 @@
                 .num-mins {
                     display: inline-block;
                     padding-left: 10px;
+                    padding-right: 10px;
+                    border-right: 1px solid black;
+                }
+
+                .annotate-box {
+                    display:inline-block;
+                    padding-left: 10px;
                 }
             }
-        }
-
-        .tool-area {
-            display: inline-block;
-            float: right;
-            padding: 50px 100px;
         }
     }
 }
