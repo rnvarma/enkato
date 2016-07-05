@@ -1,6 +1,10 @@
 @import '../mixins.scss';
 @import '../colors.scss';
 
+.editableTopicNodeContainer {
+    margin-bottom: 0px;
+}
+
 .editableTopicNode{
     width:100%;
     background-color: white;

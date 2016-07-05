@@ -92,8 +92,7 @@ module.exports = React.createClass({
                 class: "annotating",
                 body: <AnnotateVideosForSeries
                           data={this.props.data}
-                          quizMode={this.props.quizMode}
-                      />
+                          quizMode={this.props.quizMode}/>
             }
             nextText = "Finish";
         } else {
@@ -102,8 +101,7 @@ module.exports = React.createClass({
                 class: "",
                 body: <AddVideoToSeriesForm
                           urls={this.props.urls}
-                          onURLAdded={this.props.onURLImport}
-                      />
+                          onURLAdded={this.props.onURLImport}/>
             }
             nextText = "Next";
         }
