@@ -3,10 +3,10 @@ require("css/globals/base.scss")
 require("css/globals/NavBar.scss")
 require("css/series/seriespage/SeriesPage.scss");
 
-var React = require('react')
-var ReactDOM = require('react-dom')
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var NavBar = require('js/globals/NavBar');
+import NavBar from 'js/globals/NavBar';
 import { Col, Row } from 'react-bootstrap';
 
 import SeriesSideBar from 'js/series/seriespage/SeriesSideBar';

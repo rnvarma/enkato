@@ -1,19 +1,17 @@
-
 require("css/series/seriespage/AddVideoToSeriesForm.scss");
 
-var React = require('react')
+import React from 'react';
 
-var FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome';
 
-var Form = require('react-bootstrap').Form;
-var FormGroup = require('react-bootstrap').FormGroup;
-var Col = require('react-bootstrap').Col;
-var FormControl = require('react-bootstrap').FormControl;
-var ControlLabel = require('react-bootstrap').ControlLabel;
-var InputGroup = require('react-bootstrap').InputGroup;
+import { Col, Form, FormGroup, FormControl, ControlLabel, InputGroup } from 'react-bootstrap';
 
-module.exports = React.createClass({
-    render: function() {
+export default class AddToVideoSeriesForm extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
         return (
             <div className="addVideoToSeriesForm">
                 <Form>
@@ -21,6 +19,6 @@ module.exports = React.createClass({
                     <FormControl className="addVideoTextArea" rows={10} onChange={this.props.onURLAdded} componentClass="textarea" type="text" placeholder="Enter each URL on a new line." value={this.props.urls} />
                 </Form>
             </div>
-        )
+        );
     }
-})
+}
