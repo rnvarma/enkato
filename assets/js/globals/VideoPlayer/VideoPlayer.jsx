@@ -112,7 +112,7 @@ module.exports  = React.createClass({
     componentDidMount: function() {
         this.loadDataFromServer(this.props.videoUUID);
         this.setWindowSize();
-        this.setState({isPlaying:true})
+        this.setState({isPlaying:false})
         this.setState({currentTime:"0:00"})
         this.setState({percentDone:0})
         window.onresize=this.setWindowSize;
@@ -134,10 +134,8 @@ module.exports  = React.createClass({
     handlePlayPauseClick: function(){
         //Set the local state and make the API call
         if(this.state.isPlaying){
-            this.setState({isPlaying:false});
             this.state.Player.pause();
         } else{
-            this.setState({isPlaying:true})
             this.state.Player.play();
         }
     },
@@ -156,15 +154,13 @@ module.exports  = React.createClass({
                 <div className="topicButtonColumn">
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
-                        handleTopicClick={this.handleTopicClick}
-                    />
+                        handleTopicClick={this.handleTopicClick}/>
                 </div>
                 <div className="videoDiv">
                     <Video
                         renderVideo={this.state.Player.renderVideo}
                         videoDivHeight={this.state.videoDivHeight}
-                        controlBarHeight={$('.ControlBar').height()}
-                    />
+                        controlBarHeight={$('.ControlBar').height()}/>
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}
@@ -176,8 +172,7 @@ module.exports  = React.createClass({
                         totalTime={this.totalTime}
                         percentDone={this.state.percentDone}
                         setPlaybackRate={this.state.Player.setPlaybackRate}
-                        playerContext={this.state.Player.getContext()}
-                    />
+                        playerContext={this.state.Player.getContext()}/>
                 </div>
             </div>
         )

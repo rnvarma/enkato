@@ -78,14 +78,13 @@ var SeriesPage = React.createClass({
                 <NavBar />
                 <div className="seriesPage">
                     <Row>
-                        <Col md={2}>
+                        <Col md={2} xsHidden smHidden>
                             <SeriesSideBar />
                         </Col>
                         <Col md={10}>
                             <SeriesMainArea
                                 openModal={this.openModal}
-                                data={this.state.data}
-                            />
+                                data={this.state.data}/>
                         </Col>
                     </Row>
                     <UploadAnnotateModal

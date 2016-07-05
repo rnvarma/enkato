@@ -29,7 +29,7 @@ module.exports = React.createClass({
         })
         this.props.setPlaybackRate(speed, this.props.playerContext)
     },
-    componentDidMount: function(){
+    componentDidMount: function() {
         this.setState({
             isShowingSpeedChanger:false
         })

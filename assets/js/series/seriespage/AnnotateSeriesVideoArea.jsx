@@ -14,7 +14,6 @@ module.exports = React.createClass({
                     videoUUID={this.props.currentVideo.uuid}/>
             )
         } else {
-            console.log(this.props.currentVideo.uuid + "  annotateseriesVideoArea")
             editingBody = (
                 <div className="video">
                     <EditVideoPlayer 

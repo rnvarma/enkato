@@ -117,7 +117,6 @@ module.exports = React.createClass({
         this.setState({topicObjList: topicList});
     },
     syncTopics: function() {
-        console.log(this.state.topicObjList)
         var data = {
             'topics': JSON.stringify(this.state.topicObjList)
         }
@@ -279,19 +278,18 @@ module.exports = React.createClass({
     handlePlayPauseClick: function(){
         //Set the local state and make the API call
         if(this.state.isPlaying){
-            this.setState({isPlaying:false});
             this.state.Player.pause();
         } else{
-            this.setState({isPlaying:true})
             this.state.Player.play();
         }
     },
     componentWillReceiveProps: function(nextProps) {
         if (this.state.uuid != nextProps.videoUUID) {
-            // $(".videoDiv").remove();
             this.setState({uuid: nextProps.videoUUID})
+            this.loadDataFromServer(nextProps.videoUUID)
         }
-        this.loadDataFromServer(nextProps.videoUUID)
+        if (!this.state.Player)
+            this.loadDataFromServer(nextProps.videoUUID)
     },
     playInContext: function(context){
         this.state.Player.play()
@@ -326,8 +324,7 @@ module.exports = React.createClass({
                             totalTime={this.totalTime}
                             percentDone={this.state.percentDone}
                             setPlaybackRate={this.state.Player.setPlaybackRate}
-                            playerContext={this.state.Player.getContext()}
-                        />
+                            playerContext={this.state.Player.getContext()}/>
                     </div>
                 </div>
         )
