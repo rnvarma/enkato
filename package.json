@@ -4,7 +4,9 @@
   "description": "fucking lit",
   "main": "index.js",
   "scripts": {
-    "test": "python manage.py runserver"
+      "test": "python manage.py test",
+      "django": "python manage.py runserver",
+      "webpack": "webpack --watch --progress --colors"
   },
   "author": "rohan varma",
   "license": "ISC",
