@@ -62,11 +62,6 @@ var Profile = React.createClass({
                                 onClick={this.onSeriesViewClick}>
                                 Series
                             </div>
-                            <div
-                                className={"allvideos" + (this.state.viewseries ? "" : " active")}
-                                onClick={this.onAllVideosViewClick}>
-                                All Videos
-                            </div>
                         </div>
                     </div>
                     <ProfileSeriesList
@@ -78,7 +73,11 @@ var Profile = React.createClass({
 });
 
 
-
+// <div
+//     className={"allvideos" + (this.state.viewseries ? "" : " active")}
+//     onClick={this.onAllVideosViewClick}>
+//     All Videos
+// </div>
 
 
 ReactDOM.render(<Profile />, document.getElementById('page-anchor'))

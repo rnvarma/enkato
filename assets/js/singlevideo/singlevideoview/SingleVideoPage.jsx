@@ -1,32 +1,20 @@
 require('bootstrap-loader');
 require('css/singlevideo/SingleVideoPage/SingleVideoPage')
-var VideoPlayer=require('js/globals/VideoPlayer/VideoPlayer')
-var NavBar = require('js/globals/NavBar')
-var React = require('react')
-var ReactDOM = require('react-dom')
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
 
-function getCookie(name){
-  var cookieValue = null;
-  if (document.cookie && document.cookie != '') {
-    var cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-      var cookie = $.trim(cookies[i]);
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) == (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import { Row, Col } from 'react-bootstrap';
+
+import NavBar from 'js/globals/NavBar';
+import VideoPlayer from 'js/globals/VideoPlayer/VideoPlayer';
+
+export default class SingleVideoPage extends React.Component {
+    constructor(props) {
+        super(props);
     }
-  }
-  return cookieValue;
-}
-csrftoken = getCookie('csrftoken');
 
-
-var SingleVideoPage = React.createClass({
-    render: function() {
+    render() {
         return (
           <div>
             <NavBar/>
@@ -38,11 +26,9 @@ var SingleVideoPage = React.createClass({
           </div>
         );
     }
-})
+}
 
-ReactDOM.render(<SingleVideoPage 
-    videoUUID={$("#v_uuid").attr("data-vuuid")}/>, 
-    document.getElementById('page-anchor')
-)
+ReactDOM.render(<SingleVideoPage videoUUID={$("#v_uuid").attr("data-vuuid")} />, 
+                document.getElementById('page-anchor'));
 
 

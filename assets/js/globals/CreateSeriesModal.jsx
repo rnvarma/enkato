@@ -26,7 +26,7 @@ module.exports = React.createClass({
     },
     onFormSubmit: function() {
         if (!this.state.name || !this.state.description) return;
-        data = {
+        var data = {
             name: this.state.name,
             description: this.state.description
         }

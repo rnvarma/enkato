@@ -1,12 +1,16 @@
 require('bootstrap-loader'); 
 require("css/globals/VideoPlayer/VideoPlayer")
-var React = require('react')
-var ReactDOM = require('react-dom')
-var TopicList = require('js/globals/videoPlayer/TopicList')
-var Video = require('js/globals/videoPlayer/Video')
-var ControlBar = require('js/globals/videoPlayer/ControlBar')
-var Player = require('js/globals/videoPlayer/Player');
-pollInterval=100
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import TopicList from 'js/globals/videoPlayer/TopicList';
+import Video from 'js/globals/videoPlayer/Video';
+import ControlBar from 'js/globals/videoPlayer/ControlBar';
+import Player from 'js/globals/videoPlayer/Player';
+
+// How often the video player checks the video's state
+const pollInterval = 100;
 
 function updateCurrentTopicOnKey(targetKey, topicList){
     for(var i=0; i<topicList.length; i++){
@@ -18,7 +22,6 @@ function updateCurrentTopicOnKey(targetKey, topicList){
     }
     return topicList;
 }
-
 
 /*
 * ASSUMES LIST IS SORTED BY TIME
@@ -40,7 +43,7 @@ function updateCurrentTopicOnTime(seconds, topicList){
 }
 
 function styleTime(time){
-    seconds = time%60
+    let seconds = time%60
     if(seconds<10)
         seconds = "0"+seconds
     //floors the round
@@ -57,9 +60,11 @@ module.exports  = React.createClass({
           success: function(data) {
             if (this.state.Player)
                 this.state.Player.destroy();
-            this.setState({Player: new Player(data.videoID)})
-            this.setState({topicObjList:data.topicList})
-            this.forceUpdate();
+              this.setState({Player: new Player(data.videoID)});
+              
+              this.setState({topicObjList:data.topicList})
+              this.forceUpdate();
+              this.totalTime = data.videoData.duration_clean;
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -144,19 +149,22 @@ module.exports  = React.createClass({
         }
     },
     render: function() {
-        if(this.state.Player==null) return <div>loading...</div>
-        return ( 
+        if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
+
+        return (
             <div className="ynVideoPlayer">
                 <div className="topicButtonColumn">
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
-                        handleTopicClick={this.handleTopicClick}/>
+                        handleTopicClick={this.handleTopicClick}
+                    />
                 </div>
                 <div className="videoDiv">
                     <Video
                         renderVideo={this.state.Player.renderVideo}
                         videoDivHeight={this.state.videoDivHeight}
-                        controlBarHeight={$('.ControlBar').height()}/>
+                        controlBarHeight={$('.ControlBar').height()}
+                    />
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}
@@ -165,9 +173,11 @@ module.exports  = React.createClass({
                         handlePlayPauseClick={this.handlePlayPauseClick}
                         handleScrub={this.handleScrub}
                         currentTime={this.state.currentTime}
+                        totalTime={this.totalTime}
                         percentDone={this.state.percentDone}
                         setPlaybackRate={this.state.Player.setPlaybackRate}
-                        playerContext={this.state.Player.getContext()}/>
+                        playerContext={this.state.Player.getContext()}
+                    />
                 </div>
             </div>
         )

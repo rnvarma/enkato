@@ -2,21 +2,20 @@ require('bootstrap-loader');
 require("css/globals/base.scss");
 require("css/globals/EditVideoPlayer/EditVideoPlayer.scss")
 
-var React = require('react')
-var ReactDOM = require('react-dom')
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var getCookie = require('js/globals/GetCookie')
+import getCookie from 'js/globals/GetCookie';
 
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
-var Button = require('react-bootstrap').Button;
+import { Row, Col, Button } from 'react-bootstrap';
 
-var NavBar = require('js/globals/NavBar');
-var Video = require('js/globals/videoPlayer/Video')
-var ControlBar = require('js/globals/videoPlayer/ControlBar')
-var Player = require('js/globals/videoPlayer/Player');
-var EditableTopicList = require('js/globals/EditVideoPlayer/EditableTopicList')
-var pollInterval = 100;
+import NavBar from 'js/globals/NavBar';
+import Video from 'js/globals/videoPlayer/Video';
+import ControlBar from 'js/globals/videoPlayer/ControlBar';
+import Player from 'js/globals/videoPlayer/Player';
+import EditableTopicList from 'js/globals/EditVideoPlayer/EditableTopicList';
+
+const pollInterval = 100;
 
 function updateCurrentTopicOnKey(targetKey, topicList){
     for(var i=0; i<topicList.length; i++){
@@ -77,7 +76,7 @@ function removeTopic(targetKey, topicList) {
 }
 
 function styleTime(time){
-    seconds = time%60
+    let seconds = time%60
     if(seconds<10)
         seconds = "0"+seconds
     //floors the round
@@ -97,9 +96,10 @@ module.exports = React.createClass({
                     this.state.Player.destroy();
                 }
             }
-            this.setState({Player: new Player(data.videoID)})
-            this.setState({topicObjList:data.topicList})
-            this.forceUpdate();
+              this.setState({Player: new Player(data.videoID)});
+              this.setState({topicObjList:data.topicList})
+              this.forceUpdate();
+              this.totalTime = data.videoData.duration_clean;
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -251,7 +251,7 @@ module.exports = React.createClass({
         this.setState({
             pollInterval:setInterval(this.updateCurrentState, pollInterval)
         });
-        $(window).unload(this.syncTopics)
+        $(window).on("unload", this.syncTopics);
     },
     componentWillMount:function(){
         this.loadDataFromServer(this.props.videoUUID);
@@ -292,7 +292,8 @@ module.exports = React.createClass({
         this.state.Player.play()
     },
     render: function() {
-        if(this.state.Player==null) return <div>loading...</div>
+        if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
+
         return (
                 <div className="ynVideoPlayer">
                     <div className="topicButtonColumn">
@@ -317,7 +318,11 @@ module.exports = React.createClass({
                             handlePlayPauseClick={this.handlePlayPauseClick}
                             handleScrub={this.handleScrub}
                             currentTime={this.state.currentTime}
-                            percentDone={this.state.percentDone}/>
+                            totalTime={this.totalTime}
+                            percentDone={this.state.percentDone}
+                            setPlaybackRate={this.state.Player.setPlaybackRate}
+                            playerContext={this.state.Player.getContext()}
+                        />
                     </div>
                 </div>
         )

@@ -8,10 +8,10 @@ var ReactDOM = require('react-dom')
 
 var NavBar = require('js/globals/NavBar');
 var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
+import { Col } from 'react-bootstrap';
 
 var SeriesSideBar = require('js/series/seriespage/SeriesSideBar');
-var SeriesMainArea = require('js/series/seriespage/SeriesMainArea');
+import SeriesMainArea from 'js/series/seriespage/SeriesMainArea';
 var UploadAnnotateModal = require('js/series/seriespage/UploadAnnotateModal');
 
 var SeriesPage = React.createClass({
@@ -99,7 +99,7 @@ var SeriesPage = React.createClass({
                     />
                 </div>
             </div>
-        )
+        );
     }
 })
 

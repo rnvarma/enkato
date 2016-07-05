@@ -3,19 +3,26 @@ require("css/series/seriespage/SeriesMainArea.scss");
 
 var React = require('react')
 
-var Button = require('react-bootstrap').Button;
+import { Button } from 'react-bootstrap';
 
 var NoVideosArea = require('js/series/seriespage/NoVideosArea');
 var SeriesVideoList = require('js/series/seriespage/SeriesVideoList');
 
-module.exports = React.createClass({
-    render: function() {
-        img_src = this.props.data.image || '/static/imgs/blank_thumbnail.png'
+export default class SeriesMainArea extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        const img_src = this.props.data.image || '/static/imgs/blank_thumbnail.png'
         if (this.props.data.videos.length == 0) {
             var video_area = <NoVideosArea
-            data={this.props.data}
-            reloadPageData={this.props.reloadPageData}
-            openModal={this.props.openModal} />
+                                 data={this.props.data}
+                                 reloadPageData={this.props.reloadPageData}
+                                 openModal={this.props.openModal}
+                             />
+
+            var annotateVideosButton = "";
         } else {
             var video_area = (
                 <div>
@@ -26,6 +33,13 @@ module.exports = React.createClass({
                     />
                 </div>
             )
+            var annotateVideosButton =  (
+                <div className="tool-area">
+                    <Button onClick={this.props.openModal.bind(null, true)}>
+                        Annotate Video(s)
+                    </Button>
+                </div>
+            );
         }
         return (
             <div className="seriesMainArea">
@@ -51,11 +65,11 @@ module.exports = React.createClass({
                                 {this.props.data.total_len}
                             </div>
                         </div>
-                        <Button onClick={this.props.openModal.bind(null, true)}>Annotate Video(s)</Button>
                     </div>
+                    {annotateVideosButton}
                 </div>
                 {video_area}
             </div>
-        )
+        );
     }
-})
+}
