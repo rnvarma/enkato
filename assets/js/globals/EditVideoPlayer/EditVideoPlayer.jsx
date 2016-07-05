@@ -96,9 +96,10 @@ module.exports = React.createClass({
                     this.state.Player.destroy();
                 }
             }
-            this.setState({Player: new Player(data.videoID)})
-            this.setState({topicObjList:data.topicList})
-            this.forceUpdate();
+              this.setState({Player: new Player(data.videoID)});
+              this.setState({topicObjList:data.topicList})
+              this.forceUpdate();
+              this.totalTime = data.videoData.duration_clean;
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -291,7 +292,8 @@ module.exports = React.createClass({
         this.state.Player.play()
     },
     render: function() {
-        if(this.state.Player==null) return <div>loading...</div>
+        if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
+
         return (
                 <div className="ynVideoPlayer">
                     <div className="topicButtonColumn">
@@ -316,6 +318,7 @@ module.exports = React.createClass({
                             handlePlayPauseClick={this.handlePlayPauseClick}
                             handleScrub={this.handleScrub}
                             currentTime={this.state.currentTime}
+                            totalTime={this.totalTime}
                             percentDone={this.state.percentDone}
                             setPlaybackRate={this.state.Player.setPlaybackRate}
                             playerContext={this.state.Player.getContext()}

@@ -60,9 +60,11 @@ module.exports  = React.createClass({
           success: function(data) {
             if (this.state.Player)
                 this.state.Player.destroy();
-            this.setState({Player: new Player(data.videoID)})
-            this.setState({topicObjList:data.topicList})
-            this.forceUpdate();
+              this.setState({Player: new Player(data.videoID)});
+              
+              this.setState({topicObjList:data.topicList})
+              this.forceUpdate();
+              this.totalTime = data.videoData.duration_clean;
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -147,19 +149,22 @@ module.exports  = React.createClass({
         }
     },
     render: function() {
-        if(this.state.Player==null) return <div>loading...</div>
-        return ( 
+        if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
+
+        return (
             <div className="ynVideoPlayer">
                 <div className="topicButtonColumn">
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
-                        handleTopicClick={this.handleTopicClick}/>
+                        handleTopicClick={this.handleTopicClick}
+                    />
                 </div>
                 <div className="videoDiv">
                     <Video
                         renderVideo={this.state.Player.renderVideo}
                         videoDivHeight={this.state.videoDivHeight}
-                        controlBarHeight={$('.ControlBar').height()}/>
+                        controlBarHeight={$('.ControlBar').height()}
+                    />
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}
@@ -168,9 +173,11 @@ module.exports  = React.createClass({
                         handlePlayPauseClick={this.handlePlayPauseClick}
                         handleScrub={this.handleScrub}
                         currentTime={this.state.currentTime}
+                        totalTime={this.totalTime}
                         percentDone={this.state.percentDone}
                         setPlaybackRate={this.state.Player.setPlaybackRate}
-                        playerContext={this.state.Player.getContext()}/>
+                        playerContext={this.state.Player.getContext()}
+                    />
                 </div>
             </div>
         )
