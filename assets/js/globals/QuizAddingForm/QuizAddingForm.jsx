@@ -87,6 +87,9 @@ module.exports = React.createClass({
         this.loadDataFromServer(this.props.videoUUID);
         $(window).unload(this.saveDataToServer)
     },
+    componentWillUnmount: function() {
+        this.saveDataToServer();
+    },
     componentWillReceiveProps: function(nextProps) {
         if (this.state.uuid != nextProps.videoUUID) {
             this.saveDataToServer()
@@ -109,7 +112,7 @@ module.exports = React.createClass({
         }
     },
     addNewChoice: function(qid) {
-        data = {
+        var data = {
             qid: qid
         }
         $.ajax({
@@ -141,7 +144,7 @@ module.exports = React.createClass({
         });
     },
     deleteChoice: function(qid, cid, index) {
-        data = {
+        var data = {
             qid: qid,
             cid: cid
         }
@@ -180,7 +183,7 @@ module.exports = React.createClass({
         });
     },
     addQuestion: function() {
-        data = this.state;
+        var data = this.state;
         $.ajax({
           url: "/v/" + this.state.uuid + "/addquizquestion",
           dataType: 'json',
@@ -212,6 +215,7 @@ module.exports = React.createClass({
                         scrollToFromButton={this.scrollToFromButton}
                         questions={this.state.questions}/>
                     <FontAwesome
+                        className="addQuestionButton"
                         onClick={this.addQuestion}
                         name='plus'/>
                 </div>

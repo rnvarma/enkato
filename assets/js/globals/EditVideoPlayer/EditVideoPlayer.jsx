@@ -243,18 +243,21 @@ module.exports = React.createClass({
     },
     componentDidMount: function() {
         this.setWindowSize();
-        this.setState({isPlaying:true})
-        this.setState({currentTime:"0:00"})
-        this.setState({percentDone:0})
+        this.setState({
+            isPlaying: true,
+            currentTime: "0:00",
+            percentDone: 0
+        })
         window.onresize=this.setWindowSize;
         //updates time and playing
         this.setState({
-            pollInterval:setInterval(this.updateCurrentState, pollInterval)
+            pollInterval: setInterval(this.updateCurrentState, pollInterval)
         });
         $(window).on("unload", this.syncTopics);
     },
     componentWillMount:function(){
         this.loadDataFromServer(this.props.videoUUID);
+        this.setState({uuid: this.props.videoUUID})
     },
     componentWillUnmount: function(){
         clearInterval(this.state.pollInterval)

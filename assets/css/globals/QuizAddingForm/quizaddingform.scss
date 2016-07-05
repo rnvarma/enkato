@@ -32,3 +32,13 @@
         background-color: $black-active;
     }
 }
+
+.addQuestionButton {
+    padding: 5px 7px;
+
+    &:hover {
+        background-color: $structabl-blue;
+        color: white;
+        cursor: pointer;
+    }
+}
