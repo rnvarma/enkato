@@ -20,6 +20,8 @@ export default class SeriesMainArea extends React.Component {
             data={this.props.data}
             reloadPageData={this.props.reloadPageData}
             openModal={this.props.openModal} />
+
+            var annotateVideosButton = ""
         } else {
             var video_area = (
                 <div>
@@ -30,6 +32,11 @@ export default class SeriesMainArea extends React.Component {
                     />
                 </div>
             )
+            var annotateVideosButton =  (
+                <Button onClick={this.props.openModal.bind(null, true)}>
+                    Annotate Video(s)
+                </Button>
+                )
         }
         return (
             <div className="seriesMainArea">
@@ -55,7 +62,7 @@ export default class SeriesMainArea extends React.Component {
                                 {this.props.data.total_len}
                             </div>
                         </div>
-                        <Button onClick={this.props.openModal.bind(null, true)}>Annotate Video(s)</Button>
+                        {annotateVideosButton}
                     </div>
                 </div>
                 {video_area}
