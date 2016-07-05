@@ -1,6 +1,7 @@
 var path = require("path")
 var webpack = require('webpack')
 var BundleTracker = require('webpack-bundle-tracker')
+var pathtoassets = require('./pathtoassets')
 
 module.exports = {
   context: __dirname,
@@ -21,12 +22,12 @@ module.exports = {
   },
 
   output: {
-      path: path.resolve(__dirname + '/assets/bundles/'),
+      path: path.resolve(pathtoassets + '/assets/bundles/'),
       filename: "[name]-[hash].js",
   },
 
   plugins: [
-      new BundleTracker({filename: path.resolve(__dirname, '/webpack-stats.json')}),
+      new BundleTracker({filename: pathtoassets + '/webpack-stats.json'}),
   ],
 
   module: {
