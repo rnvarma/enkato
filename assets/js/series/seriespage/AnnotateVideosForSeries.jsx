@@ -1,41 +1,40 @@
-
 require("css/series/seriespage/AnnotateVideosForSeries.scss");
 
-var React = require('react')
+import React from 'react';
 
-var AnnotateSeriesSideBar = require('js/series/seriespage/AnnotateSeriesSideBar');
-var AnnotateSeriesVideoArea = require('js/series/seriespage/AnnotateSeriesVideoArea');
+import AnnotateSeriesSideBar from 'js/series/seriespage/AnnotateSeriesSideBar';
+import AnnotateSeriesVideoArea from 'js/series/seriespage/AnnotateSeriesVideoArea';
 
-module.exports = React.createClass({
-    getInitialState: function() {
-        return {
-            currentVideo: null
-        }
-    },
-    componentWillReceiveProps: function(nextProps) {
-        this.setState({ currentVideo: nextProps.data.videos[0] });
-    },
-    updateCurrVideo: function(id) {
+export default class AnnotateVideosForSeries extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            currentVideo: this.props.data.videos[0]
+        };
+        this.updateCurrVideo = this.updateCurrVideo.bind(this);
+    }
+
+    updateCurrVideo(id) {
         for (var i = 0; this.props.data.videos; i++) {
-            if (this.props.data.videos[i].uuid == id) break
+            if (this.props.data.videos[i].uuid == id) break;
         }
         this.setState({currentVideo: this.props.data.videos[i]});
-    },
-    render: function() {
-        if(this.state.currentVideo == null){
-            return <div> loading... </div>
-        }
+    }
+
+    render() {
         return (
             <div className="annotateVideosForSeries">
                 <AnnotateSeriesSideBar 
                     data={this.props.data}
                     updateCurrVideo={this.updateCurrVideo}
-                    currentVideo={this.state.currentVideo}/>
+                    currentVideo={this.state.currentVideo}
+                />
                 <AnnotateSeriesVideoArea
                     data={this.props.data}
                     currentVideo={this.state.currentVideo}
-                    quizMode={this.props.quizMode}/>
+                    quizMode={this.props.quizMode}
+                />
             </div>
-        )
+        );
     }
-});
+}
