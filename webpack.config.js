@@ -1,7 +1,6 @@
 var path = require("path")
 var webpack = require('webpack')
 var BundleTracker = require('webpack-bundle-tracker')
-var pathtoassets = require('./pathtoassets')
 
 module.exports = {
   context: __dirname,
@@ -22,17 +21,17 @@ module.exports = {
   },
 
   output: {
-      path: path.resolve(pathtoassets + '/assets/bundles/'),
+      path: path.resolve(__dirname + '/assets/bundles/'),
       filename: "[name]-[hash].js",
   },
 
   plugins: [
-    new BundleTracker({filename: pathtoassets + '/webpack-stats.json'}),
+      new BundleTracker({filename: path.resolve(__dirname, '/webpack-stats.json')}),
   ],
 
   module: {
     loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader', query: { presets:['react'] }}, // to transform JSX into JS
+        { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader', query: { presets:['react', 'es2015'] }}, // to transform JSX into JS
       { test: /\.css$/, loaders: ["style", "css", "postcss"]},
       { test: /\.scss$/, loaders: ["style", "css", "postcss", "sass"]},
       { test: /\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery,this=>window'},

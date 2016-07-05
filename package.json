@@ -4,9 +4,9 @@
   "description": "fucking lit",
   "main": "index.js",
   "scripts": {
-      "test": "python manage.py test",
-      "django": "python manage.py runserver",
-      "webpack": "webpack --watch --progress --colors"
+    "test": "python manage.py test",
+    "django": "python manage.py runserver",
+    "webpack": "webpack --watch --progress --colors"
   },
   "author": "rohan varma",
   "license": "ISC",
@@ -44,6 +44,7 @@
     "babel": "^6.5.2",
     "babel-core": "^6.9.1",
     "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.5.0",
     "bootstrap-loader": "^1.0.10",
     "bootstrap-sass": "^3.3.6",
