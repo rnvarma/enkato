@@ -78,7 +78,8 @@ module.exports = React.createClass({
             <div className="controlBar">
                 <ProgressBar 
                     handleScrub={this.props.handleScrub}
-                    getDuration={this.props.getDuration}
+                    videoDuration={this.props.videoDuration}
+                    handleTopicClick={this.props.handleTopicClick}
                     topicObjList={this.props.topicObjList}
                     percentDone={this.props.percentDone}
                 />
