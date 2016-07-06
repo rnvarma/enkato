@@ -16,6 +16,7 @@ module.exports = React.createClass({
                     setChoiceList={this.props.setChoiceList}
                     addNewChoice={this.props.addNewChoice}
                     deleteChoice={this.props.deleteChoice}
+                    deleteQuestion={this.props.deleteQuestion}
                     makeChoiceIsCorrect={this.props.makeChoiceIsCorrect}
                     scrollToFromButton={this.props.scrollToFromButton}
                     index={index}

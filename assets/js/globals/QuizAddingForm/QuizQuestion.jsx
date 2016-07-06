@@ -24,7 +24,8 @@ module.exports = React.createClass({
                     onFocus={this.props.scrollToQuestion}/>
                 <FontAwesome
                     className="timesIcon"
-                    name="times"/>
+                    name="times"
+                    onClick={this.props.deleteQuestion}/>
             </Row>
         )
     }
