@@ -189,6 +189,7 @@ module.exports = React.createClass({
                 var questions = this.state.questions
                 questions.push(data.new_question)
                 this.setState({questions: questions})
+                this.scrollToFromButton(data.new_question.id, questions.length - 1)
             } else {
                 console.log("Internal Server Error: Adding Quiz Question Failed")
             }
