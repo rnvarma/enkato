@@ -35,19 +35,6 @@ module.exports = React.createClass({
         })
     },
     render: function() {
-        var playOrPause;
-        if(this.props.isPlaying){
-            playOrPause = "pause"
-        }else{
-            playOrPause="play"
-        }
-
-        let popoverArea = "";
-        if (this.state.isShowingSpeedChanger) {
-            popoverArea =
-                "";
-        }
-
         return (
             <div className="controlBar">
                 <ProgressBar 
@@ -60,11 +47,10 @@ module.exports = React.createClass({
                 <Row>
                     <FontAwesome 
                         className="playButton" 
-                        name={playOrPause}
+                        name={this.props.isPlaying ? "pause" : "play"}
                         onClick={this.props.handlePlayPauseClick}
                     />
                     <span className="videoTime">{this.props.currentTime} / {this.props.totalTime}</span>
-                    {popoverArea}
                     <OverlayTrigger trigger="focus" placement="top" overlay=
                                     {<Popover className="playbackPopover">
                                             <div 
