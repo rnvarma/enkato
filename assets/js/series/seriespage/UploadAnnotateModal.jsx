@@ -1,27 +1,34 @@
 
 require("css/series/seriespage/UploadAnnotateModal.scss");
 
-var React = require('react');
+import React from 'react';
 
-var getCookie = require('js/globals/GetCookie')
-var Button = require('react-bootstrap').Button;
-var Modal = require('react-bootstrap').Modal;
+import getCookie from 'js/globals/GetCookie';
 
-var AddVideoToSeriesForm = require('js/series/seriespage/AddVideoToSeriesForm');
-var AnnotateVideosForSeries = require('js/series/seriespage/AnnotateVideosForSeries');
+import { Button, Modal } from 'react-bootstrap';
 
-module.exports = React.createClass({
-    getInitialState: function() {
-        return { 'error': "" };
-    },
-    onBack: function() {
+import AddVideoToSeriesForm from 'js/series/seriespage/AddVideoToSeriesForm';
+import AnnotateVideosForSeries from 'js/series/seriespage/AnnotateVideosForSeries';
+
+export default class UploadAnnotateModal extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: ""
+        };
+        this.onBack = this.onBack.bind(this);
+        this.onNext = this.onNext.bind(this);
+    }
+
+    onBack() {
         if (this.props.annotateMode) {
             this.props.setAnnotateMode(false);
         } else {
             this.props.close();
         }
-    },
-    onNext: function() {
+    }
+
+    onNext() {
         if (this.props.annotateMode) {
             this.props.close();
         } else {
@@ -82,28 +89,33 @@ module.exports = React.createClass({
                 this.setState({ error: "" });
             }
         }
-    },
-    render: function() {
+    }
+
+    render() {
         var modalInfo = {}
         var nextText = "";
+        let toggleBtns = "";
         if (this.props.annotateMode) {
             modalInfo = {
                 title: "Annotating",
                 class: "annotating",
                 body: <AnnotateVideosForSeries
                           data={this.props.data}
-                          quizMode={this.props.quizMode}
-                      />
+                          quizMode={this.props.quizMode}/>
             }
             nextText = "Finish";
+            toggleBtns = (<div><Button
+                              className={"toggleAnnotating topics" + (this.props.quizMode ? "" : " active")}
+                              onClick={this.props.setTopicMode}>Topics</Button>
+            <Button className={"toggleAnnotating quizzes" + (this.props.quizMode ? " active" : "")}
+                    onClick={this.props.setQuizMode}>Quizzing</Button></div>);
         } else {
             modalInfo = {
                 title: "Import Video(s)",
                 class: "",
                 body: <AddVideoToSeriesForm
                           urls={this.props.urls}
-                          onURLAdded={this.props.onURLImport}
-                      />
+                          onURLAdded={this.props.onURLImport}/>
             }
             nextText = "Next";
         }
@@ -116,14 +128,10 @@ module.exports = React.createClass({
                     </Modal.Header>
                     <Modal.Body>
                         {this.state.error} {/* TODO: style error code */}
-                        {modalInfo.body} 
+                        {modalInfo.body}
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button
-                            className={"toggleAnnotating topics" + (this.props.quizMode ? "" : " active")}
-                            onClick={this.props.setTopicMode}>Topics</Button>
-                        <Button className={"toggleAnnotating quizzes" + (this.props.quizMode ? " active" : "")}
-                                onClick={this.props.setQuizMode}>Quizzing</Button>
+                        {toggleBtns}
                         <Button className="structabl-blue" onClick={this.props.close}>Cancel</Button>
                         <Button className="structabl-red" onClick={this.onBack}>Back</Button>
                         <Button className="structabl-red" onClick={this.onNext}>{nextText}</Button>
@@ -132,4 +140,4 @@ module.exports = React.createClass({
             </div>
         );
     }
-})
+}

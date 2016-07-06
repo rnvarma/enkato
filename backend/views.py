@@ -91,6 +91,7 @@ class Serializer(object):
         data = {}
         data["shouldRefocus"] = False
         data["currentFocus"] = 0
+        data["active"] = False
         data["quizQuestionText"] = quizQ.question_text
         data["new"] = False
         data["choiceList"] = map(Serializer.serialize_quiz_choice, quizQ.mc_responses.all())

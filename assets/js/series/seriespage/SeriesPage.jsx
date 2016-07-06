@@ -3,16 +3,15 @@ require("css/globals/base.scss")
 require("css/globals/NavBar.scss")
 require("css/series/seriespage/SeriesPage.scss");
 
-var React = require('react')
-var ReactDOM = require('react-dom')
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var NavBar = require('js/globals/NavBar');
-var Row = require('react-bootstrap').Row;
-import { Col } from 'react-bootstrap';
+import NavBar from 'js/globals/NavBar';
+import { Col, Row } from 'react-bootstrap';
 
-var SeriesSideBar = require('js/series/seriespage/SeriesSideBar');
+import SeriesSideBar from 'js/series/seriespage/SeriesSideBar';
 import SeriesMainArea from 'js/series/seriespage/SeriesMainArea';
-var UploadAnnotateModal = require('js/series/seriespage/UploadAnnotateModal');
+import UploadAnnotateModal from 'js/series/seriespage/UploadAnnotateModal';
 
 var SeriesPage = React.createClass({
     getInitialState: function() {
@@ -79,14 +78,13 @@ var SeriesPage = React.createClass({
                 <NavBar />
                 <div className="seriesPage">
                     <Row>
-                        <Col md={2}>
+                        <Col md={2} xsHidden smHidden>
                             <SeriesSideBar />
                         </Col>
                         <Col md={10}>
                             <SeriesMainArea
                                 openModal={this.openModal}
-                                data={this.state.data}
-                            />
+                                data={this.state.data}/>
                         </Col>
                     </Row>
                     <UploadAnnotateModal
@@ -95,8 +93,7 @@ var SeriesPage = React.createClass({
                         setTopicMode={this.setTopicMode} setQuizMode={this.setQuizMode}
                         setAnnotateMode={this.setAnnotateMode} setUrls={this.setUrls}
                         onURLImport={this.onURLImport}
-                        reloadPageData={this.loadPageData}
-                    />
+                        reloadPageData={this.loadPageData}/>
                 </div>
             </div>
         );

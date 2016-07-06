@@ -17,6 +17,7 @@ module.exports = React.createClass({
                     handleChoiceTextChange={this.props.handleChoiceTextChange}
                     addNewChoice={this.props.addNewChoice}
                     deleteChoice={this.props.deleteChoice}
+                    makeChoiceIsCorrect={this.props.makeChoiceIsCorrect}
                     moveFocusDownOrAddNewChoice={this.props.moveFocusDownOrAddNewChoice}
                     shouldUseX={shouldUseX}/>
             )

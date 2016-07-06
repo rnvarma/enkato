@@ -9,9 +9,16 @@
     height: 50px;
     padding: 12px;
 
+    @include respond-to(medium) {
+        font-size: 18px;
+    }
+
+    @include respond-to(small) {
+        font-size: 14px;
+    }
+
     &:hover {
         cursor: pointer;
         background-color: darkred;
     }
-
  }

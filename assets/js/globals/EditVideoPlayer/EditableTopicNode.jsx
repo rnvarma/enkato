@@ -37,7 +37,7 @@ module.exports = React.createClass({
     },
     render: function() {
         return (
-            <form onSubmit={this.submitForm}>
+            <form className="editableTopicNodeContainer" onSubmit={this.submitForm}>
                 <div
                     className={"editableTopicNode" + (this.state.editing ? " active" : "")
                                                    + (this.state.hovering ? " hover" : "")}

@@ -28,15 +28,20 @@ module.exports = React.createClass({
             this.props.deleteChoice(this.props.choice.id, this.props.index)
         }
     },
+    onChoiceSelected: function() {
+        this.props.makeChoiceIsCorrect(this.props.choice.id);
+    },
     render: function(){
         //add 1 to index because its an index // starts @ 0 ! 1
         var placeholder = "Choice "+(this.props.index+1)
+
         return(
             <form onSubmit={this.submit}>
                 <Row className="choice-row">
                     <FontAwesome
-                        className='circle-icon' 
-                        name='circle-thin'/>
+                        className={'circle-icon' + (this.props.choice.is_correct ? " correct" : "")}
+                        name={this.props.choice.is_correct ? 'check-circle' : 'circle-thin'}
+                        onClick={this.onChoiceSelected}/>
                     <input
                         className="choice-input"
                         type="text"

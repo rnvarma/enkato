@@ -63,6 +63,7 @@ class UpdateQuiz(View):
             for choice in q["choiceList"]:
                 cObj = MCChoice.objects.get(id=choice["id"])
                 cObj.choice_text = choice["text"]
+                cObj.is_correct = choice["is_correct"]
                 cObj.save()
             qObj.save()
             count+=1

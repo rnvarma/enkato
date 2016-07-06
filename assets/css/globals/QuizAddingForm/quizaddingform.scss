@@ -1,3 +1,5 @@
+@import '../colors.scss';
+
 .quizAddingForm{
     background-color:white;
     width:100%;
@@ -14,9 +16,29 @@
 }
 
 .singleNumberButton{
-    margin-bottom:20px;
+    padding: 5px 10px;
+
+    &.active {
+        background-color: $structabl-blue;
+        color: white;
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: $grey-hover;
+    }
+
+    &:active {
+        background-color: $black-active;
+    }
 }
 
-.singleNumberButton:hover{
-    cursor:pointer;
+.addQuestionButton {
+    padding: 5px 7px;
+
+    &:hover {
+        background-color: $structabl-blue;
+        color: white;
+        cursor: pointer;
+    }
 }

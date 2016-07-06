@@ -75,11 +75,20 @@ module.exports = React.createClass({
         var height = $("#" + idNum + "q").height()
         var scrollTop = height * index
         $(".quizAddingForm").animate({scrollTop: scrollTop}, 500);
+        var tempQuestionList = this.state.questions
+        for (var i = 0; i < tempQuestionList.length; i++) {
+          tempQuestionList[i].active = false;
+        }
+        tempQuestionList[index].active = true
+        this.setState({questions: tempQuestionList})
     },
     componentDidMount: function(){
         this.setState({uuid: this.props.videoUUID})
         this.loadDataFromServer(this.props.videoUUID);
         $(window).unload(this.saveDataToServer)
+    },
+    componentWillUnmount: function() {
+        this.saveDataToServer();
     },
     componentWillReceiveProps: function(nextProps) {
         if (this.state.uuid != nextProps.videoUUID) {
@@ -103,7 +112,7 @@ module.exports = React.createClass({
         }
     },
     addNewChoice: function(qid) {
-        data = {
+        var data = {
             qid: qid
         }
         $.ajax({
@@ -135,7 +144,7 @@ module.exports = React.createClass({
         });
     },
     deleteChoice: function(qid, cid, index) {
-        data = {
+        var data = {
             qid: qid,
             cid: cid
         }
@@ -174,7 +183,7 @@ module.exports = React.createClass({
         });
     },
     addQuestion: function() {
-        data = this.state;
+        var data = this.state;
         $.ajax({
           url: "/v/" + this.state.uuid + "/addquizquestion",
           dataType: 'json',
@@ -198,6 +207,17 @@ module.exports = React.createClass({
           }.bind(this)
         });
     },
+    makeChoiceIsCorrect: function(cid, qIndex) {
+        var tempQuestionList = this.state.questions
+        for (var i = 0; i < tempQuestionList[qIndex].choiceList.length; i++) {
+            if (tempQuestionList[qIndex].choiceList[i].id == cid) {
+                tempQuestionList[qIndex].choiceList[i].is_correct = true;
+            } else {
+                tempQuestionList[qIndex].choiceList[i].is_correct = false;
+            }
+        }
+        this.setState({questions: tempQuestionList})
+    },
     render: function(){
         return(
             <div className="quizAddingForm">
@@ -206,6 +226,7 @@ module.exports = React.createClass({
                         scrollToFromButton={this.scrollToFromButton}
                         questions={this.state.questions}/>
                     <FontAwesome
+                        className="addQuestionButton"
                         onClick={this.addQuestion}
                         name='plus'/>
                 </div>
@@ -215,6 +236,8 @@ module.exports = React.createClass({
                     handleQuizQuestionChange={this.handleQuizQuestionChange}
                     addNewChoice={this.addNewChoice}
                     deleteChoice={this.deleteChoice}
+                    makeChoiceIsCorrect={this.makeChoiceIsCorrect}
+                    scrollToFromButton={this.scrollToFromButton}
                     questions={this.state.questions}/>
             </div>
         )

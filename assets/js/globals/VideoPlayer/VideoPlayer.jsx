@@ -60,9 +60,11 @@ module.exports  = React.createClass({
           success: function(data) {
             if (this.state.Player)
                 this.state.Player.destroy();
-            this.setState({Player: new Player(data.videoID)})
-            this.setState({topicObjList:data.topicList})
-            this.forceUpdate();
+              this.setState({Player: new Player(data.videoID)});
+              
+              this.setState({topicObjList:data.topicList})
+              this.forceUpdate();
+              this.totalTime = data.videoData.duration_clean;
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -110,7 +112,7 @@ module.exports  = React.createClass({
     componentDidMount: function() {
         this.loadDataFromServer(this.props.videoUUID);
         this.setWindowSize();
-        this.setState({isPlaying:true})
+        this.setState({isPlaying:false})
         this.setState({currentTime:"0:00"})
         this.setState({percentDone:0})
         window.onresize=this.setWindowSize;
@@ -132,10 +134,8 @@ module.exports  = React.createClass({
     handlePlayPauseClick: function(){
         //Set the local state and make the API call
         if(this.state.isPlaying){
-            this.setState({isPlaying:false});
             this.state.Player.pause();
         } else{
-            this.setState({isPlaying:true})
             this.state.Player.play();
         }
     },
@@ -147,8 +147,9 @@ module.exports  = React.createClass({
         }
     },
     render: function() {
-        if(this.state.Player==null) return <div>loading...</div>
-        return ( 
+        if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
+
+        return (
             <div className="ynVideoPlayer">
                 <div className="topicButtonColumn">
                     <TopicList 
@@ -168,6 +169,7 @@ module.exports  = React.createClass({
                         handlePlayPauseClick={this.handlePlayPauseClick}
                         handleScrub={this.handleScrub}
                         currentTime={this.state.currentTime}
+                        totalTime={this.totalTime}
                         percentDone={this.state.percentDone}
                         setPlaybackRate={this.state.Player.setPlaybackRate}
                         playerContext={this.state.Player.getContext()}/>

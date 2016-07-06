@@ -14,6 +14,7 @@ module.exports = React.createClass({
                     scrollToFromButton={this.props.scrollToFromButton}
                     key={question.id}
                     index={index}
+                    active={question.active}
                     order={index + 1}/>
             )
         }.bind(this))
