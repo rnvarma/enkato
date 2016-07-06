@@ -93,8 +93,7 @@ var SeriesPage = React.createClass({
                         setTopicMode={this.setTopicMode} setQuizMode={this.setQuizMode}
                         setAnnotateMode={this.setAnnotateMode} setUrls={this.setUrls}
                         onURLImport={this.onURLImport}
-                        reloadPageData={this.loadPageData}
-                    />
+                        reloadPageData={this.loadPageData}/>
                 </div>
             </div>
         );

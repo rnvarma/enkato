@@ -20,7 +20,8 @@ module.exports = React.createClass({
                     type="text"
                     placeholder="Question"
                     value={this.props.questionText}
-                    onChange={this.handleQuestionTextChange}/>
+                    onChange={this.handleQuestionTextChange}
+                    onFocus={this.props.scrollToQuestion}/>
             </Row>
         )
     }
