@@ -54,6 +54,33 @@
 
             .creator {
                 margin-top: 3px;
+
+                .seperator {
+                    padding-right: 10px;
+                    padding-left: 10px;
+                    border-right: 1px solid black;
+
+                    .alertIcon {
+                        display: none;
+                    }
+
+                    &:first-of-type {
+                        padding-left: 0px;
+                    }
+
+                    &:last-of-type {
+                        border-right: none;
+                        padding-right: 0;
+                    }
+
+                    &.alertAnnotate {
+                        .alertIcon {
+                            display: inherit;
+                            color: red;
+                            margin-right: 5px;
+                        }
+                    }
+                }
             }
         }
     }

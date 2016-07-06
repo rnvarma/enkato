@@ -18,9 +18,8 @@ module.exports = React.createClass({
         this.props.moveFocusDownOrAddNewChoice(this.props.index)
     },
     deleteChoice: function(){
-        console.log(this.props.index)
         if(this.props.shouldUseX)
-            this.props.deleteChoice(this.props.choice.id)
+            this.props.deleteChoice(this.props.choice.id, this.props.index)
     },
     onKeyDown: function(e) {
         if (e.keyCode == 8 && !this.props.choice.text && this.props.index > 0) {

@@ -316,6 +316,7 @@ module.exports = React.createClass({
                         <ControlBar 
                             className="ControlBar"
                             isPlaying={this.state.isPlaying}
+                            videoDuration={this.state.Player.getDuration()}
                             topicObjList={this.state.topicObjList}
                             getDuration={this.state.Player.getDuration}
                             handlePlayPauseClick={this.handlePlayPauseClick}

@@ -74,6 +74,8 @@ class Serializer(object):
         data["creator"] = Serializer.serialize_user(video.creator)
         data["num_views"] = video.num_views
         data["order"] = video.order if 'order' in video.__dict__ else 0
+        data["num_topics"] = video.topics.count()
+        data["num_quiz_questions"] = video.quiz_questions.count()
         return data
 
     @staticmethod

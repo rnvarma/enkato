@@ -12,9 +12,13 @@
     height:100%;
     width:25%;
 }
-.videoDiv{
+.videoDiv {
     float: right;
     width: 75%;
     margin:0px;
     height:100%;
+
+    &.full {
+        width: 100%;
+    }
 }

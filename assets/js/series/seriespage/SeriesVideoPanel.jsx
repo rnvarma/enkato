@@ -2,6 +2,7 @@
 require("css/series/seriespage/SeriesVideoPanel.scss");
 
 var React = require('react')
+import FontAwesome from 'react-fontawesome';
 
 module.exports = React.createClass({
     onClick: function() {
@@ -28,7 +29,18 @@ module.exports = React.createClass({
                             <a href={"/v/" + video.uuid}>{video.name}</a>
                         </div>
                         <div className="creator">
-                            {video.creator.name}
+                            <span className={"seperator" + (video.num_topics ? "" : " alertAnnotate")}>
+                                <FontAwesome
+                                    name="exclamation-circle"
+                                    className="alertIcon"/>
+                                {video.num_topics} topics
+                            </span>
+                            <span className={"seperator" + (video.num_quiz_questions ? "" : " alertAnnotate")}>
+                                <FontAwesome 
+                                    name="exclamation-circle" 
+                                    className="alertIcon"/>
+                                {video.num_quiz_questions} quiz questions
+                            </span>
                         </div>
                     </div>
                 </div>

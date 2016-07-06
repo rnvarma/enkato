@@ -143,7 +143,7 @@ module.exports = React.createClass({
           }.bind(this)
         });
     },
-    deleteChoice: function(qid, cid, index) {
+    deleteChoice: function(qid, cid, qIndex, cIndex) {
         var data = {
             qid: qid,
             cid: cid
@@ -160,18 +160,9 @@ module.exports = React.createClass({
           success: function(data) {
             if (data.status) {
                 var questions = this.state.questions
-                for (var i = 0; i < questions.length; i++) {
-                    if (questions[i].id == data.qid) {
-                        for (var j = 0; j < questions[i].choiceList.length; j++) {
-                            if (questions[i].choiceList[j].id == cid) {
-                                questions[i].choiceList[j - 1].focus = true;
-                                questions[i].choiceList.splice(j, 1)
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
+                questions[qIndex].choiceList.splice(cIndex, 1)
+                if (cIndex > 0) 
+                    questions[qIndex].choiceList[cIndex].focus = true;
                 this.setState({questions: questions})
             } else {
                 console.log("Internal Server Error: Adding Quiz Option Failed")
@@ -198,6 +189,7 @@ module.exports = React.createClass({
                 var questions = this.state.questions
                 questions.push(data.new_question)
                 this.setState({questions: questions})
+                this.scrollToFromButton(data.new_question.id, questions.length - 1)
             } else {
                 console.log("Internal Server Error: Adding Quiz Question Failed")
             }
@@ -218,6 +210,37 @@ module.exports = React.createClass({
         }
         this.setState({questions: tempQuestionList})
     },
+    deleteQuestion: function(qid, qIndex) {
+        var data = {
+            qid: qid
+        }
+        $.ajax({
+          url: "/v/" + this.state.uuid + "/deletequizquestion",
+          dataType: 'json',
+          type: 'POST',
+          data: data,
+          beforeSend: function (xhr) {
+            xhr.withCredentials = true;
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          },
+          success: function(data) {
+            if (data.status) {
+                var questions = this.state.questions
+                questions.splice(qIndex, 1)
+                this.setState({questions: questions})
+                if (qIndex > 0) {
+                    var newQuestionID = questions[qIndex - 1].id
+                    this.scrollToFromButton(newQuestionID, qIndex - 1)
+                }
+            } else {
+                console.log("Internal Server Error: Deleting Quiz Question Failed")
+            }
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
+    },
     render: function(){
         return(
             <div className="quizAddingForm">
@@ -236,6 +259,7 @@ module.exports = React.createClass({
                     handleQuizQuestionChange={this.handleQuizQuestionChange}
                     addNewChoice={this.addNewChoice}
                     deleteChoice={this.deleteChoice}
+                    deleteQuestion={this.deleteQuestion}
                     makeChoiceIsCorrect={this.makeChoiceIsCorrect}
                     scrollToFromButton={this.scrollToFromButton}
                     questions={this.state.questions}/>

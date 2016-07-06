@@ -4,6 +4,8 @@ require("css/globals/VideoPlayer/VideoPlayer")
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { styleDuration } from 'js/globals/utility';
+
 import TopicList from 'js/globals/videoPlayer/TopicList';
 import Video from 'js/globals/videoPlayer/Video';
 import ControlBar from 'js/globals/videoPlayer/ControlBar';
@@ -42,14 +44,6 @@ function updateCurrentTopicOnTime(seconds, topicList){
     return topicList;
 }
 
-function styleTime(time){
-    let seconds = time%60
-    if(seconds<10)
-        seconds = "0"+seconds
-    //floors the round
-    return Math.round((time-30)/60) + ":" + seconds;
-}
-
 module.exports  = React.createClass({
     loadDataFromServer: function(v_id){
         console.log("loadDataFromServer")
@@ -61,10 +55,16 @@ module.exports  = React.createClass({
             if (this.state.Player)
                 this.state.Player.destroy();
               this.setState({Player: new Player(data.videoID)});
-              
-              this.setState({topicObjList:data.topicList})
+              this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
+
               this.forceUpdate();
+
+              this.videoPlayerClass = "";
+              if (data.topicList.length == 0) {
+                  this.videoPlayerClass = "full";
+              }
               this.totalTime = data.videoData.duration_clean;
+
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -74,13 +74,14 @@ module.exports  = React.createClass({
     updateCurrentState: function(){
         //set time
         var seconds = Math.round(this.state.Player.getCurrentTime())
-        this.setState({currentTime:styleTime(seconds)})
+        this.setState({currentTime:styleDuration(seconds)})
         var percentDone = (seconds / this.state.Player.getDuration())*100
         this.setState({percentDone:percentDone})
         
         this.setState({
             topicObjList:updateCurrentTopicOnTime(seconds, this.state.topicObjList)
-        })
+        }, this.afterTopicListUpdate);
+
         //set isplaying
         var playing = !this.state.Player.paused();
         this.setState({
@@ -92,7 +93,7 @@ module.exports  = React.createClass({
     getInitialState: function() {
         return {
             topicObjList: [], 
-            isPlaying:false, 
+            isPlaying: false, 
             currentTime:"0:00",
             percentDone:0,
             Player: null,
@@ -124,15 +125,15 @@ module.exports  = React.createClass({
         this.state.Player.seekTo(duration*percentOfOne)
     },
     handleTopicClick:function(targetKey, time){
-        //First, set the new currentTopic
+        // First, set the new currentTopic
         this.setState({
             topicObjList:updateCurrentTopicOnKey(targetKey, this.state.topicObjList)
-        })
-        //Second, Make API call to update video state
+        }, this.afterTopicListUpdate);
+        // Second, Make API call to update video state
         this.state.Player.seekTo(time)
     },
     handlePlayPauseClick: function(){
-        //Set the local state and make the API call
+        // Set the local state and make the API call
         if(this.state.isPlaying){
             this.state.Player.pause();
         } else{
@@ -141,40 +142,53 @@ module.exports  = React.createClass({
     },
     componentWillReceiveProps: function(nextProps) {
         if (this.state.uuid != nextProps.videoUUID) {
-            // $(".videoDiv").remove();
             this.setState({uuid: nextProps.videoUUID})
             this.loadDataFromServer(nextProps.videoUUID);
         }
     },
-    render: function() {
-        if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
-
-        return (
-            <div className="ynVideoPlayer">
+    afterTopicListUpdate() {
+        if (this.state.topicObjList.length != 0) {
+            this.topicList = (
                 <div className="topicButtonColumn">
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
-                        handleTopicClick={this.handleTopicClick}/>
+                        handleTopicClick={this.handleTopicClick}
+                    />
                 </div>
-                <div className="videoDiv">
-                    <Video
-                        renderVideo={this.state.Player.renderVideo}
-                        videoDivHeight={this.state.videoDivHeight}
-                        controlBarHeight={$('.ControlBar').height()}/>
-                    <ControlBar 
-                        className="ControlBar"
-                        isPlaying={this.state.isPlaying}
-                        topicObjList={this.state.topicObjList}
-                        getDuration={this.state.Player.getDuration}
-                        handlePlayPauseClick={this.handlePlayPauseClick}
-                        handleScrub={this.handleScrub}
-                        currentTime={this.state.currentTime}
-                        totalTime={this.totalTime}
-                        percentDone={this.state.percentDone}
-                        setPlaybackRate={this.state.Player.setPlaybackRate}
-                        playerContext={this.state.Player.getContext()}/>
+            );
+        } else {
+            this.topicList = "";
+        }
+    },
+    render: function() {
+        if (this.state.Player == null) {
+            return (<div className="loading">Loading video player...</div>);
+        }
+        return (
+            <div className="ynVideoPlayer"> 
+            {this.topicList}
+            <div className={`videoDiv ${this.videoPlayerClass}`}>
+            <Video
+            renderVideo={this.state.Player.renderVideo}
+            videoDivHeight={this.state.videoDivHeight}
+            controlBarHeight={$('.ControlBar').height()}
+            />
+            <ControlBar 
+            className="ControlBar"
+            isPlaying={this.state.isPlaying}
+            videoDuration={this.state.Player.getDuration()}
+            handleTopicClick={this.handleTopicClick}
+            topicObjList={this.state.topicObjList}
+            handlePlayPauseClick={this.handlePlayPauseClick}
+            handleScrub={this.handleScrub}
+            currentTime={this.state.currentTime}
+            totalTime={this.totalTime}
+            percentDone={this.state.percentDone}
+            setPlaybackRate={this.state.Player.setPlaybackRate}
+            playerContext={this.state.Player.getContext()}
+            />
                 </div>
             </div>
-        )
+        );
     }
 })
