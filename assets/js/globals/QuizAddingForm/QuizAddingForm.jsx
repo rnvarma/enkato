@@ -207,6 +207,17 @@ module.exports = React.createClass({
           }.bind(this)
         });
     },
+    makeChoiceIsCorrect: function(cid, qIndex) {
+        var tempQuestionList = this.state.questions
+        for (var i = 0; i < tempQuestionList[qIndex].choiceList.length; i++) {
+            if (tempQuestionList[qIndex].choiceList[i].id == cid) {
+                tempQuestionList[qIndex].choiceList[i].is_correct = true;
+            } else {
+                tempQuestionList[qIndex].choiceList[i].is_correct = false;
+            }
+        }
+        this.setState({questions: tempQuestionList})
+    },
     render: function(){
         return(
             <div className="quizAddingForm">
@@ -225,6 +236,8 @@ module.exports = React.createClass({
                     handleQuizQuestionChange={this.handleQuizQuestionChange}
                     addNewChoice={this.addNewChoice}
                     deleteChoice={this.deleteChoice}
+                    makeChoiceIsCorrect={this.makeChoiceIsCorrect}
+                    scrollToFromButton={this.scrollToFromButton}
                     questions={this.state.questions}/>
             </div>
         )
