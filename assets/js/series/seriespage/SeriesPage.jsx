@@ -90,8 +90,10 @@ var SeriesPage = React.createClass({
                     <UploadAnnotateModal
                         {...this.state}
                         close={this.closeModal}
-                        setTopicMode={this.setTopicMode} setQuizMode={this.setQuizMode}
-                        setAnnotateMode={this.setAnnotateMode} setUrls={this.setUrls}
+                        setTopicMode={this.setTopicMode} 
+                        setQuizMode={this.setQuizMode}
+                        setAnnotateMode={this.setAnnotateMode} 
+                        setUrls={this.setUrls}
                         onURLImport={this.onURLImport}
                         reloadPageData={this.loadPageData}/>
                 </div>
