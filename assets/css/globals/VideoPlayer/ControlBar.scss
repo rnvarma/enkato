@@ -1,6 +1,5 @@
 @import '../colors.scss';
 
-
 .controlBar{ 
     height:50px;
     width:100%;
@@ -15,6 +14,7 @@
         cursor:pointer;
     } 
     .videoTime{
+        padding-bottom: 5px;
         color:white;
         margin-left:15px;
     }

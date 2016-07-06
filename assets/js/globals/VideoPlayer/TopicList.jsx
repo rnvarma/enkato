@@ -1,50 +1,49 @@
 require('bootstrap-loader');
 require("css/globals/VideoPlayer/TopicList")
-var React = require('react')
-var ReactDOM = require('react-dom')
-var ScrollArea = require('react-scrollbar')
 
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var TopicNode = React.createClass({
-    handleTopicClick:function(){
-        this.props.handleTopicClick(this.props.topic.id, this.props.topic.time)
-    },
-    render:function(){
-        if(this.props.topic.isCurrentTopic){
-            return(
-                <div id="selectedTopicNode" className="topicNode" onClick={this.handleTopicClick}>
-                    {this.props.topic.name}
-                </div>
-            )
-        } else {
-            return(
-                <div className="topicNode" onClick={this.handleTopicClick}>
-                    {this.props.topic.name}
-                </div>
-            )
-        }
+import ScrollArea from 'react-scrollbar';
+
+class TopicNode extends React.Component {
+    constructor(props) {
+        super(props);
     }
-});
 
+    render() {
+        return (
+            <div
+                className="topicNode"
+                id={(this.props.topic.isCurrentTopic ? "selectedTopicNode" : "")}
+                onClick={this.handleTopicClick}
+            >
+                {this.props.topic.name}
+            </div>
+        );
+    }
+}
 
+export default class TopicList extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
-module.exports = React.createClass({
-    
-    render:function(){
+    render() {
         var topicNodes = this.props.topicObjList.map(function(topic) {
             return (
                 <TopicNode
                     key={topic.id}
                     topic={topic}
                     handleTopicClick={this.props.handleTopicClick}
-                >
-                </TopicNode>
+                />
             );
-        },this);
-        return(
+        }, this);
+
+        return (
             <ScrollArea className="topicList">
-                {topicNodes}
+                {(topicNodes.length != 0) ? topicNodes : "No topics"}
             </ScrollArea>
-        )
+        );
     }
-});
+}
