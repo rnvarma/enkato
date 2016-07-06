@@ -87,6 +87,17 @@ class AddQuizQuestion(View):
             'new_question': Serializer.serialize_quiz_question(new_question)
         })
 
+class DeleteQuizQuestion(View):
+    def post(self, request, v_uuid):
+        q_id = request.POST.get('qid')
+        question = QuizQuestion.objects.get(id=q_id)
+        question.delete()
+
+        return JsonResponse({
+            'status': True,
+            'qid': q_id
+        })
+
 class AddQuizOption(View):
     def post(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)

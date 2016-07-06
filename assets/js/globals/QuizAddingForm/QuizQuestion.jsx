@@ -12,9 +12,9 @@ module.exports = React.createClass({
     render: function(){
         return(
             <Row className="question-row">
-                    <FontAwesome
-                        className='arrow-icon' 
-                        name='arrow-right'/>
+                <FontAwesome
+                    className='arrow-icon' 
+                    name='arrow-right'/>
                 <input
                     className="question-input"
                     type="text"
@@ -22,6 +22,10 @@ module.exports = React.createClass({
                     value={this.props.questionText}
                     onChange={this.handleQuestionTextChange}
                     onFocus={this.props.scrollToQuestion}/>
+                <FontAwesome
+                    className="timesIcon"
+                    name="times"
+                    onClick={this.props.deleteQuestion}/>
             </Row>
         )
     }

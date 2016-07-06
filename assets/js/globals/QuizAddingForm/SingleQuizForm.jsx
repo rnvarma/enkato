@@ -64,8 +64,8 @@ module.exports = React.createClass({
             }
         }
     },
-    deleteChoice:function(choiceId, index){
-        this.props.deleteChoice(this.props.question.id, choiceId, index)
+    deleteChoice:function(choiceId, cindex){
+        this.props.deleteChoice(this.props.question.id, choiceId, this.props.index, cindex)
     },
     makeChoiceIsCorrect: function(choiceId) {
         this.props.makeChoiceIsCorrect(choiceId, this.props.index)
@@ -73,13 +73,17 @@ module.exports = React.createClass({
     scrollToQuestion: function() {
         this.props.scrollToFromButton(this.props.question.id, this.props.index);
     },
+    deleteQuestion: function() {
+        this.props.deleteQuestion(this.props.question.id, this.props.index)
+    },
     render: function() {
         return (
             <div className="indi-quiz-form">
                 <QuizQuestion 
                     questionText={this.props.question.quizQuestionText}
                     handleQuizQuestionChange={this.handleQuizQuestionChange}
-                    scrollToQuestion={this.scrollToQuestion}/>
+                    scrollToQuestion={this.scrollToQuestion}
+                    deleteQuestion={this.deleteQuestion}/>
                 <MCChoiceList 
                     addNewChoice ={this.addNewChoice}
                     handleChoiceTextChange={this.handleChoiceTextChange}
