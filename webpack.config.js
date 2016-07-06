@@ -1,6 +1,7 @@
-var path = require("path")
+var path = require('path')
 var webpack = require('webpack')
 var BundleTracker = require('webpack-bundle-tracker')
+var CleanWebpackPlugin = require('clean-webpack-plugin')
 var pathtoassets = require('./pathtoassets')
 
 module.exports = {
@@ -32,6 +33,7 @@ module.exports = {
             jQuery: "jquery"
         }),
         new BundleTracker({filename: pathtoassets + '/webpack-stats.json'}),
+        new CleanWebpackPlugin(['assets/bundles'])
   ],
 
   module: {
