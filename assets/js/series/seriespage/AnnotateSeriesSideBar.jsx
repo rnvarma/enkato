@@ -17,8 +17,7 @@ module.exports = React.createClass({
                     video={v}
                     key={v.order}
                     updateCurrVideo={updateCurrVideo}
-                    isCurrVideo={isCurrVideo}
-                />
+                    isCurrVideo={isCurrVideo}/>
             );
         });
         

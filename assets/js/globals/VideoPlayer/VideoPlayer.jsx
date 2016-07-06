@@ -61,10 +61,26 @@ module.exports  = React.createClass({
             if (this.state.Player)
                 this.state.Player.destroy();
               this.setState({Player: new Player(data.videoID)});
-              
-              this.setState({topicObjList:data.topicList})
+              this.setState({topicObjList:data.topicList});
+
               this.forceUpdate();
+
+              this.topicList = "";
+              this.videoPlayerClass = "";
+              if (data.topicList.length == 0) {
+                  this.videoPlayerClass = "full";
+              } else {
+                  this.topicList = (
+                      <div className="topicButtonColumn">
+                          <TopicList 
+                              topicObjList={this.state.topicObjList} 
+                              handleTopicClick={this.handleTopicClick}
+                          />
+                      </div>
+                  );
+              }
               this.totalTime = data.videoData.duration_clean;
+
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -150,13 +166,9 @@ module.exports  = React.createClass({
         if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
 
         return (
-            <div className="ynVideoPlayer">
-                <div className="topicButtonColumn">
-                    <TopicList 
-                        topicObjList={this.state.topicObjList} 
-                        handleTopicClick={this.handleTopicClick}/>
-                </div>
-                <div className="videoDiv">
+            <div className="ynVideoPlayer"> 
+            {this.topicList}
+            <div className={`videoDiv ${this.videoPlayerClass}`}>
                     <Video
                         renderVideo={this.state.Player.renderVideo}
                         videoDivHeight={this.state.videoDivHeight}
