@@ -143,7 +143,7 @@ module.exports = React.createClass({
           }.bind(this)
         });
     },
-    deleteChoice: function(qid, cid, index) {
+    deleteChoice: function(qid, cid, qIndex, cIndex) {
         var data = {
             qid: qid,
             cid: cid
@@ -160,18 +160,21 @@ module.exports = React.createClass({
           success: function(data) {
             if (data.status) {
                 var questions = this.state.questions
-                for (var i = 0; i < questions.length; i++) {
-                    if (questions[i].id == data.qid) {
-                        for (var j = 0; j < questions[i].choiceList.length; j++) {
-                            if (questions[i].choiceList[j].id == cid) {
-                                questions[i].choiceList[j - 1].focus = true;
-                                questions[i].choiceList.splice(j, 1)
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
+                questions[qIndex].choiceList.splice(cIndex, 1)
+                if (cIndex > 0) 
+                    questions[qIndex].choiceList[cIndex].focus = true;
+                // for (var i = 0; i < questions.length; i++) {
+                //     if (questions[i].id == data.qid) {
+                //         for (var j = 0; j < questions[i].choiceList.length; j++) {
+                //             if (questions[i].choiceList[j].id == cid && j > 0) {
+                //                 questions[i].choiceList[j - 1].focus = true;
+                //                 questions[i].choiceList.splice(j, 1)
+                //                 break;
+                //             }
+                //         }
+                //         break;
+                //     }
+                // }
                 this.setState({questions: questions})
             } else {
                 console.log("Internal Server Error: Adding Quiz Option Failed")

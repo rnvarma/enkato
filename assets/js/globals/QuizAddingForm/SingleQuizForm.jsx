@@ -64,8 +64,8 @@ module.exports = React.createClass({
             }
         }
     },
-    deleteChoice:function(choiceId, index){
-        this.props.deleteChoice(this.props.question.id, choiceId, index)
+    deleteChoice:function(choiceId, cindex){
+        this.props.deleteChoice(this.props.question.id, choiceId, this.props.index, cindex)
     },
     makeChoiceIsCorrect: function(choiceId) {
         this.props.makeChoiceIsCorrect(choiceId, this.props.index)
