@@ -36,7 +36,11 @@ var SeriesPage = React.createClass({
         this.setState({ show: true, annotateMode: annotating });
     },
     closeModal: function() {
-        this.setState({ show: false });
+        this.setState({
+            show: false,
+            annotateMode: false,
+            quizMode: false
+        });
     },
     onURLImport: function(event) {
         this.setState({ urls: event.target.value });
@@ -90,8 +94,10 @@ var SeriesPage = React.createClass({
                     <UploadAnnotateModal
                         {...this.state}
                         close={this.closeModal}
-                        setTopicMode={this.setTopicMode} setQuizMode={this.setQuizMode}
-                        setAnnotateMode={this.setAnnotateMode} setUrls={this.setUrls}
+                        setTopicMode={this.setTopicMode}
+                        setQuizMode={this.setQuizMode}
+                        setAnnotateMode={this.setAnnotateMode}
+                        setUrls={this.setUrls}
                         onURLImport={this.onURLImport}
                         reloadPageData={this.loadPageData}/>
                 </div>

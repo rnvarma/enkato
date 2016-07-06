@@ -27,13 +27,11 @@ export default class AnnotateVideosForSeries extends React.Component {
                 <AnnotateSeriesSideBar 
                     data={this.props.data}
                     updateCurrVideo={this.updateCurrVideo}
-                    currentVideo={this.state.currentVideo}
-                />
+                    currentVideo={this.state.currentVideo}/>
                 <AnnotateSeriesVideoArea
                     data={this.props.data}
                     currentVideo={this.state.currentVideo}
-                    quizMode={this.props.quizMode}
-                />
+                    quizMode={this.props.quizMode}/>
             </div>
         );
     }

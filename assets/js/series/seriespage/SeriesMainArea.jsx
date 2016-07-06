@@ -28,8 +28,7 @@ export default class SeriesMainArea extends React.Component {
                     <SeriesVideoList data={this.props.data} />
                     <NoVideosArea
                         data={this.props.data}
-                        openModal={this.props.openModal}
-                    />
+                        openModal={this.props.openModal}/>
                 </div>
             )
             var annotateVideosButton =  (

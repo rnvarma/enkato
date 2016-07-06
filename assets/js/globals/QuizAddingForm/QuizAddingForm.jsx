@@ -27,7 +27,6 @@ module.exports = React.createClass({
           dataType: 'json',
           cache: false,
           success: function(data) {
-            console.log(data)
             this.setState(data)
           }.bind(this),
           error: function(xhr, status, err) {
@@ -49,7 +48,6 @@ module.exports = React.createClass({
             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
           },
           success: function(data) {
-            console.log("yay we done")
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
