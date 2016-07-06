@@ -20,7 +20,6 @@ export default class SeriesMainArea extends React.Component {
                                  data={this.props.data}
                                  reloadPageData={this.props.reloadPageData}
                                  openModal={this.props.openModal}/>
-
             var annotateVideosButton = "";
         } else {
             var video_area = (

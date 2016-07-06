@@ -1,0 +1,19 @@
+
+
+$dotSize: 14px;
+$dotColor: red;
+$dotBorderThickness: 1px;
+$dotBorderColor: blue;
+
+.topicDot {
+    position: absolute;
+    width: $dotSize;
+    height: $dotSize;
+    border-radius: $dotSize;
+
+    border: $dotBorderThickness solid $dotBorderColor;
+    background-color: $dotColor;
+
+    margin-top: -2px;
+    margin-left: -$dotSize / 2;
+}

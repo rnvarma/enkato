@@ -2,13 +2,17 @@ require('bootstrap-loader');
 require("css/globals/VideoPlayer/TopicList")
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import ScrollArea from 'react-scrollbar';
 
 class TopicNode extends React.Component {
     constructor(props) {
         super(props);
+        this.handleTopicClick = this.handleTopicClick.bind(this);
+    }
+
+    handleTopicClick() {
+        this.props.handleTopicClick(this.props.topic.id, this.props.topic.time);
     }
 
     render() {
@@ -42,7 +46,7 @@ export default class TopicList extends React.Component {
 
         return (
             <ScrollArea className="topicList">
-                {(topicNodes.length != 0) ? topicNodes : "No topics"}
+                {topicNodes}
             </ScrollArea>
         );
     }
