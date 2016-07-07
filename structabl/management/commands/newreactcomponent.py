@@ -5,9 +5,9 @@ baseSCSS = """\
 @import '../../globals/colors.scss';
 @import '../../globals/mixins.scss';
 
-.{camelCaseName} {
+.{camelCaseName} {{
     
-}
+}}
 """
 
 baseJSX = """\
@@ -15,21 +15,21 @@ require('css/{app}/{endpoint}/{name}.scss');
 
 import React from 'react';
 
-class {name} extends React.Component {
-    constructor(props) {
+class {name} extends React.Component {{
+    constructor(props) {{
         super(props);
-    }
+    }}
 
-    render() {
+    render() {{
         return (
             <div className="{camelCaseName}">
             </div>
         );
-    }
-}
+    }}
+}}
 """
 
-importCommand = "var %s = require('js/%s/%s/%s');"
+importCommand = "import {name} from 'js/{app}/{endpoint}/{name}';"
 
 class Command(BaseCommand):
     help = 'create a new react component -- initializes jsx + scss'
@@ -53,7 +53,7 @@ class Command(BaseCommand):
         jsx_file.write(baseJSX.format(camelCaseName=camelCaseName, **options))
         jsx_file.close()
 
-        print importCommand % (options["name"], options["app"], options["endpoint"], options["name"])
+        print importCommand.format(**options)
         
 
 
