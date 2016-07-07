@@ -15,6 +15,11 @@ export function getCookie(name) {
     return cookieValue;
 }
 
+/* adds an s or es to the end of string if needed, based on quantity */
+export function pluralize(string, quantity, ending='s') {
+    return quantity == 1 ? string : `${string}${ending}`;
+}
+
 /* seconds to M:SS or H:MM:SS, decimals retained */
 export function styleDuration(seconds) {
     let sec = seconds % 60;
