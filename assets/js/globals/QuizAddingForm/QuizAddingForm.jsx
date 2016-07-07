@@ -1,24 +1,18 @@
+require('css/globals/QuizAddingForm/quizaddingform.scss');
 
-require('css/globals/QuizAddingForm/quizaddingform.scss')
-var React = require('react')
-var ReactDOM = require('react-dom')
- 
-var getCookie = require('js/globals/GetCookie')
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var FontAwesome = require('react-fontawesome');
-var ScrollArea = require('react-scrollbar')
+import { getCookie } from 'js/globals/utility';
 
-var Form = require('react-bootstrap').Form;
-var FormGroup = require('react-bootstrap').FormGroup;
-var Row = require('react-bootstrap').Row;
-var FormControl = require('react-bootstrap').FormControl;
-var ControlLabel = require('react-bootstrap').ControlLabel;
-var InputGroup = require('react-bootstrap').InputGroup;
-var FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome';
+import ScrollArea from 'react-scrollbar';
 
-var SingleQuizForm = require('js/globals/QuizAddingForm/SingleQuizForm.jsx')
-var QuizFormsList = require('js/globals/QuizAddingForm/QuizFormsList');
-var ScrollButtonList = require('js/globals/QuizAddingForm/ScrollButtonList');
+import { Row, Form, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
+
+import SingleQuizForm from 'js/globals/QuizAddingForm/SingleQuizForm';
+import QuizFormsList from 'js/globals/QuizAddingForm/QuizFormsList';
+import ScrollButtonList from 'js/globals/QuizAddingForm/ScrollButtonList';
 
 module.exports = React.createClass({
     loadDataFromServer: function(vuuid){
@@ -239,10 +233,11 @@ module.exports = React.createClass({
           }.bind(this)
         });
     },
-    render: function(){
-        return(
+    render: function() {
+        let height = $('.quizAddingForm').height() - 10;
+        return (
             <div className="quizAddingForm">
-                <div className="questionNumberButtons">
+                <div className="questionNumberButtons" style={{height}}>
                     <ScrollButtonList 
                         scrollToFromButton={this.scrollToFromButton}
                         questions={this.state.questions}/>
