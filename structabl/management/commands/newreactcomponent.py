@@ -15,7 +15,7 @@ require('css/{app}/{endpoint}/{name}.scss');
 
 import React from 'react';
 
-class {name} extends React.Component {{
+export default class {name} extends React.Component {{
     constructor(props) {{
         super(props);
     }}
