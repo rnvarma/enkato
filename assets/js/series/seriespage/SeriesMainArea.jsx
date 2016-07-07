@@ -5,8 +5,10 @@ var React = require('react')
 
 import { Button } from 'react-bootstrap';
 
-var NoVideosArea = require('js/series/seriespage/NoVideosArea');
-var SeriesVideoList = require('js/series/seriespage/SeriesVideoList');
+import { pluralize } from 'js/globals/utility';
+
+import NoVideosArea from 'js/series/seriespage/NoVideosArea';
+import SeriesVideoList from 'js/series/seriespage/SeriesVideoList';
 
 export default class SeriesMainArea extends React.Component {
     constructor(props) {
@@ -56,7 +58,7 @@ export default class SeriesMainArea extends React.Component {
                                 <a href={"/userprofile/" + this.props.data.creator.user_id}>{this.props.data.creator.name}</a>
                             </div>
                             <div className="num-videos">
-                                {this.props.data.num_videos} videos
+                                {this.props.data.num_videos} {pluralize("video", this.props.data.num_videos)}
                             </div>
                             <div className="num-mins">
                                 {this.props.data.total_len}
