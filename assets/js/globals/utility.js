@@ -40,3 +40,11 @@ export function styleDuration(seconds) {
         return `${min}:${sec}`;
     }
 }
+
+/* returns string with ellipses if it's greater than length */
+export function truncate(string, length) {
+    if (string.length > length) {
+        return string.substring(0, length) + '...';
+    }
+    return string;
+}
