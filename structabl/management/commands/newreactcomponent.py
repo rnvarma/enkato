@@ -45,7 +45,7 @@ class Command(BaseCommand):
         
         scss_path = 'assets/css' + os.sep + spec_path + '.scss'
         scss_file = open(scss_path, 'w+')
-        scss_file.write(baseSCSS.format(camelCaseName))
+        scss_file.write(baseSCSS.format(camelCaseName=camelCaseName))
         scss_file.close()
 
         jsx_path = 'assets/js' + os.sep + spec_path + '.jsx'
