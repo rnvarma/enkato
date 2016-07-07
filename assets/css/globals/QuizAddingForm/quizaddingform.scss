@@ -9,7 +9,7 @@
 }
 
 .questionNumberButtons {
-    overflow: hidden; /* height set through js */
+    overflow: scroll; /* height set through js */
     position: fixed;
     top: 120;
     left: calc(23.3%);

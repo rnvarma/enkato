@@ -235,6 +235,9 @@ module.exports = React.createClass({
     },
     render: function() {
         let height = $('.quizAddingForm').height() - 10;
+        if (isNaN(height)) {
+            height = 530;
+        }
         return (
             <div className="quizAddingForm">
                 <div className="questionNumberButtons" style={{height}}>
