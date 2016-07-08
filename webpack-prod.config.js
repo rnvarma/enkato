@@ -25,7 +25,7 @@ module.exports = {
   },
 
   output: {
-      path: path.resolve(pathtoassets + '/assets/prod-bundles/'),
+      path: path.resolve(pathtoassets + '/assets/prod-assets/prod-bundles/'),
       filename: "[name]-[hash].js",
   },
 
@@ -37,7 +37,7 @@ module.exports = {
         new BundleTracker({
           filename: pathtoassets + '/webpack-prod-stats.json'
         }),
-        new CleanWebpackPlugin(['assets/prod-bundles']),
+        new CleanWebpackPlugin(['assets/prod-assets/prod-bundles']),
         new webpack.optimize.UglifyJsPlugin({
           compress: {
             warnings: false 
