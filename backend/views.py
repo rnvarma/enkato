@@ -168,6 +168,50 @@ class QuizData(APIView):
             'numQuestions': quizQs.count()
         })
 
+def secondify(time):
+    timeL = time.split(":")
+    seconds = 0
+    print(timeL)
+    if(len(timeL) == 2):
+        seconds = int(timeL[0])*60 + int(timeL[1])
+    elif(len(timeL)==3):
+        seconds = int(timeL[0])*3600 + int(timeL[1])*60 + int(timeL[2])
+    return seconds
+
+class YTIndexScript(APIView):
+    def get(self, request, v_uuid):
+        video = Video.objects.get(uuid=v_uuid)
+        topics = '''02:25 : Primitives
+06:32 : Output
+08:51 : Math
+11:18 : Conditionals
+14:38 : Looping
+17:14 : Strings
+22:05 : Input
+26:08 : Arrays
+27:32 : Vectors
+28:58 : Tuples
+30:02 : Functions
+32:14 : Closures
+33:48 : Pointers
+37:41 : Structs
+41:12 : Traits
+43:37 : Enums
+'''
+        topicObjsList = []
+        for topic in topics.splitlines():
+            topicL = topic.split(" : ")
+            topicName = topicL[1]
+            topicTime = secondify(topicL[0])
+            topicObj = Topic(video = video, time = topicTime, name = topicName)
+            topicObjsList.append(topicObj)
+            print(topicName)
+        for topicObj in topicObjsList:
+            topicObj.save()
+        return JsonResponse({'hey':True})
+
+
+
 
 # access via /api/video/<v_uuid>/questions
 class QuestionData(APIView):

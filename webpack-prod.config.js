@@ -7,6 +7,8 @@ var pathtoassets = require('./pathtoassets')
 module.exports = {
   context: __dirname,
 
+  devtool: 'cheap-module-source-map',
+
   entry: {
     homepage: './assets/js/home/homepage/HomePage.jsx',
     profile: './assets/js/userprofile/profile/Profile.jsx',
@@ -23,7 +25,7 @@ module.exports = {
   },
 
   output: {
-      path: path.resolve(pathtoassets + '/assets/prod-bundles/'),
+      path: path.resolve(pathtoassets + '/assets/prod-assets/prod-bundles/'),
       filename: "[name]-[hash].js",
   },
 
@@ -32,8 +34,21 @@ module.exports = {
             $: "jquery",
             jQuery: "jquery"
         }),
-        new BundleTracker({filename: pathtoassets + '/webpack-prod-stats.json'}),
-        new CleanWebpackPlugin(['assets/bundles'])
+        new BundleTracker({
+          filename: pathtoassets + '/webpack-prod-stats.json'
+        }),
+        new CleanWebpackPlugin(['assets/prod-assets/prod-bundles']),
+        new webpack.optimize.UglifyJsPlugin({
+          compress: {
+            warnings: false 
+          } 
+        }),
+        new webpack.DefinePlugin({
+          'process.env': {
+            'NODE_ENV': JSON.stringify('production')
+          }
+        })
+
   ],
 
   module: {

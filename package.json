@@ -7,7 +7,8 @@
     "test": "python manage.py test",
     "django": "python manage.py runserver",
     "webpack-dev": "webpack --watch --progress --colors",
-    "webpack-prod": "webpack --config webpack-prod.config.js --progress --colors"
+    "webpack-prod": "webpack --config webpack-prod.config.js --progress --colors",
+    "webpack-prod-analyze": "webpack --config webpack-prod.config.js --progress --colors --json | webpack-bundle-size-analyzer"
   },
   "author": "rohan varma",
   "license": "ISC",
@@ -42,6 +43,7 @@
     "url-loader": "^0.5.7",
     "vimeo": "^1.2.0",
     "webpack": "^1.13.1",
+    "webpack-bundle-size-analyzer": "^2.0.2",
     "webpack-bundle-tracker": "0.0.93",
     "youtube-iframe": "^1.0.2"
   },

@@ -2,13 +2,14 @@ require("css/globals/NavBar.scss")
 
 var React = require('react')
 
-var Navbar = require('react-bootstrap').Navbar;
-var Nav = require('react-bootstrap').Nav;
-var NavItem = require('react-bootstrap').NavItem;
-var MenuItem = require('react-bootstrap').MenuItem;
-var NavDropdown = require('react-bootstrap').NavDropdown;
+import Navbar from 'react-bootstrap/lib/Navbar';
+import Nav from 'react-bootstrap/lib/Nav';
+import NavItem from 'react-bootstrap/lib/NavItem';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
+import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 
 var CreateSeriesModal = require('js/globals/CreateSeriesModal')
+var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
 
 module.exports = React.createClass({
     getInitialState: function() {
@@ -68,7 +69,7 @@ module.exports = React.createClass({
                 <Navbar.Header>
                   <Navbar.Brand>
                     <a href="/">
-                        <span className="logo"><img className="headerLogo" src="/static/imgs/enkato_logo.png" /></span>
+                        <span className="logo"><img className="headerLogo" src={DjangoImageLinkHandler("enkato_logo.png")} /></span>
                     </a>
                   </Navbar.Brand>
                   <Navbar.Toggle />

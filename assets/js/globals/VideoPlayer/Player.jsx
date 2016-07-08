@@ -79,6 +79,7 @@ module.exports = function (videoId) {
         if (seconds == Math.floor(this.player.getDuration())) {
             seconds -= 0.5; /* YouTube bug, seeking to getDuration() floor doesn't work */
         }
+        console.log(seconds)
         return this.player.seekTo(seconds);
     }
 

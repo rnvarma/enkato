@@ -9,6 +9,7 @@ import { pluralize } from 'js/globals/utility';
 
 import NoVideosArea from 'js/series/seriespage/NoVideosArea';
 import SeriesVideoList from 'js/series/seriespage/SeriesVideoList';
+var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
 
 export default class SeriesMainArea extends React.Component {
     constructor(props) {
@@ -16,7 +17,7 @@ export default class SeriesMainArea extends React.Component {
     }
 
     render() {
-        const img_src = this.props.data.image || '/static/imgs/blank_thumbnail.png'
+        const img_src = this.props.data.image || DjangoImageLinkHandler('blank_thumbnail.png')
         if (this.props.data.videos.length == 0) {
             var video_area = <NoVideosArea
                                  data={this.props.data}

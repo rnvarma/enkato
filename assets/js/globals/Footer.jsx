@@ -1,13 +1,14 @@
 require("css/globals/Footer")
 
 var React = require('react')
+var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
 
 module.exports = React.createClass({
     render: function() {
         return (
             <div className="footer">
                 <div className="name">
-                    <img src="/static/imgs/enkato_logo.png" className="logo"/>
+                    <img src={DjangoImageLinkHandler("enkato_logo.png")} className="logo"/>
                 </div>
                 <div className="footerPart">
                     <div className="title">
