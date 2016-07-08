@@ -29,9 +29,9 @@ CLASS_DIR = os.path.join(BASE_DIR, 'classroom')
 SECRET_KEY = 'k3di=5f2_to8g!^(c_)6#9!uex9e65i4n&rllc*a@bu8l$(!#)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = '/login'
 
