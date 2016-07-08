@@ -35,45 +35,6 @@ module.exports = React.createClass({
         })
     },
     render: function() {
-        var playOrPause;
-        if(this.props.isPlaying){
-            playOrPause = "pause"
-        }else{
-            playOrPause="play"
-        }
-
-        let popoverArea = "";
-        if (this.state.isShowingSpeedChanger) {
-            popoverArea =
-                (<Popover placement="top" className="playbackPopover">
-                    <div 
-                        onClick={this.setPlaybackSpeed.bind(this,2)}
-                        className="speedButton">
-                        2x
-                    </div>
-                    <div 
-                        onClick={this.setPlaybackSpeed.bind(this,1.5)}
-                        className="speedButton">
-                        1.5x
-                    </div>
-                    <div 
-                        onClick={this.setPlaybackSpeed.bind(this,1)}
-                        className="speedButton">
-                        1x
-                    </div>
-                    <div 
-                        onClick={this.setPlaybackSpeed.bind(this,.5)}
-                        className="speedButton">
-                        .5x
-                    </div>
-                    <div 
-                        onClick={this.setPlaybackSpeed.bind(this,.25)}
-                        className="speedButton">
-                        .25x
-                    </div>
-                </Popover>);
-        }
-
         return (
             <div className="controlBar">
                 <ProgressBar 
@@ -86,16 +47,45 @@ module.exports = React.createClass({
                 <Row>
                     <FontAwesome 
                         className="playButton" 
-                        name={playOrPause}
+                        name={this.props.isPlaying ? "pause" : "play"}
                         onClick={this.props.handlePlayPauseClick}
                     />
                     <span className="videoTime">{this.props.currentTime} / {this.props.totalTime}</span>
-                    {popoverArea}
-                    <span 
-                        className="playbackRate"
-                        onClick={this.showPlaybackSpeedChanger}>
-                        {this.state.playBackSpeed}
-                    </span>
+                    <OverlayTrigger trigger="focus" placement="top" overlay=
+                                    {<Popover className="playbackPopover">
+                                            <div 
+                                                onClick={this.setPlaybackSpeed.bind(this,2)}
+                                                className="speedButton">
+                                                2x
+                                            </div>
+                                            <div 
+                                                onClick={this.setPlaybackSpeed.bind(this,1.5)}
+                                                className="speedButton">
+                                                1.5x
+                                            </div>
+                                            <div 
+                                                onClick={this.setPlaybackSpeed.bind(this,1)}
+                                                className="speedButton">
+                                                1x
+                                            </div>
+                                            <div 
+                                                onClick={this.setPlaybackSpeed.bind(this,.5)}
+                                                className="speedButton">
+                                                .5x
+                                            </div>
+                                            <div 
+                                                onClick={this.setPlaybackSpeed.bind(this,.25)}
+                                                className="speedButton">
+                                                .25x
+                                            </div>
+                                    </Popover>}>
+                                    <span
+                                        tabIndex={0}
+                                        className="playbackRate"
+                                        onClick={this.showPlaybackSpeedChanger}>
+                                        {this.state.playBackSpeed}
+                                    </span>
+                    </OverlayTrigger>
                 </Row>
             </div>
         );

@@ -1,8 +1,9 @@
+require('css/series/seriespage/SeriesVideoPanel.scss');
 
-require("css/series/seriespage/SeriesVideoPanel.scss");
-
-var React = require('react')
+import React from 'react';
 import FontAwesome from 'react-fontawesome';
+
+import { pluralize } from 'js/globals/utility';
 
 module.exports = React.createClass({
     onClick: function() {
@@ -33,20 +34,20 @@ module.exports = React.createClass({
                                 <FontAwesome
                                     name="exclamation-circle"
                                     className="alertIcon"/>
-                                {video.num_topics} topics
+                                {video.num_topics} {pluralize("topic", video.num_topics)}
                             </span>
                             <span className={"seperator" + (video.num_quiz_questions ? "" : " alertAnnotate")}>
                                 <FontAwesome 
                                     name="exclamation-circle" 
                                     className="alertIcon"/>
-                                {video.num_quiz_questions} quiz questions
+                                {video.num_quiz_questions} quiz {pluralize("question", video.num_quiz_questions)}
                             </span>
                         </div>
                     </div>
                 </div>
                 <div className={rightClass}>
                     <div className="numViews">
-                        {video.num_views} views
+                        {video.num_views} {pluralize("view", video.num_views)}
                     </div>
                     <div className="time">
                         {video.duration_san}
