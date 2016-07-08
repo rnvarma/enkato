@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 import os
 
 baseSCSS = """\
@@ -15,11 +15,7 @@ require('css/{app}/{endpoint}/{name}.scss');
 
 import React from 'react';
 
-export default class {name} extends React.Component {{
-    constructor(props) {{
-        super(props);
-    }}
-
+class {name} extends React.Component {{
     render() {{
         return (
             <div className="{camelCaseName}">
@@ -27,6 +23,8 @@ export default class {name} extends React.Component {{
         );
     }}
 }}
+
+export default {name};
 """
 
 importCommand = "import {name} from 'js/{app}/{endpoint}/{name}';"
