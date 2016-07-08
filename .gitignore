@@ -2,8 +2,8 @@
 *.pyc
 pathtoassets.js
 node_modules/*
-# assets/bundles/*
-# webpack-stats.json
+assets/bundles/*
+webpack-stats.json
 db.sqlite3
 npm-debug.log
 # Elastic Beanstalk Files
