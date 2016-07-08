@@ -2,10 +2,10 @@ require("css/globals/CreateSeriesModal.scss")
 
 var React = require('react')
 
-var NavItem = require('react-bootstrap').NavItem;
-var Modal = require('react-bootstrap').Modal;
-var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
-var Button = require('react-bootstrap').Button;
+import NavItem from 'react-bootstrap/lib/NavItem';
+import Modal from 'react-bootstrap/lib/Modal';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Button from 'react-bootstrap/lib/Button';
 
 var CreateSeriesForm = require('js/globals/CreateSeriesForm')
 var getCookie = require('js/globals/GetCookie')

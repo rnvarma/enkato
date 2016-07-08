@@ -4,9 +4,9 @@ require("css/globals/base.scss");
 var React = require('react')
 var ReactDOM = require('react-dom')
 
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
-var Button = require('react-bootstrap').Button;
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+import Button from 'react-bootstrap/lib/Button';
 
 var NavBar = require('js/globals/NavBar');
 var CreateClassForm = require('js/classroom/createclass/CreateClassForm');

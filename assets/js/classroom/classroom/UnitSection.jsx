@@ -1,7 +1,7 @@
 var React = require('react')
 
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 
 var UnitList = require('js/classroom/classroom/UnitList');
 var UnitVideoList = require('js/classroom/classroom/UnitVideoList');

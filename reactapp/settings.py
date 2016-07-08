@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'storages',
     'webpack_loader',
     'structabl',
     'home',
@@ -132,14 +133,23 @@ USE_L10N = True
 
 USE_TZ = True
 
+AWS_ACCESS_KEY_ID = 'AKIAIA5XRYWUZJOKIMFA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'enkato-static-files'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+STATICFILES_LOCATION = 'static'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
+STATICFILES_STORAGE = 'reactapp.storage.StaticStorage'
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
 
-STATIC_URL = '/static/'
+MEDIAFILES_LOCATION = 'media'
+MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+DEFAULT_FILE_STORAGE = 'reactapp.storage.MediaStorage'
+
+# STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'assets'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
+    os.path.join(BASE_DIR, 'assets/prod-bundles'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
 )
 
 

@@ -2,11 +2,11 @@ require("css/globals/NavBar.scss")
 
 var React = require('react')
 
-var Navbar = require('react-bootstrap').Navbar;
-var Nav = require('react-bootstrap').Nav;
-var NavItem = require('react-bootstrap').NavItem;
-var MenuItem = require('react-bootstrap').MenuItem;
-var NavDropdown = require('react-bootstrap').NavDropdown;
+import Navbar from 'react-bootstrap/lib/Navbar';
+import Nav from 'react-bootstrap/lib/Nav';
+import NavItem from 'react-bootstrap/lib/NavItem';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
+import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 
 var CreateSeriesModal = require('js/globals/CreateSeriesModal')
 
