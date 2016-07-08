@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^v/(?P<v_uuid>[a-zA-Z0-9_.-]+)/deletequizquestion$', DeleteQuizQuestion.as_view()),
     url(r'^v/(?P<v_uuid>[a-zA-Z0-9_.-]+)/addquizoption$', AddQuizOption.as_view()),
     url(r'^v/(?P<v_uuid>[a-zA-Z0-9_.-]+)/deletequizoption$', DeleteQuizOption.as_view()),
+    url(r'^v/(?P<v_uuid>[a-zA-Z0-9_.-]+)/question/add', AddQuestion.as_view()),
     url(r'^deletetopic$', DeleteTopic.as_view()),
     url(r'editvideo$', EditVideoTesting.as_view()),
 

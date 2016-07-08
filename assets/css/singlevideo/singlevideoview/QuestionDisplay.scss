@@ -1,0 +1,15 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.questionDisplay {
+  background-color: white;
+  margin: 0;
+  padding: 30px 20px;
+  font-size: 18px;
+  height: 100%;
+
+  &.empty {
+    font-size: 30px;
+    text-align: center;
+  }
+}

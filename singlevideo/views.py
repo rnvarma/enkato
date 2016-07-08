@@ -8,10 +8,12 @@ from backend.views import Serializer
 
 import json
 
+
 # Create your views here.
 class SingleVideoPage(View):
-    def get(self, request,v_uuid):
-        return render(request, 'singlevideo/singlevideo.html', {'v_uuid':v_uuid})
+    def get(self, request, v_uuid):
+        return render(request, 'singlevideo/singlevideo.html', {'v_uuid': v_uuid})
+
 
 class AddTopic(View):
     def post(self, request, v_uuid):
@@ -24,9 +26,10 @@ class AddTopic(View):
         )
         newTopic.save()
         return JsonResponse({
-            'status': True, 
+            'status': True,
             'newTopic': Serializer.serialize_topic(newTopic)
         })
+
 
 class UpdateTopics(View):
     def post(self, request, v_uuid):
@@ -39,12 +42,14 @@ class UpdateTopics(View):
             topic_obj.save()
         return JsonResponse({'status': True})
 
+
 class DeleteTopic(View):
     def post(self, request):
         t_uuid = request.POST.get('uuid')
         topic = Topic.objects.get(uuid=t_uuid)
         topic.delete()
         return JsonResponse({'status': True})
+
 
 class EditVideoTesting(View):
     def get(self, request):
@@ -66,9 +71,10 @@ class UpdateQuiz(View):
                 cObj.is_correct = choice["is_correct"]
                 cObj.save()
             qObj.save()
-            count+=1
-        
+            count += 1
+
         return JsonResponse({'status': True})
+
 
 class AddQuizQuestion(View):
     def post(self, request, v_uuid):
@@ -87,6 +93,7 @@ class AddQuizQuestion(View):
             'new_question': Serializer.serialize_quiz_question(new_question)
         })
 
+
 class DeleteQuizQuestion(View):
     def post(self, request, v_uuid):
         q_id = request.POST.get('qid')
@@ -97,6 +104,7 @@ class DeleteQuizQuestion(View):
             'status': True,
             'qid': q_id
         })
+
 
 class AddQuizOption(View):
     def post(self, request, v_uuid):
@@ -115,6 +123,7 @@ class AddQuizOption(View):
             'new_choice': new_choice_data
         })
 
+
 class DeleteQuizOption(View):
     def post(self, request, v_uuid):
         q_id = request.POST.get('qid')
@@ -129,5 +138,25 @@ class DeleteQuizOption(View):
         })
 
 
+# POST via /v/<v_uuid>/question/add
+class AddQuestion(View):
+    """ Given valid information, returns new question's data """
 
+    def post(self, request, v_uuid):
+        topic_id = int(request.POST.get('topic')) if request.POST.get('topic') else None
+        question = Question(
+            video=Video.objects.get(uuid=v_uuid),
+            topic_id=topic_id,
+            student=request.user.customuser,
+            title=request.POST.get('title'),
+            text=request.POST.get('text'),
+            time=int(request.POST.get('time', 0))
+        )
+        question.save()
+        #questionFileUpload = QuestionFileUpload(
+        #    question=question,
+        #    file=request.POST.get('file')
+        #)
+        #questionFileUpload.save()
 
+        return JsonResponse(QuestionSerializer(question).data)
