@@ -6,7 +6,8 @@
   "scripts": {
     "test": "python manage.py test",
     "django": "python manage.py runserver",
-    "webpack": "webpack --watch --progress --colors"
+    "webpack-dev": "webpack --watch --progress --colors",
+    "webpack-prod": "webpack --config webpack-prod.config.js --progress --colors"
   },
   "author": "rohan varma",
   "license": "ISC",
