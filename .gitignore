@@ -2,7 +2,7 @@
 *.pyc
 pathtoassets.js
 node_modules/*
-assets/bundles/*
+# assets/bundles/*
 # webpack-stats.json
 db.sqlite3
 npm-debug.log
