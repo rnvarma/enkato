@@ -1,0 +1,20 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.questionFilterBar {
+
+  .filterOption {
+    padding: 12px 40px;
+    background-color: white;
+    font-size: 18px;
+    text-align: center;
+
+    &.selected {
+      font-weight: bold;
+    }
+  }
+
+  .filterQuery {
+    background-color: white;
+  }
+}
