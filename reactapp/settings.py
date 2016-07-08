@@ -93,13 +93,32 @@ WSGI_APPLICATION = 'reactapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+DEV_GLOBAL_DB = {
+    'ENGINE': 'django_postgrespool',
+    'NAME': 'enkatodev',
+    'USER': 'enkatodev',
+    'PASSWORD': 'khanacademy23',
+    'HOST': 'enkato-dev.caubwydik7md.us-east-1.rds.amazonaws.com',
+    'PORT': '5432'
 }
 
+DEV_LOCAL_DB = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+}
+
+PROD_DB = {
+    'ENGINE': 'django_postgrespool',
+    'NAME': 'enkatoprod',
+    'USER': 'enkatoprod',
+    'PASSWORD': 'khanacademy23',
+    'HOST': 'enkato-prod.caubwydik7md.us-east-1.rds.amazonaws.com',
+    'PORT': '5432'
+}
+
+DATABASES = {
+    'default': DEV_LOCAL_DB if DEBUG else PROD_DB
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
