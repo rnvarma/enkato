@@ -1,10 +1,6 @@
 @import '../mixins.scss';
 @import '../colors.scss';
 
-$dotSize: 14px;
-$dotColor: red;
-$dotBorderColor: blue;
-
 .topicDot {
     position: absolute;
     width: 8px;

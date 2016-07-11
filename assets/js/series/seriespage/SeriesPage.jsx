@@ -27,7 +27,8 @@ var SeriesPage = React.createClass({
             urls: "",
             show: false,
             annotateMode: false,
-            quizMode: false
+            quizMode: false,
+            is_creator: false
         }
     },
     openModal: function(annotating) {
@@ -75,6 +76,21 @@ var SeriesPage = React.createClass({
         this.loadPageData();
     },
     render: function() {
+        if (this.state.is_creator) {
+            var uploadModal = (
+                <UploadAnnotateModal
+                    {...this.state}
+                    close={this.closeModal}
+                    setTopicMode={this.setTopicMode}
+                    setQuizMode={this.setQuizMode}
+                    setAnnotateMode={this.setAnnotateMode}
+                    setUrls={this.setUrls}
+                    onURLImport={this.onURLImport}
+                    reloadPageData={this.loadPageData}/>
+            )
+        } else {
+            var uploadModal = ""
+        }
         return (
             <div>
                 <NavBar />
@@ -89,15 +105,7 @@ var SeriesPage = React.createClass({
                                 {...this.state}/>
                         </Col>
                     </Row>
-                    <UploadAnnotateModal
-                        {...this.state}
-                        close={this.closeModal}
-                        setTopicMode={this.setTopicMode}
-                        setQuizMode={this.setQuizMode}
-                        setAnnotateMode={this.setAnnotateMode}
-                        setUrls={this.setUrls}
-                        onURLImport={this.onURLImport}
-                        reloadPageData={this.loadPageData}/>
+                    {uploadModal}
                 </div>
             </div>
         );
