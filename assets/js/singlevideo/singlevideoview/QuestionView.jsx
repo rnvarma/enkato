@@ -30,6 +30,8 @@ class QuestionView extends React.Component {
     this.closeModal = this.closeModal.bind(this);
     this.addQuestion = this.addQuestion.bind(this);
     this.pushQuestion = this.pushQuestion.bind(this);
+    this.pushResponse = this.pushResponse.bind(this);
+    this.pushResponseText = this.pushResponseText.bind(this);
     this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
     this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
   }
@@ -131,6 +133,24 @@ class QuestionView extends React.Component {
     });
   }
 
+  /* actually adds the response after it has been POSTed */
+  pushResponse(questionId, newResponse) {
+    const questionToAppend = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    questionToAppend.responses.push(newResponse);
+    this.setState({ questions: this.questionData });
+  }
+
+  /* stores to response input, unique for each question */
+  pushResponseText(questionId, newResponseText) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    question.responseInput = newResponseText;
+    this.setState({ questions: this.questionData });
+  }
+
   render() {
     return (
       <Row>
@@ -164,7 +184,12 @@ class QuestionView extends React.Component {
             currentQuestion={this.state.currentQuestion}
             setCurrentQuestion={this.setCurrentQuestion}
           />
-          <QuestionDisplay question={this.state.currentQuestion} />
+          <QuestionDisplay
+            question={this.state.currentQuestion}
+            pushResponse={this.pushResponse}
+            pushResponseText={this.pushResponseText}
+            videoUUID={this.props.videoUUID}
+          />
         </Row>
       </Row>
     );

@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 
 import QuestionDisplayResponse from 'js/singlevideo/singlevideoview/QuestionDisplayResponse';
+import QuestionResponseForm from 'js/singlevideo/singlevideoview/QuestionResponseForm'
 
 class QuestionDisplay extends React.Component {
   render() {
@@ -20,10 +21,10 @@ class QuestionDisplay extends React.Component {
     var responses = '';
     if (this.props.question.responses) {
       responses = this.props.question.responses.map((response) => {
-        return (<QuestionDisplayResponse response={response}/>);
+        return (<Row><QuestionDisplayResponse response={response} /></Row>);
       });
     }
-    
+
     return (
       <Col md={8} className="questionDisplay">
         <Row>
@@ -31,6 +32,15 @@ class QuestionDisplay extends React.Component {
           time: {this.props.question.timestamp}
         </Row>
         {responses}
+        <Row>
+          <QuestionResponseForm
+            question={this.props.question}
+            pushResponse={this.props.pushResponse}
+            pushResponseText={this.props.pushResponseText}
+            videoUUID={this.props.videoUUID}
+            key={this.props.question.id}
+          />
+        </Row>
       </Col>
     );
   }
