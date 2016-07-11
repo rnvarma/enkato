@@ -10,7 +10,7 @@ export default class SeriesVideoList extends React.Component {
     }
 
     render() {
-        var videoPanels = this.props.data.videos.map(function(v) {
+        var videoPanels = this.props.videos.map(function(v) {
             return (
                 <SeriesVideoPanel key={v.order} video={v}/>
             );

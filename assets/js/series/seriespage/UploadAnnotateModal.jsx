@@ -34,7 +34,7 @@ export default class UploadAnnotateModal extends React.Component {
         } else {
             if (this.props.urls) {
                 $.ajax({
-                    url: "/upload/s/" + this.props.data.s_id,
+                    url: "/upload/s/" + this.props.s_id,
                     dataType: "json",
                     type: "POST",
                     data: { urls: this.props.urls },
@@ -44,9 +44,9 @@ export default class UploadAnnotateModal extends React.Component {
                     },
                     success: function(data) {
                         if (data.status) {
-                            this.props.reloadPageData();
-                            this.props.setAnnotateMode(true);
+                            this.props.reloadPageData(() => { this.props.setAnnotateMode(true); });
                             this.props.setUrls(""); /* reset url entry to avoid resubmission */
+                          this.setState({ error: '' });
                         } else {
                             /* remove urls from list that didn't fail */
                             /* errors is list of bad urls */
@@ -85,8 +85,12 @@ export default class UploadAnnotateModal extends React.Component {
                     }.bind(this)
                 });
             } else {
+              if (this.props.videos.length > 0) {
                 this.props.setAnnotateMode(true);
-                this.setState({ error: "" });
+                this.setState({error: ''});
+              } else {
+                this.setState({error: 'No videos uploaded!'});
+              }
             }
         }
     }
@@ -96,28 +100,29 @@ export default class UploadAnnotateModal extends React.Component {
         var nextText = "";
         let toggleBtns = "";
         if (this.props.annotateMode) {
-            modalInfo = {
-                title: "Annotating",
-                class: "annotating",
-                body: <AnnotateVideosForSeries
-                          data={this.props.data}
-                          quizMode={this.props.quizMode}/>
-            }
-            nextText = "Finish";
-            toggleBtns = (<div><Button
-                              className={"toggleAnnotating topics" + (this.props.quizMode ? "" : " active")}
-                              onClick={this.props.setTopicMode}>Topics</Button>
-            <Button className={"toggleAnnotating quizzes" + (this.props.quizMode ? " active" : "")}
-                    onClick={this.props.setQuizMode}>Quizzing</Button></div>);
+          console.log(this.state, this.props, "switching to annotateMode");
+          modalInfo = {
+            title: "Annotating",
+            class: "annotating",
+            body: <AnnotateVideosForSeries
+                      videos={this.props.videos}
+                      quizMode={this.props.quizMode} />
+          }
+          nextText = "Finish";
+          toggleBtns = (<div><Button
+                            className={"toggleAnnotating topics" + (this.props.quizMode ? "" : " active")}
+                            onClick={this.props.setTopicMode}>Topics</Button>
+          <Button className={"toggleAnnotating quizzes" + (this.props.quizMode ? " active" : "")}
+                  onClick={this.props.setQuizMode}>Quizzing</Button></div>);
         } else {
-            modalInfo = {
-                title: "Import Video(s)",
-                class: "",
-                body: <AddVideoToSeriesForm
-                          urls={this.props.urls}
-                          onURLAdded={this.props.onURLImport}/>
-            }
-            nextText = "Next";
+          modalInfo = {
+            title: "Import Video(s)",
+            class: "",
+            body: <AddVideoToSeriesForm
+                      urls={this.props.urls}
+                      onURLAdded={this.props.onURLImport}/>
+          }
+          nextText = "Next";
         }
 
         return (
@@ -127,7 +132,7 @@ export default class UploadAnnotateModal extends React.Component {
                         <Modal.Title>{modalInfo.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        {this.state.error} {/* TODO: style error code */}
+                        {this.state.error}
                         {modalInfo.body}
                     </Modal.Body>
                     <Modal.Footer>
