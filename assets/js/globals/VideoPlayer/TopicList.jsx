@@ -22,7 +22,14 @@ class TopicNode extends React.Component {
                 id={(this.props.topic.isCurrentTopic ? "selectedTopicNode" : "")}
                 onClick={this.handleTopicClick}
             >
-                {this.props.topic.name}
+                <div className="time">
+                    {this.props.topic.time_clean}
+                </div>
+                <div className="nameContainer">
+                    <div className="name">
+                        {this.props.topic.name}
+                    </div>
+                </div>
             </div>
         );
     }
@@ -39,8 +46,7 @@ export default class TopicList extends React.Component {
                 <TopicNode
                     key={topic.id}
                     topic={topic}
-                    handleTopicClick={this.props.handleTopicClick}
-                />
+                    handleTopicClick={this.props.handleTopicClick}/>
             );
         }, this);
 

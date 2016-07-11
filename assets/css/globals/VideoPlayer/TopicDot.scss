@@ -1,19 +1,18 @@
-
+@import '../mixins.scss';
+@import '../colors.scss';
 
 $dotSize: 14px;
 $dotColor: red;
-$dotBorderThickness: 1px;
 $dotBorderColor: blue;
 
 .topicDot {
     position: absolute;
-    width: $dotSize;
-    height: $dotSize;
-    border-radius: $dotSize;
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
 
-    border: $dotBorderThickness solid $dotBorderColor;
-    background-color: $dotColor;
+    background-color: $structabl-blue;
 
-    margin-top: -2px;
-    margin-left: -$dotSize / 2;
+    margin-top: 1.1px;
+    margin-left: -3.5px;
 }
