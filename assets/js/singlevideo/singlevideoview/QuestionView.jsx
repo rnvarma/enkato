@@ -2,6 +2,8 @@ require('css/singlevideo/singlevideoview/QuestionView.scss');
 
 import React from 'react';
 
+import Fuse from 'fuse.js';
+
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
@@ -18,13 +20,18 @@ class QuestionView extends React.Component {
       questions: [],
       currentQuestion: null,
       filter: '',
+      filterAnswered: false,
+      filterUnanswered: false,
       addingQuestion: false,
     };
     this.setCurrentQuestion = this.setCurrentQuestion.bind(this);
     this.setFilter = this.setFilter.bind(this);
+    this.filterQuestions = this.filterQuestions.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.addQuestion = this.addQuestion.bind(this);
     this.pushQuestion = this.pushQuestion.bind(this);
+    this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
+    this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
   }
 
   componentDidMount() {
@@ -37,6 +44,7 @@ class QuestionView extends React.Component {
       dataType: 'json',
       cache: false,
       success: (data) => {
+        this.questionData = data.questions;
         this.setState({
           questions: data.questions,
           currentQuestion: data.questions[0],
@@ -54,29 +62,71 @@ class QuestionView extends React.Component {
     });
   }
 
-  setFilter(filter) {
+  setFilter(filter, reset = false) {
+    if (reset) {
+      this.setState({
+        filter,
+        filterAnswered: false,
+        filterUnanswered: false,
+      }, this.filterQuestions);
+    } else {
+      this.setState({ filter }, this.filterQuestions);
+    }
+  }
+
+  toggleAnsweredFilter() {
     this.setState({
-      filter,
+      filterAnswered: !this.state.filterAnswered, filterUnanswered: false
+    }, this.filterQuestions);
+  }
+
+  toggleUnansweredFilter() {
+    this.setState({
+      filterAnswered: false, filterUnanswered: !this.state.filterUnanswered
+    }, this.filterQuestions);
+  }
+
+  filterQuestions() {
+    /* first remove based on whether the question is answered or not */
+    let questions = this.questionData.filter((question) => {
+      let valid = true;
+
+      if (this.state.filterAnswered) {
+        valid = question.resolved;
+      }
+      if (this.state.filterUnanswered) {
+        valid = valid && !question.resolved;
+      }
+
+      return valid;
     });
+
+    /* now do fuzzy search */
+    /* https://github.com/krisk/Fuse#options */
+    if (this.state.filter) {
+      const fuse = new Fuse(questions, {
+        keys: ['title', 'text', 'responses.text'],
+        /* verbose: true, very useful for debugging */
+      });
+      questions = fuse.search(this.state.filter);
+    }
+    this.setState({ questions });
   }
 
   closeModal() {
-    this.setState({
-      addingQuestion: false,
-    });
+    this.setState({ addingQuestion: false });
   }
 
   /* prompts user to add question, via modal in QuestionForm */
   addQuestion() {
-    this.setState({
-      addingQuestion: true,
-    });
+    this.setState({ addingQuestion: true });
   }
 
   /* adds question to state */
   pushQuestion(newQuestion) {
+    this.questionData = [...this.questionData, newQuestion];
     this.setState({
-      questions: [...this.state.questions, newQuestion],
+      questions: this.questionData,
       currentQuestion: newQuestion,
     });
   }
@@ -101,7 +151,11 @@ class QuestionView extends React.Component {
         <Row>
           <QuestionFilterBar
             filter={this.state.filter}
+            filterAnswered={this.state.filterAnswered}
+            filterUnanswered={this.state.filterUnanswered}
             setFilter={this.setFilter}
+            toggleAnsweredFilter={this.toggleAnsweredFilter}
+            toggleUnansweredFilter={this.toggleUnansweredFilter}
           />
         </Row>
         <Row className="questionView">

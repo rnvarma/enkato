@@ -27,17 +27,17 @@
     "http": "0.0.0",
     "https": "^1.0.0",
     "imports-loader": "^0.6.5",
-    "jquery": "^3.0.0",
+    "jquery": "^3.1.0",
     "node-sass": "^3.7.0",
     "postcss-loader": "^0.9.1",
-    "react": "*",
+    "react": "^15.2.1",
     "react-bootstrap": "^0.29.4",
     "react-custom-scrollbars": "^4.0.0-beta.2",
-    "react-dom": "*",
+    "react-dom": "^15.2.1",
     "react-fontawesome": "^1.1.0",
     "react-scrollbar": "^0.4.1",
     "resolve-url": "^0.2.1",
-    "resolve-url-loader": "^1.4.3",
+    "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.0",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
@@ -48,6 +48,7 @@
     "youtube-iframe": "^1.0.2"
   },
   "devDependencies": {
-    "clean-webpack-plugin": "^0.1.9"
+    "clean-webpack-plugin": "^0.1.9",
+    "fuse.js": "^2.2.0"
   }
 }

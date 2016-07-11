@@ -28,22 +28,22 @@ export default class QuestionFilterBar extends React.Component {
       <div className="questionFilterBar">
         <Col
           md={3}
-          className={(this.props.filter ? '' : 'selected ') + 'filterOption'}
-          onClick={this.props.setFilter.bind(null, '')}
+          className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
+          onClick={this.props.setFilter.bind(null, '', true)}
         >
           View All
         </Col>
         <Col
           md={3}
-          className={(this.props.filter === ':answered' ? 'selected ' : '') + 'filterOption'}
-          onClick={this.props.setFilter.bind(null, ':answered')}
+          className={(this.props.filterAnswered ? 'selected ' : '') + 'filterOption'}
+          onClick={this.props.toggleAnsweredFilter}
         >
           Answered
         </Col>
         <Col
           md={3}
-          className={(this.props.filter === ':unanswered' ? 'selected ' : '') + 'filterOption'}
-          onClick={this.props.setFilter.bind(null, ':unanswered')}
+          className={(this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
+          onClick={this.props.toggleUnansweredFilter}
         >
           Unanswered
         </Col>
@@ -53,6 +53,7 @@ export default class QuestionFilterBar extends React.Component {
               <FormControl
                 type="input"
                 onChange={this.setFilterFromQuery}
+                value={this.props.filter}
               />
               <InputGroup.Button><Button>ICON</Button></InputGroup.Button>
             </InputGroup>
