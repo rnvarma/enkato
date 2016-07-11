@@ -1,0 +1,14 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.seriesViewerHeader {
+    padding: 20px 15px;
+
+    border-bottom: 10px solid $structabl-blue;
+
+    .seriesName {
+        font-weight: bold;
+        color: $structabl-blue;
+        font-size: 16px;
+    }
+}

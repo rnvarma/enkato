@@ -1,0 +1,11 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.seriesViewerSideBar {
+    display: inline-block;
+    vertical-align: top;
+    width: 20%;
+    height: 80%;
+
+    background-color: white;
+}

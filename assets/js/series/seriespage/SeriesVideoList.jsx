@@ -15,6 +15,7 @@ export default class SeriesVideoList extends React.Component {
                 <SeriesVideoPanel
                     key={v.order}
                     video={v}
+                    s_id={this.props.s_id}
                     is_creator={this.props.is_creator}/>
             );
         }.bind(this))
