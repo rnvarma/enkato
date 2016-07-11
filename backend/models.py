@@ -268,7 +268,7 @@ class QuestionResponseSerializer(serializers.ModelSerializer):
 
 
 class QuestionSerializer(serializers.ModelSerializer):
-    response = QuestionResponseSerializer(many=True, read_only=True)
+    responses = QuestionResponseSerializer(many=True, read_only=True)
 
     class Meta:
         model = Question
