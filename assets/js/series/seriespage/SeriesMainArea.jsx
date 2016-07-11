@@ -17,19 +17,19 @@ export default class SeriesMainArea extends React.Component {
     }
 
     render() {
-        const img_src = this.props.data.image || DjangoImageLinkHandler('blank_thumbnail.png')
-        if (this.props.data.videos.length == 0) {
+        const img_src = this.props.image || DjangoImageLinkHandler('blank_thumbnail.png')
+        if (this.props.videos.length == 0) {
             var video_area = <NoVideosArea
-                                 data={this.props.data}
+                                 videos={this.props.videos}
                                  reloadPageData={this.props.reloadPageData}
                                  openModal={this.props.openModal}/>
             var annotateVideosButton = "";
         } else {
             var video_area = (
                 <div>
-                    <SeriesVideoList data={this.props.data} />
+                    <SeriesVideoList videos={this.props.videos} />
                     <NoVideosArea
-                        data={this.props.data}
+                        videos={this.props.videos}
                         openModal={this.props.openModal}/>
                 </div>
             )
@@ -49,20 +49,20 @@ export default class SeriesMainArea extends React.Component {
                     </div>
                     <div className="metadata-area">
                         <div className="name">
-                            {this.props.data.name}
+                            {this.props.name}
                         </div>
                         <div className="description">
-                            {this.props.data.description}
+                            {this.props.description}
                         </div>
                         <div className="stats">
                             <div className="creator">
-                                <a href={"/userprofile/" + this.props.data.creator.user_id}>{this.props.data.creator.name}</a>
+                                <a href={"/userprofile/" + this.props.creator.user_id}>{this.props.creator.name}</a>
                             </div>
                             <div className="num-videos">
-                                {this.props.data.num_videos} {pluralize("video", this.props.data.num_videos)}
+                                {this.props.num_videos} {pluralize("video", this.props.num_videos)}
                             </div>
                             <div className="num-mins">
-                                {this.props.data.total_len}
+                                {this.props.total_len}
                             </div>
                             {annotateVideosButton}
                         </div>

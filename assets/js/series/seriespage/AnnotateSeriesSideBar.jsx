@@ -10,7 +10,7 @@ module.exports = React.createClass({
     render: function() {
         var updateCurrVideo = this.props.updateCurrVideo;
         var currVideoID = this.props.currentVideo.uuid;
-        var sideButtons = this.props.data.videos.map(function(v) {
+        var sideButtons = this.props.videos.map(function(v) {
             var isCurrVideo = (currVideoID == v.uuid)
             return (
                 <AnnotateSeriesSideBarButton

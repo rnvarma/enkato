@@ -16,16 +16,14 @@ import UploadAnnotateModal from 'js/series/seriespage/UploadAnnotateModal';
 var SeriesPage = React.createClass({
     getInitialState: function() {
         return {
-            data: {
-                s_id: $("#s_id").attr("data-sid"),
-                name: '',
-                description: '',
-                image: '',
-                videos: [],
-                creator: {},
-                num_videos: 0,
-                total_len: 0,
-            },
+            s_id: $("#s_id").attr("data-sid"),
+            name: '',
+            description: '',
+            image: '',
+            videos: [],
+            creator: {},
+            num_videos: 0,
+            total_len: 0,
             urls: "",
             show: false,
             annotateMode: false,
@@ -57,16 +55,16 @@ var SeriesPage = React.createClass({
     setUrls: function(newUrls) {
         this.setState({ urls: newUrls });
     },
-    loadPageData: function() {
+    loadPageData: function(callback = function() {}) {
         $.ajax({
-          url: "/1/s/" + this.state.data.s_id,
+          url: "/1/s/" + this.state.s_id,
           dataType: 'json',
           cache: false,
             success: function(data) {
-                var stateData = this.state.data;
+                var stateData = this.state;
                 /* update state.data */
                 $.extend(true, stateData, data);
-                this.setState({ data: stateData });
+                this.setState(stateData, callback());
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -88,7 +86,7 @@ var SeriesPage = React.createClass({
                         <Col md={12}>
                             <SeriesMainArea
                                 openModal={this.openModal}
-                                data={this.state.data}/>
+                                {...this.state}/>
                         </Col>
                     </Row>
                     <UploadAnnotateModal
