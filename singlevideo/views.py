@@ -1,10 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import View
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from backend.models import *
 
 from backend.views import Serializer
+
+from rest_framework import viewsets
+from rest_framework.views import Response
 
 import json
 
@@ -136,6 +139,42 @@ class DeleteQuizOption(View):
             'cid': c_id,
             'qid': q_id
         })
+
+
+class QuestionResponseViewset(viewsets.ViewSet):
+    """ The question response API """
+
+    def list(self, request, v_uuid):
+        queryset = QuestionResponse.objects.filter(question__video__uuid=v_uuid)
+        serializer = QuestionResponseSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, v_uuid):
+        data = request.data.copy()
+        data['user'] = request.user.customuser.id
+        if data['user'] == Video.objects.filter(uuid=v_uuid).all()[0].creator.id:
+            data['is_instructor'] = True
+
+        serializer = QuestionResponseSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+    def retrieve(self, request, v_uuid=None, pk=None):
+        response = get_object_or_404(QuestionResponse, pk=pk)
+        serializer = QuestionResponseSerializer(response)
+        return Response(serializer.data)
+
+    def destroy(self, request, v_uuid=None, pk=None):
+        response = get_object_or_404(QuestionResponse, pk=pk)
+        if response.user.id == request.user.customuser.id:
+            response.delete()
+            return Response()
+
+        return Response({'error': 'Not authorized to destroy this content.'})
 
 
 # POST via /v/<v_uuid>/question/add

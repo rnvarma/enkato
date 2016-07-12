@@ -1,0 +1,13 @@
+{% extends 'globals/base.html' %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}Series - structabl{% endblock %}
+
+{% block content %}
+    <div id="page-anchor"></div>
+    <div id="s_id" data-sid={{ s_id }} type="hidden"></div>
+{% endblock %}
+
+{% block js %}
+    {% render_bundle 'seriesviewer' %}
+{% endblock %}

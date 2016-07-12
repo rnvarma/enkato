@@ -12,9 +12,13 @@ export default class SeriesVideoList extends React.Component {
     render() {
         var videoPanels = this.props.videos.map(function(v) {
             return (
-                <SeriesVideoPanel key={v.order} video={v}/>
+                <SeriesVideoPanel
+                    key={v.order}
+                    video={v}
+                    s_id={this.props.s_id}
+                    is_creator={this.props.is_creator}/>
             );
-        })
+        }.bind(this))
         return (
             <div className="seriesVideoList">
                 {videoPanels}

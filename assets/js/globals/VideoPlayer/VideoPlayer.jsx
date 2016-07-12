@@ -166,27 +166,25 @@ module.exports  = React.createClass({
         }
         return (
             <div className="ynVideoPlayer"> 
-            {this.topicList}
-            <div className={`videoDiv ${this.videoPlayerClass}`}>
-            <Video
-            renderVideo={this.state.Player.renderVideo}
-            videoDivHeight={this.state.videoDivHeight}
-            controlBarHeight={$('.ControlBar').height()}
-            />
-            <ControlBar 
-            className="ControlBar"
-            isPlaying={this.state.isPlaying}
-            videoDuration={this.state.Player.getDuration()}
-            handleTopicClick={this.handleTopicClick}
-            topicObjList={this.state.topicObjList}
-            handlePlayPauseClick={this.handlePlayPauseClick}
-            handleScrub={this.handleScrub}
-            currentTime={this.state.currentTime}
-            totalTime={this.totalTime}
-            percentDone={this.state.percentDone}
-            setPlaybackRate={this.state.Player.setPlaybackRate}
-            playerContext={this.state.Player.getContext()}
-            />
+                {this.topicList}
+                <div className={`videoDiv ${this.videoPlayerClass}`}>
+                    <Video
+                        renderVideo={this.state.Player.renderVideo}
+                        videoDivHeight={this.state.videoDivHeight}
+                        controlBarHeight={$('.ControlBar').height()}/>
+                    <ControlBar 
+                        className="ControlBar"
+                        isPlaying={this.state.isPlaying}
+                        videoDuration={this.state.Player.getDuration()}
+                        handleTopicClick={this.handleTopicClick}
+                        topicObjList={this.state.topicObjList}
+                        handlePlayPauseClick={this.handlePlayPauseClick}
+                        handleScrub={this.handleScrub}
+                        currentTime={this.state.currentTime}
+                        totalTime={this.totalTime}
+                        percentDone={this.state.percentDone}
+                        setPlaybackRate={this.state.Player.setPlaybackRate}
+                        playerContext={this.state.Player.getContext()}/>
                 </div>
             </div>
         );

@@ -40,7 +40,7 @@ class Serializer(object):
         return data
 
     @staticmethod
-    def serialize_series(series):
+    def serialize_series(series, request=None):
         data = {}
         data["uuid"] = series.uuid
         data["name"] = series.name
@@ -57,6 +57,8 @@ class Serializer(object):
         data["total_len"] = sanetizeTime(total_time)
         videos = map(lambda sv: sv.video, series_videos)
         data["videos"] = map(Serializer.serialize_video, videos)
+        data["is_creator"] = False if not request else series.creator == request.user.customuser
+        data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
         return data
 
     @staticmethod
@@ -142,7 +144,7 @@ class ClassroomData(APIView):
 class SeriesData(APIView):
     def get(self, request, s_id):
         series = Series.objects.get(uuid=s_id)
-        series_data = Serializer.serialize_series(series)
+        series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
 
 
