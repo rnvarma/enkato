@@ -6,7 +6,7 @@ from backend.models import *
 
 from backend.views import Serializer
 
-from rest_framework import viewsets
+from rest_framework import viewsets, exceptions
 from rest_framework.views import Response
 
 import json
@@ -156,16 +156,21 @@ class QuestionResponseViewset(viewsets.ViewSet):
             data['is_instructor'] = True
 
         serializer = QuestionResponseSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
+        return Response(serializer.data)
 
     def retrieve(self, request, v_uuid=None, pk=None):
         response = get_object_or_404(QuestionResponse, pk=pk)
         serializer = QuestionResponseSerializer(response)
+        return Response(serializer.data)
+
+    def partial_update(self, request, v_uuid=None, pk=None):
+        response = get_object_or_404(QuestionResponse, pk=pk)
+        serializer = QuestionResponseSerializer(response, data={'text': request.data.get('text')}, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(serializer.data)
 
     def destroy(self, request, v_uuid=None, pk=None):
@@ -173,8 +178,8 @@ class QuestionResponseViewset(viewsets.ViewSet):
         if response.user.id == request.user.customuser.id:
             response.delete()
             return Response()
-
-        return Response({'error': 'Not authorized to destroy this content.'})
+        else:
+            raise exceptions.PermissionDenied()
 
 
 # POST via /v/<v_uuid>/question/add

@@ -9,6 +9,27 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 
+class DatedModel(models.Model):
+    """ Generic model with created, modified, and modified count fields """
+
+    created = models.DateTimeField(editable=False)
+    modified = models.DateTimeField()
+    modified_count = models.IntegerField(default=0)
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        if not self.id: # Model does not exist yet
+            self.created = timezone.now()
+        else:
+            self.modified_count += 1
+        self.modified = timezone.now()
+
+        return super(DatedModel, self).save(*args, **kwargs)
+
+
+
 class CustomUser(models.Model):
     email = models.CharField(max_length=100, default="")
     first_name = models.CharField(max_length=100, default="")
@@ -244,9 +265,8 @@ class QuestionUpvote(models.Model):
     user = models.ForeignKey(CustomUser, related_name="question_upvotes")
 
 
-class QuestionResponse(models.Model):
+class QuestionResponse(DatedModel):
     question = models.ForeignKey(Question, related_name="responses")
-    timestamp = models.DateTimeField(default=timezone.now)  # when done
     text = models.TextField()
     user = models.ForeignKey(CustomUser, related_name="question_responses")
     is_instructor = models.BooleanField(default=False)
