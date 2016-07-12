@@ -2,5 +2,6 @@
 @import '../../globals/mixins.scss';
 
 .seriesViewerVideoList {
-    
+    height: calc(100% - 200px);
+    overflow-y: scroll
 }
