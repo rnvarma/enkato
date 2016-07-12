@@ -32,6 +32,8 @@ class QuestionView extends React.Component {
     this.pushQuestion = this.pushQuestion.bind(this);
     this.pushResponse = this.pushResponse.bind(this);
     this.pushResponseText = this.pushResponseText.bind(this);
+    this.pushResponseEditText = this.pushResponseEditText.bind(this);
+    this.pushResponseNewText = this.pushResponseNewText.bind(this);
     this.removeResponse = this.removeResponse.bind(this);
     this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
     this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
@@ -48,6 +50,14 @@ class QuestionView extends React.Component {
       cache: false,
       success: (data) => {
         this.questionData = data.questions;
+        /* set response.input, used for editing responses */
+        this.questionData.forEach((question, index, array) => {
+          question.responses.forEach((response, i, arr) => {
+            response.input = response.text;
+            arr[i] = response;
+          });
+          array[index] = question;
+        });
         this.setState({
           questions: data.questions,
           currentQuestion: data.questions[0],
@@ -144,11 +154,35 @@ class QuestionView extends React.Component {
   }
 
   /* stores to response input, unique for each question */
-  pushResponseText(questionId, newResponseText) {
+  pushResponseText(questionId, responseText) {
     const question = this.questionData.find(question => {
       return questionId === question.id;
     });
-    question.responseInput = newResponseText;
+    question.responseInput = responseText;
+    this.setState({ questions: this.questionData });
+  }
+
+  /* similar to above, but for the case in which you are editing responses */
+  /* does not update actual response.text, internal */
+  pushResponseEditText(questionId, responseId, responseEditText) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    const response = question.responses.find(response => {
+      return responseId === response.id;
+    });
+    response.input = responseEditText;
+    this.setState({ questions: this.questionData });
+  }
+
+  pushResponseNewText(questionId, responseId, newText) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    const response = question.responses.find(response => {
+      return responseId === response.id;
+    });
+    response.text = newText;
     this.setState({ questions: this.questionData });
   }
 
@@ -156,11 +190,9 @@ class QuestionView extends React.Component {
     const question = this.questionData.find(question => {
       return questionId === question.id;
     });
-    console.log("question", question);
     const response = question.responses.find(response => {
       return responseId === response.id;
     });
-    console.log("response", response);
     const index = question.responses.indexOf(response);
     question.responses.splice(index, 1);
     this.setState({ questions: this.questionData });
@@ -203,6 +235,8 @@ class QuestionView extends React.Component {
             question={this.state.currentQuestion}
             pushResponse={this.pushResponse}
             pushResponseText={this.pushResponseText}
+            pushResponseEditText={this.pushResponseEditText}
+            pushResponseNewText={this.pushResponseNewText}
             removeResponse={this.removeResponse}
             videoUUID={this.props.videoUUID}
           />

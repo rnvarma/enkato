@@ -18,15 +18,19 @@ class QuestionDisplay extends React.Component {
       );
     }
 
-    var responses = '';
+    var responses;
     if (this.props.question.responses) {
       responses = this.props.question.responses.map((response) => {
         return (
           <Row>
             <QuestionDisplayResponse
+              key={response.id}
               question={this.props.question}
               response={response}
               videoUUID={this.props.videoUUID}
+              pushResponseText={this.props.pushResponseText}
+              pushResponseEditText={this.props.pushResponseEditText}
+              pushResponseNewText={this.props.pushResponseNewText}
               removeResponse={this.props.removeResponse}
             />
           </Row>

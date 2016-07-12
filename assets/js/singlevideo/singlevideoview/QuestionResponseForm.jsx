@@ -13,7 +13,7 @@ import getCookie from 'js/globals/GetCookie';
 
 class QuestionResponseForm extends React.Component {
   constructor() {
-    super()
+    super();
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
