@@ -62,7 +62,14 @@ class SeriesViewer extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({currUUID: nextProps.currUUID})
+        var newUUID = nextProps.currUUID;
+        var newVideo = this.state.videos.filter(function(v) {
+            return v.uuid == newUUID
+        })
+        this.setState({
+            currUUID: nextProps.currUUID,
+            currVideo: newVideo ? newVideo[0] : this.state.currVideo
+        })
     }
 
     componentDidMount() {
