@@ -32,6 +32,7 @@ class QuestionView extends React.Component {
     this.pushQuestion = this.pushQuestion.bind(this);
     this.pushResponse = this.pushResponse.bind(this);
     this.pushResponseText = this.pushResponseText.bind(this);
+    this.removeResponse = this.removeResponse.bind(this);
     this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
     this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
   }
@@ -151,6 +152,20 @@ class QuestionView extends React.Component {
     this.setState({ questions: this.questionData });
   }
 
+  removeResponse(questionId, responseId) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    console.log("question", question);
+    const response = question.responses.find(response => {
+      return responseId === response.id;
+    });
+    console.log("response", response);
+    const index = question.responses.indexOf(response);
+    question.responses.splice(index, 1);
+    this.setState({ questions: this.questionData });
+  }
+
   render() {
     return (
       <Row>
@@ -188,6 +203,7 @@ class QuestionView extends React.Component {
             question={this.state.currentQuestion}
             pushResponse={this.pushResponse}
             pushResponseText={this.pushResponseText}
+            removeResponse={this.removeResponse}
             videoUUID={this.props.videoUUID}
           />
         </Row>

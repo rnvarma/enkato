@@ -282,8 +282,10 @@ class QuestionResponseUpvote(models.Model):
 
 
 class QuestionResponseSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = QuestionResponse
+        read_only_fields = ('modified',)
 
 
 class QuestionSerializer(serializers.ModelSerializer):

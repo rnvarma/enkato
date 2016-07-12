@@ -21,7 +21,7 @@ class QuestionResponseForm extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    if (this.state.text) {
+    if (this.props.question.responseInput) {
       const data = {
         text: this.props.question.responseInput,
         question: this.props.question.id,
@@ -38,7 +38,7 @@ class QuestionResponseForm extends React.Component {
         },
         success: (data) => {
           this.props.pushResponse(this.props.question.id, data);
-          this.setState({ text: '' });
+          this.props.pushResponseText(this.props.question.id, '');
         },
         error: (xhr, status, err) => {
           console.error(status, err.toString());

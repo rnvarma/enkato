@@ -21,7 +21,16 @@ class QuestionDisplay extends React.Component {
     var responses = '';
     if (this.props.question.responses) {
       responses = this.props.question.responses.map((response) => {
-        return (<Row><QuestionDisplayResponse response={response} /></Row>);
+        return (
+          <Row>
+            <QuestionDisplayResponse
+              question={this.props.question}
+              response={response}
+              videoUUID={this.props.videoUUID}
+              removeResponse={this.props.removeResponse}
+            />
+          </Row>
+        );
       });
     }
 

@@ -175,7 +175,7 @@ class QuestionResponseViewset(viewsets.ViewSet):
 
     def destroy(self, request, v_uuid=None, pk=None):
         response = get_object_or_404(QuestionResponse, pk=pk)
-        if response.user.id == request.user.customuser.id:
+        if response.user == request.user.customuser:
             response.delete()
             return Response()
         else:
