@@ -8,6 +8,9 @@ module.exports = {
   context: __dirname,
 
   entry: {
+    activate: './assets/js/registration/Activate.jsx',
+    activationComplete: './assets/js/registration/ActivationComplete.jsx',
+    registrationComplete: './assets/js/registration/RegistrationComplete.jsx',
     homepage: './assets/js/home/homepage/HomePage.jsx',
     profile: './assets/js/userprofile/profile/Profile.jsx',
     educator: './assets/js/home/creator/Educator.jsx',

@@ -196,4 +196,10 @@ else:
     }
 
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'team@enkato.com'
+EMAIL_HOST_PASSWORD = 'khanacademy23'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
+ACCOUNT_ACTIVATION_DAYS = 1
