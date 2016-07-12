@@ -30,13 +30,13 @@ module.exports = React.createClass({
                             <a href={"/v/" + video.uuid}>{video.name}</a>
                         </div>
                         <div className="creator">
-                            <span className={"seperator" + (video.num_topics ? "" : " alertAnnotate")}>
+                            <span className={"seperator" + (this.props.is_creator && !video.num_topics ? " alertAnnotate" : "")}>
                                 <FontAwesome
                                     name="exclamation-circle"
                                     className="alertIcon"/>
                                 {video.num_topics} {pluralize("topic", video.num_topics)}
                             </span>
-                            <span className={"seperator" + (video.num_quiz_questions ? "" : " alertAnnotate")}>
+                            <span className={"seperator" + (this.props.is_creator && !video.num_quiz_questions ? " alertAnnotate" : "")}>
                                 <FontAwesome 
                                     name="exclamation-circle" 
                                     className="alertIcon"/>

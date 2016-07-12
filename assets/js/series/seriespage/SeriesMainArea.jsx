@@ -24,10 +24,12 @@ export default class SeriesMainArea extends React.Component {
                                  reloadPageData={this.props.reloadPageData}
                                  openModal={this.props.openModal}/>
             var annotateVideosButton = "";
-        } else {
+        } else if (this.props.is_creator) {
             var video_area = (
                 <div>
-                    <SeriesVideoList videos={this.props.videos} />
+                    <SeriesVideoList
+                        videos={this.props.videos}
+                        is_creator={this.props.is_creator}/>
                     <NoVideosArea
                         videos={this.props.videos}
                         openModal={this.props.openModal}/>
@@ -40,6 +42,15 @@ export default class SeriesMainArea extends React.Component {
                     </Button>
                 </div>
             );
+        } else {
+            var video_area = (
+                <div>
+                    <SeriesVideoList
+                        videos={this.props.videos}
+                        is_creator={this.props.is_creator}/>
+                </div>
+            )
+            var annotateVideosButton = "";
         }
         return (
             <div className="seriesMainArea">

@@ -247,7 +247,7 @@ class QuestionUpvote(models.Model):
 class QuestionResponse(models.Model):
     question = models.ForeignKey(Question, related_name="responses")
     timestamp = models.DateTimeField(default=timezone.now)  # when done
-    text = models.TextField(default="")
+    text = models.TextField()
     user = models.ForeignKey(CustomUser, related_name="question_responses")
     is_instructor = models.BooleanField(default=False)
 
@@ -264,7 +264,6 @@ class QuestionResponseUpvote(models.Model):
 class QuestionResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionResponse
-        exclude = ('question',)
 
 
 class QuestionSerializer(serializers.ModelSerializer):
