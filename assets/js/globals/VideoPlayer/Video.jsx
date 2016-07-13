@@ -13,7 +13,11 @@ module.exports = React.createClass({
                 style={{height:height+"px"}}
                 className="iframeWrapper">
                 {this.props.renderVideo()}
-                <QuizModal showingQuiz={this.props.showingQuiz}/>
+                <QuizModal 
+                    showingOverlay={this.props.showingOverlay}
+                    takingQuiz={this.props.takingQuiz}
+                    showQuiz={this.props.showQuiz}
+                />
             </div>
         )
     }

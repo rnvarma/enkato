@@ -57,7 +57,7 @@ export default class TopicList extends React.Component {
             <ScrollArea className="topicList">
                 {topicNodes}
                 <TakeQuizButton
-                    showQuiz={this.props.showQuiz}
+                    showOverlay={this.props.showOverlay}
                 />
             </ScrollArea>
         );

@@ -1,21 +1,38 @@
 require('bootstrap-loader');
-var React = require('react')
-require("css/globals/VideoPlayer/QuizModal")
+var React = require('react');
+require("css/globals/VideoPlayer/QuizModal");
+import Button from 'react-bootstrap/lib/Button';
 
+var QuizForm = require('js/globals/VideoPlayer/QuizForm');
 
 module.exports= React.createClass({
     render:function(){
-        var style = (this.props.showingQuiz ? {} : {display:"none"})
+        var bg_style = (this.props.showingOverlay ? {} : {display:"none"})
+        var q_style = (this.props.takingQuiz ? {} : {display:"none"})
         return(
-            <div 
-                className="greyBackground"
-                style={style}
-            >
+            <div>
+                <div 
+                    className="greyBackground"
+                    style={bg_style}
+                >
+                    <div className="questionText">
+                        Would You Like to Check Your Understanding?
+                    </div>
+                    <Button 
+                        className="takeQuizButton"
+                        onClick={this.props.showQuiz}
+                    >
+                        Take The Quiz
+                    </Button>
+                    <div className="noThanks">
+                        No, Thanks
+                    </div>
+                </div>
                 <div 
                     className="quizModal"
-                    style={style}
+                    style={q_style}
                 >
-                    Hello World
+                    <QuizForm />
                 </div>
             </div>
         )

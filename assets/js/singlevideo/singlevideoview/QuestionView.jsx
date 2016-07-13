@@ -272,7 +272,7 @@ class QuestionView extends React.Component {
             setFilter={this.setFilter}
             toggleAnsweredFilter={this.toggleAnsweredFilter}
             toggleUnansweredFilter={this.toggleUnansweredFilter}/>
-          <Row className="questionView">
+          <Row>
             <QuestionList
               questions={this.state.questions}
               currentQuestion={this.state.currentQuestion}
