@@ -10,6 +10,6 @@ module.exports = {
     upload: './assets/js/upload/upload/UploadSingleVideo.jsx',
     createseries: './assets/js/series/create/CreateSeries.jsx',
     seriespage: './assets/js/series/seriespage/SeriesPage.jsx',
-    seriesviewer: './assets/js/series/seriesviewer/SeriesViewer.jsx',
+    //seriesviewer: './assets/js/series/seriesviewer/SeriesViewer.jsx',
     quizaddingform: './assets/js/testinggrounds/QuizAddingForm/QuizAddingForm.jsx',
 }

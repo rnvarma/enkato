@@ -1,7 +1,8 @@
 require('bootstrap-loader');
 require("css/globals/VideoPlayer/Video")
 var React = require('react')
-var ReactDOM = require('react-dom')
+var QuizModal = require('js/globals/VideoPlayer/QuizModal')
+import { Button, Modal } from 'react-bootstrap';
 
 
 module.exports = React.createClass({ 
@@ -12,6 +13,25 @@ module.exports = React.createClass({
                 style={{height:height+"px"}}
                 className="iframeWrapper">
                 {this.props.renderVideo()}
+                <div className="modal-container">
+                    <Modal
+                        show={true}
+                        onHide{close}
+                        container={this}
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title>
+                                ContainedModal
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Lorem Ipsum Fuckity cukc Fuckity
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button onClick={close}>Close</Button>
+                        </Modal.Footer>
+                    </Modal>
+                </div>
             </div>
         )
     }
