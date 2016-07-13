@@ -16,7 +16,10 @@ class SerivesViewerSidebarVideoPanel extends React.Component {
 
     render() {
         return (
-            <div className="serivesViewerSidebarVideoPanel" onClick={this.onClick}>
+            <div
+                className={"serivesViewerSidebarVideoPanel" + (this.props.active ? " active" : "")}
+                onClick={this.onClick}
+                id={"panel-" + this.props.video.uuid}>
                 <div className="imageArea">
                     <img src={this.props.video.thumbnail} className="image"/>
                 </div>

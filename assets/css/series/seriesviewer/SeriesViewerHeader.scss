@@ -9,7 +9,13 @@
 
     .seriesName {
         font-weight: bold;
+        color: $enkato-green;
+        font-size: 13px;
+    }
+
+    .currVideoName {
+        font-weight: bold;
         color: $structabl-blue;
-        font-size: 16px;
+        font-size: 18px;
     }
 }

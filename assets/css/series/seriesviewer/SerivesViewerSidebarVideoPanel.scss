@@ -6,11 +6,16 @@
 
     border-bottom: 1px solid $structabl-bg-blue;
 
+    &.active {
+        background-color: $grey-hover;
+        outline: 1px solid $structabl-blue;
+    }
+
     &:hover {
         cursor: pointer;
         background-color: $grey-hover;
 
-        border: 1px solid $structabl-blue;
+        outline: 1px solid $structabl-blue;
     }
 
     .imageArea {
