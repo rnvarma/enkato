@@ -6,6 +6,10 @@
   border-top: 15px solid $structabl-blue;
   border-bottom: 1px solid $bg-grey;
 
+  .form-group {
+    margin-bottom: 0;
+  }
+
   .filterOption {
     color: $structabl-blue;
     padding: 12px 20px;
@@ -19,7 +23,12 @@
   }
 
   .filterQuery {
+    margin-top: 7px;
     background-color: white;
+
+    .filterInput {
+      padding: 5px 20px;
+    }
 
     .btn {
       padding: 8px 40px;
