@@ -31,6 +31,8 @@ class QuestionView extends React.Component {
     this.addQuestion = this.addQuestion.bind(this);
     this.pushQuestion = this.pushQuestion.bind(this);
     this.removeQuestion = this.removeQuestion.bind(this);
+    this.pushQuestionEditText = this.pushQuestionEditText.bind(this);
+    this.pushQuestionNewText = this.pushQuestionNewText.bind(this);
     this.pushResponse = this.pushResponse.bind(this);
     this.pushResponseText = this.pushResponseText.bind(this);
     this.pushResponseEditText = this.pushResponseEditText.bind(this);
@@ -38,7 +40,6 @@ class QuestionView extends React.Component {
     this.removeResponse = this.removeResponse.bind(this);
     this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
     this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
-    this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this)
   }
 
   componentDidMount() {
