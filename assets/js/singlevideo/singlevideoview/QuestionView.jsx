@@ -31,6 +31,8 @@ class QuestionView extends React.Component {
     this.addQuestion = this.addQuestion.bind(this);
     this.pushQuestion = this.pushQuestion.bind(this);
     this.removeQuestion = this.removeQuestion.bind(this);
+    this.pushQuestionEditText = this.pushQuestionEditText.bind(this);
+    this.pushQuestionNewText = this.pushQuestionNewText.bind(this);
     this.pushResponse = this.pushResponse.bind(this);
     this.pushResponseText = this.pushResponseText.bind(this);
     this.pushResponseEditText = this.pushResponseEditText.bind(this);
@@ -41,12 +43,12 @@ class QuestionView extends React.Component {
   }
 
   componentDidMount() {
-    this.getQuestionData();
+    this.getQuestionData(this.props.videoUUID);
   }
 
-  getQuestionData() {
+  getQuestionData(videoUUID) {
     $.ajax({
-      url: `/api/video/${this.props.videoUUID}/questions`,
+      url: `/api/video/${videoUUID}/questions`,
       dataType: 'json',
       cache: false,
       success: (data) => {
@@ -231,6 +233,12 @@ class QuestionView extends React.Component {
       questions: this.questionData,
       currentQuestion: this.questionData[0],
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+      if (this.props.videoUUID != nextProps.videoUUID) {
+          this.getQuestionData(nextProps.videoUUID);
+      }
   }
 
   render() {

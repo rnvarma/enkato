@@ -10,6 +10,7 @@ import NavBar from 'js/globals/NavBar';
 import { Col, Row } from 'react-bootstrap';
 import getCookie from 'js/globals/GetCookie';
 
+import QuestionView from 'js/singlevideo/singlevideoview/QuestionView';
 import SeriesViewerSideBar from 'js/series/seriesviewer/SeriesViewerSideBar';
 import SeriesViewerVideoArea from 'js/series/seriesviewer/SeriesViewerVideoArea';
 
@@ -116,6 +117,9 @@ class SeriesViewer extends React.Component {
                         {...this.state}/>
                     <SeriesViewerVideoArea
                         currUUID={this.state.currUUID}/>+
+                </div>
+                <div className="questionArea">
+                    <QuestionView videoUUID={this.state.currUUID} />
                 </div>
             </div>
         )
