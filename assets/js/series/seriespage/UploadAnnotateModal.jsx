@@ -22,7 +22,7 @@ export default class UploadAnnotateModal extends React.Component {
 
     onBack() {
         if (this.props.annotateMode) {
-            this.props.setAnnotateMode(false);
+            this.props.setUploadMode();
         } else {
             this.props.close();
         }
@@ -44,9 +44,10 @@ export default class UploadAnnotateModal extends React.Component {
                     },
                     success: function(data) {
                         if (data.status) {
-                            this.props.reloadPageData(() => { this.props.setAnnotateMode(true); });
+                            this.props.reloadPageData();
                             this.props.setUrls(""); /* reset url entry to avoid resubmission */
-                          this.setState({ error: '' });
+                            this.setState({ error: '' });
+                            this.props.setAnnotateMode()
                         } else {
                             /* remove urls from list that didn't fail */
                             /* errors is list of bad urls */
@@ -86,7 +87,7 @@ export default class UploadAnnotateModal extends React.Component {
                 });
             } else {
               if (this.props.videos.length > 0) {
-                this.props.setAnnotateMode(true);
+                this.props.setAnnotateMode();
                 this.setState({error: ''});
               } else {
                 this.setState({error: 'No videos uploaded!'});
@@ -100,7 +101,6 @@ export default class UploadAnnotateModal extends React.Component {
         var nextText = "";
         let toggleBtns = "";
         if (this.props.annotateMode) {
-          console.log(this.state, this.props, "switching to annotateMode");
           modalInfo = {
             title: "Annotating",
             class: "annotating",
