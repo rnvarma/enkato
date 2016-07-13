@@ -40,7 +40,7 @@ class QuestionResponseEditForm extends React.Component {
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
       },
       success: () => {
-        this.setState({ editing: false });
+        this.props.toggleEdit();
         this.props.pushResponseNewText(this.props.question.id, this.props.response.id, this.props.response.input);
       },
     });
