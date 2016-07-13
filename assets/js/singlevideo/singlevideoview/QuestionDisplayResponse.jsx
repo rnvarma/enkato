@@ -2,6 +2,8 @@ require('css/singlevideo/singlevideoview/QuestionDisplayResponse.scss');
 
 import React from 'react';
 
+import moment from 'moment';
+
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
@@ -69,11 +71,20 @@ class QuestionDisplayResponse extends React.Component {
       );
     }
 
+    const created = moment(this.props.response.created);
+    var modified;
+    if (!created.isSame(this.props.response.modified)) {
+      modified = moment(this.props.response.modified);
+    }
+
     return (
       <Row className="questionDisplayResponse">
-        response text: {this.props.response.text}
-        <Button onClick={this.toggleEdit}>Edit</Button>
-        <Button onClick={this.delete}>Delete</Button>
+        <div className="responseText">
+          {this.props.response.text}
+          <Button onClick={this.toggleEdit}>Edit</Button>
+          <Button onClick={this.delete}>Delete</Button>
+        </div>
+        created: {created.fromNow()}{modified ? ", modified: "+modified.fromNow() : ""}
       </Row>
     );
   }

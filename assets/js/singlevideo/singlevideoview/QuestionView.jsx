@@ -4,11 +4,13 @@ import React from 'react';
 
 import Fuse from 'fuse.js';
 
+import FontAwesome from 'react-fontawesome';
+
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
-import QuestionForm from 'js/singlevideo/singlevideoview/QuestionForm';
+import QuestionModal from 'js/singlevideo/singlevideoview/QuestionModal';
 import QuestionFilterBar from 'js/singlevideo/singlevideoview/QuestionFilterBar';
 import QuestionList from 'js/singlevideo/singlevideoview/QuestionList';
 import QuestionDisplay from 'js/singlevideo/singlevideoview/QuestionDisplay';
@@ -140,6 +142,7 @@ class QuestionView extends React.Component {
   /* prompts user to add question, via modal in QuestionForm */
   addQuestion() {
     this.setState({ addingQuestion: true });
+    console.log('add question');
   }
 
   /* adds question to state */
@@ -243,51 +246,51 @@ class QuestionView extends React.Component {
 
   render() {
     return (
-      <Row>
-        <QuestionForm
-          videoUUID={this.props.videoUUID}
-          showing={this.state.addingQuestion}
-          close={this.closeModal}
-          pushQuestion={this.pushQuestion}
-        />
+      <div className="questionView">
         <Row>
-          <Col md={5}>
-            <h2>Question & Answers</h2>
-          </Col>
-          <Col mdOffset={9}>
-            <Button className="addQuestionBtn" onClick={this.addQuestion}>Add A Question</Button>
-          </Col>
-        </Row>
-        <Row>
+          <QuestionModal
+            videoUUID={this.props.videoUUID}
+            showing={this.state.addingQuestion}
+            close={this.closeModal}
+            pushQuestion={this.pushQuestion}
+          />
+          <Row>
+            <Col md={5}>
+              <div className="qaTitle">Question & Answers</div>
+            </Col>
+            <Col mdOffset={10}>
+              <Button className="addQuestionBtn" onClick={this.addQuestion}>
+                <FontAwesome name="plus-circle" />
+                Ask A Question
+              </Button>
+            </Col>
+          </Row>
           <QuestionFilterBar
             filter={this.state.filter}
             filterAnswered={this.state.filterAnswered}
             filterUnanswered={this.state.filterUnanswered}
             setFilter={this.setFilter}
             toggleAnsweredFilter={this.toggleAnsweredFilter}
-            toggleUnansweredFilter={this.toggleUnansweredFilter}
-          />
+            toggleUnansweredFilter={this.toggleUnansweredFilter}/>
+          <Row className="questionView">
+            <QuestionList
+              questions={this.state.questions}
+              currentQuestion={this.state.currentQuestion}
+              setCurrentQuestion={this.setCurrentQuestion}/>
+            <QuestionDisplay
+              question={this.state.currentQuestion}
+              removeQuestion={this.removeQuestion}
+              pushQuestionEditText={this.pushQuestionEditText}
+              pushQuestionNewText={this.pushQuestionNewText}
+              pushResponse={this.pushResponse}
+              pushResponseText={this.pushResponseText}
+              pushResponseEditText={this.pushResponseEditText}
+              pushResponseNewText={this.pushResponseNewText}
+              removeResponse={this.removeResponse}
+              videoUUID={this.props.videoUUID}/>
+          </Row>
         </Row>
-        <Row className="questionView">
-          <QuestionList
-            questions={this.state.questions}
-            currentQuestion={this.state.currentQuestion}
-            setCurrentQuestion={this.setCurrentQuestion}
-          />
-          <QuestionDisplay
-            question={this.state.currentQuestion}
-            removeQuestion={this.removeQuestion}
-            pushQuestionEditText={this.pushQuestionEditText}
-            pushQuestionNewText={this.pushQuestionNewText}
-            pushResponse={this.pushResponse}
-            pushResponseText={this.pushResponseText}
-            pushResponseEditText={this.pushResponseEditText}
-            pushResponseNewText={this.pushResponseNewText}
-            removeResponse={this.removeResponse}
-            videoUUID={this.props.videoUUID}
-          />
-        </Row>
-      </Row>
+      </div>
     );
   }
 }

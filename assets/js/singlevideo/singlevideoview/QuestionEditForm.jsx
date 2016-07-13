@@ -8,6 +8,8 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 
 import getCookie from 'js/globals/GetCookie';
 
+import QuestionForm from 'js/singlevideo/singlevideoview/QuestionForm';
+
 class QuestionEditForm extends React.Component {
   constructor() {
     super();
@@ -55,12 +57,15 @@ class QuestionEditForm extends React.Component {
   render() {
     return (
       <div className="questionEditForm">
-        <Form horizontal onSubmit={this.onSubmit}>
-                {/* TODO: add topic changer */}
-                <FormControl onChange={this.onTitleChange} type="text" value={this.props.question.input.title} />
-                <FormControl onChange={this.onTextChange} componentClass="textarea" rows={8} type="text" value={this.props.question.input.text} />
-                <Button type="submit">Submit</Button>
-        </Form>
+        <QuestionForm
+          onSubmit={this.onSubmit}
+          onTopicChange={null}
+          onTitleChange={this.onTitleChange}
+          onTextChange={this.onTextChange}
+          titleValue={this.props.question.input.title}
+          textValue={this.props.question.input.text}
+        />
+        <Button onClick={this.onSubmit}>Edit</Button>
         <Button onClick={this.props.toggleEdit}>Cancel</Button>
         <Button onClick={this.props.delete}>Delete</Button>
       </div>
