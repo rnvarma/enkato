@@ -4,6 +4,8 @@ require("css/globals/VideoPlayer/TopicList")
 import React from 'react';
 
 import ScrollArea from 'react-scrollbar';
+import TakeQuizButton from 'js/globals/videoPlayer/TakeQuizButton';
+
 
 class TopicNode extends React.Component {
     constructor(props) {
@@ -19,7 +21,7 @@ class TopicNode extends React.Component {
         return (
             <div
                 className="topicNode"
-                id={(this.props.topic.isCurrentTopic ? "selectedTopicNode" : "")}
+                id={((this.props.topic.isCurrentTopic&&!this.props.showingQuiz) ? "selectedTopicNode" : "")}
                 onClick={this.handleTopicClick}
             >
                 <div className="time">
@@ -46,13 +48,17 @@ export default class TopicList extends React.Component {
                 <TopicNode
                     key={topic.id}
                     topic={topic}
-                    handleTopicClick={this.props.handleTopicClick}/>
+                    handleTopicClick={this.props.handleTopicClick}
+                    showingQuiz={this.props.showingQuiz}/>
             );
         }, this);
 
         return (
             <ScrollArea className="topicList">
                 {topicNodes}
+                <TakeQuizButton
+                    showQuiz={this.props.showQuiz}
+                />
             </ScrollArea>
         );
     }

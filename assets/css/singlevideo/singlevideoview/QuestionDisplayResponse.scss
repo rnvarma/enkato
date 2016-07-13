@@ -2,5 +2,18 @@
 @import '../../globals/mixins.scss';
 
 .questionDisplayResponse {
-    
+
+  padding: 10px 30px;
+
+  .btn {
+    float: right;
+    display: none;
+    margin-left: 10px;
+  }
+
+  &:hover {
+    .btn {
+      display: block;
+    }
+  }
 }

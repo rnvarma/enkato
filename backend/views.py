@@ -153,10 +153,15 @@ class VideoData(View):
         video = Video.objects.get(uuid=v_uuid)
         topicList = video.topics.all().order_by('time')
         frontendTList = map(Serializer.serialize_topic, topicList)
+        #get QuizList
+        quizQs = video.quiz_questions.all()
+        questions = map(Serializer.serialize_quiz_question, quizQs)
         return JsonResponse({
             'videoID': video.vid_id,
             'topicList': frontendTList,
-            'videoData': Serializer.serialize_video(video)
+            'videoData': Serializer.serialize_video(video),
+            'questions': questions,
+            'numQuestions':quizQs.count()
         })
 
 
