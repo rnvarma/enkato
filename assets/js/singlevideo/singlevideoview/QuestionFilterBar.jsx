@@ -3,6 +3,7 @@ require('css/singlevideo/singlevideoview/QuestionFilterBar.scss');
 import React from 'react';
 
 import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
@@ -25,7 +26,7 @@ export default class QuestionFilterBar extends React.Component {
 
   render() {
     return (
-      <div className="questionFilterBar">
+      <Row className="questionFilterBar">
         <Col
           md={3}
           className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
@@ -59,7 +60,7 @@ export default class QuestionFilterBar extends React.Component {
             </InputGroup>
           </FormGroup>
         </Col>
-      </div>
+      </Row>
     );
   }
 }
