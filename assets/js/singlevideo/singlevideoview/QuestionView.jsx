@@ -38,15 +38,16 @@ class QuestionView extends React.Component {
     this.removeResponse = this.removeResponse.bind(this);
     this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
     this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
+    this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this)
   }
 
   componentDidMount() {
-    this.getQuestionData();
+    this.getQuestionData(this.props.videoUUID);
   }
 
-  getQuestionData() {
+  getQuestionData(videoUUID) {
     $.ajax({
-      url: `/api/video/${this.props.videoUUID}/questions`,
+      url: `/api/video/${videoUUID}/questions`,
       dataType: 'json',
       cache: false,
       success: (data) => {
@@ -231,6 +232,13 @@ class QuestionView extends React.Component {
       questions: this.questionData,
       currentQuestion: this.questionData[0],
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+      if (this.props.videoUUID != nextProps.videoUUID) {
+          this.getQuestionData(nextProps.videoUUID);
+      }
   }
 
   render() {
