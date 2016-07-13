@@ -4,6 +4,8 @@ import React from 'react';
 
 import Fuse from 'fuse.js';
 
+import FontAwesome from 'react-fontawesome';
+
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
@@ -254,8 +256,11 @@ class QuestionView extends React.Component {
             <Col md={5}>
               <div className="qaTitle">Question & Answers</div>
             </Col>
-            <Col mdOffset={9}>
-              <Button className="addQuestionBtn" onClick={this.addQuestion}>Add A Question</Button>
+            <Col mdOffset={10}>
+              <Button className="addQuestionBtn" onClick={this.addQuestion}>
+                <FontAwesome name="plus-circle" />
+                Ask A Question
+              </Button>
             </Col>
           </Row>
           <QuestionFilterBar

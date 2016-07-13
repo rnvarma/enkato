@@ -2,6 +2,8 @@ require('css/singlevideo/singlevideoview/QuestionFilterBar.scss');
 
 import React from 'react';
 
+import FontAwesome from 'react-fontawesome';
+
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
@@ -28,27 +30,27 @@ export default class QuestionFilterBar extends React.Component {
     return (
       <Row className="questionFilterBar">
         <Col
-          md={3}
+          md={2}
           className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.setFilter.bind(null, '', true)}
         >
           View All
         </Col>
         <Col
-          md={3}
+          md={2}
           className={(this.props.filterAnswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.toggleAnsweredFilter}
         >
           Answered
         </Col>
         <Col
-          md={3}
+          md={2}
           className={(this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.toggleUnansweredFilter}
         >
           Unanswered
         </Col>
-        <Col md={3} className="filterQuery">
+        <Col mdOffset={1} md={5} className="filterQuery">
           <FormGroup>
             <InputGroup>
               <FormControl
@@ -56,7 +58,7 @@ export default class QuestionFilterBar extends React.Component {
                 onChange={this.setFilterFromQuery}
                 value={this.props.filter}
               />
-              <InputGroup.Button><Button>ICON</Button></InputGroup.Button>
+              <InputGroup.Button><Button><FontAwesome name="search" /></Button></InputGroup.Button>
             </InputGroup>
           </FormGroup>
         </Col>

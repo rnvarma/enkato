@@ -4,12 +4,59 @@
 .questionDisplay {
   background-color: white;
   margin: 0;
-  padding: 30px 20px;
   font-size: 18px;
   height: 100%;
+  padding-top: 20px;
+
+  border-left: 1px solid $bg-grey;
 
   &.empty {
     font-size: 30px;
     text-align: center;
+  }
+
+  .questionBox {
+    padding-bottom: 20px;
+
+    .btn {
+      float: right;
+      display: none;
+      margin-left: 10px;
+    }
+
+    &:hover {
+      .btn {
+        display: block;
+      }
+    }
+
+    .questionHeader {
+      color: $enkato-green;
+      font-weight: 500;
+      font-size: 15px;
+      padding: 0 30px;
+    }
+
+    .questionTitle {
+      color: $structabl-blue;
+      font-weight: 700;
+      font-size: 18px;
+      padding: 0 30px;
+    }
+
+    .questionText {
+      padding: 15px 30px 30px;
+      color: $structabl-blue;
+    }
+
+    .questionFooter {
+      color: $structabl-blue;
+      border-top: 1px solid $bg-grey;
+      padding: 10px 30px;
+
+      .studentName {
+        font-weight: bold;
+      }
+    }
   }
 }

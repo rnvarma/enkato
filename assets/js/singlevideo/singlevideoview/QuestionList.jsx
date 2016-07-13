@@ -21,7 +21,7 @@ class QuestionList extends React.Component {
                   <div className="questionPreviewTitle">
                       {truncate(question.title, 31)}
                   </div>
-                  <div className="questionPreviewDescription">
+                  <div className="questionPreviewText">
                       {truncate(question.text, 31)}
                   </div>
               </div>
@@ -30,7 +30,7 @@ class QuestionList extends React.Component {
 
         return (
           <Col md={4} className="questionList">
-              { questions }
+              {questions}
           </Col>
         );
     }
