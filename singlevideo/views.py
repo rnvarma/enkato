@@ -141,9 +141,9 @@ class DeleteQuizOption(View):
         })
 
 
-def can_make_changes(actor, object_owner, video_uuid):
-    if (object_owner == actor or
-                actor == Video.objects.get(v_uuid=v_uuid).creator):
+def can_make_changes(actor, owner, video_uuid):
+    if (owner == actor or
+                actor == Video.objects.get(v_uuid=video_uuid).creator):
         return True
     else:
         raise exceptions.PermissionDenied()

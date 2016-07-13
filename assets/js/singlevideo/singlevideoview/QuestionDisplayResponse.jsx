@@ -4,10 +4,8 @@ import React from 'react';
 
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
-import Form from 'react-bootstrap/lib/Form';
-import FormControl from 'react-bootstrap/lib/FormControl';
 
-import getCookie from 'js/globals/GetCookie';
+import QuestionResponseEditForm from 'js/singlevideo/singlevideoview/QuestionResponseEditForm';
 
 class QuestionDisplayResponse extends React.Component {
   constructor() {
@@ -16,11 +14,8 @@ class QuestionDisplayResponse extends React.Component {
       editing: false,
     };
 
-    this.delete = this.delete.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
-    this.onTextChange = this.onTextChange.bind(this);
-    this.patch = this.patch.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   componentDidMount() {
@@ -35,6 +30,10 @@ class QuestionDisplayResponse extends React.Component {
     this.setState({
       editing: newProps.response.input !== newProps.response.text,
     });
+  }
+
+  toggleEdit() {
+    this.setState({ editing: !this.state.editing });
   }
 
   delete() {
@@ -52,60 +51,31 @@ class QuestionDisplayResponse extends React.Component {
     });
   }
 
-  onSubmit(event) {
-    event.preventDefault();
-    this.patch();
-  }
-
-  toggleEdit() {
-    this.setState({ editing: !this.state.editing });
-  }
-
-  onTextChange(event) {
-    this.props.pushResponseEditText(this.props.question.id, this.props.response.id, event.target.value);
-  }
-
-  patch() {
-    /* TODO: error handling on failing to patch */
-    const data = {
-      'text': this.props.response.input,
-    };
-    $.ajax({
-      url: `/api/videos/${this.props.videoUUID}/responses/${this.props.response.id}`,
-      type: 'PATCH',
-      data,
-      beforeSend(xhr) {
-        xhr.withCredentials = true;
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-      },
-      success: () => {
-        this.setState({ editing: false });
-        this.props.pushResponseNewText(this.props.question.id, this.props.response.id, this.props.response.input);
-      },
-    });
-  }
-
   render() {
     if (this.state.editing) {
       return (
         <Row className="questionDisplayResponse">
-          <Form horizontal onSubmit={this.onSubmit}>
-            <FormControl onChange={this.onTextChange} componentClass="textarea" rows={4} type="text" value={this.props.response.input} />
-            <Button type="submit">Submit</Button>
-          </Form>
-          <Button onClick={this.toggleEdit}>Cancel</Button>
-          <Button onClick={this.delete}>Delete</Button>
-        </Row>
-      );
-    } else {
-      return (
-        <Row className="questionDisplayResponse">
-          response text: {this.props.response.text}
-          <Button onClick={this.toggleEdit}>Edit</Button>
-          <Button onClick={this.delete}>Delete</Button>
+          <QuestionResponseEditForm
+            videoUUID={this.props.videoUUID}
+            question={this.props.question}
+            response={this.props.response}
+            delete={this.delete}
+            toggleEdit={this.toggleEdit}
+            removeResponse={this.props.removeResponse}
+            pushResponseEditText={this.props.pushResponseEditText}
+            pushResponseNewText={this.props.pushResponseNewText}
+          />
         </Row>
       );
     }
+
+    return (
+      <Row className="questionDisplayResponse">
+        response text: {this.props.response.text}
+        <Button onClick={this.toggleEdit}>Edit</Button>
+        <Button onClick={this.delete}>Delete</Button>
+      </Row>
+    );
   }
 }
 

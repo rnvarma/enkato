@@ -32,7 +32,7 @@ class QuestionResponseForm extends React.Component {
         dataType: 'json',
         type:'POST',
         data,
-        beforeSend: (xhr) => {
+        beforeSend(xhr) {
           xhr.withCredentials = true;
           xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
         },
