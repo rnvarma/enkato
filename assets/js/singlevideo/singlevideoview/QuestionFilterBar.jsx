@@ -7,7 +7,6 @@ import FontAwesome from 'react-fontawesome';
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 
@@ -51,16 +50,16 @@ export default class QuestionFilterBar extends React.Component {
           Unanswered
         </Col>
         <Col mdOffset={1} md={5} className="filterQuery">
-          <FormGroup>
-            <InputGroup>
-              <FormControl
-                type="input"
-                onChange={this.setFilterFromQuery}
-                value={this.props.filter}
-              />
-              <InputGroup.Button><Button><FontAwesome name="search" /></Button></InputGroup.Button>
-            </InputGroup>
-          </FormGroup>
+          <InputGroup>
+            <FormControl
+              type="input"
+              className="filterInput"
+              placeholder="Search Questions"
+              onChange={this.setFilterFromQuery}
+              value={this.props.filter}
+            />
+            <InputGroup.Button><Button><FontAwesome name="search" /></Button></InputGroup.Button>
+          </InputGroup>
         </Col>
       </Row>
     );
