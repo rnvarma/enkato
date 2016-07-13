@@ -173,7 +173,7 @@ class QuestionViewset(viewsets.ViewSet):
     def partial_update(self, request, v_uuid, pk):
         question = get_object_or_404(Question, pk=pk)
         if can_make_changes(actor=request.user.customuser, owner=question.student, video_uuid=v_uuid):
-            update_fields = ('topic', 'time', 'title', 'text')
+            update_fields = ('topic', 'time', 'title', 'text', 'resolved')
             if len(request.data) == 0:
                 raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(update_fields))
             for field in request.data:
@@ -220,7 +220,14 @@ class QuestionResponseViewset(viewsets.ViewSet):
     def partial_update(self, request, v_uuid, pk):
         response = get_object_or_404(QuestionResponse, pk=pk)
         if can_make_changes(request.user.customuser, response.user, v_uuid):
-            serializer = QuestionResponseSerializer(response, data={'text': request.data.get('text')}, partial=True)
+            update_fields = ('text', 'endorsed')
+            if len(request.data) == 0:
+                raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(update_fields))
+            for field in request.data:
+                if field not in update_fields:
+                    raise exceptions.ValidationError(field + ' is not a supported field')
+            update_data = {key: request.data.get(key, getattr(question, key)) for key in update_fields}
+            serializer = QuestionResponseSerializer(response, data=update_data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)

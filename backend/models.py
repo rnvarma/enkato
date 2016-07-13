@@ -269,6 +269,7 @@ class QuestionResponse(DatedModel):
     user = models.ForeignKey(CustomUser, related_name="question_responses")
     is_instructor = models.BooleanField(default=False)
     text = models.TextField()
+    endorsed = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
         return self.text
