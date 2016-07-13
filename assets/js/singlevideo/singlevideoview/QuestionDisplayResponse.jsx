@@ -79,10 +79,12 @@ class QuestionDisplayResponse extends React.Component {
 
     return (
       <Row className="questionDisplayResponse">
-        response text: {this.props.response.text}
+        <div className="responseText">
+          {this.props.response.text}
+          <Button onClick={this.toggleEdit}>Edit</Button>
+          <Button onClick={this.delete}>Delete</Button>
+        </div>
         created: {created.fromNow()}{modified ? ", modified: "+modified.fromNow() : ""}
-        <Button onClick={this.toggleEdit}>Edit</Button>
-        <Button onClick={this.delete}>Delete</Button>
       </Row>
     );
   }
