@@ -10,7 +10,7 @@ module.exports = React.createClass({
         return (
             <div
                 className="takeQuizButton"
-                onClick={this.props.showQuiz}
+                onClick={this.props.showOverlay}
             >
                 <FontAwesome
                     className="checkIcon"

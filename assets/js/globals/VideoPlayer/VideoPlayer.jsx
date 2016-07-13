@@ -123,19 +123,19 @@ module.exports  = React.createClass({
                 id: 1,
                 new: true
             }],
-            showingQuiz:false
+            showingOverlay:false,
+            takingQuiz:false
         };
     },
-    showQuiz: function(){
+    showOverlay: function(){
         this.setState({
-            showingQuiz:true
-        }, this.logNewState);
+            showingOverlay:true
+        });
         this.state.Player.pause();
-        console.log("showQUiz")
         console.log(this.state.questions)
     },
-    logNewState: function(){
-        console.log(this.state)
+    showQuiz: function(){
+        this.setState({takingQuiz:true})
     },
     setWindowSize: function(){
         this.setState({
@@ -168,7 +168,8 @@ module.exports  = React.createClass({
         this.state.Player.seekTo(time)
         //make sure you're not showing quiz anymore
         this.setState({
-            showingQuiz:false
+            showingOverlay:false,
+            takingQuiz:false
         })
         //make sure the video is playing
         this.state.Player.play()
@@ -178,8 +179,12 @@ module.exports  = React.createClass({
         if(this.state.isPlaying){
             this.state.Player.pause();
         } else{
-            if(this.state.showingQuiz) 
-                this.setState({showingQuiz:false});
+            if(this.state.showingOverlay) 
+                this.setState(
+                    {
+                        showingOverlay:false,
+                        takingQuiz:false
+                    });
             this.state.Player.play();
         }
     },
@@ -203,8 +208,8 @@ module.exports  = React.createClass({
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
                         handleTopicClick={this.handleTopicClick}
-                        showQuiz={this.showQuiz}
-                        showingQuiz={this.state.showingQuiz}
+                        showOverlay={this.showOverlay}
+                        showingOverlay={this.state.showingOverlay}
                     />
                 </div>
             );
@@ -214,8 +219,8 @@ module.exports  = React.createClass({
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
                         handleTopicClick={this.handleTopicClick}
-                        showingQuiz={this.state.showingQuiz}
-                        showQuiz={this.showQuiz}
+                        showingOverlay={this.state.showingOverlay}
+                        showOverlay={this.showOverlay}
                     />
                 </div>
             );
@@ -233,7 +238,9 @@ module.exports  = React.createClass({
                         renderVideo={this.state.Player.renderVideo}
                         videoDivHeight={this.state.videoDivHeight}
                         controlBarHeight={$('.ControlBar').height()}
-                        showingQuiz={this.state.showingQuiz}
+                        showingOverlay={this.state.showingOverlay}
+                        takingQuiz={this.state.takingQuiz}
+                        showQuiz={this.showQuiz}
                     />
                     <ControlBar 
                         className="ControlBar"
