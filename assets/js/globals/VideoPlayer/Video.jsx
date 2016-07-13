@@ -16,7 +16,7 @@ module.exports = React.createClass({
                 <div className="modal-container">
                     <Modal
                         show={true}
-                        onHide{close}
+                        onHide={close}
                         container={this}
                     >
                         <Modal.Header closeButton>
