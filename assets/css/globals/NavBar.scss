@@ -1,15 +1,22 @@
 @import 'colors.scss';
 @import 'mixins.scss';
 
-.navbar {
+.navbar.navbar-default {
     border-radius: 0px;
-    margin-bottom: 0px;
-    background-color: white;
+    background-color: $structabl-blue;
     border: none;
 
     .nav {
         font-weight: 800;
         text-transform: uppercase;
+    }
+
+    .navbar-nav {
+        li {
+            a {
+                color: white;
+            }
+        }
     }
 }
 
