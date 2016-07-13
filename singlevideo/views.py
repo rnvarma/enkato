@@ -6,7 +6,7 @@ from backend.models import *
 
 from backend.views import Serializer
 
-from rest_framework import viewsets
+from rest_framework import viewsets, exceptions
 from rest_framework.views import Response
 
 import json
@@ -141,6 +141,57 @@ class DeleteQuizOption(View):
         })
 
 
+def can_make_changes(actor, owner, video_uuid):
+    if (owner == actor or
+                actor == Video.objects.get(v_uuid=video_uuid).creator):
+        return True
+    else:
+        raise exceptions.PermissionDenied()
+
+
+class QuestionViewset(viewsets.ViewSet):
+    """ The quesetion API """
+
+    def list(self, request, v_uuid):
+        queryset = Question.objects.filter(video__uuid=v_uuid)
+        serializer = QuestionSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, v_uuid):
+        data = request.data.copy()
+        data['user'] = request.user.customuser.id
+
+        serializer = QuestionSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+    def retrieve(self, request, v_uuid, pk):
+        question = get_object_or_404(Question, pk=pk)
+        serializer = QuestionSerializer(question)
+        return Response(serializer.data)
+
+    def partial_update(self, request, v_uuid, pk):
+        question = get_object_or_404(Question, pk=pk)
+        if can_make_changes(actor=request.user.customuser, owner=question.student, video_uuid=v_uuid):
+            update_fields = ('topic', 'time', 'title', 'text')
+            if len(request.data) == 0:
+                raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(update_fields))
+            for field in request.data:
+                if field not in update_fields:
+                    raise exceptions.ValidationError(field + ' is not a supported field')
+            update_data = {key: request.data.get(key, getattr(question, key)) for key in update_fields}
+            serializer = QuestionSerializer(question, data=update_data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+
+    def destroy(self, request, v_uuid, pk):
+        question = get_object_or_404(Question, pk=pk)
+        if can_make_changes(actor=request.user.customuser, owner=question.student, video_uuid=v_uuid):
+            question.delete()
+            return Response()
+
+
 class QuestionResponseViewset(viewsets.ViewSet):
     """ The question response API """
 
@@ -156,25 +207,29 @@ class QuestionResponseViewset(viewsets.ViewSet):
             data['is_instructor'] = True
 
         serializer = QuestionResponseSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors)
+        return Response(serializer.data)
 
-    def retrieve(self, request, v_uuid=None, pk=None):
+    def retrieve(self, request, v_uuid, pk):
         response = get_object_or_404(QuestionResponse, pk=pk)
         serializer = QuestionResponseSerializer(response)
         return Response(serializer.data)
 
-    def destroy(self, request, v_uuid=None, pk=None):
+    def partial_update(self, request, v_uuid, pk):
         response = get_object_or_404(QuestionResponse, pk=pk)
-        if response.user.id == request.user.customuser.id:
+        if can_make_changes(request.user.customuser, response.user, v_uuid):
+            serializer = QuestionResponseSerializer(response, data={'text': request.data.get('text')}, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+
+    def destroy(self, request, v_uuid, pk):
+        response = get_object_or_404(QuestionResponse, pk=pk)
+        if can_make_changes(request.user.customuser, response.user, v_uuid):
             response.delete()
             return Response()
-
-        return Response({'error': 'Not authorized to destroy this content.'})
 
 
 # POST via /v/<v_uuid>/question/add
@@ -192,10 +247,10 @@ class AddQuestion(View):
             time=int(request.POST.get('time', 0))
         )
         question.save()
-        #questionFileUpload = QuestionFileUpload(
+        # questionFileUpload = QuestionFileUpload(
         #    question=question,
         #    file=request.POST.get('file')
-        #)
-        #questionFileUpload.save()
+        # )
+        # questionFileUpload.save()
 
         return JsonResponse(QuestionSerializer(question).data)

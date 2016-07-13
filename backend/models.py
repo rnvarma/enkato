@@ -9,6 +9,27 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 
+class DatedModel(models.Model):
+    """ Generic model with created, modified, and modified count fields """
+
+    created = models.DateTimeField(editable=False)
+    modified = models.DateTimeField()
+    modified_count = models.IntegerField(default=0)
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        if not self.id: # Model does not exist yet
+            self.created = timezone.now()
+        else:
+            self.modified_count += 1
+        self.modified = timezone.now()
+
+        return super(DatedModel, self).save(*args, **kwargs)
+
+
+
 class CustomUser(models.Model):
     email = models.CharField(max_length=100, default="")
     first_name = models.CharField(max_length=100, default="")
@@ -219,14 +240,13 @@ class Topic(models.Model):
         return self.name
 
 
-class Question(models.Model):
-    timestamp = models.DateTimeField(default=timezone.now)  # when asked
+class Question(DatedModel):
+    student = models.ForeignKey(CustomUser, related_name="questions")
     video = models.ForeignKey(Video, related_name="videos")
     topic = models.ForeignKey(Topic, related_name="questions", blank=True, null=True)
-    student = models.ForeignKey(CustomUser, related_name="questions")
+    time = models.IntegerField(default=0)
     title = models.TextField(max_length=200)
     text = models.TextField()
-    time = models.IntegerField(default=0)
     resolved = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
@@ -244,12 +264,11 @@ class QuestionUpvote(models.Model):
     user = models.ForeignKey(CustomUser, related_name="question_upvotes")
 
 
-class QuestionResponse(models.Model):
+class QuestionResponse(DatedModel):
     question = models.ForeignKey(Question, related_name="responses")
-    timestamp = models.DateTimeField(default=timezone.now)  # when done
-    text = models.TextField()
     user = models.ForeignKey(CustomUser, related_name="question_responses")
     is_instructor = models.BooleanField(default=False)
+    text = models.TextField()
 
     def __str__(self):
         return self.text
@@ -262,8 +281,10 @@ class QuestionResponseUpvote(models.Model):
 
 
 class QuestionResponseSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = QuestionResponse
+        read_only_fields = ('modified',)
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -271,7 +292,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        exclude = ('video',)
+        read_only_fields = ('modified',)
         depth = 1
 
 # =================================================================================== #

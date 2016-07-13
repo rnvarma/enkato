@@ -1,0 +1,22 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.seriesViewerNextButton {
+    height: 100px;
+    padding: 20px 15px;
+
+    border-top: 1px solid $structabl-bg-blue;
+
+    .upNext {
+        font-weight: bold;
+        color: grey;
+        font-size: 13px;
+    }
+
+    .name {
+        font-weight: bold;
+        color: $structabl-blue;
+        font-size: 18px;
+    }
+}
+

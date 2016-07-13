@@ -58,6 +58,7 @@ class Serializer(object):
         videos = map(lambda sv: sv.video, series_videos)
         data["videos"] = map(Serializer.serialize_video, videos)
         data["is_creator"] = False if not request else series.creator == request.user.customuser
+        data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
         return data
 
     @staticmethod

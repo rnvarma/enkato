@@ -20,6 +20,12 @@ export function pluralize(string, quantity, ending='s') {
     return quantity == 1 ? string : `${string}${ending}`;
 }
 
+export function truncate(string, quantity, ellipses=false) {
+    var trunc = string.slice(0, quantity);
+    if (ellipses) return trunc + "...";
+    else return trunc;
+}
+
 /* seconds to M:SS or H:MM:SS, decimals retained */
 export function styleDuration(seconds) {
     let sec = seconds % 60;

@@ -30,8 +30,12 @@ class QuestionView extends React.Component {
     this.closeModal = this.closeModal.bind(this);
     this.addQuestion = this.addQuestion.bind(this);
     this.pushQuestion = this.pushQuestion.bind(this);
+    this.removeQuestion = this.removeQuestion.bind(this);
     this.pushResponse = this.pushResponse.bind(this);
     this.pushResponseText = this.pushResponseText.bind(this);
+    this.pushResponseEditText = this.pushResponseEditText.bind(this);
+    this.pushResponseNewText = this.pushResponseNewText.bind(this);
+    this.removeResponse = this.removeResponse.bind(this);
     this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
     this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
   }
@@ -47,9 +51,21 @@ class QuestionView extends React.Component {
       cache: false,
       success: (data) => {
         this.questionData = data.questions;
+        /* set response.input, used for editing responses */
+        this.questionData.forEach((question, index, array) => {
+          question.responses.forEach((response, i, arr) => {
+            response.input = response.text;
+            arr[i] = response;
+          });
+          question.input = {
+            title: question.title,
+            text: question.text,
+          };
+          array[index] = question;
+        });
         this.setState({
-          questions: data.questions,
-          currentQuestion: data.questions[0],
+          questions: this.questionData,
+          currentQuestion: this.questionData[0],
         });
       },
       error: (xhr, status, err) => {
@@ -133,6 +149,33 @@ class QuestionView extends React.Component {
     });
   }
 
+  removeQuestion(questionId) {
+    const question = this.questionData.find(question => {
+      return questionId == question.id;
+    });
+    const index = this.questionData.indexOf(question);
+    this.questionData.splice(index, 1);
+    this.setState({ question: this.questionData });
+  }
+
+  pushQuestionEditText(questionId, questionEditTitle, questionEditText) {
+    const question = this.questionData.find(question => {
+      return questionId == question.id;
+    });
+    question.input.title = questionEditTitle;
+    question.input.text = questionEditText;
+    this.setState({ question: this.questionData });
+  }
+
+  pushQuestionNewText(questionId, questionNewTitle, questionNewText) {
+    const question = this.questionData.find(question => {
+      return questionId == question.id;
+    });
+    question.title = questionNewTitle;
+    question.text = questionNewText;
+    this.setState({ question: this.questionData });
+  }
+
   /* actually adds the response after it has been POSTed */
   pushResponse(questionId, newResponse) {
     const questionToAppend = this.questionData.find(question => {
@@ -143,12 +186,51 @@ class QuestionView extends React.Component {
   }
 
   /* stores to response input, unique for each question */
-  pushResponseText(questionId, newResponseText) {
+  pushResponseText(questionId, responseText) {
     const question = this.questionData.find(question => {
       return questionId === question.id;
     });
-    question.responseInput = newResponseText;
+    question.responseInput = responseText;
     this.setState({ questions: this.questionData });
+  }
+
+  /* similar to above, but for the case in which you are editing responses */
+  /* does not update actual response.text, internal */
+  pushResponseEditText(questionId, responseId, responseEditText) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    const response = question.responses.find(response => {
+      return responseId === response.id;
+    });
+    response.input = responseEditText;
+    this.setState({ questions: this.questionData });
+  }
+
+  pushResponseNewText(questionId, responseId, newText) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    const response = question.responses.find(response => {
+      return responseId === response.id;
+    });
+    response.text = newText;
+    this.setState({ questions: this.questionData });
+  }
+
+  removeResponse(questionId, responseId) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    const response = question.responses.find(response => {
+      return responseId === response.id;
+    });
+    const index = question.responses.indexOf(response);
+    question.responses.splice(index, 1);
+    this.setState({
+      questions: this.questionData,
+      currentQuestion: this.questionData[0],
+    });
   }
 
   render() {
@@ -186,8 +268,14 @@ class QuestionView extends React.Component {
           />
           <QuestionDisplay
             question={this.state.currentQuestion}
+            removeQuestion={this.removeQuestion}
+            pushQuestionEditText={this.pushQuestionEditText}
+            pushQuestionNewText={this.pushQuestionNewText}
             pushResponse={this.pushResponse}
             pushResponseText={this.pushResponseText}
+            pushResponseEditText={this.pushResponseEditText}
+            pushResponseNewText={this.pushResponseNewText}
+            removeResponse={this.removeResponse}
             videoUUID={this.props.videoUUID}
           />
         </Row>

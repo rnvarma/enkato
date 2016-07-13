@@ -47,10 +47,28 @@ export default class SeriesMainArea extends React.Component {
                 <div>
                     <SeriesVideoList
                         videos={this.props.videos}
+                        s_id={this.props.s_id}
                         is_creator={this.props.is_creator}/>
                 </div>
             )
-            var annotateVideosButton = "";
+            
+            if (this.props.is_subscribed) {
+                var annotateVideosButton = (
+                    <div className="annotate-box">
+                        <Button onClick={this.props.onUnsubscribe}>
+                            Unsubscribe
+                        </Button>
+                    </div>
+                )
+            } else {
+                var annotateVideosButton = (
+                    <div className="annotate-box">
+                        <Button onClick={this.props.onSubscribe}>
+                            Subscribe
+                        </Button>
+                    </div>
+                )
+            }
         }
         return (
             <div className="seriesMainArea">
