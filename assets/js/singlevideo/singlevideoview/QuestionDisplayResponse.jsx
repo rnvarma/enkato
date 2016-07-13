@@ -78,13 +78,17 @@ class QuestionDisplayResponse extends React.Component {
     }
 
     return (
-      <Row className="questionDisplayResponse">
-        <div className="responseText">
-          {this.props.response.text}
-          <Button onClick={this.toggleEdit}>Edit</Button>
-          <Button onClick={this.delete}>Delete</Button>
+      <Row>
+        <div className={(this.props.response.is_instructor ? 'instructor ' : '') + 'questionDisplayResponse'}>
+          <div className="responseText">
+            {this.props.response.text}
+          </div>
+          <div className="responseFooter">
+            <img></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> asked {created.fromNow()}{modified ? ", modified: "+modified.fromNow() : ""}
+            <Button onClick={this.delete}>Delete</Button>
+            <Button onClick={this.toggleEdit}>Edit Response</Button>
+          </div>
         </div>
-        created: {created.fromNow()}{modified ? ", modified: "+modified.fromNow() : ""}
       </Row>
     );
   }

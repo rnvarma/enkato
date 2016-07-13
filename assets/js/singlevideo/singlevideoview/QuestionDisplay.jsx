@@ -101,7 +101,7 @@ class QuestionDisplay extends React.Component {
                 {this.props.question.text}
               </div>
               <div className="questionFooter">
-                <span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span> asked {created}
+                <img></img><span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span> asked {created}
               </div>
             </div>
           )}

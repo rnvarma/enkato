@@ -120,7 +120,7 @@ PROD_DB = {
 }
 
 DATABASES = {
-    'default': DEV_LOCAL_DB if DEBUG else PROD_DB
+    'default': DEV_LOCAL_DB # if DEBUG else PROD_DB
 }
 
 # Password validation
