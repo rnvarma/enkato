@@ -10,7 +10,7 @@ import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
-import QuestionForm from 'js/singlevideo/singlevideoview/QuestionForm';
+import QuestionModal from 'js/singlevideo/singlevideoview/QuestionModal';
 import QuestionFilterBar from 'js/singlevideo/singlevideoview/QuestionFilterBar';
 import QuestionList from 'js/singlevideo/singlevideoview/QuestionList';
 import QuestionDisplay from 'js/singlevideo/singlevideoview/QuestionDisplay';
@@ -142,6 +142,7 @@ class QuestionView extends React.Component {
   /* prompts user to add question, via modal in QuestionForm */
   addQuestion() {
     this.setState({ addingQuestion: true });
+    console.log('add question');
   }
 
   /* adds question to state */
@@ -247,11 +248,12 @@ class QuestionView extends React.Component {
     return (
       <div className="questionView">
         <Row>
-          <QuestionForm
+          <QuestionModal
             videoUUID={this.props.videoUUID}
             showing={this.state.addingQuestion}
             close={this.closeModal}
-            pushQuestion={this.pushQuestion}/>
+            pushQuestion={this.pushQuestion}
+          />
           <Row>
             <Col md={5}>
               <div className="qaTitle">Question & Answers</div>
