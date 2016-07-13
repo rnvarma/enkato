@@ -178,6 +178,8 @@ module.exports  = React.createClass({
         if(this.state.isPlaying){
             this.state.Player.pause();
         } else{
+            if(this.state.showingQuiz) 
+                this.setState({showingQuiz:false});
             this.state.Player.play();
         }
     },
@@ -231,6 +233,7 @@ module.exports  = React.createClass({
                         renderVideo={this.state.Player.renderVideo}
                         videoDivHeight={this.state.videoDivHeight}
                         controlBarHeight={$('.ControlBar').height()}
+                        showingQuiz={this.state.showingQuiz}
                     />
                     <ControlBar 
                         className="ControlBar"
