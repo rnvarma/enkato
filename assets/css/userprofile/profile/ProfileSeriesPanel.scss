@@ -19,10 +19,18 @@
                 width: 50%;
                 display: inline-block;
             }
+
+            &.one {
+                .image {
+                    width: 100%;
+                    display: inline-block;
+                }
+            }
         }
 
         .seriesInfo {
             padding: 20px;
+            height: 150px;
 
             .name {
                 font-weight: bold;
