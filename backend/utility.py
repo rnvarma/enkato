@@ -86,7 +86,7 @@ def getInfoFromYTSnippet(video_data):
         'name': video_data['snippet']['title'],
         'description': video_data['snippet']['description'],
         'thumbnail': video_data['snippet']['thumbnails']['medium']['url'],
-        'tags': video_data['snippet']['tags'],
+        'tags': video_data['snippet']['tags'] if 'tags' in video_data['snippet'] else [],
         'duration': convertYTDurationToSeconds(video_data['contentDetails']['duration'])
     }
 
