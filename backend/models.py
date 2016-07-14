@@ -371,7 +371,7 @@ class StudentSeriesVideoData(models.Model):
     ss_data = models.ForeignKey(StudentSeriesData, related_name="videos_data")
     video = models.ForeignKey(Video, related_name="series_students_data")
     num_views = models.IntegerField(default=0)
-    avg_duration_watched = models.IntegerField(default=0)  # number seconds
+    total_time_watched = models.IntegerField(default=0)  # number seconds
     seconds_into_video = models.IntegerField(default=0)
     watched = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
