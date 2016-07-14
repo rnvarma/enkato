@@ -148,6 +148,13 @@ def can_make_changes(actor, owner, video_uuid):
     else:
         raise exceptions.PermissionDenied()
 
+def get_update_data(data, partial_object, allowed_fields):
+    if not len(data):
+        raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(allowed_fields))
+    for field in data:
+        if field not in allowed_fields:
+            raise exceptions.ValidationError(field + ' is not a supported field')
+    return {key: data.get(key, getattr(partial_object, key)) for key in allowed_fields}
 
 class QuestionViewset(viewsets.ViewSet):
     """ The quesetion API """
@@ -174,12 +181,7 @@ class QuestionViewset(viewsets.ViewSet):
         question = get_object_or_404(Question, pk=pk)
         if can_make_changes(actor=request.user.customuser, owner=question.student, video_uuid=v_uuid):
             update_fields = ('topic', 'time', 'title', 'text', 'resolved')
-            if len(request.data) == 0:
-                raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(update_fields))
-            for field in request.data:
-                if field not in update_fields:
-                    raise exceptions.ValidationError(field + ' is not a supported field')
-            update_data = {key: request.data.get(key, getattr(question, key)) for key in update_fields}
+            update_data = get_update_data(request.data, partial_object=question, allowed_fields=update_fields)
             serializer = QuestionSerializer(question, data=update_data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -221,12 +223,7 @@ class QuestionResponseViewset(viewsets.ViewSet):
         response = get_object_or_404(QuestionResponse, pk=pk)
         if can_make_changes(request.user.customuser, response.user, v_uuid):
             update_fields = ('text', 'endorsed')
-            if len(request.data) == 0:
-                raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(update_fields))
-            for field in request.data:
-                if field not in update_fields:
-                    raise exceptions.ValidationError(field + ' is not a supported field')
-            update_data = {key: request.data.get(key, getattr(question, key)) for key in update_fields}
+            update_data = get_update_data(request.data, partial_object=response, allowed_fields=update_fields)
             serializer = QuestionResponseSerializer(response, data=update_data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
