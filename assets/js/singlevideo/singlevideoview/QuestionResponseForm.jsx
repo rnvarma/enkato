@@ -13,7 +13,7 @@ import getCookie from 'js/globals/GetCookie';
 
 class QuestionResponseForm extends React.Component {
   constructor() {
-    super()
+    super();
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
@@ -21,7 +21,7 @@ class QuestionResponseForm extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    if (this.state.text) {
+    if (this.props.question.responseInput) {
       const data = {
         text: this.props.question.responseInput,
         question: this.props.question.id,
@@ -32,13 +32,13 @@ class QuestionResponseForm extends React.Component {
         dataType: 'json',
         type:'POST',
         data,
-        beforeSend: (xhr) => {
+        beforeSend(xhr) {
           xhr.withCredentials = true;
           xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
         },
         success: (data) => {
           this.props.pushResponse(this.props.question.id, data);
-          this.setState({ text: '' });
+          this.props.pushResponseText(this.props.question.id, '');
         },
         error: (xhr, status, err) => {
           console.error(status, err.toString());

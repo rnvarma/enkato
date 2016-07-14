@@ -15,10 +15,11 @@ module.exports = React.createClass({
                 <img src={s} className="image"/>
             )
         })
+        var numVideos = this.props.series.thumbnails.length;
         return (
             <Col md={4} lg={3} sm={6} xs={12} className="profileSeriesPanelCol">
                 <div className="profileSeriesPanel" onClick={this.onClick}>
-                    <div className="thumbnailArea">
+                    <div className={"thumbnailArea" + (numVideos == 1 ? " one" : "")}>
                         {thumbnails}
                     </div>
                     <div className="seriesInfo">

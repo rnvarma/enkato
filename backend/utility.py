@@ -5,7 +5,8 @@ import string
 
 # API docs: https://developers.google.com/youtube/v3/docs/videos
 API_KEY = "AIzaSyCy8238lONTrmV2DdyDpBViFoqke3wuk7A"
-BASE_URL = "https://www.googleapis.com/youtube/v3/videos?"
+VIDEO_URL = "https://www.googleapis.com/youtube/v3/videos?"
+PLAYLIST_URL = "https://www.googleapis.com/youtube/v3/playlistItems?"
 
 def capitalize(s):
     if not len(s): return ""
@@ -24,6 +25,9 @@ def getYTIdFromURL(url):
             yt_id = None
 
     return yt_id
+
+def getYTPlaylistIdFromURL(url):
+    return url.split("list=")[1].split("&")[0]
 
 def convertSecondsToTime(s):
     minutes = s / 60
@@ -59,11 +63,11 @@ def convertYTDurationToSeconds(yt_dur):
         seconds += num if denom == "S" else (num * 60) if denom == "M" else (num * 60 * 60)
     return seconds
 
-def getDataFromURL(base_url, params):
+def getDataFromURL(url, params):
     """ Contacts api at base_url with params and returns data retrieved """
 
     params_str = urllib.urlencode(params) # encodes into GET parameters
-    request_url = base_url + params_str
+    request_url = url + params_str
     response = urllib.urlopen(request_url)
 
     # first read the response from the response object
@@ -76,6 +80,64 @@ def getDataFromURL(base_url, params):
 
     return data
 
+def getInfoFromYTSnippet(video_data):
+    return {
+        'id': video_data['id'],
+        'name': video_data['snippet']['title'],
+        'description': video_data['snippet']['description'],
+        'thumbnail': video_data['snippet']['thumbnails']['medium']['url'],
+        'tags': video_data['snippet']['tags'] if 'tags' in video_data['snippet'] else [],
+        'duration': convertYTDurationToSeconds(video_data['contentDetails']['duration'])
+    }
+
+def getPlaylistVideos(p_id):
+    params = {
+        'maxResults': 50,
+        'part': 'snippet,contentDetails',
+        'playlistId': p_id,
+        'key': API_KEY
+    }
+
+    data = getDataFromURL(PLAYLIST_URL, params)
+
+    results = data["items"]
+    totalResults = data["pageInfo"]["totalResults"]
+    retrievedResults = data["pageInfo"]["resultsPerPage"]
+
+    while retrievedResults < totalResults:
+        params["pageToken"] = data["nextPageToken"]
+        data = getDataFromURL(PLAYLIST_URL, params)
+        results.append(data["items"])
+        retrievedResults += data["pageInfo"]["resultsPerPage"]
+
+    ids = map(lambda d: d["contentDetails"]["videoId"], results)
+    orders = {d["contentDetails"]["videoId"]: d["snippet"]["position"] for d in results}
+
+    params = {
+        'maxResults': 50,
+        'part': 'snippet,contentDetails',
+        'id': ",".join(ids),
+        'key': API_KEY
+    }
+
+    data = getDataFromURL(VIDEO_URL, params)
+
+    results = data["items"]
+    totalResults = data["pageInfo"]["totalResults"]
+    retrievedResults = data["pageInfo"]["resultsPerPage"]
+
+    while retrievedResults < totalResults:
+        params["pageToken"] = data["nextPageToken"]
+        data = getDataFromURL(VIDEO_URL, params)
+        results.append(data["items"])
+        retrievedResults += data["pageInfo"]["resultsPerPage"]
+
+    data = map(getInfoFromYTSnippet, results)
+    for video_data in data:
+        video_data["order"] = orders[video_data["id"]]
+    return data
+
+
 def getYTMetaData(yt_id):
     """ See https://developers.google.com/youtube/v3/docs/videos for API details """
 
@@ -85,19 +147,13 @@ def getYTMetaData(yt_id):
         'key': API_KEY
     }
 
-    data = getDataFromURL(BASE_URL, params)
+    data = getDataFromURL(VIDEO_URL, params)
     if not data['pageInfo']['totalResults']: return None # no results
 
     # search by id will only yield one result
     video_data = data['items'][0]
 
-    return {
-        'name': video_data['snippet']['title'],
-        'description': video_data['snippet']['description'],
-        'thumbnail': video_data['snippet']['thumbnails']['medium']['url'],
-        'tags': video_data['snippet']['tags'],
-        'duration': convertYTDurationToSeconds(video_data['contentDetails']['duration'])
-    }
+    return getInfoFromYTSnippet(video_data)
 
 def getStringsFromStringList(strings):
     """ Supports string seperated by new lines or commas """

@@ -124,15 +124,14 @@ class UserData(APIView):
             data["logged_in"] = True
         return Response(data)
 
-
 class UserProfileData(APIView):
     def get(self, request, u_id):
         cu = CustomUser.objects.get(id=u_id)
         data = {}
         data["userdata"] = Serializer.serialize_userprofiledata(cu)
-        data["series"] = map(Serializer.serialize_series, cu.created_series.all())
+        data["created_series"] = map(Serializer.serialize_series, cu.created_series.all())
+        data["subscribed_series"] = map(Serializer.serialize_series, cu.student_series.all())
         return Response(data)
-
 
 class ClassroomData(APIView):
     def get(self, request, c_id):
@@ -140,25 +139,27 @@ class ClassroomData(APIView):
         class_data = Serializer.serialize_class(classroom)
         return Response(class_data)
 
-
 class SeriesData(APIView):
     def get(self, request, s_id):
         series = Series.objects.get(uuid=s_id)
         series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
 
-
 class VideoData(View):
     def get(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
         topicList = video.topics.all().order_by('time')
         frontendTList = map(Serializer.serialize_topic, topicList)
+        #get QuizList
+        quizQs = video.quiz_questions.all()
+        questions = map(Serializer.serialize_quiz_question, quizQs)
         return JsonResponse({
             'videoID': video.vid_id,
             'topicList': frontendTList,
-            'videoData': Serializer.serialize_video(video)
+            'videoData': Serializer.serialize_video(video),
+            'questions': questions,
+            'numQuestions':quizQs.count()
         })
-
 
 class QuizData(APIView):
     def get(self, request, v_uuid):
@@ -211,9 +212,6 @@ class YTIndexScript(APIView):
         for topicObj in topicObjsList:
             topicObj.save()
         return JsonResponse({'hey':True})
-
-
-
 
 # access via /api/video/<v_uuid>/questions
 class QuestionData(APIView):

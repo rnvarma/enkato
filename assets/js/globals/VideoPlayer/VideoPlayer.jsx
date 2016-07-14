@@ -11,6 +11,7 @@ import Video from 'js/globals/videoPlayer/Video';
 import ControlBar from 'js/globals/videoPlayer/ControlBar';
 import Player from 'js/globals/videoPlayer/Player';
 
+
 // How often the video player checks the video's state
 const pollInterval = 100;
 
@@ -43,6 +44,20 @@ function updateCurrentTopicOnTime(seconds, topicList){
     if(!setTrue) topicList[i-1].isCurrentTopic=true;
     return topicList;
 }
+function clearCurrentTopic(topicList){
+    var tList = []
+    for(var i=0; i<topicList.length; i++){
+        topicList[i].isCurrentTopic = false;
+        var currTopic = topicList[i]
+        tList.push(currTopic)
+        console.log("---------")
+        console.log(tList[i])
+    }
+    console.log(tList)
+    return tList;
+}
+
+
 
 module.exports  = React.createClass({
     loadDataFromServer: function(v_id){
@@ -54,16 +69,16 @@ module.exports  = React.createClass({
           success: function(data) {
             if (this.state.Player)
                 this.state.Player.destroy();
-              this.setState({Player: new Player(data.videoID)});
-              this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
+            this.setState({Player: new Player(data.videoID)});
+            this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
+            console.log(data.questions)
+            this.forceUpdate();
 
-              this.forceUpdate();
-
-              this.videoPlayerClass = "";
-              if (data.topicList.length == 0) {
-                  this.videoPlayerClass = "full";
-              }
-              this.totalTime = data.videoData.duration_clean;
+            this.videoPlayerClass = "";
+            if (data.topicList.length == 0) {
+              this.videoPlayerClass = "full";
+            }
+            this.totalTime = data.videoData.duration_clean;
 
           }.bind(this),
           error: function(xhr, status, err) {
@@ -100,7 +115,27 @@ module.exports  = React.createClass({
             videoDivHeight: 0,
             videoDivWidth: 0,
             uuid: this.props.videoUUID,
+            questions:[{
+                text: "",
+                choiceList: [{text:"", id:0}],
+                shouldRefocus: false,
+                currentFocus: 0,
+                id: 1,
+                new: true
+            }],
+            showingOverlay:false,
+            takingQuiz:false
         };
+    },
+    showOverlay: function(){
+        this.setState({
+            showingOverlay:true
+        });
+        this.state.Player.pause();
+        console.log(this.state.questions)
+    },
+    showQuiz: function(){
+        this.setState({takingQuiz:true})
     },
     setWindowSize: function(){
         this.setState({
@@ -131,12 +166,25 @@ module.exports  = React.createClass({
         }, this.afterTopicListUpdate);
         // Second, Make API call to update video state
         this.state.Player.seekTo(time)
+        //make sure you're not showing quiz anymore
+        this.setState({
+            showingOverlay:false,
+            takingQuiz:false
+        })
+        //make sure the video is playing
+        this.state.Player.play()
     },
     handlePlayPauseClick: function(){
         // Set the local state and make the API call
         if(this.state.isPlaying){
             this.state.Player.pause();
         } else{
+            if(this.state.showingOverlay) 
+                this.setState(
+                    {
+                        showingOverlay:false,
+                        takingQuiz:false
+                    });
             this.state.Player.play();
         }
     },
@@ -147,17 +195,28 @@ module.exports  = React.createClass({
         }
     },
     afterTopicListUpdate() {
+        //this function was setting this.topicList to an emptystring when 
+        //this.state.topicObjList was empty. I'm Leaving the infrastructure
+        //for that functionality intact (which is why I have this dumb if/else).
+        //Now we have to add the "Takequiz" button at the bottom of the
+        //TopicList, but aashley said this design isn't definite. 
+        //              --Arman 7/11/16
+
         if (this.state.topicObjList.length != 0) {
             this.topicList = (
                 <div className="topicButtonColumn">
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
                         handleTopicClick={this.handleTopicClick}
+                        showOverlay={this.showOverlay}
+                        showingOverlay={this.state.showingOverlay}
                     />
                 </div>
             );
         } else {
-            this.topicList = "";
+            this.topicList = (
+                <div></div>
+            );
         }
     },
     render: function() {
@@ -171,7 +230,11 @@ module.exports  = React.createClass({
                     <Video
                         renderVideo={this.state.Player.renderVideo}
                         videoDivHeight={this.state.videoDivHeight}
-                        controlBarHeight={$('.ControlBar').height()}/>
+                        controlBarHeight={$('.ControlBar').height()}
+                        showingOverlay={this.state.showingOverlay}
+                        takingQuiz={this.state.takingQuiz}
+                        showQuiz={this.showQuiz}
+                    />
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}
@@ -184,7 +247,8 @@ module.exports  = React.createClass({
                         totalTime={this.totalTime}
                         percentDone={this.state.percentDone}
                         setPlaybackRate={this.state.Player.setPlaybackRate}
-                        playerContext={this.state.Player.getContext()}/>
+                        playerContext={this.state.Player.getContext()}
+                    />
                 </div>
             </div>
         );

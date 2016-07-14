@@ -120,6 +120,15 @@ PROD_DB = {
     'PORT': '5432'
 }
 
+PROD_DB = {
+    'ENGINE': 'django_postgrespool',
+    'NAME': 'd74djt258l9ik',
+    'USER': 'iahgregulfpcnh',
+    'PASSWORD': '5Oh_TIClof5UxpOgUaoymaMVm3',
+    'HOST': 'ec2-107-21-219-235.compute-1.amazonaws.com',
+    'PORT': '5432'
+}
+
 DATABASES = {
     'default': DEV_LOCAL_DB if DEBUG else PROD_DB
 }

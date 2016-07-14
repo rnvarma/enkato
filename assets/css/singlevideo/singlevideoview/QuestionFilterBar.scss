@@ -2,12 +2,21 @@
 @import '../../globals/mixins.scss';
 
 .questionFilterBar {
+  background: white;
+  border-top: 15px solid $structabl-blue;
+  border-bottom: 1px solid $bg-grey;
+
+  .form-group {
+    margin-bottom: 0;
+  }
 
   .filterOption {
-    padding: 12px 40px;
+    color: $structabl-blue;
+    padding: 12px 20px;
     background-color: white;
     font-size: 18px;
-    text-align: center;
+    width: 12%;
+    display: inline-block;
 
     &.selected {
       font-weight: bold;
@@ -15,6 +24,20 @@
   }
 
   .filterQuery {
+    margin-top: 7px;
     background-color: white;
+
+    .filterInput {
+      padding: 5px 20px;
+    }
+
+    .btn {
+      padding: 8px 40px;
+      background-color: #f1f1f1;
+    }
+
+    .fa-search {
+      font-size: 1.2em;
+    }
   }
 }

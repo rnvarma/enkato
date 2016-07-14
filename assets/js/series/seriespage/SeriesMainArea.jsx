@@ -29,6 +29,7 @@ export default class SeriesMainArea extends React.Component {
                 <div>
                     <SeriesVideoList
                         videos={this.props.videos}
+                        s_id={this.props.s_id}
                         is_creator={this.props.is_creator}/>
                     <NoVideosArea
                         videos={this.props.videos}

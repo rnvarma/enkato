@@ -3,22 +3,10 @@ from django.views.generic.base import View
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
-from backend.utility import getYTIdFromURL, getYTMetaData, getStringsFromStringList
+from backend.utility import getPlaylistVideos, getYTPlaylistIdFromURL, getYTIdFromURL, getYTMetaData, getStringsFromStringList
 from backend.models import Tag, Video, VideoTag, Series, SeriesVideo
 
-def uploadYTVideo(url, creator):
-    """
-    Saves video and each individual tag from the url or
-    returns None if bad url or failed API response
-    """
-
-    vid_id = getYTIdFromURL(url)
-    if vid_id is None: return None
-
-    # metadata contains name, description, thumbnail, duration, tags
-    metadata = getYTMetaData(vid_id)
-    if metadata is None: return None
-
+def loadYTVideoToDB(metadata, creator):
     tags = metadata["tags"]
 
     tag_objs = []
@@ -32,7 +20,7 @@ def uploadYTVideo(url, creator):
     video = Video.objects.create(
         name=metadata["name"],
         source="youtube",
-        vid_id=vid_id,
+        vid_id=metadata["id"],
         description=metadata["description"],
         thumbnail=metadata["thumbnail"],
         duration=metadata["duration"],
@@ -49,6 +37,28 @@ def uploadYTVideo(url, creator):
         video_tag.save()
 
     return video
+
+def uploadYTPlaylist(url, creator):
+    p_id = getYTPlaylistIdFromURL(url)
+    videos = getPlaylistVideos(p_id)
+    videos.sort(lambda x, y: cmp(x["order"], y["order"]))
+    videos = [loadYTVideoToDB(v, creator) for v in videos]
+    return videos
+
+def uploadYTVideo(url, creator):
+    """
+    Saves video and each individual tag from the url or
+    returns None if bad url or failed API response
+    """
+
+    vid_id = getYTIdFromURL(url)
+    if vid_id is None: return None
+
+    # metadata contains name, description, thumbnail, duration, tags
+    metadata = getYTMetaData(vid_id)
+    if metadata is None: return None
+
+    return loadYTVideoToDB(metadata, creator)
 
 class UploadVideo(View):
     def get(self, request):
@@ -78,11 +88,16 @@ class UploadVideoToSeries(View):
         videos = []
         bad_urls = []
         for url in url_list:
-            video = uploadYTVideo(url, creator)
-            if video is None:
-                bad_urls.append(url)
+            # means that it is a playlist url
+            if "list" in url:
+                data = uploadYTPlaylist(url, creator)
+                videos.extend(data)
             else:
-                videos.append(video)
+                video = uploadYTVideo(url, creator)
+                if video is None:
+                    bad_urls.append(url)
+                else:
+                    videos.append(video)
 
         series = Series.objects.get(uuid=s_id)
         # find current video order

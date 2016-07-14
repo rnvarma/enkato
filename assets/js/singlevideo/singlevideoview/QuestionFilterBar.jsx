@@ -2,9 +2,11 @@ require('css/singlevideo/singlevideoview/QuestionFilterBar.scss');
 
 import React from 'react';
 
+import FontAwesome from 'react-fontawesome';
+
 import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 
@@ -25,41 +27,38 @@ export default class QuestionFilterBar extends React.Component {
 
   render() {
     return (
-      <div className="questionFilterBar">
-        <Col
-          md={3}
+      <Row className="questionFilterBar">
+        <div
           className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.setFilter.bind(null, '', true)}
         >
           View All
-        </Col>
-        <Col
-          md={3}
+        </div>
+        <div
           className={(this.props.filterAnswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.toggleAnsweredFilter}
         >
           Answered
-        </Col>
-        <Col
-          md={3}
+        </div>
+        <div
           className={(this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.toggleUnansweredFilter}
         >
           Unanswered
-        </Col>
-        <Col md={3} className="filterQuery">
-          <FormGroup>
-            <InputGroup>
-              <FormControl
-                type="input"
-                onChange={this.setFilterFromQuery}
-                value={this.props.filter}
-              />
-              <InputGroup.Button><Button>ICON</Button></InputGroup.Button>
-            </InputGroup>
-          </FormGroup>
-        </Col>
-      </div>
+        </div>
+        <div className="filterQuery">
+          <InputGroup>
+            <FormControl
+              type="input"
+              className="filterInput"
+              placeholder="Search Questions"
+              onChange={this.setFilterFromQuery}
+              value={this.props.filter}
+            />
+            <InputGroup.Button><Button><FontAwesome name="search" /></Button></InputGroup.Button>
+          </InputGroup>
+        </div>
+      </Row>
     );
   }
 }

@@ -8,6 +8,32 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
+
+class DatedModel(models.Model):
+    """ Generic model with created, modified, and modified count fields """
+
+    created = models.DateTimeField(editable=False)
+    modified = models.DateTimeField()
+    modified_count = models.IntegerField(default=0)
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        update_modified = kwargs.pop('update_modified', True)
+
+        if not self.id: # Model does not exist yet
+            self.created = timezone.now()
+        else:
+            if update_modified:
+                self.modified_count += 1
+        if update_modified:
+            self.modified = timezone.now()
+
+        return super(DatedModel, self).save(*args, **kwargs)
+
+
+
 class CustomUser(models.Model):
     email = models.CharField(max_length=100, default="")
     first_name = models.CharField(max_length=100, default="")
@@ -216,14 +242,13 @@ class Topic(models.Model):
         return self.name
 
 
-class Question(models.Model):
-    timestamp = models.DateTimeField(default=timezone.now)  # when asked
+class Question(DatedModel):
+    student = models.ForeignKey(CustomUser, related_name="questions")
     video = models.ForeignKey(Video, related_name="videos")
     topic = models.ForeignKey(Topic, related_name="questions", blank=True, null=True)
-    student = models.ForeignKey(CustomUser, related_name="questions")
+    time = models.IntegerField(default=0)
     title = models.TextField(max_length=200)
     text = models.TextField()
-    time = models.IntegerField(default=0)
     resolved = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
@@ -241,12 +266,12 @@ class QuestionUpvote(models.Model):
     user = models.ForeignKey(CustomUser, related_name="question_upvotes")
 
 
-class QuestionResponse(models.Model):
+class QuestionResponse(DatedModel):
     question = models.ForeignKey(Question, related_name="responses")
-    timestamp = models.DateTimeField(default=timezone.now)  # when done
-    text = models.TextField()
     user = models.ForeignKey(CustomUser, related_name="question_responses")
     is_instructor = models.BooleanField(default=False)
+    text = models.TextField()
+    endorsed = models.BooleanField(default=False, blank=True)
 
     def __str__(self):
         return self.text
@@ -259,8 +284,10 @@ class QuestionResponseUpvote(models.Model):
 
 
 class QuestionResponseSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = QuestionResponse
+        read_only_fields = ('modified',)
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -268,7 +295,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        exclude = ('video',)
+        read_only_fields = ('modified',)
         depth = 1
 
 # =================================================================================== #
@@ -316,7 +343,6 @@ class StudentUnitData(models.Model):
     unit = models.ForeignKey(Unit, related_name="students_data")
     completed = models.BooleanField(default=False)
 
-
 class StudentClassVideoData(models.Model):
     sc_data = models.ForeignKey(StudentClassData, related_name="videos_data")
     video = models.ForeignKey(Video, related_name="class_students_data")
@@ -325,9 +351,32 @@ class StudentClassVideoData(models.Model):
     seconds_into_video = models.IntegerField(default=0)
     completed = models.BooleanField(default=False)
 
+# class StudentClassVideoQuizQuestionData(models.Model):
+#     scv_data = models.ForeignKey(StudentClassVideoData, related_name="quizzes_data")
+#     quiz_question = models.ForeignKey(QuizQuestion, related_name="responses")
+#     answer = models.TextField(default="")
+#     is_correct = models.BooleanField(default=False)
+#     context = models.CharField(max_length=20, default="")  # either diagnostic, post-video, unit, class, etc
+#     timestamp = models.DateTimeField(default=timezone.now)
 
-class StudentClassVideoQuizQuestionData(models.Model):
-    scv_data = models.ForeignKey(StudentClassVideoData, related_name="quizzes_data")
+
+
+
+
+class StudentSeriesData(models.Model):
+    user = models.ForeignKey(CustomUser, related_name="series_data")
+    series = models.ForeignKey(Series, related_name="students_data")
+
+class StudentSeriesVideoData(models.Model):
+    sp_data = models.ForeignKey(StudentSeriesData, related_name="videos_data")
+    video = models.ForeignKey(Video, related_name="series_students_data")
+    num_views = models.IntegerField(default=0)
+    avg_duration_watched = models.IntegerField(default=0)  # number seconds
+    seconds_into_video = models.IntegerField(default=0)
+    completed = models.BooleanField(default=False)
+
+class StudentSeriesVideoQuizQuestionData(models.Model):
+    scv_data = models.ForeignKey(StudentSeriesVideoData, related_name="quizzes_data")
     quiz_question = models.ForeignKey(QuizQuestion, related_name="responses")
     answer = models.TextField(default="")
     is_correct = models.BooleanField(default=False)
@@ -335,10 +384,12 @@ class StudentClassVideoQuizQuestionData(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)
 
 
+
+
+
 class StudentPlaylistData(models.Model):
     user = models.ForeignKey(CustomUser, related_name="playlists_data")
     playlist = models.ForeignKey(Playlist, related_name="students_data")
-
 
 class StudentPlaylistVideoData(models.Model):
     sp_data = models.ForeignKey(StudentPlaylistData, related_name="videos_data")

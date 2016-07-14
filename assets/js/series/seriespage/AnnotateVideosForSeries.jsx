@@ -22,16 +22,14 @@ export default class AnnotateVideosForSeries extends React.Component {
   }
 
   render() {
-    console.log("RENDERING");
     const video = (this.state.currentVideo != null) ? this.state.currentVideo : this.props.videos[0];
-    console.log("Here is the video set up", video, this.state.currentVideo, this.props, this.props.videos[0]);
+    if (!video) return <div>"loading..."</div>
     return (
       <div className="annotateVideosForSeries">
         <AnnotateSeriesSideBar
           videos={this.props.videos}
           updateCurrVideo={this.updateCurrVideo}
-          currentVideo={video}
-        />
+          currentVideo={video}/>
         <AnnotateSeriesVideoArea
           currentVideo={video}
           quizMode={this.props.quizMode}

@@ -46,8 +46,11 @@ var SeriesPage = React.createClass({
     onURLImport: function(event) {
         this.setState({ urls: event.target.value });
     },
-    setAnnotateMode: function(bool) {
-        this.setState({ annotateMode: bool });
+    setUploadMode: function() {
+        this.setState({ annotateMode: false });
+    },
+    setAnnotateMode: function() {
+        this.setState({ annotateMode: true });
     },
     setTopicMode: function() {
         this.setState({ quizMode: false });
@@ -130,6 +133,7 @@ var SeriesPage = React.createClass({
                     setTopicMode={this.setTopicMode}
                     setQuizMode={this.setQuizMode}
                     setAnnotateMode={this.setAnnotateMode}
+                    setUploadMode={this.setUploadMode}
                     setUrls={this.setUrls}
                     onURLImport={this.onURLImport}
                     reloadPageData={this.loadPageData}/>

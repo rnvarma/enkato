@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.9",
-    "fuse.js": "^2.2.0"
+    "fuse.js": "^2.2.0",
+    "moment": "^2.14.1"
   }
 }
