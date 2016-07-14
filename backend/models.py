@@ -20,11 +20,15 @@ class DatedModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
+        update_modified = kwargs.pop('update_modified', True)
+
         if not self.id: # Model does not exist yet
             self.created = timezone.now()
         else:
-            self.modified_count += 1
-        self.modified = timezone.now()
+            if update_modified:
+                self.modified_count += 1
+        if update_modified:
+            self.modified = timezone.now()
 
         return super(DatedModel, self).save(*args, **kwargs)
 
@@ -123,7 +127,6 @@ class Series(models.Model):
     def __str__(self):
         return self.name
 
-
 # class rating systems
 # - basic star-rating feedback
 # - number of students enrolled
@@ -204,7 +207,6 @@ class SeriesVideo(models.Model):
     video = models.OneToOneField(Video, related_name="series_video")
     series = models.ForeignKey(Series, related_name="videos")
     order = models.IntegerField(default=0)  # order within the series
-
 
 class PlaylistVideo(models.Model):
     video = models.ForeignKey(Video, related_name="playlists")

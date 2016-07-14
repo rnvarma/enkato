@@ -215,14 +215,7 @@ module.exports  = React.createClass({
             );
         } else {
             this.topicList = (
-                <div className="topicButtonColumn">
-                    <TopicList 
-                        topicObjList={this.state.topicObjList} 
-                        handleTopicClick={this.handleTopicClick}
-                        showingOverlay={this.state.showingOverlay}
-                        showOverlay={this.showOverlay}
-                    />
-                </div>
+                <div></div>
             );
         }
     },

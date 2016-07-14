@@ -15,6 +15,8 @@
     padding: 12px 20px;
     background-color: white;
     font-size: 18px;
+    width: 12%;
+    display: inline-block;
 
     &.selected {
       font-weight: bold;
@@ -31,7 +33,11 @@
 
     .btn {
       padding: 8px 40px;
-      background-color: grey;
+      background-color: #f1f1f1;
+    }
+
+    .fa-search {
+      font-size: 1.2em;
     }
   }
 }

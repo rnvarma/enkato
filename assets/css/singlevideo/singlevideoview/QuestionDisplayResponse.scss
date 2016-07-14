@@ -6,18 +6,6 @@
   color: $structabl-blue;
   border-bottom: 10px solid $bg-grey;
 
-  .btn {
-    float: right;
-    display: none;
-    margin-left: 10px;
-  }
-
-  &:hover {
-    .btn {
-      display: block;
-    }
-  }
-
   &.instructor {
     border-top: 14px solid $kato-green;
   }
@@ -28,6 +16,33 @@
 
   .responseText {
     padding: 15px 20px;
+    width: 70%;
+    display: inline-block;
+  }
+
+  .responseBadges {
+    width: 30%;
+    display: inline-block;
+    text-transform: uppercase;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 700;
+
+    padding: 15px 20px;
+
+    .fa {
+      font-size: 1.4em;
+      padding-right: 6px;
+      padding-bottom: 8px;
+
+      &.endorsed {
+        color: $enkato-green;
+      }
+
+      &.instructor {
+        color: $kato-green;
+      }
+    }
   }
 
   .responseFooter {
@@ -36,6 +51,19 @@
 
     .studentName {
       font-weight: bold;
+    }
+
+    .plainBtn {
+      display: inline-block;
+      float: right;
+      font-weight: bold;
+      font-size: 16px;
+      margin-left: 20px;
+      margin-top: 5px;
+
+      &:hover {
+        cursor: pointer;
+      }
     }
 
     img {
