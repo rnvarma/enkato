@@ -141,13 +141,22 @@ class DeleteQuizOption(View):
         })
 
 
-def can_make_changes(actor, owner, video_uuid):
-    if (owner == actor or
-                actor == Video.objects.get(v_uuid=video_uuid).creator):
-        return True
-    else:
-        raise exceptions.PermissionDenied()
+def can_make_changes(user, owner, video_uuid):
+    if hasattr(user, 'customuser'):
+        custom_user = user.customuser
+        if (owner == custom_user or
+            custom_user == Video.objects.get(uuid=video_uuid).creator):
+            return True
 
+    raise exceptions.PermissionDenied()
+
+def get_update_data(data, partial_object, allowed_fields):
+    if not len(data):
+        raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(allowed_fields))
+    for field in data:
+        if field not in allowed_fields:
+            raise exceptions.ValidationError(field + ' is not a supported field')
+    return {key: data.get(key, getattr(partial_object, key)) for key in allowed_fields}
 
 class QuestionViewset(viewsets.ViewSet):
     """ The quesetion API """
@@ -172,14 +181,9 @@ class QuestionViewset(viewsets.ViewSet):
 
     def partial_update(self, request, v_uuid, pk):
         question = get_object_or_404(Question, pk=pk)
-        if can_make_changes(actor=request.user.customuser, owner=question.student, video_uuid=v_uuid):
+        if can_make_changes(user=request.user, owner=question.student, video_uuid=v_uuid):
             update_fields = ('topic', 'time', 'title', 'text', 'resolved')
-            if len(request.data) == 0:
-                raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(update_fields))
-            for field in request.data:
-                if field not in update_fields:
-                    raise exceptions.ValidationError(field + ' is not a supported field')
-            update_data = {key: request.data.get(key, getattr(question, key)) for key in update_fields}
+            update_data = get_update_data(request.data, partial_object=question, allowed_fields=update_fields)
             serializer = QuestionSerializer(question, data=update_data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -187,7 +191,7 @@ class QuestionViewset(viewsets.ViewSet):
 
     def destroy(self, request, v_uuid, pk):
         question = get_object_or_404(Question, pk=pk)
-        if can_make_changes(actor=request.user.customuser, owner=question.student, video_uuid=v_uuid):
+        if can_make_changes(user=request.user, owner=question.student, video_uuid=v_uuid):
             question.delete()
             return Response()
 
@@ -219,14 +223,9 @@ class QuestionResponseViewset(viewsets.ViewSet):
 
     def partial_update(self, request, v_uuid, pk):
         response = get_object_or_404(QuestionResponse, pk=pk)
-        if can_make_changes(request.user.customuser, response.user, v_uuid):
+        if can_make_changes(user=request.user, owner=response.user, video_uuid=v_uuid):
             update_fields = ('text', 'endorsed')
-            if len(request.data) == 0:
-                raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(update_fields))
-            for field in request.data:
-                if field not in update_fields:
-                    raise exceptions.ValidationError(field + ' is not a supported field')
-            update_data = {key: request.data.get(key, getattr(question, key)) for key in update_fields}
+            update_data = get_update_data(request.data, partial_object=response, allowed_fields=update_fields)
             serializer = QuestionResponseSerializer(response, data=update_data, partial=True)
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -234,7 +233,7 @@ class QuestionResponseViewset(viewsets.ViewSet):
 
     def destroy(self, request, v_uuid, pk):
         response = get_object_or_404(QuestionResponse, pk=pk)
-        if can_make_changes(request.user.customuser, response.user, v_uuid):
+        if can_make_changes(user=request.user, owner=response.user, video_uuid=v_uuid):
             response.delete()
             return Response()
 
