@@ -20,11 +20,15 @@ class DatedModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
+        update_modified = kwargs.pop('update_modified', True)
+
         if not self.id: # Model does not exist yet
             self.created = timezone.now()
         else:
-            self.modified_count += 1
-        self.modified = timezone.now()
+            if update_modified:
+                self.modified_count += 1
+        if update_modified:
+            self.modified = timezone.now()
 
         return super(DatedModel, self).save(*args, **kwargs)
 

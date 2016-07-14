@@ -66,6 +66,7 @@ class QuestionDisplay extends React.Component {
             pushResponseEditText={this.props.pushResponseEditText}
             pushResponseNewText={this.props.pushResponseNewText}
             removeResponse={this.props.removeResponse}
+            toggleEndorsedResponse={this.props.toggleEndorsedResponse}
           />
         );
       });

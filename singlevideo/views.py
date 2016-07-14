@@ -156,7 +156,17 @@ def get_update_data(data, partial_object, allowed_fields):
     for field in data:
         if field not in allowed_fields:
             raise exceptions.ValidationError(field + ' is not a supported field')
-    return {key: data.get(key, getattr(partial_object, key)) for key in allowed_fields}
+
+    updated_fields = []
+    update_data = {}
+    for key in allowed_fields:
+        if hasattr(data, key):
+            updated_fields.append(key)
+            update_data[key] = data[key]
+        else:
+            update_data[key] = getattr(partial_object, key)
+
+    return update_data, updated_fields
 
 class QuestionViewset(viewsets.ViewSet):
     """ The quesetion API """
@@ -183,10 +193,10 @@ class QuestionViewset(viewsets.ViewSet):
         question = get_object_or_404(Question, pk=pk)
         if can_make_changes(user=request.user, owner=question.student, video_uuid=v_uuid):
             update_fields = ('topic', 'time', 'title', 'text', 'resolved')
-            update_data = get_update_data(request.data, partial_object=question, allowed_fields=update_fields)
+            update_data, updated_fields = get_update_data(request.data, partial_object=question, allowed_fields=update_fields)
             serializer = QuestionSerializer(question, data=update_data, partial=True)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
+            serializer.save(update_modified='resolved' not in updated_fields)
             return Response(serializer.data)
 
     def destroy(self, request, v_uuid, pk):
@@ -225,10 +235,10 @@ class QuestionResponseViewset(viewsets.ViewSet):
         response = get_object_or_404(QuestionResponse, pk=pk)
         if can_make_changes(user=request.user, owner=response.user, video_uuid=v_uuid):
             update_fields = ('text', 'endorsed')
-            update_data = get_update_data(request.data, partial_object=response, allowed_fields=update_fields)
+            update_data, updated_fields = get_update_data(request.data, partial_object=response, allowed_fields=update_fields)
             serializer = QuestionResponseSerializer(response, data=update_data, partial=True)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
+            serializer.save(update_modified='endorsed' not in updated_fields)
             return Response(serializer.data)
 
     def destroy(self, request, v_uuid, pk):
