@@ -124,7 +124,6 @@ class UserData(APIView):
             data["logged_in"] = True
         return Response(data)
 
-
 class UserProfileData(APIView):
     def get(self, request, u_id):
         cu = CustomUser.objects.get(id=u_id)
@@ -134,20 +133,17 @@ class UserProfileData(APIView):
         data["subscribed_series"] = map(Serializer.serialize_series, cu.student_series.all())
         return Response(data)
 
-
 class ClassroomData(APIView):
     def get(self, request, c_id):
         classroom = Classroom.objects.get(uuid=c_id)
         class_data = Serializer.serialize_class(classroom)
         return Response(class_data)
 
-
 class SeriesData(APIView):
     def get(self, request, s_id):
         series = Series.objects.get(uuid=s_id)
         series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
-
 
 class VideoData(View):
     def get(self, request, v_uuid):
@@ -164,7 +160,6 @@ class VideoData(View):
             'questions': questions,
             'numQuestions':quizQs.count()
         })
-
 
 class QuizData(APIView):
     def get(self, request, v_uuid):
@@ -217,9 +212,6 @@ class YTIndexScript(APIView):
         for topicObj in topicObjsList:
             topicObj.save()
         return JsonResponse({'hey':True})
-
-
-
 
 # access via /api/video/<v_uuid>/questions
 class QuestionData(APIView):
