@@ -16,7 +16,8 @@ module.exports = React.createClass({
         return {
             logged_in: false,
             username: '',
-            user_id: 0
+            user_id: 0,
+            num_notifications: 0
         }
     },
     componentWillMount: function() {
@@ -29,6 +30,19 @@ module.exports = React.createClass({
                 logged_in: data.logged_in,
                 username: data.username,
                 user_id: data.user_id
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
+        $.ajax({
+          url: "/1/getnotificationsnum",
+          dataType: 'json',
+          cache: false,
+          success: function(data) {
+            this.setState({
+                num_notifications: data.num
             });
           }.bind(this),
           error: function(xhr, status, err) {
@@ -52,6 +66,7 @@ module.exports = React.createClass({
             var RightBar = (
                 <Nav pullRight>
                     <CreateSeriesModal />
+                    <NavItem eventKey={3} href="/userprofile">You have {this.state.num_notifications} unread notification(s)</NavItem>
                     <NavItem eventKey={2} href="/logout">Logout</NavItem>
                     <NavItem eventKey={1} href="/userprofile">{this.state.username}</NavItem>
                 </Nav>

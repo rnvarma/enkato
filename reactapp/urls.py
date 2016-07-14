@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+import notifications.urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,4 +29,5 @@ urlpatterns = [
     url(r'^', include('series.urls')),
     url(r'^', include('userdashboard.urls')),
     url(r'^', include('testinggrounds.urls')),
+    url(r'^', include(notifications.urls, namespace='notifications')),
 ]

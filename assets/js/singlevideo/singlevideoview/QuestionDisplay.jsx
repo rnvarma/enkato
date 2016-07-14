@@ -23,6 +23,22 @@ class QuestionDisplay extends React.Component {
     };
     this.delete = this.delete.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onTextChange = this.onTextChange.bind(this);
+  }
+
+  componentDidMount() {
+    /* if you have unique input saved, then you're editing */
+    this.setState({ /* TODO: CHECK TOPIC CHANGE */
+      editing: this.props.question && (this.props.question.input.title !== this.props.question.title || this.props.question.input.text !== this.props.question.text),
+    });
+  }
+
+  componentWillReceiveProps(newProps) {
+    /* if you have unique input saved, then you're editing */
+    this.setState({ /* TODO: CHECK TOPIC CHANGE */
+      editing: newProps.question.input.title !== newProps.question.title || newProps.question.input.text !== newProps.question.text,
+    });
   }
 
   delete() {
@@ -42,6 +58,38 @@ class QuestionDisplay extends React.Component {
 
   toggleEdit() {
     this.setState({ editing: !this.state.editing });
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    if (this.props.question.responseInput) {
+      const data = {
+        text: this.props.question.responseInput,
+        question: this.props.question.id,
+      };
+
+      $.ajax({
+        url: `/api/videos/${this.props.videoUUID}/responses`,
+        dataType: 'json',
+        type: 'POST',
+        data,
+        beforeSend(xhr) {
+          xhr.withCredentials = true;
+          xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+        },
+        success: (data) => {
+          this.props.pushResponse(this.props.question.id, data);
+          this.props.pushResponseText(this.props.question.id, '');
+        },
+        error: (xhr, status, err) => {
+          console.error(status, err.toString());
+        },
+      });
+    }
+  }
+
+  onTextChange(event) {
+    this.props.pushResponseText(this.props.question.id, event.target.value);
   }
 
   render() {
@@ -66,6 +114,7 @@ class QuestionDisplay extends React.Component {
             pushResponseEditText={this.props.pushResponseEditText}
             pushResponseNewText={this.props.pushResponseNewText}
             removeResponse={this.props.removeResponse}
+            toggleEndorsedResponse={this.props.toggleEndorsedResponse}
           />
         );
       });
@@ -109,12 +158,12 @@ class QuestionDisplay extends React.Component {
         {responses}
         <Row>
           <QuestionResponseForm
-            question={this.props.question}
-            pushResponse={this.props.pushResponse}
-            pushResponseText={this.props.pushResponseText}
-            videoUUID={this.props.videoUUID}
+            onSubmit={this.onSubmit}
+            onTextChange={this.onTextChange}
+            textValue={this.props.question.responseInput}
             key={this.props.question.id}
           />
+          <Button onClick={this.onSubmit}>Submit</Button>
         </Row>
       </Col>
     );

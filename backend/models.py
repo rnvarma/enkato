@@ -20,11 +20,15 @@ class DatedModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        if not self.id: # Model does not exist yet
+        update_modified = kwargs.pop('update_modified', True)
+
+        if not self.id:  # Model does not exist yet
             self.created = timezone.now()
         else:
-            self.modified_count += 1
-        self.modified = timezone.now()
+            if update_modified:
+                self.modified_count += 1
+        if update_modified:
+            self.modified = timezone.now()
 
         return super(DatedModel, self).save(*args, **kwargs)
 
@@ -123,7 +127,6 @@ class Series(models.Model):
     def __str__(self):
         return self.name
 
-
 # class rating systems
 # - basic star-rating feedback
 # - number of students enrolled
@@ -204,7 +207,6 @@ class SeriesVideo(models.Model):
     video = models.OneToOneField(Video, related_name="series_video")
     series = models.ForeignKey(Series, related_name="videos")
     order = models.IntegerField(default=0)  # order within the series
-
 
 class PlaylistVideo(models.Model):
     video = models.ForeignKey(Video, related_name="playlists")
@@ -366,15 +368,16 @@ class StudentSeriesData(models.Model):
     series = models.ForeignKey(Series, related_name="students_data")
 
 class StudentSeriesVideoData(models.Model):
-    sp_data = models.ForeignKey(StudentSeriesData, related_name="videos_data")
+    ss_data = models.ForeignKey(StudentSeriesData, related_name="videos_data")
     video = models.ForeignKey(Video, related_name="series_students_data")
     num_views = models.IntegerField(default=0)
-    avg_duration_watched = models.IntegerField(default=0)  # number seconds
+    total_time_watched = models.IntegerField(default=0)  # number seconds
     seconds_into_video = models.IntegerField(default=0)
+    watched = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
 class StudentSeriesVideoQuizQuestionData(models.Model):
-    scv_data = models.ForeignKey(StudentSeriesVideoData, related_name="quizzes_data")
+    ssv_data = models.ForeignKey(StudentSeriesVideoData, related_name="quizzes_data")
     quiz_question = models.ForeignKey(QuizQuestion, related_name="responses")
     answer = models.TextField(default="")
     is_correct = models.BooleanField(default=False)

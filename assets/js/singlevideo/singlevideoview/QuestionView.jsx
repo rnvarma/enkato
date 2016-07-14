@@ -40,6 +40,7 @@ class QuestionView extends React.Component {
     this.pushResponseEditText = this.pushResponseEditText.bind(this);
     this.pushResponseNewText = this.pushResponseNewText.bind(this);
     this.removeResponse = this.removeResponse.bind(this);
+    this.toggleEndorsedResponse = this.toggleEndorsedResponse.bind(this);
     this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
     this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
   }
@@ -142,11 +143,14 @@ class QuestionView extends React.Component {
   /* prompts user to add question, via modal in QuestionForm */
   addQuestion() {
     this.setState({ addingQuestion: true });
-    console.log('add question');
   }
 
   /* adds question to state */
   pushQuestion(newQuestion) {
+    newQuestion.input = {
+      title: newQuestion.title,
+      text: newQuestion.text,
+    };
     this.questionData = [...this.questionData, newQuestion];
     this.setState({
       questions: this.questionData,
@@ -167,8 +171,10 @@ class QuestionView extends React.Component {
     const question = this.questionData.find(question => {
       return questionId == question.id;
     });
-    question.input.title = questionEditTitle;
-    question.input.text = questionEditText;
+    question.input = {
+      title: questionEditTitle,
+      text: questionEditText,
+    };
     this.setState({ question: this.questionData });
   }
 
@@ -178,6 +184,10 @@ class QuestionView extends React.Component {
     });
     question.title = questionNewTitle;
     question.text = questionNewText;
+    question.input = {
+      title: questionEditTitle,
+      text: questionEditText,
+    };
     this.setState({ question: this.questionData });
   }
 
@@ -186,6 +196,7 @@ class QuestionView extends React.Component {
     const questionToAppend = this.questionData.find(question => {
       return questionId === question.id;
     });
+    newResponse.input = newResponse.text;
     questionToAppend.responses.push(newResponse);
     this.setState({ questions: this.questionData });
   }
@@ -220,6 +231,7 @@ class QuestionView extends React.Component {
       return responseId === response.id;
     });
     response.text = newText;
+    response.input = response.text;
     this.setState({ questions: this.questionData });
   }
 
@@ -236,6 +248,17 @@ class QuestionView extends React.Component {
       questions: this.questionData,
       currentQuestion: this.questionData[0],
     });
+  }
+
+  toggleEndorsedResponse(questionId, responseId) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    const response = question.responses.find(response => {
+      return responseId === response.id;
+    });
+    response.endorsed = !response.endorsed;
+    this.setState({ questions: this.questionData });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -287,6 +310,7 @@ class QuestionView extends React.Component {
               pushResponseEditText={this.pushResponseEditText}
               pushResponseNewText={this.pushResponseNewText}
               removeResponse={this.removeResponse}
+              toggleEndorsedResponse={this.toggleEndorsedResponse}
               videoUUID={this.props.videoUUID}/>
           </Row>
         </Row>
