@@ -143,11 +143,14 @@ class QuestionView extends React.Component {
   /* prompts user to add question, via modal in QuestionForm */
   addQuestion() {
     this.setState({ addingQuestion: true });
-    console.log('add question');
   }
 
   /* adds question to state */
   pushQuestion(newQuestion) {
+    newQuestion.input = {
+      title: newQuestion.title,
+      text: newQuestion.text,
+    };
     this.questionData = [...this.questionData, newQuestion];
     this.setState({
       questions: this.questionData,
@@ -168,8 +171,10 @@ class QuestionView extends React.Component {
     const question = this.questionData.find(question => {
       return questionId == question.id;
     });
-    question.input.title = questionEditTitle;
-    question.input.text = questionEditText;
+    question.input = {
+      title: questionEditTitle,
+      text: questionEditText,
+    };
     this.setState({ question: this.questionData });
   }
 
@@ -179,6 +184,10 @@ class QuestionView extends React.Component {
     });
     question.title = questionNewTitle;
     question.text = questionNewText;
+    question.input = {
+      title: questionEditTitle,
+      text: questionEditText,
+    };
     this.setState({ question: this.questionData });
   }
 
@@ -187,6 +196,7 @@ class QuestionView extends React.Component {
     const questionToAppend = this.questionData.find(question => {
       return questionId === question.id;
     });
+    newResponse.input = newResponse.text;
     questionToAppend.responses.push(newResponse);
     this.setState({ questions: this.questionData });
   }
@@ -221,6 +231,7 @@ class QuestionView extends React.Component {
       return responseId === response.id;
     });
     response.text = newText;
+    response.input = response.text;
     this.setState({ questions: this.questionData });
   }
 

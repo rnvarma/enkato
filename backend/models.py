@@ -22,7 +22,7 @@ class DatedModel(models.Model):
     def save(self, *args, **kwargs):
         update_modified = kwargs.pop('update_modified', True)
 
-        if not self.id: # Model does not exist yet
+        if not self.id:  # Model does not exist yet
             self.created = timezone.now()
         else:
             if update_modified:
