@@ -3,9 +3,10 @@ var React = require('react');
 require("css/globals/VideoPlayer/QuizModal");
 import Button from 'react-bootstrap/lib/Button';
 
-var QuizForm = require('js/globals/VideoPlayer/QuizForm');
+var QuizForm = require('js/globals/QuizView/QuizForm');
 
 module.exports= React.createClass({
+    
     render:function(){
         var bg_style = (this.props.showingOverlay ? {} : {display:"none"})
         var q_style = (this.props.takingQuiz ? {} : {display:"none"})
@@ -32,7 +33,7 @@ module.exports= React.createClass({
                     className="quizModal"
                     style={q_style}
                 >
-                    <QuizForm />
+                    <QuizForm videoUUID={this.props.videoUUID}/>
                 </div>
             </div>
         )

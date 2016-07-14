@@ -115,14 +115,6 @@ module.exports  = React.createClass({
             videoDivHeight: 0,
             videoDivWidth: 0,
             uuid: this.props.videoUUID,
-            questions:[{
-                text: "",
-                choiceList: [{text:"", id:0}],
-                shouldRefocus: false,
-                currentFocus: 0,
-                id: 1,
-                new: true
-            }],
             showingOverlay:false,
             takingQuiz:false
         };
@@ -132,7 +124,6 @@ module.exports  = React.createClass({
             showingOverlay:true
         });
         this.state.Player.pause();
-        console.log(this.state.questions)
     },
     showQuiz: function(){
         this.setState({takingQuiz:true})
@@ -234,6 +225,7 @@ module.exports  = React.createClass({
                         showingOverlay={this.state.showingOverlay}
                         takingQuiz={this.state.takingQuiz}
                         showQuiz={this.showQuiz}
+                        videoUUID={this.state.uuid}
                     />
                     <ControlBar 
                         className="ControlBar"

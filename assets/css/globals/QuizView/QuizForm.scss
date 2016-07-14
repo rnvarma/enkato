@@ -1,5 +1,6 @@
 @import '../colors.scss';
 
+$quizForm-header-height: 40px;
 
 .quizForm{
     background-color:white;
@@ -21,6 +22,6 @@
         left:0;
 
         width:100%;
-        height:40px;
+        height:$quizForm-header-height;
     }
 }

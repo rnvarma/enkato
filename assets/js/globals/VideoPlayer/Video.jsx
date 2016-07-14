@@ -17,6 +17,7 @@ module.exports = React.createClass({
                     showingOverlay={this.props.showingOverlay}
                     takingQuiz={this.props.takingQuiz}
                     showQuiz={this.props.showQuiz}
+                    videoUUID={this.props.videoUUID}
                 />
             </div>
         )
