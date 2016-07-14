@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
 from backend.models import *
+from backend.notification import *
 
 class CreateSeries(View):
     def post(self, request):
@@ -35,6 +36,7 @@ class SubscribeSeriesPage(View):
         if series.students.filter(id=cu.id).count() > 0:
             return JsonResponse({'status': False, 'issue': 'User already subscribed to the series'})
         series.students.add(cu)
+        request.user.groups.add(get_series_notification_group(series))
         return JsonResponse({'status': True})
 
 class UnsubscribeSeriesPage(View):
@@ -46,13 +48,9 @@ class UnsubscribeSeriesPage(View):
         if series.students.filter(id=cu.id).count() == 0:
             return JsonResponse({'status': False, 'issue': 'User not subscribed to the series'})
         series.students.remove(cu)
+        request.user.groups.remove(get_series_notification_group(series))
         return JsonResponse({'status': True})
 
 class SeriesViewerPage(View):
     def get(self, request, s_id):
         return render(request, 'series/series_viewer.html', {'s_id': s_id})
-
-
-
-
-

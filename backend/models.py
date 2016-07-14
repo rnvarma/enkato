@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
-
 class CustomUser(models.Model):
     email = models.CharField(max_length=100, default="")
     first_name = models.CharField(max_length=100, default="")
@@ -102,7 +101,6 @@ class Series(models.Model):
     def __str__(self):
         return self.name
 
-
 # class rating systems
 # - basic star-rating feedback
 # - number of students enrolled
@@ -183,7 +181,6 @@ class SeriesVideo(models.Model):
     video = models.OneToOneField(Video, related_name="series_video")
     series = models.ForeignKey(Series, related_name="videos")
     order = models.IntegerField(default=0)  # order within the series
-
 
 class PlaylistVideo(models.Model):
     video = models.ForeignKey(Video, related_name="playlists")

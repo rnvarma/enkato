@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'authentication',
     'classroom',
     'upload',
-    'series'
+    'series',
+    'notifications',
 ]
 
 MIDDLEWARE_CLASSES = [
