@@ -15,7 +15,8 @@ var Profile = React.createClass({
     getInitialState: function() {
         return {
             userdata: {},
-            series: [],
+            created_series: [],
+            subscribed_series: [],
             viewseries: true
         }
     },
@@ -65,7 +66,11 @@ var Profile = React.createClass({
                         </div>
                     </div>
                     <ProfileSeriesList
-                        data={this.state}/>
+                        series={this.state.subscribed_series}
+                        name={"Series You Subscribe To"}/>
+                    <ProfileSeriesList
+                        series={this.state.created_series}
+                        name={"Series by You"}/>
                 </div>
             </div>
         )

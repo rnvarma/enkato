@@ -130,7 +130,8 @@ class UserProfileData(APIView):
         cu = CustomUser.objects.get(id=u_id)
         data = {}
         data["userdata"] = Serializer.serialize_userprofiledata(cu)
-        data["series"] = map(Serializer.serialize_series, cu.created_series.all())
+        data["created_series"] = map(Serializer.serialize_series, cu.created_series.all())
+        data["subscribed_series"] = map(Serializer.serialize_series, cu.student_series.all())
         return Response(data)
 
 

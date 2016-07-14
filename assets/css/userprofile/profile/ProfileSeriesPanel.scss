@@ -10,8 +10,11 @@
     .profileSeriesPanel {
         background-color: white;
 
+        transition: 0.5s background-color;
+
         &:hover {
             cursor: pointer;
+            background-color: #ddd;
         }
 
         .thumbnailArea {
