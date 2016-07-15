@@ -42,15 +42,16 @@ module.exports = React.createClass({
                     videoDuration={this.props.videoDuration}
                     handleTopicClick={this.props.handleTopicClick}
                     topicObjList={this.props.topicObjList}
-                    percentDone={this.props.percentDone}
-                />
+                    percentDone={this.props.percentDone}/>
                 <Row>
                     <FontAwesome 
                         className="playButton" 
                         name={this.props.isPlaying ? "pause" : "play"}
-                        onClick={this.props.handlePlayPauseClick}
-                    />
+                        onClick={this.props.handlePlayPauseClick}/>
                     <span className="videoTime">{this.props.currentTime} / {this.props.totalTime}</span>
+                    <div className="quizButton" onClick={this.props.showQuiz}>
+                        Quiz
+                    </div>
                     <OverlayTrigger trigger="focus" placement="top" overlay=
                                     {<Popover className="playbackPopover">
                                             <div 

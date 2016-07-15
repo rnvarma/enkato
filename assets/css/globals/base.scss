@@ -2,6 +2,8 @@
 
 body {
     font-family: 'Roboto', sans-serif !important;
+    letter-spacing: 0.2px;
+    font-size: 14px;
     background-color: $structabl-bg-blue;
 }
 
@@ -18,9 +20,12 @@ form label {
     color: $structabl-blue;
 }
 
+.btn {
+    border: 0px;
+}
+
 .btn.structabl-red.btn-default {
     border-radius: 4px;
-    font-size: 14px;
 
     background-color: $structabl-red;
     color: white;
@@ -43,7 +48,6 @@ form label {
 
 .btn.greenBtn.btn-default {
     border-radius: 4px;
-    font-size: 14px;
     text-transform: uppercase;
 
     background-color: $kato-green;
@@ -67,7 +71,6 @@ form label {
 
 .btn.structabl-blue.btn-default {
     border-radius: 4px;
-    font-size: 14px;
 
     background-color: $structabl-blue;
     color: white;

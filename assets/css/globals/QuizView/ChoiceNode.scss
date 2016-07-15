@@ -1,0 +1,19 @@
+.choiceNode{
+    margin-bottom:20px;
+    font-size:16px;
+    position: relative;
+    .circle-icon{
+        color:#DCDCDC;
+        font-size: 25px;
+        margin-right:20px;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .choiceText{
+        position:absolute;
+        top:0;
+        left:40;
+    }
+} 

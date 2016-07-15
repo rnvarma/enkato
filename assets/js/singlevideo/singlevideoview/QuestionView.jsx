@@ -52,8 +52,9 @@ class QuestionView extends React.Component {
   }
 
   getQuestionData(videoUUID) {
+    if (!videoUUID) return;
     $.ajax({
-      url: `/api/video/${videoUUID}/questions`,
+      url: "/api/video/" + videoUUID + "/questions",
       dataType: 'json',
       cache: false,
       success: (data) => {

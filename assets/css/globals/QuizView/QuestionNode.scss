@@ -1,0 +1,31 @@
+@import '../colors.scss';
+
+.questionNode{
+    padding-top:40px;
+    padding-left:50px;
+    height:100%;
+    width:100%;
+    .title{
+        font-size:20px;
+        color:$structabl-blue;
+        .arrowIcon{
+            font-weight:thin;
+            margin-right:25px;
+        }
+        .titleText{
+            font-weight:700;
+        }
+    }
+    .choiceList{
+        padding-left:50px;
+        padding-top:35px;
+    }
+
+    &.noQuiz {
+        font-weight: bold;
+        color: $structabl-blue;
+        font-size: 20px;
+        text-align: center;
+        padding-top: 50px;
+    }
+}

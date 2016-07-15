@@ -1,0 +1,26 @@
+@import '../colors.scss';
+
+.quizForm{
+    background-color:white;
+    width:100%;
+    position:relative;
+    
+    .header{
+        color:white;
+        font-size:20px;
+        font-weight:700;
+        background-color: $structabl-blue;
+        padding: 15px;
+
+        width:100%;
+
+        .closeForm {
+            float: right;
+            font-size: 30px
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+}

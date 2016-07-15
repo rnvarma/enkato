@@ -4,10 +4,11 @@ var React = require('react')
 var ReactDOM = require('react-dom')
 var YouTubeIframeLoader = require('youtube-iframe');
 
-module.exports = function (videoId) {
+module.exports = function (videoId, onPlayerStateChange) {
 
     this.player;
     this.videoId = videoId;
+    this.onPlayerStateChange = onPlayerStateChange
 
     this.init = function(videoId) {
         var this2 = this
@@ -21,8 +22,13 @@ module.exports = function (videoId) {
                     'autoplay': 1, 
                     'controls': 0,
                     'fs': 0,
-                    'iv_load_policy': 3
+                    'iv_load_policy': 3,
+                    'modestbranding': 1,
+                    'showinfo': 0
                 },
+                events: {
+                    onStateChange: this2.onPlayerStateChange
+                }
             });
         }
         YouTubeIframeLoader.load(loadPlayer)
@@ -161,5 +167,10 @@ module.exports = function (videoId) {
         return(
             <div id="player" data-vid={this.videoId}></div>
         )
+    }
+
+    this.ended = function() {
+        if (!this.player) return;
+        return this.player.getPlayerState() == 0
     }
 }
