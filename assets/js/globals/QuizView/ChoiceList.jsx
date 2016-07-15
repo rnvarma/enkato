@@ -8,11 +8,16 @@ module.exports = React.createClass({
         var index = -1;
         var ChoiceNodes = this.props.choiceList.map(function(choice){
             index++;
+            var isSelected=false;
+            if(index == this.props.selectedAnswer){
+                isSelected = true;
+            }
             return(
                 <ChoiceNode 
                     index={index}
                     choiceText={choice.text}
-                    selectChoice={this.props.selectChoice}/>
+                    selectChoice={this.props.selectChoice}
+                    isSelected={isSelected}/>
             )
         }.bind(this))
         return(
