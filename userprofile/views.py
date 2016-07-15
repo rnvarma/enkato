@@ -15,8 +15,9 @@ class Serializers(object):
 		data = {}
 
 		if notification.verb == 'new series video':
-			data["description"] = notification.actor.username + ' added a series video\n' + str(notification.timestamp)
-			data["link"] = notification.action_object.series.uuid + '/watch#' + notification.action_object.video.uuid
+			data["description"] = notification.actor.username + ' added a series video'
+			data["timestamp"] = str(notification.timestamp)
+			data["link"] = '/s/' + notification.action_object.series.uuid + '/watch#' + notification.action_object.video.uuid
 		return data
 
 class GetNotifications(View):
