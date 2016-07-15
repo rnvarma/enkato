@@ -20,6 +20,7 @@ module.exports = React.createClass({
             this.setState({
                 currentQuestion: 0
             })
+            this.setState({selectedAnswers:new Array(data.numQuestions)})
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -39,7 +40,8 @@ module.exports = React.createClass({
             questions:[],
             numQuestions: 0,
             uuid: '',
-            currentQuestion: 0
+            currentQuestion: 0,
+            selectedAnswers:[]
         }
     },
     closeModal: function() {
@@ -55,6 +57,12 @@ module.exports = React.createClass({
             currentQuestion: this.state.currentQuestion - 1
         })
     },
+    selectChoice: function(choiceIndex){
+        var tempChoiceList = this.state.selectedAnswers
+        tempChoiceList[this.state.currentQuestion] = choiceIndex
+        this.setState({selectedAnswers:tempChoiceList})
+        console.log(tempChoiceList)
+    },
     render:function(){
         var currentQuestionData = this.state.questions[this.state.currentQuestion]
         return(
@@ -67,7 +75,8 @@ module.exports = React.createClass({
                     questions={this.state.questions}
                     currentQuestion={this.state.currentQuestion}/>
                 <QuestionNode
-                    question={currentQuestionData}/>
+                    question={currentQuestionData}
+                    selectChoice={this.selectChoice}/>
                 <QuizNavFooter
                     currentQuestion={this.state.currentQuestion}
                     numQuestions={this.state.numQuestions}

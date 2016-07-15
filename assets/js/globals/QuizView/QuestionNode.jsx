@@ -23,6 +23,7 @@ module.exports = React.createClass({
                     </span>
                 </div>
                 <ChoiceList 
+                    selectChoice={this.props.selectChoice}
                     className="choiceList"
                     choiceList={this.props.question.choiceList}/>
             </div>
