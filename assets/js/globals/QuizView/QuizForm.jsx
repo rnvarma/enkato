@@ -3,6 +3,10 @@ var React = require('react');
 require("css/globals/QuizView/QuizForm");
 var QuestionList = require('js/globals/QuizView/QuestionList');
 
+import QuizNav from 'js/globals/QuizView/QuizNav';
+
+import FontAwesome from 'react-fontawesome';
+
 module.exports = React.createClass({
     loadDataFromServer: function(vuuid){
         $.ajax({
@@ -39,13 +43,20 @@ module.exports = React.createClass({
             uuid: ''
         }
     },
+    closeModal: function() {
+        this.props.closeModal()
+    },
     render:function(){
         return(
             <div className="quizForm">
                 <div className="header">
                     Check Your Understanding
+                    <FontAwesome className="closeForm" name="close" onClick={this.closeModal}/>
                 </div>
-                <QuestionList questions={this.state.questions}/>
+                <QuizNav 
+                    questions={this.state.questions}/>
+                <QuestionList
+                    questions={this.state.questions}/>
             </div>
         )
     }

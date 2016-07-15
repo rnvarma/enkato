@@ -175,6 +175,13 @@ module.exports  = React.createClass({
             takingQuiz: true
         })
     },
+    closeModal: function() {
+        this.setState({
+            takingQuiz: false,
+            showingOverlay: false
+        })
+        this.state.Player.play()
+    },
     setWindowSize: function(){
         this.setState({
             videoDivHeight: $(".videoDiv").height()
@@ -275,7 +282,8 @@ module.exports  = React.createClass({
                         showingOverlay={this.state.showingOverlay}
                         takingQuiz={this.state.takingQuiz}
                         showQuiz={this.showQuiz}
-                        videoUUID={this.state.uuid}/>
+                        videoUUID={this.state.uuid}
+                        closeModal={this.closeModal}/>
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}

@@ -10,17 +10,14 @@ module.exports = React.createClass({
         return(
             <div className="questionNode">
                 <div className="title"> 
-                    <FontAwesome
-                    className='arrowIcon' 
-                    name='arrow-right'/>
+                    <FontAwesome className='arrowIcon' name='arrow-right'/>
                     <span className="titleText">
                         {this.props.question.quizQuestionText} 
                     </span>
                 </div>
                 <ChoiceList 
                     className="choiceList"
-                    choiceList={this.props.question.choiceList}
-                />
+                    choiceList={this.props.question.choiceList}/>
             </div>
         )
     }

@@ -24,7 +24,9 @@ module.exports= React.createClass({
                     </div>
                 </div>
                 <div className="quizModal" style={q_style}>
-                    <QuizForm videoUUID={this.props.videoUUID}/>
+                    <QuizForm
+                        videoUUID={this.props.videoUUID}
+                        closeModal={this.props.closeModal}/>
                 </div>
             </div>
         )

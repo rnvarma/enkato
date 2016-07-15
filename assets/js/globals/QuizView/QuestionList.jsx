@@ -9,8 +9,7 @@ module.exports = React.createClass({
             return (
                 <QuestionNode
                     key={question.id}
-                    question={question}
-                />
+                    question={question}/>
             )
         }.bind(this))
         return(
