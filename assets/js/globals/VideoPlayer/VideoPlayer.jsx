@@ -3,6 +3,7 @@ require("css/globals/VideoPlayer/VideoPlayer")
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import getCookie from 'js/globals/GetCookie';
 
 import { styleDuration } from 'js/globals/utility';
 
@@ -44,67 +45,18 @@ function updateCurrentTopicOnTime(seconds, topicList){
     if(!setTrue) topicList[i-1].isCurrentTopic=true;
     return topicList;
 }
+
 function clearCurrentTopic(topicList){
     var tList = []
     for(var i=0; i<topicList.length; i++){
         topicList[i].isCurrentTopic = false;
         var currTopic = topicList[i]
         tList.push(currTopic)
-        console.log("---------")
-        console.log(tList[i])
     }
-    console.log(tList)
     return tList;
 }
 
-
-
 module.exports  = React.createClass({
-    loadDataFromServer: function(v_id){
-        console.log("loadDataFromServer")
-        $.ajax({
-          url: "/1/v/" + v_id,
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            if (this.state.Player)
-                this.state.Player.destroy();
-            this.setState({Player: new Player(data.videoID)});
-            this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
-            console.log(data.questions)
-            this.forceUpdate();
-
-            this.videoPlayerClass = "";
-            if (data.topicList.length == 0) {
-              this.videoPlayerClass = "full";
-            }
-            this.totalTime = data.videoData.duration_clean;
-
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    updateCurrentState: function(){
-        //set time
-        var seconds = Math.round(this.state.Player.getCurrentTime())
-        this.setState({currentTime:styleDuration(seconds)})
-        var percentDone = (seconds / this.state.Player.getDuration())*100
-        this.setState({percentDone:percentDone})
-        
-        this.setState({
-            topicObjList:updateCurrentTopicOnTime(seconds, this.state.topicObjList)
-        }, this.afterTopicListUpdate);
-
-        //set isplaying
-        var playing = !this.state.Player.paused();
-        this.setState({
-            isPlaying: playing
-        })
-        this.setWindowSize()
-
-    },
     getInitialState: function() {
         return {
             topicObjList: [], 
@@ -124,18 +76,104 @@ module.exports  = React.createClass({
                 new: true
             }],
             showingOverlay:false,
-            takingQuiz:false
+            takingQuiz:false,
+            viewStats: {
+                duration: 0,
+                end: 0
+            },
+            s_id: this.props.s_id
         };
+    },
+    trackView: function(uuid, end) {
+        var data = {
+            v_id: this.state.uuid,
+            duration: this.state.viewStats.duration,
+            end: end ? end : this.state.Player.getCurrentTime()
+        }
+        var s_id = this.state.s_id
+        $.ajax({
+          url: "/trackview" + (s_id ? "/s/" + s_id : ""),
+          dataType: 'json',
+          type: 'POST',
+          data: data,
+          beforeSend: function (xhr) {
+            xhr.withCredentials = true;
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          },
+          success: function(data) {
+            if (data.status) {
+                console.log(data)
+                this.state.viewStats.duration = 0;
+            } else {
+                console.log("sad face");
+            }
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
+    },
+    onPlayerStateChange: function(event) {
+        if (event.data == 0) {
+            this.trackView(this.state.uuid)
+        } else if (event.data == 1) {
+        }
+    },
+    loadDataFromServer: function(v_id){
+        $.ajax({
+          url: "/1/v/" + v_id,
+          dataType: 'json',
+          cache: false,
+          success: function(data) {
+            if (this.state.Player) {
+                this.state.Player.destroy();
+            }
+            this.setState({
+                Player: new Player(data.videoID, this.onPlayerStateChange)
+            });
+            this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
+            this.forceUpdate();
+
+            this.videoPlayerClass = "";
+            if (data.topicList.length == 0) {
+              this.videoPlayerClass = "full";
+            }
+            this.totalTime = data.videoData.duration_clean;
+
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
+    },
+    updateCurrentState: function(){
+        //set time
+        var seconds = Math.round(this.state.Player.getCurrentTime())
+        var percentDone = (seconds / this.state.Player.getDuration())*100
+        var playing = !this.state.Player.paused() && !this.state.Player.ended();
+        if (playing)
+            this.state.viewStats.duration += 100
+
+        this.setState({
+            isPlaying: playing,
+            percentDone: percentDone,
+            currentTime: styleDuration(seconds),
+            topicObjList: updateCurrentTopicOnTime(seconds, this.state.topicObjList)
+        }, this.afterTopicListUpdate)
+        
+        this.setWindowSize()
+
     },
     showOverlay: function(){
         this.setState({
-            showingOverlay:true
+            showingOverlay: true
         });
         this.state.Player.pause();
-        console.log(this.state.questions)
     },
     showQuiz: function(){
-        this.setState({takingQuiz:true})
+        this.setState({
+            takingQuiz: true
+        })
     },
     setWindowSize: function(){
         this.setState({
@@ -148,9 +186,11 @@ module.exports  = React.createClass({
     componentDidMount: function() {
         this.loadDataFromServer(this.props.videoUUID);
         this.setWindowSize();
-        this.setState({isPlaying:false})
-        this.setState({currentTime:"0:00"})
-        this.setState({percentDone:0})
+        this.setState({
+            isPlaying: false,
+            currentTime: "0:00",
+            percentDone: 0
+        })
         window.onresize=this.setWindowSize;
         //updates time and playing
         setInterval(this.updateCurrentState, pollInterval)
@@ -190,6 +230,7 @@ module.exports  = React.createClass({
     },
     componentWillReceiveProps: function(nextProps) {
         if (this.state.uuid != nextProps.videoUUID) {
+            this.trackView(this.state.uuid)
             this.setState({uuid: nextProps.videoUUID})
             this.loadDataFromServer(nextProps.videoUUID);
         }

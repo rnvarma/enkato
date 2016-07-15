@@ -10,7 +10,8 @@ class SeriesViewerVideoArea extends React.Component {
             return (
                 <div className="seriesViewerVideoArea">
                     <VideoPlayer 
-                        videoUUID={this.props.currUUID}/>
+                        videoUUID={this.props.currUUID}
+                        s_id={this.props.s_id}/>
                 </div>
             );
         } else {
