@@ -4,7 +4,7 @@ import React from 'react';
 
 import Col from 'react-bootstrap/lib/Col';
 
-import { truncate, pluralize, styleDuration } from 'js/globals/utility';
+import { truncate, pluralize } from 'js/globals/utility';
 
 class QuestionList extends React.Component {
     render() {
@@ -16,13 +16,13 @@ class QuestionList extends React.Component {
                 onClick={this.props.setCurrentQuestion.bind(null, question)}
               >
                   <div className="questionPreviewHeader">
-                      {styleDuration(question.time)} {question.topic ? question.topic.name : 'General'}, {responseCount} {pluralize("response", responseCount)}
+                      {question.topic ? question.topic.name : 'General'}, {responseCount} {pluralize("response", responseCount)}
                   </div>
                   <div className="questionPreviewTitle">
-                      {truncate(question.title, 31)}
+                      {truncate(question.title, 30)}
                   </div>
                   <div className="questionPreviewText">
-                      {truncate(question.text, 31)}
+                      {truncate(question.text, 38)}
                   </div>
               </div>
             );

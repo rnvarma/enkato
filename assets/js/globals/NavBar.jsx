@@ -1,6 +1,7 @@
 require("css/globals/NavBar.scss")
 
 var React = require('react')
+var moment = require('moment')
 
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
@@ -10,6 +11,7 @@ import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 
 var CreateSeriesModal = require('js/globals/CreateSeriesModal')
 var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
+var FontAwesome = require('react-fontawesome');
 
 module.exports = React.createClass({
     getInitialState: function() {
@@ -18,7 +20,7 @@ module.exports = React.createClass({
             username: '',
             user_id: 0,
             num_notifications: 0,
-            notifications: [{description: 'WHADDUP'}]
+            notifications: []
         }
     },
     componentWillMount: function() {
@@ -77,15 +79,16 @@ module.exports = React.createClass({
           <NavItem eventKey={2} href="/register">SIGN UP</NavItem>
         )
         if (this.state.logged_in) {
-            var numstring = "You have " + this.state.num_notifications + " unread notification(s)"
+            var numstring = this.state.num_notifications
             var RightBar = (
                 <Nav pullRight>
                     <CreateSeriesModal />
                     <NavItem eventKey={2} href="/logout">Logout</NavItem>
                     <NavItem eventKey={1} href="/userprofile">{this.state.username}</NavItem>
+                    <FontAwesome name="fa fa-bell" aria-hidden="true"></FontAwesome>
                     <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown">
                         {this.state.notifications.map(function(notification) {
-                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description}</div></MenuItem>);
+                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description} {moment(notification.timestamp).format('LLL')}</div></MenuItem>);
                         })}
                     </NavDropdown>
                 </Nav>

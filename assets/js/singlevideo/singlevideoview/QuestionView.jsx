@@ -43,6 +43,8 @@ class QuestionView extends React.Component {
     this.toggleEndorsedResponse = this.toggleEndorsedResponse.bind(this);
     this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
     this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
+    this.toggleEditQuestion = this.toggleEditQuestion.bind(this);
+    this.toggleEditResponse = this.toggleEditResponse.bind(this);
   }
 
   componentDidMount() {
@@ -186,8 +188,8 @@ class QuestionView extends React.Component {
     question.title = questionNewTitle;
     question.text = questionNewText;
     question.input = {
-      title: questionEditTitle,
-      text: questionEditText,
+      title: questionNewTitle,
+      text: questionNewText,
     };
     this.setState({ question: this.questionData });
   }
@@ -262,6 +264,33 @@ class QuestionView extends React.Component {
     this.setState({ questions: this.questionData });
   }
 
+  toggleEditQuestion(questionId) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    if (question.editing) { /*  checks if it's undefined */
+      question.editing = false;
+    } else {
+      question.editing = true;
+    }
+    this.setState({ questions: this.questionData });
+  }
+
+  toggleEditResponse(questionId, responseId) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    const response = question.responses.find(response => {
+      return responseId === response.id;
+    });
+    if (response.editing) {
+      response.editing = false;
+    } else {
+      response.editing = true;
+    }
+    this.setState({ questions: this.questionData });
+  }
+
   componentWillReceiveProps(nextProps) {
       if (this.props.videoUUID != nextProps.videoUUID) {
           this.getQuestionData(nextProps.videoUUID);
@@ -273,6 +302,8 @@ class QuestionView extends React.Component {
       <div className="questionView">
         <Row>
           <QuestionModal
+            topicList={this.props.topicList}
+            getCurrentTime={this.props.getCurrentTime}
             videoUUID={this.props.videoUUID}
             showing={this.state.addingQuestion}
             close={this.closeModal}
@@ -302,6 +333,8 @@ class QuestionView extends React.Component {
               currentQuestion={this.state.currentQuestion}
               setCurrentQuestion={this.setCurrentQuestion}/>
             <QuestionDisplay
+              topicList={this.props.topicList}
+              getCurrentTime={this.props.getCurrentTime}
               question={this.state.currentQuestion}
               removeQuestion={this.removeQuestion}
               pushQuestionEditText={this.pushQuestionEditText}
@@ -312,6 +345,8 @@ class QuestionView extends React.Component {
               pushResponseNewText={this.pushResponseNewText}
               removeResponse={this.removeResponse}
               toggleEndorsedResponse={this.toggleEndorsedResponse}
+              toggleEditQuestion={this.toggleEditQuestion}
+              toggleEditResponse={this.toggleEditResponse}
               videoUUID={this.props.videoUUID}/>
           </Row>
         </Row>

@@ -128,6 +128,11 @@ module.exports  = React.createClass({
           dataType: 'json',
           cache: false,
           success: function(data) {
+
+              /* an optional prop */
+              if (this.props.setTopicList) {
+                  this.props.setTopicList(data.topicList);
+              }
             if (this.state.Player) {
                 this.state.Player.destroy();
             }
@@ -142,6 +147,11 @@ module.exports  = React.createClass({
               this.videoPlayerClass = "full";
             }
             this.totalTime = data.videoData.duration_clean;
+
+              /* optional prop */
+              if (this.props.setGetCurrentTime) {
+                  this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
+              }
 
           }.bind(this),
           error: function(xhr, status, err) {
@@ -254,6 +264,11 @@ module.exports  = React.createClass({
         //Now we have to add the "Takequiz" button at the bottom of the
         //TopicList, but aashley said this design isn't definite. 
         //              --Arman 7/11/16
+
+        // this was an attempt at efficiency but it failed
+        // im sorry
+        // the more i think about this the more i think this class is all messed up
+        //              --moorejs 7/14/16
 
         if (this.state.topicObjList.length != 0) {
             this.topicList = (
