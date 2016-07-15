@@ -102,7 +102,6 @@ module.exports  = React.createClass({
           },
           success: function(data) {
             if (data.status) {
-                console.log(data)
                 this.state.viewStats.duration = 0;
             } else {
                 console.log("sad face");

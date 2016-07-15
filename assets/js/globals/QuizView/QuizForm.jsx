@@ -36,15 +36,8 @@ module.exports = React.createClass({
     },
     getInitialState:function(){
         return {
-            questions:[{
-                text: "",
-                choiceList: [{text:"", id:0}],
-                shouldRefocus: false,
-                currentFocus: 0,
-                id: 1,
-                new: true
-            }],
-            numQuestions: 1,
+            questions:[],
+            numQuestions: 0,
             uuid: '',
             currentQuestion: 0
         }

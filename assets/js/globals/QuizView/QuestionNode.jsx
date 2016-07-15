@@ -7,6 +7,13 @@ var FontAwesome = require('react-fontawesome');
 
 module.exports = React.createClass({
     render:function(){
+        if (!this.props.question) {
+            return (
+                <div className="questionNode">
+                    Loading...
+                </div>
+            )
+        }
         return(
             <div className="questionNode">
                 <div className="title"> 
