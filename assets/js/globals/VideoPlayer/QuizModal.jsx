@@ -5,12 +5,14 @@ import Button from 'react-bootstrap/lib/Button';
 
 var QuizForm = require('js/globals/QuizView/QuizForm');
 import SerivesViewerSidebarVideoPanel from 'js/series/seriesviewer/SerivesViewerSidebarVideoPanel';
+import FontAwesome from 'react-fontawesome';
 
 module.exports= React.createClass({
     
     render:function(){
         var bg_style = (this.props.showingOverlay ? {} : {display:"none"})
         var q_style = (this.props.takingQuiz ? {} : {display:"none"})
+        var overlay_style = (this.props.takingQuiz || this.props.showingOverlay ? {} : {display:"none"})
         var nextVideo;
         if (this.props.nextVideo) {
             nextVideo = (
@@ -25,6 +27,8 @@ module.exports= React.createClass({
         }
         return(
             <div>
+                <div className="greyBackground" style={overlay_style}>
+                </div>
                 <div className="greyBackground" style={bg_style}>
                     <div className="questionText">
                         Would You Like to Check Your Understanding?
@@ -34,6 +38,12 @@ module.exports= React.createClass({
                     </Button>
                     <div className="noThanks">
                         No, Thanks
+                    </div>
+                    <div className="rewatch" onClick={this.props.playVideo}>
+                        <FontAwesome className="undoIcon" name="undo" />
+                        <div className="text">
+                            Replay video
+                        </div>
                     </div>
                     {nextVideo}
                 </div>

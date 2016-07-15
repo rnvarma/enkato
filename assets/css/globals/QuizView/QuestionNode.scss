@@ -20,4 +20,12 @@
         padding-left:50px;
         padding-top:35px;
     }
+
+    &.noQuiz {
+        font-weight: bold;
+        color: $structabl-blue;
+        font-size: 20px;
+        text-align: center;
+        padding-top: 50px;
+    }
 }

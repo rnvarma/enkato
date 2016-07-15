@@ -9,8 +9,8 @@ module.exports = React.createClass({
     render:function(){
         if (!this.props.question) {
             return (
-                <div className="questionNode">
-                    Loading...
+                <div className="questionNode noQuiz">
+                    The instructor has not created a quiz for this video.
                 </div>
             )
         }

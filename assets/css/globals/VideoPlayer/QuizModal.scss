@@ -18,14 +18,27 @@
     }
     .takeQuizButton {
         width:wrap-text;
-        width:30%;
-        margin-left:35%;
-        background-color:$enkato-green;
+        width:180px;
+        margin-left: calc(calc(100% - 180px) / 2);
+        background-color:$enkato-bright-green;
         border:none;
         color:white;
+        font-size: 20px;
+        margin-top: 20px;
     }
     .noThanks {
+        color: white;
+        text-align: center;
+        margin-top: 10px;
 
+        &:hover {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        &:active {
+            color: $structabl-red;
+        }
     }
 
     .nextVideoBtn {
@@ -38,6 +51,34 @@
             font-weight: 800;
             font-size: 16px;
             padding: 5px;
+        }
+    }
+
+    .rewatch {
+        text-align: center;
+        color: white;
+        margin-top: 40px;
+
+        &:hover {
+            cursor: pointer;
+            font-weight: bold;
+
+            .undoIcon {
+                font-size: 42px;
+            }
+        }
+
+        &:active {
+            color: $kato-green;
+        }
+
+        .undoIcon {
+            font-size: 40px;
+        }
+
+        .text {
+            font-size: 20px;
+            margin-top: 10px;
         }
     }
 }

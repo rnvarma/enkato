@@ -19,7 +19,8 @@ module.exports = React.createClass({
                     showQuiz={this.props.showQuiz}
                     videoUUID={this.props.videoUUID}
                     closeModal={this.props.closeModal}
-                    nextVideo={this.props.nextVideo}/>
+                    nextVideo={this.props.nextVideo}
+                    playVideo={this.props.playVideo}/>
             </div>
         )
     }

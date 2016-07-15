@@ -232,12 +232,7 @@ module.exports  = React.createClass({
         if(this.state.isPlaying){
             this.state.Player.pause();
         } else{
-            if(this.state.showingOverlay) 
-                this.setState(
-                    {
-                        showingOverlay:false,
-                        takingQuiz:false
-                    });
+            this.closeModal()
             this.state.Player.play();
         }
     },
@@ -276,6 +271,10 @@ module.exports  = React.createClass({
             );
         }
     },
+    playVideo: function() {
+        this.closeModal();
+        this.state.Player.play();
+    },
     render: function() {
         if (this.state.Player == null) {
             return (<div className="loading">Loading video player...</div>);
@@ -293,7 +292,8 @@ module.exports  = React.createClass({
                         showQuiz={this.showQuiz}
                         videoUUID={this.state.uuid}
                         closeModal={this.closeModal}
-                        nextVideo={this.props.nextVideo}/>
+                        nextVideo={this.props.nextVideo}
+                        playVideo={this.playVideo}/>
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}
