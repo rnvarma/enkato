@@ -102,7 +102,6 @@ module.exports  = React.createClass({
           },
           success: function(data) {
             if (data.status) {
-                console.log(data)
                 this.state.viewStats.duration = 0;
             } else {
                 console.log("sad face");
@@ -113,9 +112,13 @@ module.exports  = React.createClass({
           }.bind(this)
         });
     },
+    onVideoEnd: function() {
+        this.trackView(this.state.uuid)
+        this.showOverlay();
+    },
     onPlayerStateChange: function(event) {
         if (event.data == 0) {
-            this.trackView(this.state.uuid)
+            this.onVideoEnd()
         } else if (event.data == 1) {
         }
     },
@@ -172,6 +175,7 @@ module.exports  = React.createClass({
     },
     showQuiz: function(){
         this.setState({
+            showingOverlay: true,
             takingQuiz: true
         })
     },
@@ -260,9 +264,8 @@ module.exports  = React.createClass({
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
                         handleTopicClick={this.handleTopicClick}
-                        showOverlay={this.showOverlay}
-                        showingOverlay={this.state.showingOverlay}
-                    />
+                        showQuiz={this.showQuiz}
+                        showingOverlay={this.state.showingOverlay}/>
                 </div>
             );
         } else {
@@ -287,7 +290,8 @@ module.exports  = React.createClass({
                         takingQuiz={this.state.takingQuiz}
                         showQuiz={this.showQuiz}
                         videoUUID={this.state.uuid}
-                        closeModal={this.closeModal}/>
+                        closeModal={this.closeModal}
+                        nextVideo={this.props.nextVideo}/>
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}

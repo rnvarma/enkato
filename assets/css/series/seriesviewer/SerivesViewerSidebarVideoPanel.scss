@@ -8,14 +8,11 @@
 
     &.active {
         background-color: $grey-hover;
-        outline: 1px solid $structabl-blue;
     }
 
     &:hover {
         cursor: pointer;
         background-color: $grey-hover;
-
-        outline: 1px solid $structabl-blue;
     }
 
     .imageArea {

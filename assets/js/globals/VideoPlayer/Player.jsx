@@ -22,7 +22,9 @@ module.exports = function (videoId, onPlayerStateChange) {
                     'autoplay': 1, 
                     'controls': 0,
                     'fs': 0,
-                    'iv_load_policy': 3
+                    'iv_load_policy': 3,
+                    'modestbranding': 1,
+                    'showinfo': 0
                 },
                 events: {
                     onStateChange: this2.onPlayerStateChange
