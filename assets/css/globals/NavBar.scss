@@ -7,8 +7,8 @@
     border: none;
 
     .nav {
-        font-weight: 800;
-        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 400;
     }
 
     .navbar-nav {
@@ -18,6 +18,10 @@
             }
         }
     }
+}
+
+.notification {
+    color: black
 }
 
 .navbar-brand {

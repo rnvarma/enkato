@@ -3,12 +3,12 @@
 .controlBar{ 
     height:50px;
     width:100%;
-    background-color:$structabl-blue;
+    background-color:$grey-control-bar-bg-color;
     .playButton{
         margin-left: 35px;
-        margin-top: 8px;
+        margin-top: 10px;
         color: white;
-        font-size: 26px;
+        font-size: 20px;
         /* padding-top: 7px; */
         float: left;
     }
@@ -16,17 +16,15 @@
         cursor:pointer;
     } 
     .videoTime{
-        margin-top: 9px;
-        color: white;
-        font-size: 17px;
+        margin-top: 10px;
+        color: $grey-progress-bar-text;
         margin-left: 15px;
         float: left;
     }
     .playbackRate{
         color:white;
-        margin:12px;
-        margin-right:70px;
-        font-weight:600;
+        margin: 10px 70px 0 0;
+        font-weight:400;
         float: right;
     }
     .playbackRate:hover{
@@ -40,9 +38,7 @@
 }
 
 .playbackPopover{
-    background-color:$structabl-blue;
-    border-color:white;
-    size:12px;
+    background-color: $structabl-blue;
     height:120px;
     width:60px;
     position:absolute;

@@ -118,7 +118,7 @@ class SeriesViewer extends React.Component {
                     <SeriesViewerVideoArea
                         currUUID={this.state.currUUID}
                         s_id={this.state.s_id}
-                        nextVideo={this.state.nextVideo}/>+
+                        nextVideo={this.state.nextVideo}/>
                 </div>
                 <div className="questionArea">
                     <QuestionView videoUUID={this.state.currUUID} />
