@@ -174,7 +174,6 @@ module.exports  = React.createClass({
         this.state.Player.pause();
     },
     showQuiz: function(){
-        console.log("wooo")
         this.setState({
             showingOverlay: true,
             takingQuiz: true
@@ -291,7 +290,8 @@ module.exports  = React.createClass({
                         takingQuiz={this.state.takingQuiz}
                         showQuiz={this.showQuiz}
                         videoUUID={this.state.uuid}
-                        closeModal={this.closeModal}/>
+                        closeModal={this.closeModal}
+                        nextVideo={this.props.nextVideo}/>
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}
