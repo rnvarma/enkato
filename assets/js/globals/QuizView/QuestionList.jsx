@@ -13,7 +13,7 @@ module.exports = React.createClass({
             )
         }.bind(this))
         return(
-            <div className="questionList">
+            <div className="quizQuestionList">
                 {QuestionNodes}
             </div>
         )

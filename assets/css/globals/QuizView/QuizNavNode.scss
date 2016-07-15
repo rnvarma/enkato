@@ -1,0 +1,8 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.quizNavNode {
+    padding: 5px 10px;
+    border-bottom: 1px solid $structabl-bg-blue;
+    border-right: 1px solid $structabl-bg-blue;
+}
