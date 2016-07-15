@@ -169,15 +169,17 @@ module.exports  = React.createClass({
     },
     showOverlay: function(){
         this.setState({
-            showingOverlay: true
+            showingOverlay: true,
+            takingQuiz: false
         });
         this.state.Player.pause();
     },
     showQuiz: function(){
         this.setState({
-            showingOverlay: true,
+            showingOverlay: false,
             takingQuiz: true
         })
+        this.state.Player.pause()
     },
     closeModal: function() {
         this.setState({
@@ -304,7 +306,8 @@ module.exports  = React.createClass({
                         totalTime={this.totalTime}
                         percentDone={this.state.percentDone}
                         setPlaybackRate={this.state.Player.setPlaybackRate}
-                        playerContext={this.state.Player.getContext()}/>
+                        playerContext={this.state.Player.getContext()}
+                        showQuiz={this.showQuiz}/>
                 </div>
             </div>
         );

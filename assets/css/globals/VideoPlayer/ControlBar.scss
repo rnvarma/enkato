@@ -23,12 +23,28 @@
     }
     .playbackRate{
         color:white;
-        margin: 10px 70px 0 0;
+        margin: 10px 40px 0 0;
         font-weight:400;
         float: right;
     }
     .playbackRate:hover{
         cursor:pointer;
+    }
+
+    .quizButton {
+        float: right;
+        color: white;
+        margin-top: 10px;
+        margin-right: 50px;
+
+        &:hover {
+            font-weight: bold;
+            cursor: pointer
+        }
+
+        &:active {
+            color: $kato-green;
+        }
     }
 }
 
