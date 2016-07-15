@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionView.scss');
+require('css/globals/QuestionAndAnswer/QuestionView.scss');
 
 import React from 'react';
 
@@ -10,10 +10,10 @@ import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
-import QuestionModal from 'js/singlevideo/singlevideoview/QuestionModal';
-import QuestionFilterBar from 'js/singlevideo/singlevideoview/QuestionFilterBar';
-import QuestionList from 'js/singlevideo/singlevideoview/QuestionList';
-import QuestionDisplay from 'js/singlevideo/singlevideoview/QuestionDisplay';
+import QuestionModal from 'js/globals/QuestionAndAnswer/QuestionModal';
+import QuestionFilterBar from 'js/globals/QuestionAndAnswer/QuestionFilterBar';
+import QuestionList from 'js/globals/QuestionAndAnswer/QuestionList';
+import QuestionDisplay from 'js/globals/QuestionAndAnswer/QuestionDisplay';
 
 class QuestionView extends React.Component {
   constructor(props) {

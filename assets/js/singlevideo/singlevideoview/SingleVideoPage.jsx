@@ -9,7 +9,7 @@ import Col from 'react-bootstrap/lib/Col';
 
 import NavBar from 'js/globals/NavBar';
 import VideoPlayer from 'js/globals/VideoPlayer/VideoPlayer';
-import QuestionView from 'js/singlevideo/singlevideoview/QuestionView';
+import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
 
 class SingleVideoPage extends React.Component {
   constructor() {

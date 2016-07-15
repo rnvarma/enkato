@@ -1,10 +1,9 @@
-require('css/singlevideo/singlevideoview/QuestionFilterBar.scss');
+require('css/globals/QuestionAndAnswer/QuestionFilterBar.scss');
 
 import React from 'react';
 
 import FontAwesome from 'react-fontawesome';
 
-import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 import InputGroup from 'react-bootstrap/lib/InputGroup';

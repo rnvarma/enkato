@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionEditForm.scss');
+require('css/globals/QuestionAndAnswer/QuestionEditForm.scss');
 
 import React from 'react';
 
@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/lib/Button';
 
 import getCookie from 'js/globals/GetCookie';
 
-import QuestionForm from 'js/singlevideo/singlevideoview/QuestionForm';
+import QuestionForm from 'js/globals/QuestionAndAnswer/QuestionForm';
 
 class QuestionEditForm extends React.Component {
   constructor() {

@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 
 import NavBar from 'js/globals/NavBar';
 
-import QuestionView from 'js/singlevideo/singlevideoview/QuestionView';
+import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
 import SeriesViewerSideBar from 'js/series/seriesviewer/SeriesViewerSideBar';
 import SeriesViewerVideoArea from 'js/series/seriesviewer/SeriesViewerVideoArea';
 
