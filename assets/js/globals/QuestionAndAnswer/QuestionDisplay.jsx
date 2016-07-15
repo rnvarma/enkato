@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionDisplay.scss');
+require('css/globals/QuestionAndAnswer/QuestionDisplay.scss');
 
 import React from 'react';
 
@@ -11,9 +11,9 @@ import Button from 'react-bootstrap/lib/Button';
 import getCookie from 'js/globals/GetCookie';
 import { styleDuration } from 'js/globals/utility';
 
-import QuestionDisplayResponse from 'js/singlevideo/singlevideoview/QuestionDisplayResponse';
-import QuestionResponseForm from 'js/singlevideo/singlevideoview/QuestionResponseForm';
-import QuestionEditForm from 'js/singlevideo/singlevideoview/QuestionEditForm';
+import QuestionDisplayResponse from 'js/globals/QuestionAndAnswer/QuestionDisplayResponse';
+import QuestionResponseForm from 'js/globals/QuestionAndAnswer/QuestionResponseForm';
+import QuestionEditForm from 'js/globals/QuestionAndAnswer/QuestionEditForm';
 
 class QuestionDisplay extends React.Component {
   constructor() {

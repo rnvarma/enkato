@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionDisplayResponse.scss');
+require('css/globals/QuestionAndAnswer/QuestionDisplayResponse.scss');
 
 import React from 'react';
 
@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/lib/Row';
 
 import getCookie from 'js/globals/GetCookie';
 
-import QuestionResponseEditForm from 'js/singlevideo/singlevideoview/QuestionResponseEditForm';
+import QuestionResponseEditForm from 'js/globals/QuestionAndAnswer/QuestionResponseEditForm';
 
 class QuestionDisplayResponse extends React.Component {
   constructor() {

@@ -63,8 +63,12 @@ module.exports = React.createClass({
         this.setState({selectedAnswers:tempChoiceList})
         console.log(tempChoiceList)
     },
+    setQuestion: function(qNum){
+        this.setState({currentQuestion:qNum})
+    },
     render:function(){
         var currentQuestionData = this.state.questions[this.state.currentQuestion]
+        var isLast = (this.state.currentQuestion==this.state.numQuestions-1)
         return(
             <div className="quizForm">
                 <div className="header">
@@ -73,10 +77,13 @@ module.exports = React.createClass({
                 </div>
                 <QuizNav 
                     questions={this.state.questions}
-                    currentQuestion={this.state.currentQuestion}/>
+                    currentQuestion={this.state.currentQuestion}
+                    setQuestion={this.setQuestion}/>
                 <QuestionNode
                     question={currentQuestionData}
-                    selectChoice={this.selectChoice}/>
+                    selectChoice={this.selectChoice}
+                    isLast={isLast}
+                    selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}/>
                 <QuizNavFooter
                     currentQuestion={this.state.currentQuestion}
                     numQuestions={this.state.numQuestions}

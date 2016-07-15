@@ -1,5 +1,7 @@
 @import '../colors.scss';
 
+$questionIndent:50px;
+
 .questionNode{
     padding-top:40px;
     padding-left:50px;
@@ -17,7 +19,7 @@
         }
     }
     .choiceList{
-        padding-left:50px;
+        padding-left:$questionIndent;
         padding-top:35px;
     }
 
@@ -28,4 +30,21 @@
         text-align: center;
         padding-top: 50px;
     }
+
+    .quizSubmitAnswerButton{
+        background-color:$kato-green;
+        color:white;
+        font-weight:800;
+        margin-left:$questionIndent;
+    }
+
+    .quizSubmitButtonHR{
+        margin-left:50px;
+        width:calc(100% - #{$questionIndent}*2);
+    }
 }
+
+
+
+
+

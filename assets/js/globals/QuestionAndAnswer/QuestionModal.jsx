@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionModal.scss');
+require('css/globals/QuestionAndAnswer/QuestionModal.scss');
 
 import React from 'react';
 
@@ -8,7 +8,7 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 
 import getCookie from 'js/globals/GetCookie';
 
-import QuestionForm from 'js/singlevideo/singlevideoview/QuestionForm';
+import QuestionForm from 'js/globals/QuestionAndAnswer/QuestionForm';
 
 class QuestionModal extends React.Component {
   constructor() {

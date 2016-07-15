@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionForm.scss');
+require('css/globals/QuestionAndAnswer/QuestionForm.scss');
 
 import React from 'react';
 

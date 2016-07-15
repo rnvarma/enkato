@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionList.scss');
+require('css/globals/QuestionAndAnswer/QuestionList.scss');
 
 import React from 'react';
 
