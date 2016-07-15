@@ -41,7 +41,8 @@ module.exports = React.createClass({
             numQuestions: 0,
             uuid: '',
             currentQuestion: 0,
-            selectedAnswers:[]
+            selectedAnswers:[],
+            numQsAnswered:0
         }
     },
     closeModal: function() {
@@ -59,9 +60,22 @@ module.exports = React.createClass({
     },
     selectChoice: function(choiceIndex){
         var tempChoiceList = this.state.selectedAnswers
-        tempChoiceList[this.state.currentQuestion] = choiceIndex
-        this.setState({selectedAnswers:tempChoiceList})
-        console.log(tempChoiceList)
+        if(choiceIndex==tempChoiceList[this.state.currentQuestion]){
+            tempChoiceList[this.state.currentQuestion] = null
+        } else {
+            tempChoiceList[this.state.currentQuestion] = choiceIndex
+        }
+        this.setState({selectedAnswers:tempChoiceList}, this.setNumQsAnswered)
+
+    },
+    setNumQsAnswered:function(){
+        var count = 0
+        for (var i = this.state.selectedAnswers.length - 1; i >= 0; i--) {
+            if(this.state.selectedAnswers[i] != null){
+                count++;
+            }
+        }
+        this.setState({numQsAnswered:count})
     },
     setQuestion: function(qNum){
         this.setState({currentQuestion:qNum})
@@ -83,6 +97,8 @@ module.exports = React.createClass({
                     question={currentQuestionData}
                     selectChoice={this.selectChoice}
                     isLast={isLast}
+                    numQsAnswered={this.state.numQsAnswered}
+                    numQuestions={this.state.numQuestions}
                     selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}/>
                 <QuizNavFooter
                     currentQuestion={this.state.currentQuestion}

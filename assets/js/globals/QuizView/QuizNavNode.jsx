@@ -14,7 +14,7 @@ class QuizNavNode extends React.Component {
 
     render() {
         return (
-            <div 
+            <div
                 className={"quizNavNode" + (this.props.active ? " active" : "")} 
                 onClick={this.onClick}
             >
