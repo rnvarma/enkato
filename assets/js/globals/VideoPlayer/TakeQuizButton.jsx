@@ -10,12 +10,11 @@ module.exports = React.createClass({
         return (
             <div
                 className="takeQuizButton"
-                onClick={this.props.showOverlay}
+                onClick={this.props.showQuiz}
             >
                 <FontAwesome
                     className="checkIcon"
-                    name='check-square-o'
-                />
+                    name='check-square-o'/>
                 <span className="textWrapper">
                     <div className="text">
                         Check Your Understanding
