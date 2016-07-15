@@ -13,7 +13,8 @@ module.exports = React.createClass({
             <div className="choiceNode">
                 <FontAwesome
                     className="circle-icon"
-                    name="circle-thin"
+                    id={(this.props.isSelected)?"selected":""}
+                    name={(this.props.isSelected)?"circle":"circle-thin"}
                     onClick={this.selectChoice}
                 />
                 <span className="choiceText">
