@@ -150,6 +150,7 @@ def can_make_changes(user, owner, video_uuid):
 
     raise exceptions.PermissionDenied()
 
+
 def get_update_data(data, partial_object, allowed_fields):
     if not len(data):
         raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(allowed_fields))
@@ -160,7 +161,7 @@ def get_update_data(data, partial_object, allowed_fields):
     updated_fields = []
     update_data = {}
     for key in allowed_fields:
-        if hasattr(data, key):
+        if key in data:
             updated_fields.append(key)
             update_data[key] = data[key]
         else:

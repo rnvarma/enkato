@@ -2,5 +2,14 @@
 @import '../../globals/mixins.scss';
 
 .questionResponseForm {
-    
+
+  .control-label {
+    font-size: 28px;
+    color: $structabl-blue;
+    padding: 10px 40px 0;
+  }
+
+  .form-control {
+    margin: 0 30px;
+  }
 }

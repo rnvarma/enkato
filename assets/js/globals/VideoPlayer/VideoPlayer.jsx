@@ -7,10 +7,10 @@ import getCookie from 'js/globals/GetCookie';
 
 import { styleDuration } from 'js/globals/utility';
 
-import TopicList from 'js/globals/videoPlayer/TopicList';
-import Video from 'js/globals/videoPlayer/Video';
-import ControlBar from 'js/globals/videoPlayer/ControlBar';
-import Player from 'js/globals/videoPlayer/Player';
+import TopicList from 'js/globals/VideoPlayer/TopicList';
+import Video from 'js/globals/VideoPlayer/Video';
+import ControlBar from 'js/globals/VideoPlayer/ControlBar';
+import Player from 'js/globals/VideoPlayer/Player';
 
 
 // How often the video player checks the video's state
@@ -275,7 +275,7 @@ module.exports  = React.createClass({
                         showingOverlay={this.state.showingOverlay}
                         takingQuiz={this.state.takingQuiz}
                         showQuiz={this.showQuiz}
-                    />
+                        videoUUID={this.state.uuid}/>
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}
@@ -288,8 +288,7 @@ module.exports  = React.createClass({
                         totalTime={this.totalTime}
                         percentDone={this.state.percentDone}
                         setPlaybackRate={this.state.Player.setPlaybackRate}
-                        playerContext={this.state.Player.getContext()}
-                    />
+                        playerContext={this.state.Player.getContext()}/>
                 </div>
             </div>
         );
