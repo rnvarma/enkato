@@ -29,12 +29,19 @@ def getYTIdFromURL(url):
 def getYTPlaylistIdFromURL(url):
     return url.split("list=")[1].split("&")[0]
 
-def convertSecondsToTime(s):
-    minutes = s / 60
-    seconds = s % 60
-    return "%02d:%02d" % (minutes, seconds)
+
+def convertSecondsToTime(secs):
+    """ Seconds to h:mm:ss """
+
+    minutes, seconds = divmod(secs, 60)
+    hours, minutes = divmod(minutes, 60)
+    if not hours:
+        return "{}:{:02}".format(minutes, seconds)
+    return "{}:{:02}:{:02}".format(hours, minutes, seconds)
 
 def sanetizeTime(s):
+    """ Seconds to 4h 20m """
+
     minutes = s / 60
     seconds = s % 60
     hours = minutes / 60
