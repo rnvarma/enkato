@@ -13,11 +13,15 @@ class Serializers(object):
 	@staticmethod
 	def notification_serializer(notification):
 		data = {}
-
+		data["timestamp"] = str(notification.timestamp)
+		
 		if notification.verb == 'new series video':
 			data["description"] = notification.actor.username + ' added a series video'
-			data["timestamp"] = str(notification.timestamp)
 			data["link"] = '/s/' + notification.action_object.series.uuid + '/watch#' + notification.action_object.video.uuid
+
+		if notification.verb == 'new question response':
+			data["description"] = notification.actor.username + ' answered your question ' + notification.action_object.question.title
+			data["link"] = "/userprofile"
 		return data
 
 class GetNotifications(View):

@@ -16,7 +16,7 @@ def get_series_notification_group(series):
 	return group
 
 def new_series_video_handler(sender, instance, created, **kwargs):
-    notify.send(instance.series.creator, description=instance.series.creator.username + 'added a series video', recipient=get_series_notification_group(instance.series), verb='new series video', action_object=instance)
+    notify.send(instance.series.creator, recipient=get_series_notification_group(instance.series), verb='new series video', action_object=instance)
 
 post_save.connect(new_series_video_handler, sender=SeriesVideo)
 
@@ -24,3 +24,9 @@ def new_series_handler(sender, instance, created, **kwargs):
     group = get_series_notification_group(instance)
 
 post_save.connect(new_series_handler, sender=Series)
+
+def new_question_response_handler(sender, instance, created, **kwargs):
+	if instance.question.resolved == False:
+		notify.send(instance.user, recipient = instance.question.student.user, verb = 'new question response', action_object=instance)
+
+post_save.connect(new_question_response_handler, sender=QuestionResponse)
