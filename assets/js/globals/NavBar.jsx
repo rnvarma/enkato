@@ -17,7 +17,8 @@ module.exports = React.createClass({
             logged_in: false,
             username: '',
             user_id: 0,
-            num_notifications: 0
+            num_notifications: 0,
+            notifications: [{description: 'WHADDUP'}]
         }
     },
     componentWillMount: function() {
@@ -49,6 +50,19 @@ module.exports = React.createClass({
             console.error(this.props.url, status, err.toString());
           }.bind(this)
         });
+        $.ajax({
+          url: "/1/getnotifications",
+          dataType: 'json',
+          cache: false,
+          success: function(data) {
+            this.setState({
+                notifications: data.notifications
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
     },
     render: function() {
         var active = this.props.active;
@@ -63,12 +77,17 @@ module.exports = React.createClass({
           <NavItem eventKey={2} href="/register">SIGN UP</NavItem>
         )
         if (this.state.logged_in) {
+            var numstring = "You have " + this.state.num_notifications + " unread notification(s)"
             var RightBar = (
                 <Nav pullRight>
                     <CreateSeriesModal />
-                    <NavItem eventKey={3} href="/userprofile">You have {this.state.num_notifications} unread notification(s)</NavItem>
                     <NavItem eventKey={2} href="/logout">Logout</NavItem>
                     <NavItem eventKey={1} href="/userprofile">{this.state.username}</NavItem>
+                    <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown">
+                        {this.state.notifications.map(function(notification) {
+                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description}</div></MenuItem>);
+                        })}
+                    </NavDropdown>
                 </Nav>
             )
         } else {
