@@ -10,9 +10,10 @@ class QuizNav extends React.Component {
                 <QuizNavNode
                     key={q.id}
                     q={q}
-                    order={i}/>
+                    order={i + 1}
+                    active={this.props.currentQuestion == i}/>
             )
-        })
+        }.bind(this))
         return (
             <div className="quizNav">
                 {quizNavNodes}

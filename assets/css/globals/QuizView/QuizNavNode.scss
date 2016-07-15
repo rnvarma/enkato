@@ -5,4 +5,15 @@
     padding: 5px 10px;
     border-bottom: 1px solid $structabl-bg-blue;
     border-right: 1px solid $structabl-bg-blue;
+
+    &:hover {
+        background-color: $structabl-blue;
+        color: white;
+        cursor: pointer;
+    }
+
+    &.active {
+        background-color: $structabl-blue;
+        color: white;
+    }
 }

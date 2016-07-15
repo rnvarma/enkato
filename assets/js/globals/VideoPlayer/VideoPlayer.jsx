@@ -238,7 +238,11 @@ module.exports  = React.createClass({
     componentWillReceiveProps: function(nextProps) {
         if (this.state.uuid != nextProps.videoUUID) {
             this.trackView(this.state.uuid)
-            this.setState({uuid: nextProps.videoUUID})
+            this.setState({
+                uuid: nextProps.videoUUID,
+                takingQuiz: false,
+                showingOverlay: false
+            })
             this.loadDataFromServer(nextProps.videoUUID);
         }
     },
