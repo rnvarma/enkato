@@ -9,13 +9,13 @@
     .watched {
         height: 10px;
         width: 0%;
-        background-color: $enkato-green;
+        background-color: $kato-green;
         float: left;
     }
     .notWatched {
         height: 10px;
         width: 100%;
-        background-color: white;
+        background-color: $grey-progress-bar-not-watched;
         float: right;
     }
 

@@ -128,6 +128,11 @@ module.exports  = React.createClass({
           dataType: 'json',
           cache: false,
           success: function(data) {
+
+              /* an optional prop */
+              if (this.props.setTopicList) {
+                  this.props.setTopicList(data.topicList);
+              }
             if (this.state.Player) {
                 this.state.Player.destroy();
             }
@@ -142,6 +147,11 @@ module.exports  = React.createClass({
               this.videoPlayerClass = "full";
             }
             this.totalTime = data.videoData.duration_clean;
+
+              /* optional prop */
+              if (this.props.setGetCurrentTime) {
+                  this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
+              }
 
           }.bind(this),
           error: function(xhr, status, err) {
@@ -169,16 +179,17 @@ module.exports  = React.createClass({
     },
     showOverlay: function(){
         this.setState({
-            showingOverlay: true
+            showingOverlay: true,
+            takingQuiz: false
         });
         this.state.Player.pause();
     },
     showQuiz: function(){
-        console.log("wooo")
         this.setState({
-            showingOverlay: true,
+            showingOverlay: false,
             takingQuiz: true
         })
+        this.state.Player.pause()
     },
     closeModal: function() {
         this.setState({
@@ -231,12 +242,7 @@ module.exports  = React.createClass({
         if(this.state.isPlaying){
             this.state.Player.pause();
         } else{
-            if(this.state.showingOverlay) 
-                this.setState(
-                    {
-                        showingOverlay:false,
-                        takingQuiz:false
-                    });
+            this.closeModal()
             this.state.Player.play();
         }
     },
@@ -259,6 +265,11 @@ module.exports  = React.createClass({
         //TopicList, but aashley said this design isn't definite. 
         //              --Arman 7/11/16
 
+        // this was an attempt at efficiency but it failed
+        // im sorry
+        // the more i think about this the more i think this class is all messed up
+        //              --moorejs 7/14/16
+
         if (this.state.topicObjList.length != 0) {
             this.topicList = (
                 <div className="topicButtonColumn">
@@ -274,6 +285,10 @@ module.exports  = React.createClass({
                 <div></div>
             );
         }
+    },
+    playVideo: function() {
+        this.closeModal();
+        this.state.Player.play();
     },
     render: function() {
         if (this.state.Player == null) {
@@ -291,7 +306,9 @@ module.exports  = React.createClass({
                         takingQuiz={this.state.takingQuiz}
                         showQuiz={this.showQuiz}
                         videoUUID={this.state.uuid}
-                        closeModal={this.closeModal}/>
+                        closeModal={this.closeModal}
+                        nextVideo={this.props.nextVideo}
+                        playVideo={this.playVideo}/>
                     <ControlBar 
                         className="ControlBar"
                         isPlaying={this.state.isPlaying}
@@ -304,7 +321,8 @@ module.exports  = React.createClass({
                         totalTime={this.totalTime}
                         percentDone={this.state.percentDone}
                         setPlaybackRate={this.state.Player.setPlaybackRate}
-                        playerContext={this.state.Player.getContext()}/>
+                        playerContext={this.state.Player.getContext()}
+                        showQuiz={this.showQuiz}/>
                 </div>
             </div>
         );

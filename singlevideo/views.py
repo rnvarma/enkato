@@ -170,7 +170,7 @@ def get_update_data(data, partial_object, allowed_fields):
     return update_data, updated_fields
 
 class QuestionViewset(viewsets.ViewSet):
-    """ The quesetion API """
+    """ The question API """
 
     def list(self, request, v_uuid):
         queryset = Question.objects.filter(video__uuid=v_uuid)
@@ -178,12 +178,12 @@ class QuestionViewset(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request, v_uuid):
-        data = request.data.copy()
-        data['user'] = request.user.customuser.id
-
-        serializer = QuestionSerializer(data=data)
+        print(request.data)
+        serializer = QuestionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(student=request.user.customuser, video=get_object_or_404(Video, uuid=v_uuid))
+
+        return Response(serializer.data)
 
     def retrieve(self, request, v_uuid, pk):
         question = get_object_or_404(Question, pk=pk)
@@ -216,14 +216,13 @@ class QuestionResponseViewset(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request, v_uuid):
-        data = request.data.copy()
-        data['user'] = request.user.customuser.id
-        if data['user'] == Video.objects.filter(uuid=v_uuid).all()[0].creator.id:
-            data['is_instructor'] = True
+        user = request.user.customuser
+        is_instructor = user == Video.objects.filter(uuid=v_uuid).all()[0].creator
 
-        serializer = QuestionResponseSerializer(data=data)
+        serializer = QuestionResponseSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        # don't know why I have to pass question_id here, messed up
+        serializer.save(question_id=request.data['question_id'], user_id=user.id, is_instructor=is_instructor)
 
         return Response(serializer.data)
 

@@ -9,8 +9,8 @@ module.exports = React.createClass({
     render:function(){
         if (!this.props.question) {
             return (
-                <div className="questionNode">
-                    Loading...
+                <div className="questionNode noQuiz">
+                    The instructor has not created a quiz for this video.
                 </div>
             )
         }
@@ -23,6 +23,7 @@ module.exports = React.createClass({
                     </span>
                 </div>
                 <ChoiceList 
+                    selectChoice={this.props.selectChoice}
                     className="choiceList"
                     choiceList={this.props.question.choiceList}/>
             </div>
