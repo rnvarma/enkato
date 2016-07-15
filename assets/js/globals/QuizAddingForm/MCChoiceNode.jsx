@@ -8,7 +8,7 @@ var FontAwesome = require('react-fontawesome');
 module.exports = React.createClass({
     handleChoiceTextChange: function(e){
         this.props.handleChoiceTextChange(
-            e.target.value,
+            e.target.value, 
             this.props.index,
             this.props.choice.id
         )
