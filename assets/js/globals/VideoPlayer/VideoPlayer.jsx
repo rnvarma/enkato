@@ -112,9 +112,13 @@ module.exports  = React.createClass({
           }.bind(this)
         });
     },
+    onVideoEnd: function() {
+        this.trackView(this.state.uuid)
+        this.showOverlay();
+    },
     onPlayerStateChange: function(event) {
         if (event.data == 0) {
-            this.trackView(this.state.uuid)
+            this.onVideoEnd()
         } else if (event.data == 1) {
         }
     },
@@ -170,7 +174,9 @@ module.exports  = React.createClass({
         this.state.Player.pause();
     },
     showQuiz: function(){
+        console.log("wooo")
         this.setState({
+            showingOverlay: true,
             takingQuiz: true
         })
     },
@@ -259,9 +265,8 @@ module.exports  = React.createClass({
                     <TopicList 
                         topicObjList={this.state.topicObjList} 
                         handleTopicClick={this.handleTopicClick}
-                        showOverlay={this.showOverlay}
-                        showingOverlay={this.state.showingOverlay}
-                    />
+                        showQuiz={this.showQuiz}
+                        showingOverlay={this.state.showingOverlay}/>
                 </div>
             );
         } else {
