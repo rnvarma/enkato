@@ -288,6 +288,7 @@ class QuestionResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionResponse
         read_only_fields = ('modified',)
+        depth = 1
 
 
 class QuestionSerializer(serializers.ModelSerializer):
