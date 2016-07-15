@@ -19,6 +19,7 @@ import notifications.urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^', include('analytics.urls')),
     url(r'^', include('backend.urls')),
     url(r'^', include('home.urls')),
     url(r'^', include('authentication.urls')),

@@ -32,7 +32,7 @@ class SerivesViewerSidebarVideoPanel extends React.Component {
                     </div>
                     <div className="metadata">
                         <div className="numTopics">
-                            {this.props.video.num_topics} {pluralize("topic", this.props.video.num_topics)}
+                            {this.props.video.num_views} {pluralize("view", this.props.video.num_views)}
                         </div>
                         <div className="numQuizQuestions">
                             {this.props.video.num_quiz_questions} {pluralize("Q", this.props.video.num_quiz_questions)}
