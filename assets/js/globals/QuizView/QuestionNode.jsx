@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/lib/Button';
 
 module.exports = React.createClass({
     submitInfo:function(){
-        console.log("submitting info")
+        this.props.submitInfo()
     },
     render:function(){
         if (!this.props.question) {

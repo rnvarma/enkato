@@ -1,5 +1,6 @@
 require('bootstrap-loader');
 var React = require('react');
+import getCookie from 'js/globals/GetCookie';
 require("css/globals/QuizView/QuizForm");
 var QuestionList = require('js/globals/QuizView/QuestionList');
 var QuestionNode = require('js/globals/QuizView/QuestionNode');
@@ -80,6 +81,27 @@ module.exports = React.createClass({
     setQuestion: function(qNum){
         this.setState({currentQuestion:qNum})
     },
+    submitInfo: function(){
+        var data = {selectedAnswers:this.state.selectedAnswers}
+        var s_id = $("#s_id").attr("data-sid")
+        console.log(s_id)
+        $.ajax({
+          url: "/logquiz/s/"+s_id+"/v/"+this.props.videoUUID,
+          dataType: 'json',
+          type: 'POST',
+          data: data,
+          beforeSend: function (xhr) {
+            xhr.withCredentials = true;
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          },
+          success: function(data) {
+            console.log("post request worked")
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
+    },
     render:function(){
         var currentQuestionData = this.state.questions[this.state.currentQuestion]
         var isLast = (this.state.currentQuestion==this.state.numQuestions-1)
@@ -99,7 +121,8 @@ module.exports = React.createClass({
                     isLast={isLast}
                     numQsAnswered={this.state.numQsAnswered}
                     numQuestions={this.state.numQuestions}
-                    selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}/>
+                    selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}
+                    submitInfo={this.submitInfo}/>
                 <QuizNavFooter
                     currentQuestion={this.state.currentQuestion}
                     numQuestions={this.state.numQuestions}

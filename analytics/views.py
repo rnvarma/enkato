@@ -59,5 +59,13 @@ class RecordSeriesVideoView(View):
 
 
 
+class LogQuiz(View):
+    def post(self, request, s_id, v_uuid):
+        s = Series.objects.get(uuid=s_id)
+        ssd = StudentSeriesData.objects.get(user=request.user.customuser, series=s)
+
+        v = Video.objects.get(uuid=v_uuid)
+        ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
+        return JsonResponse({"success":True})
 
 
