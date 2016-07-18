@@ -55,17 +55,61 @@ class RecordSeriesVideoView(View):
             'numViews': video.num_views,
             'total_time_watched': ssvData.total_time_watched,
             'name': video.name
-        })
+        }) 
 
+def getCorrectAnswer(choices):
+    #returns index of correct answer
+    #returns -1 if no answer was said to be correct by instructor
+    for i in range(len(choices)):
+        if(choices[i].is_correct):
+            return i
+    return -1
 
 
 class LogQuiz(View):
     def post(self, request, s_id, v_uuid):
+        selectedAnswers = request.POST.getlist('selectedAnswers[]')
+        print(int(selectedAnswers[0]) , "dataaaaaaaaaaaaaa")
+
         s = Series.objects.get(uuid=s_id)
         ssd = StudentSeriesData.objects.get(user=request.user.customuser, series=s)
 
         v = Video.objects.get(uuid=v_uuid)
         ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
-        return JsonResponse({"success":True})
+
+        quizQuestions = v.quiz_questions.all()
+        print(quizQuestions)
+
+        result = []
+        numCorrect=0
+        for i in range(len(quizQuestions)):
+            question = quizQuestions[i]
+            correct=False
+            choices=question.mc_responses.all()
+            studentAnswer=int(selectedAnswers[i])
+            correctAnswer=getCorrectAnswer(choices) 
+            if(correctAnswer==studentAnswer):
+                correct=True
+                numCorrect+=1
+
+            quizData = StudentSeriesVideoQuizQuestionData(
+                ssv_data=ssvd, 
+                quiz_question=question,
+                answer=studentAnswer,
+                is_correct=correct
+            )
+            # quizData.save()
+            result.append({
+                "studentAnswer":studentAnswer,
+                "correctAnswer":correctAnswer,
+                "isCorrect":correct
+            })
+
+        return JsonResponse({'result':result, 'numCorrect':numCorrect})
+
+
+
+
+
 
 

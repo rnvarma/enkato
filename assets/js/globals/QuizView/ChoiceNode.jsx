@@ -10,7 +10,7 @@ module.exports = React.createClass({
     },
     render:function(){
         return(
-            <div className="choiceNode">
+            <div className="choiceNode " id={this.props.correctness}>
                 <FontAwesome
                     className="circle-icon"
                     id={(this.props.isSelected)?"selected":""}

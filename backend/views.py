@@ -217,3 +217,33 @@ class QuestionData(APIView):
         return JsonResponse({
             'questions': QuestionSerializer(questions, many=True).data
         })
+
+
+class LoadQuizData(APIView):
+    def get(self, request, s_id, v_id):
+        # s = Series.objects.get(uuid=s_id)
+        # ssd = StudentSeriesData.objects.get(user=request.user.customuser, series=s)
+
+        # v = Video.objects.get(uuid=v_uuid)
+        # ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
+
+        # quizQuestions = v.quiz_questions.all()
+
+        # result = []
+        # numCorrect=0
+        # for i in range(len(quizQuestions)):
+        #     question = quizQuestions[i]
+        #     correct=False
+        #     choices=question.mc_responses.all()
+        #     if(correctAnswer==studentAnswer):
+        #         correct=True
+        #         numCorrect+=1
+
+        #     result.append({
+        #         "studentAnswer":studentAnswer,
+        #         "correctAnswer":correctAnswer,
+        #         "isCorrect":correct
+        #     })
+
+        # return JsonResponse({'result':result, 'numCorrect':numCorrect})
+        return JsonResponse({'yo': true})

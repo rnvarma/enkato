@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^api/quizdata/(?P<v_uuid>[a-zA-Z0-9_.-]+)$', QuizData.as_view()),
     url(r'^api/video/(?P<v_uuid>[a-zA-Z0-9_.-]+)/questions$', QuestionData.as_view()),
     url(r'^api/TYIndexScript/(?P<v_uuid>[a-zA-Z0-9_.-]+)$', YTIndexScript.as_view()),
+    url(r'^api/quiz/s/(?P<s_id>[a-zA-Z0-9_.-]+)/v/(?P<v_id>[a-zA-Z0-9_.-]+)$', LoadQuizData.as_view()),
 ]
