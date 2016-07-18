@@ -6,8 +6,6 @@ from rest_framework.response import Response
 
 from backend.models import *
 from backend.utility import *
-from backend.serializers import QuestionSerializer
-
 
 class Serializer(object):
     @staticmethod
@@ -210,11 +208,3 @@ class YTIndexScript(APIView):
         for topicObj in topicObjsList:
             topicObj.save()
         return JsonResponse({'hey':True})
-
-# access via /api/video/<v_uuid>/questions
-class QuestionData(APIView):
-    def get(self, request, v_uuid):
-        questions = Question.objects.filter(video__uuid=v_uuid)
-        return JsonResponse({
-            'questions': QuestionSerializer(questions, many=True).data
-        })
