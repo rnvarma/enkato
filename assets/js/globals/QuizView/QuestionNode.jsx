@@ -19,7 +19,7 @@ module.exports = React.createClass({
             )
         }
         var submitSection = (<div></div>)
-        if(this.props.isLast){
+        if(this.props.isLast && this.props.numQuestions==this.props.numQsAnswered){
             submitSection = (
                 <div>
                     <hr className="quizSubmitButtonHR"/>
@@ -31,6 +31,7 @@ module.exports = React.createClass({
                 </div>
             )
         }
+
         return(
             <div className="questionNode">
                 <div className="title"> 
@@ -45,6 +46,9 @@ module.exports = React.createClass({
                     choiceList={this.props.question.choiceList}
                     selectedAnswer={this.props.selectedAnswer}/>
                 {submitSection}
+                <div className="showNumAnswered">
+                    {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
+                </div>
             </div>
         )
     }
