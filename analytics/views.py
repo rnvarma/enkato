@@ -98,7 +98,7 @@ class LogQuiz(View):
                 answer=studentAnswer,
                 is_correct=correct
             )
-            # quizData.save()
+            quizData.save()
             result.append({
                 "studentAnswer":studentAnswer,
                 "correctAnswer":correctAnswer,

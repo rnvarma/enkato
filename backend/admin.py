@@ -19,3 +19,5 @@ admin.site.register(Playlist)
 admin.site.register(Topic)
 admin.site.register(QuizQuestion)
 admin.site.register(MCChoice)
+admin.site.register(StudentSeriesVideoQuizQuestionData)
+

@@ -209,31 +209,52 @@ class YTIndexScript(APIView):
             topicObj.save()
         return JsonResponse({'hey':True})
 
+def getCorrectAnswer(choices):
+    #returns index of correct answer
+    #returns -1 if no answer was said to be correct by instructor
+    for i in range(len(choices)):
+        if(choices[i].is_correct):
+            return i
+    return -1
+
+
 class LoadQuizData(APIView):
     def get(self, request, s_id, v_id):
-        # s = Series.objects.get(uuid=s_id)
-        # ssd = StudentSeriesData.objects.get(user=request.user.customuser, series=s)
+        print("hi----------------------------")
+        s = Series.objects.get(uuid=s_id)
+        ssd = StudentSeriesData.objects.get(user=request.user.customuser, series=s)
 
-        # v = Video.objects.get(uuid=v_uuid)
-        # ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
+        v = Video.objects.get(uuid=v_id)
+        ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
 
-        # quizQuestions = v.quiz_questions.all()
+        quizQuestions = v.quiz_questions.all()
+        seriesQuizQuestionData = ssvd.quizzes_data.all()
 
-        # result = []
-        # numCorrect=0
-        # for i in range(len(quizQuestions)):
-        #     question = quizQuestions[i]
-        #     correct=False
-        #     choices=question.mc_responses.all()
-        #     if(correctAnswer==studentAnswer):
-        #         correct=True
-        #         numCorrect+=1
+        result = []
+        numCorrect=0
 
-        #     result.append({
-        #         "studentAnswer":studentAnswer,
-        #         "correctAnswer":correctAnswer,
-        #         "isCorrect":correct
-        #     })
+        if(len(quizQuestions)!=len(seriesQuizQuestionData)):
+            print("quiz not taken!!!!")
+            return JsonResponse({'result':result, 'numCorrect':numCorrect})
+        else: 
+            print("quiz taken!!!!")
+        
+        for i in range(len(quizQuestions)):
+            question = quizQuestions[i]
+            takenQuizData = seriesQuizQuestionData[i]
+            correct=False
+            choices=question.mc_responses.all()
 
-        # return JsonResponse({'result':result, 'numCorrect':numCorrect})
-        return JsonResponse({'yo': true})
+            studentAnswer = int(takenQuizData.answer)
+            correctAnswer = getCorrectAnswer(choices)
+
+            if(correctAnswer==studentAnswer):
+                correct=True
+                numCorrect+=1
+
+            result.append({
+                "studentAnswer":studentAnswer,
+                "correctAnswer":correctAnswer,
+                "isCorrect":correct
+            })
+        return JsonResponse({'result':result, 'numCorrect':numCorrect})
