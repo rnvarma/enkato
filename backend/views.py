@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from backend.models import *
 from backend.utility import *
+from backend.serializers import QuestionSerializer
 
 
 class Serializer(object):
@@ -69,7 +70,7 @@ class Serializer(object):
         data["description"] = video.description
         data["thumbnail"] = video.thumbnail
         data["duration_raw"] = video.duration
-        data["duration_clean"] = convertSecondsToTime(video.duration)
+        data["duration_clean"] = convert_seconds_to_duration(video.duration)
         data["duration_san"] = sanetizeTime(video.duration)
         data["creator"] = Serializer.serialize_user(video.creator)
         data["num_views"] = video.num_views
@@ -83,7 +84,7 @@ class Serializer(object):
         data = {}
         data["name"] = topic.name
         data["time"] = topic.time
-        data["time_clean"] = convertSecondsToTime(topic.time)
+        data["time_clean"] = convert_seconds_to_duration(topic.time)
         data["id"] = topic.uuid
         data["isCurrentTopic"] = False  # used in frontend
         return data

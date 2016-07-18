@@ -5,6 +5,26 @@ from django.http import JsonResponse
 
 from backend.models import *
 from backend.notification import *
+from backend.serializers import SerializationHelpers as Helpers, SeriesSerializer
+
+from rest_framework import viewsets
+from rest_framework.views import Response
+
+
+class SeriesViewset(viewsets.ViewSet):
+    """ The series API (unused) """
+
+    def list(self, request):
+        queryset = Series.objects.all()
+        serializer = SeriesSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        Helpers.is_logged_in(request.user)
+        serializer = SeriesSerializer(data=request.data)
+        serializer.save(creator=request.user.customuser)
+        return Response(serializer.data)
+
 
 class CreateSeries(View):
     def post(self, request):

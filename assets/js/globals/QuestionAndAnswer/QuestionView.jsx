@@ -54,11 +54,11 @@ class QuestionView extends React.Component {
   getQuestionData(videoUUID) {
     if (!videoUUID) return;
     $.ajax({
-      url: "/api/video/" + videoUUID + "/questions",
+      url: `/api/videos/${videoUUID}/questions`,
       dataType: 'json',
       cache: false,
       success: (data) => {
-        this.questionData = data.questions;
+        this.questionData = data;
         /* set response.input, used for editing responses */
         this.questionData.forEach((question, index, array) => {
           question.responses.forEach((response, i, arr) => {

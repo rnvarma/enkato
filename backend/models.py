@@ -283,22 +283,6 @@ class QuestionResponseUpvote(models.Model):
     user = models.ForeignKey(CustomUser, related_name="question_response_upvotes")
 
 
-class QuestionResponseSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = QuestionResponse
-        read_only_fields = ('modified',)
-        depth = 1
-
-
-class QuestionSerializer(serializers.ModelSerializer):
-    responses = QuestionResponseSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Question
-        read_only_fields = ('modified',)
-        depth = 1
-
 # =================================================================================== #
 #                               Quiz     MODELS                                       #
 # =================================================================================== #
