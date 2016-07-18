@@ -1,30 +1,22 @@
 from django.shortcuts import render
 from django.views.generic.base import View
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
 from backend.models import *
 from backend.notification import *
-from backend.serializers import SerializationHelpers as Helpers, SeriesSerializer
+from backend.serializers import SeriesSerializer
 
 from rest_framework import viewsets
-from rest_framework.views import Response
 
 
-class SeriesViewset(viewsets.ViewSet):
-    """ The series API (unused) """
+class SeriesViewset(viewsets.ModelViewSet):
+    """ The series API """
 
-    def list(self, request):
-        queryset = Series.objects.all()
-        serializer = SeriesSerializer(queryset, many=True)
-        return Response(serializer.data)
+    queryset = Series.objects.all()
+    serializer_class = SeriesSerializer
 
-    def create(self, request):
-        Helpers.is_logged_in(request.user)
-        serializer = SeriesSerializer(data=request.data)
-        serializer.save(creator=request.user.customuser)
-        return Response(serializer.data)
-
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user.customuser)
 
 class CreateSeries(View):
     def post(self, request):

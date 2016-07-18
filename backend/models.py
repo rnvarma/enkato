@@ -244,7 +244,7 @@ class Topic(models.Model):
 
 class Question(DatedModel):
     student = models.ForeignKey(CustomUser, related_name="questions")
-    video = models.ForeignKey(Video, related_name="videos")
+    video = models.ForeignKey(Video) # default related_name is question_set
     topic = models.ForeignKey(Topic, related_name="questions", blank=True, null=True)
     time = models.IntegerField(default=0)
     title = models.TextField(max_length=200)

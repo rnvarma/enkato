@@ -1,6 +1,6 @@
 from rest_framework import serializers, exceptions
 
-from .models import Series, Question, QuestionResponse, Video
+from .models import *
 
 
 # Serializer helpers
@@ -40,17 +40,10 @@ class SerializationHelpers:
         return update_data, updated_fields
 
 
-class SeriesSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Series
-        depth = 1
-
-
 class QuestionResponseSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = QuestionResponse
+        fields = '__all__'
         read_only_fields = ('modified',)
         depth = 1
 
@@ -60,5 +53,31 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
+        exclude = ('video',)
         read_only_fields = ('modified',)
         depth = 1
+
+
+class VideoSerializer(serializers.ModelSerializer):
+    question_set = QuestionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Video
+        fields = '__all__'
+        depth = 1
+
+
+class SeriesVideoSerializer(serializers.ModelSerializer):
+    video = VideoSerializer(read_only=True)
+
+    class Meta:
+        model = SeriesVideo
+        exclude = ('series',)
+
+
+class SeriesSerializer(serializers.ModelSerializer):
+    videos = SeriesVideoSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Series
+        fields = '__all__'
