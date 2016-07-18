@@ -31,5 +31,6 @@ urlpatterns = [
     url(r'^', include('userdashboard.urls')),
     url(r'^', include('testinggrounds.urls')),
     url(r'^', include('instructortools.urls')),
+    url(r'^', include('questionanswer.urls')),
     url(r'^', include(notifications.urls, namespace='notifications')),
 ]
