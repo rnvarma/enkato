@@ -18,7 +18,17 @@ class ResponseView extends React.Component {
       url: `/api/series?creator=${this.props.userId}`,
       dataType: 'json',
       cache: false,
-      success: onSuccess,
+      success: (data) => {
+        let questionData = [];
+        data.forEach((series) => {
+          series.videos.forEach((video) => {
+            video.video.question_set.forEach((question) => {
+              questionData.push(question);
+            });
+          });
+        });
+        onSuccess(questionData);
+      },
       error(xhr, status, error) {
         console.error(status, error.toString());
       },

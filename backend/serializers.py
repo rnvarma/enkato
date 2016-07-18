@@ -46,7 +46,7 @@ class QuestionResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionResponse
         exclude = ('question',)
-        read_only_fields = ('modified', 'modified_count')
+        read_only_fields = ('modified', 'modified_count', 'is_instructor', 'endorsed')
         depth = 1
 
 

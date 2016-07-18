@@ -22,6 +22,7 @@ class QuestionDisplay extends React.Component {
     this.delete = this.delete.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.postResponse = this.postResponse.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
   }
 
@@ -46,14 +47,18 @@ class QuestionDisplay extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
+    this.postResponse();
+  }
+
+  postResponse() {
     if (this.props.question.responseInput) {
       const data = {
+        question_pk: this.props.question.id,
         text: this.props.question.responseInput,
-        question_id: this.props.question.id,
       };
 
       $.ajax({
-        url: `/api/videos/${this.props.videoUUID}/responses`,
+        url: '/api/responses',
         dataType: 'json',
         type: 'POST',
         data,

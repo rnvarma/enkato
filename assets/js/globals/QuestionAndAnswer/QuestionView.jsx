@@ -54,7 +54,7 @@ class QuestionView extends React.Component {
   }
 
   getQuestionData(videoUUID) {
-    if (!videoUUID) return;
+    if (!videoUUID && !this.props.loadQuestionData) return;
     const onSuccess = (data) => {
       this.processQuestionData(data);
 
@@ -82,6 +82,7 @@ class QuestionView extends React.Component {
     /* add data to support persistent editing and other shit */
     this.questionData = data;
     this.questionData.forEach((question, index, array) => {
+      console.log(question);
       question.responses.forEach((response, i, arr) => {
         response.input = response.text;
         arr[i] = response;
@@ -310,26 +311,36 @@ class QuestionView extends React.Component {
   }
 
   render() {
+    var askModal, askButton;
+    if (this.props.videoUUID) {
+      askModal = (
+        <QuestionModal
+          topicList={this.props.topicList}
+          getCurrentTime={this.props.getCurrentTime}
+          videoUUID={this.props.videoUUID}
+          showing={this.state.addingQuestion}
+          close={this.closeModal}
+          pushQuestion={this.pushQuestion}
+        />
+      );
+      askButton = (
+        <Button className="addQuestionBtn" onClick={this.addQuestion}>
+          <FontAwesome name="plus-circle" />
+          Ask A Question
+        </Button>
+      );
+    }
+
     return (
       <div className="questionView">
         <Row>
-          <QuestionModal
-            topicList={this.props.topicList}
-            getCurrentTime={this.props.getCurrentTime}
-            videoUUID={this.props.videoUUID}
-            showing={this.state.addingQuestion}
-            close={this.closeModal}
-            pushQuestion={this.pushQuestion}
-          />
+          {askModal}
           <Row>
             <Col md={5}>
               <div className="qaTitle">Question & Answers</div>
             </Col>
             <Col mdOffset={10}>
-              <Button className="addQuestionBtn" onClick={this.addQuestion}>
-                <FontAwesome name="plus-circle" />
-                Ask A Question
-              </Button>
+              {askButton}
             </Col>
           </Row>
           <QuestionFilterBar
