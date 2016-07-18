@@ -43,7 +43,7 @@ class SerializationHelpers:
 class QuestionResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionResponse
-        fields = '__all__'
+        exclude = ('question',)
         read_only_fields = ('modified',)
         depth = 1
 

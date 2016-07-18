@@ -85,3 +85,23 @@ class QuestionResponseViewset(viewsets.ViewSet):
         if Helpers.can_make_changes(user=request.user, owner=response.user, video_uuid=v_uuid):
             response.delete()
             return Response()
+
+
+class QuestionResponseViewset(viewsets.ModelViewSet):
+    """ The question response API """
+
+    serializer_class = QuestionResponseSerializer
+
+    def get_queryset(self):
+        question = self.request.query_params.get('question_id')
+
+        if question:
+            return QuestionResponse.objects.filter(question=question)
+        else:
+            return QuestionResponse.objects.filter(user=self.request.user.customuser)
+
+    def perform_create(self, serializer):
+        user = self.request.user.customuser.id
+        is_instructor = user == Question.objects.filter(self.request.data['question']).video.creator.id
+
+        serializer.save(user=user, is_instructor=is_instructor)
