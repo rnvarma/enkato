@@ -12,8 +12,15 @@ from rest_framework import viewsets
 class SeriesViewset(viewsets.ModelViewSet):
     """ The series API """
 
-    queryset = Series.objects.all()
     serializer_class = SeriesSerializer
+
+    def get_queryset(self):
+        creator = self.request.query_params.get('creator')
+
+        if creator:
+            return Series.objects.filter(creator=creator)
+        else:
+            return Series.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user.customuser)

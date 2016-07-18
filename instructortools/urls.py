@@ -1,5 +1,6 @@
 from django.conf.urls import url
+from .views import *
 
 urlpatterns = [
-    #url
+    url(r'instructor$', InstructorResponse.as_view()),
 ]

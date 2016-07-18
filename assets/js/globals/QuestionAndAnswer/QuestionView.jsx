@@ -45,6 +45,8 @@ class QuestionView extends React.Component {
     this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
     this.toggleEditQuestion = this.toggleEditQuestion.bind(this);
     this.toggleEditResponse = this.toggleEditResponse.bind(this);
+    this.getQuestionData = this.getQuestionData.bind(this);
+    this.processQuestionData = this.processQuestionData.bind(this);
   }
 
   componentDidMount() {
@@ -53,32 +55,42 @@ class QuestionView extends React.Component {
 
   getQuestionData(videoUUID) {
     if (!videoUUID) return;
+    const onSuccess = (data) => {
+      this.processQuestionData(data);
+
+      this.setState({
+        questions: this.questionData,
+        currentQuestion: this.questionData[0],
+      });
+    };
+    if (this.props.loadQuestionData) {
+      this.props.loadQuestionData(onSuccess);
+      return;
+    }
     $.ajax({
       url: `/api/videos/${videoUUID}/questions`,
       dataType: 'json',
       cache: false,
-      success: (data) => {
-        this.questionData = data;
-        /* set response.input, used for editing responses */
-        this.questionData.forEach((question, index, array) => {
-          question.responses.forEach((response, i, arr) => {
-            response.input = response.text;
-            arr[i] = response;
-          });
-          question.input = {
-            title: question.title,
-            text: question.text,
-          };
-          array[index] = question;
-        });
-        this.setState({
-          questions: this.questionData,
-          currentQuestion: this.questionData[0],
-        });
-      },
+      success: onSuccess,
       error: (xhr, status, err) => {
         console.error(status, err.toString());
       },
+    });
+  }
+
+  processQuestionData(data) {
+    /* add data to support persistent editing and other shit */
+    this.questionData = data;
+    this.questionData.forEach((question, index, array) => {
+      question.responses.forEach((response, i, arr) => {
+        response.input = response.text;
+        arr[i] = response;
+      });
+      question.input = {
+        title: question.title,
+        text: question.text,
+      };
+      array[index] = question;
     });
   }
 

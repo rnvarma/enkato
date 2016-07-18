@@ -50,10 +50,10 @@ class QuestionResponseSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     responses = QuestionResponseSerializer(many=True, read_only=True)
+    video_pk = serializers.PrimaryKeyRelatedField(read_only=True, source='video')
 
     class Meta:
         model = Question
-        exclude = ('video',)
         read_only_fields = ('modified',)
         depth = 1
 
