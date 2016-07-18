@@ -1,3 +1,4 @@
+require('bootstrap-loader');
 require('css/instructortools/response/ResponseView.scss');
 
 import React from 'react';

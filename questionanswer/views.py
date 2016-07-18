@@ -102,6 +102,6 @@ class QuestionResponseViewset(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         user = self.request.user.customuser.id
-        is_instructor = user == Question.objects.filter(self.request.data['question']).video.creator.id
+        is_instructor = user == get_object_or_404(Question, pk=self.request.data.get('question_pk')).video.creator.id
 
-        serializer.save(user=user, is_instructor=is_instructor)
+        serializer.save(user_id=user, is_instructor=is_instructor)

@@ -41,10 +41,12 @@ class SerializationHelpers:
 
 
 class QuestionResponseSerializer(serializers.ModelSerializer):
+    question_pk = serializers.PrimaryKeyRelatedField(queryset=Question.objects.all(), source='question')
+
     class Meta:
         model = QuestionResponse
         exclude = ('question',)
-        read_only_fields = ('modified',)
+        read_only_fields = ('modified', 'modified_count')
         depth = 1
 
 

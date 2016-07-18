@@ -4,7 +4,7 @@ require("css/globals/VideoPlayer/QuizModal");
 import Button from 'react-bootstrap/lib/Button';
 
 var QuizForm = require('js/globals/QuizView/QuizForm');
-import SerivesViewerSidebarVideoPanel from 'js/series/seriesviewer/SerivesViewerSidebarVideoPanel';
+import SeriesViewerSidebarVideoPanel from 'js/series/seriesviewer/SeriesViewerSidebarVideoPanel';
 import FontAwesome from 'react-fontawesome';
 
 module.exports= React.createClass({
@@ -20,7 +20,7 @@ module.exports= React.createClass({
                     <div className="text">
                         Up Next
                     </div>
-                    <SerivesViewerSidebarVideoPanel
+                    <SeriesViewerSidebarVideoPanel
                         video={this.props.nextVideo} />
                 </div>
             )

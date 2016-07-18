@@ -2,7 +2,7 @@ require('css/series/seriesviewer/SeriesViewerVideoList.scss');
 
 import React from 'react';
 
-import SerivesViewerSidebarVideoPanel from 'js/series/seriesviewer/SerivesViewerSidebarVideoPanel';
+import SeriesViewerSidebarVideoPanel from 'js/series/seriesviewer/SeriesViewerSidebarVideoPanel';
 
 class SeriesViewerVideoList extends React.Component {
     render() {
@@ -10,10 +10,10 @@ class SeriesViewerVideoList extends React.Component {
             var active;
             if (video.uuid == this.props.currUUID) active=true;
             return (
-                <SerivesViewerSidebarVideoPanel
+                <SeriesViewerSidebarVideoPanel
                     video={video}
                     key={video.uuid}
-                    active={active}ß/>
+                    active={active} />
             )
         }.bind(this))
         return (
