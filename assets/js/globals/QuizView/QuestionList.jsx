@@ -6,6 +6,7 @@ var QuestionNode = require('js/globals/QuizView/QuestionNode');
 module.exports = React.createClass({
     render:function(){
         var QuestionNodes = this.props.questions.map(function(question, index){
+            
             return (
                 <QuestionNode
                     key={question.id}

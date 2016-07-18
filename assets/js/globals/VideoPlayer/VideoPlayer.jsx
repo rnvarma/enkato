@@ -81,7 +81,12 @@ module.exports  = React.createClass({
                 duration: 0,
                 end: 0
             },
-            s_id: this.props.s_id
+            s_id: this.props.s_id,
+            quizTaken: false,
+            completedQuizInfo:{
+                result:[],
+                numCorrect:0
+            },
         };
     },
     trackView: function(uuid, end) {
@@ -122,6 +127,21 @@ module.exports  = React.createClass({
         } else if (event.data == 1) {
         }
     },
+    loadQuizData: function(v_id){
+        var s_id = $("#s_id").attr("data-sid")
+
+        // $.ajax({
+        //     url: "/api/quiz/s/"+s_id+"/v/" + v_id,
+        //     dataType: 'json',
+        //     cache: false,
+        //     success: function(data) {
+        //         console.log("hello")
+        //     }.bind(this),
+        //     error: function(xhr, status, err) {
+        //         console.error(this.props.url, status, err.toString());
+        //     }.bind(this)
+        // });    
+    },
     loadDataFromServer: function(v_id){
         $.ajax({
           url: "/1/v/" + v_id,
@@ -158,6 +178,7 @@ module.exports  = React.createClass({
             console.error(this.props.url, status, err.toString());
           }.bind(this)
         });
+        this.loadQuizData(v_id)
     },
     updateCurrentState: function(){
         //set time
