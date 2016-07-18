@@ -7,7 +7,6 @@ from rest_framework.response import Response
 from backend.models import *
 from backend.utility import *
 
-
 class Serializer(object):
     @staticmethod
     def serialize_user(user):
@@ -69,7 +68,7 @@ class Serializer(object):
         data["description"] = video.description
         data["thumbnail"] = video.thumbnail
         data["duration_raw"] = video.duration
-        data["duration_clean"] = convertSecondsToTime(video.duration)
+        data["duration_clean"] = convert_seconds_to_duration(video.duration)
         data["duration_san"] = sanetizeTime(video.duration)
         data["creator"] = Serializer.serialize_user(video.creator)
         data["num_views"] = video.num_views
@@ -83,7 +82,7 @@ class Serializer(object):
         data = {}
         data["name"] = topic.name
         data["time"] = topic.time
-        data["time_clean"] = convertSecondsToTime(topic.time)
+        data["time_clean"] = convert_seconds_to_duration(topic.time)
         data["id"] = topic.uuid
         data["isCurrentTopic"] = False  # used in frontend
         return data
@@ -209,15 +208,6 @@ class YTIndexScript(APIView):
         for topicObj in topicObjsList:
             topicObj.save()
         return JsonResponse({'hey':True})
-
-# access via /api/video/<v_uuid>/questions
-class QuestionData(APIView):
-    def get(self, request, v_uuid):
-        questions = Question.objects.filter(video__uuid=v_uuid)
-        return JsonResponse({
-            'questions': QuestionSerializer(questions, many=True).data
-        })
-
 
 class LoadQuizData(APIView):
     def get(self, request, s_id, v_id):

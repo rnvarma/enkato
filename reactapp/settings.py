@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'classroom',
     'upload',
     'series',
+    'instructortools',
+    'questionanswer',
     'notifications',
 ]
 

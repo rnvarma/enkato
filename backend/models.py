@@ -244,7 +244,7 @@ class Topic(models.Model):
 
 class Question(DatedModel):
     student = models.ForeignKey(CustomUser, related_name="questions")
-    video = models.ForeignKey(Video, related_name="videos")
+    video = models.ForeignKey(Video) # default related_name is question_set
     topic = models.ForeignKey(Topic, related_name="questions", blank=True, null=True)
     time = models.IntegerField(default=0)
     title = models.TextField(max_length=200)
@@ -282,22 +282,6 @@ class QuestionResponseUpvote(models.Model):
     question_response = models.ForeignKey(QuestionResponse, related_name="upvotes")
     user = models.ForeignKey(CustomUser, related_name="question_response_upvotes")
 
-
-class QuestionResponseSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = QuestionResponse
-        read_only_fields = ('modified',)
-        depth = 1
-
-
-class QuestionSerializer(serializers.ModelSerializer):
-    responses = QuestionResponseSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Question
-        read_only_fields = ('modified',)
-        depth = 1
 
 # =================================================================================== #
 #                               Quiz     MODELS                                       #
