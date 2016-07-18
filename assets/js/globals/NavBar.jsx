@@ -25,26 +25,12 @@ module.exports = React.createClass({
     },
     componentWillMount: function() {
         $.ajax({
-          url: "/1/userdata",
+          url: "/1/getnotifications",
           dataType: 'json',
           cache: false,
           success: function(data) {
             this.setState({
-                logged_in: data.logged_in,
-                username: data.username,
-                user_id: data.user_id
-            });
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-        $.ajax({
-          url: "/1/getnotificationsnum",
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            this.setState({
+                notifications: data.notifications,
                 num_notifications: data.num
             });
           }.bind(this),
@@ -53,12 +39,14 @@ module.exports = React.createClass({
           }.bind(this)
         });
         $.ajax({
-          url: "/1/getnotifications",
+          url: "/1/userdata",
           dataType: 'json',
           cache: false,
           success: function(data) {
             this.setState({
-                notifications: data.notifications
+                logged_in: data.logged_in,
+                username: data.username,
+                user_id: data.user_id
             });
           }.bind(this),
           error: function(xhr, status, err) {
