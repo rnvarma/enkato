@@ -2,104 +2,29 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
 from backend.models import *
-from backend.serializers import SerializationHelpers as Helpers, QuestionSerializer, QuestionResponseSerializer
+from backend.serializers import QuestionSerializer, QuestionResponseSerializer, make_owner_permission
 
-from rest_framework import viewsets
-from rest_framework.views import Response
-
-
-class QuestionViewset(viewsets.ViewSet):
-    """ The question API """
-
-    def list(self, request, v_uuid):
-        queryset = Question.objects.filter(video__uuid=v_uuid)
-        serializer = QuestionSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request, v_uuid):
-        Helpers.is_logged_in(request.user)
-        serializer = QuestionSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(student=request.user.customuser, video=get_object_or_404(Video, uuid=v_uuid))
-
-        return Response(serializer.data)
-
-    def retrieve(self, request, v_uuid, pk):
-        question = get_object_or_404(Question, pk=pk)
-        serializer = QuestionSerializer(question)
-        return Response(serializer.data)
-
-    def partial_update(self, request, v_uuid, pk):
-        question = get_object_or_404(Question, pk=pk)
-        if Helpers.can_make_changes(user=request.user, owner=question.student, video_uuid=v_uuid):
-            update_fields = ('topic', 'time', 'title', 'text', 'resolved')
-            update_data, updated_fields = get_update_data(request.data, partial_object=question, allowed_fields=update_fields)
-            serializer = QuestionSerializer(question, data=update_data, partial=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(update_modified='resolved' not in updated_fields)
-            return Response(serializer.data)
-
-    def destroy(self, request, v_uuid, pk):
-        question = get_object_or_404(Question, pk=pk)
-        if Helpers.can_make_changes(user=request.user, owner=question.student, video_uuid=v_uuid):
-            question.delete()
-            return Response()
-
-
-class QuestionResponseViewset(viewsets.ViewSet):
-    """ The question response API """
-
-    def list(self, request, v_uuid):
-        queryset = QuestionResponse.objects.filter(question__video__uuid=v_uuid)
-        serializer = QuestionResponseSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request, v_uuid):
-        Helpers.is_logged_in(request.user)
-        user = request.user.customuser
-        is_instructor = user == Video.objects.filter(uuid=v_uuid).all()[0].creator
-
-        serializer = QuestionResponseSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        # don't know why I have to pass question_id here, messed up
-        serializer.save(question_id=request.data['question_id'], user_id=user.id, is_instructor=is_instructor)
-
-        return Response(serializer.data)
-
-    def retrieve(self, request, v_uuid, pk):
-        response = get_object_or_404(QuestionResponse, pk=pk)
-        serializer = QuestionResponseSerializer(response)
-        return Response(serializer.data)
-
-    def partial_update(self, request, v_uuid, pk):
-        response = get_object_or_404(QuestionResponse, pk=pk)
-        if Helpers.can_make_changes(user=request.user, owner=response.user, video_uuid=v_uuid):
-            update_fields = ('text', 'endorsed')
-            update_data, updated_fields = get_update_data(request.data, partial_object=response, allowed_fields=update_fields)
-            serializer = QuestionResponseSerializer(response, data=update_data, partial=True)
-            serializer.is_valid(raise_exception=True)
-            serializer.save(update_modified='endorsed' not in updated_fields)
-            return Response(serializer.data)
-
-    def destroy(self, request, v_uuid, pk):
-        response = get_object_or_404(QuestionResponse, pk=pk)
-        if Helpers.can_make_changes(user=request.user, owner=response.user, video_uuid=v_uuid):
-            response.delete()
-            return Response()
+from rest_framework import viewsets, filters, permissions
 
 
 class QuestionViewset(viewsets.ModelViewSet):
     """ The question API """
 
     serializer_class = QuestionSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, make_owner_permission('student')) # also allow instructor
+    filter_backends = (filters.OrderingFilter,)
+    ordering = ('modified',)
+    ordering_fields = ('responses',)
 
     def get_queryset(self):
         video = self.request.query_params.get('video_uuid')
 
         if video:
-            return Question.objects.filter(video__uuid=video)
+            queryset = Question.objects.filter(video__uuid=video)
         else:
-            return Question.objects.all()
+            queryset = Question.objects.all()
+
+        return queryset
 
     def perform_create(self, serializer):
         student = self.request.user.customuser.id
@@ -118,6 +43,7 @@ class QuestionResponseViewset(viewsets.ModelViewSet):
     """ The question response API """
 
     serializer_class = QuestionResponseSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, make_owner_permission('user'),)
 
     def get_queryset(self):
         question = self.request.query_params.get('question_id')

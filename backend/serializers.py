@@ -1,7 +1,6 @@
-from rest_framework import serializers, exceptions
+from rest_framework import serializers, exceptions, permissions
 
 from .models import *
-
 
 # Serializer helpers
 class SerializationHelpers:
@@ -83,3 +82,21 @@ class SeriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Series
         fields = '__all__'
+
+
+# This was necessary to create because all the models have different names
+# for their owning customuser
+def make_owner_permission(user_id_field):
+
+    class IsOwner(permissions.BasePermission):
+        def has_object_permission(self, request, view, obj):
+            if hasattr(obj, user_id_field):
+                if getattr(obj, user_id_field).id == request.user.customuser.id:
+                    return True
+                # need to allow instructor to DELETE and sometimes PATCH (e.g. when endorsing)?
+                # else:
+                # if request.DELETE:
+
+            return False
+
+    return IsOwner
