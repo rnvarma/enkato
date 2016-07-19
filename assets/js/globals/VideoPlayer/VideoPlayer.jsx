@@ -329,7 +329,6 @@ module.exports  = React.createClass({
             return (<div className="loading">Loading video player...</div>);
         }
         return (
-<<<<<<< HEAD
             <div>
                 <div className="videoTitle">
                     {this.state.videoTitle}
