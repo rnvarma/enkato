@@ -7,7 +7,6 @@
     border: none;
 
     .nav {
-        font-size: 14px;
         font-weight: 400;
     }
 
@@ -25,10 +24,6 @@
 }
 
 .navbar-brand {
-    // text-transform: uppercase;
-    font-weight: 800;
-    font-family: 'Fjalla One', sans-serif;
-
     @include respond-to(xsmall) {
         margin-left: 25px;
     }
