@@ -1,0 +1,37 @@
+@import '../../globals/colors.scss';
+@import '../../globals/VideoPlayer/ControlBar.scss';
+
+
+.centerBarSpan{
+    text-align:center;
+    color: white;
+    margin-left:25%;
+    margin-right:25%;
+
+    .backwardButton{
+        text-align:left;
+        margin-right:20px;
+        font-size: 25px;
+        margin-top: 10px;
+    }
+    .backwardButton:hover{
+        cursor:pointer;
+    }
+
+    .vTime{
+        text-align:center;
+        font-size: 20px;
+        margin-top: 10px;
+    }   
+
+    .forwardButton{
+        text-align:right;
+        margin-left:20px;
+        font-size: 25px;
+        margin-top: 10px;
+    }
+
+    .forwardButton:hover{
+        cursor:pointer;
+    }
+}

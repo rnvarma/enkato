@@ -1,0 +1,3 @@
+You have {{expiration_days}} days to activate your account. Please click the following link to complete your registration:
+
+{{site.domain}}/accounts/activate/{{activation_key}}

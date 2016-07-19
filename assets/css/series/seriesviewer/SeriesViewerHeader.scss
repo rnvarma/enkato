@@ -1,0 +1,19 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.seriesViewerHeader {
+    padding: 20px 15px;
+    height: 100px;
+
+    .seriesName {
+        font-weight: bold;
+        color: $enkato-green;
+        font-size: 13px;
+    }
+
+    .currVideoName {
+        font-weight: bold;
+        color: $structabl-blue;
+        font-size: 18px;
+    }
+}

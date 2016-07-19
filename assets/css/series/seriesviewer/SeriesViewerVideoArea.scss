@@ -1,0 +1,11 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.seriesViewerVideoArea {
+    display: inline-block;
+    vertical-align: top;
+    width: 80%;
+    height: 80%;
+
+    padding: 20px;
+}

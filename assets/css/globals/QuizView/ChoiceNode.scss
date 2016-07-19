@@ -1,0 +1,40 @@
+@import '../colors.scss';
+
+
+.choiceNode{
+    margin-bottom:20px;
+    font-size:16px;
+    position: relative;
+    padding:7px;
+    border-radius:5px;
+    width:90%;
+
+    .circle-icon{
+        color:#DCDCDC;
+        font-size: 25px;
+        margin-right:20px;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    #selected{
+        color:$structabl-blue;
+    }
+    .choiceText{
+        position:absolute;
+        top:7;
+        left:40;
+    }
+} 
+
+#incorrect{
+    background-color:grey;
+    color:white;
+    font-weight:700;
+}
+
+#correct{
+    background-color:$kato-green;
+    color:white;
+    font-weight:700;
+}

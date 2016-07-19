@@ -75,7 +75,7 @@ class Serializer(object):
         data["num_views"] = video.num_views
         data["order"] = video.order if 'order' in video.__dict__ else 0
         return data
-
+        
     @staticmethod
     def serialize_topic(topic):
         data = {}
@@ -159,4 +159,27 @@ class QuizData(APIView):
             'numQuestions': quizQs.count()
         })
 
-
+class VideoIdData(View):
+    def get(self, request, v_id):
+        try:
+            video = Video.objects.get(vid_id=v_id)
+            topicList = video.topics.all().order_by('time')
+            frontendTList = map(Serializer.serialize_topic, topicList)
+            return JsonResponse({
+                'inDatabase': True,
+                'topicList':frontendTList,
+                'videoData': Serializer.serialize_video(video)
+            })
+        except Video.DoesNotExist:
+            return JsonResponse({
+                'inDatabase': False
+            })
+        except Video.MultipleObjectsReturned:
+            video = Video.objects.filter(vid_id=v_id).first()
+            topicList = video.topics.all().order_by('time')
+            frontendTList = map(Serializer.serialize_topic, topicList)
+            return JsonResponse({
+                'inDatabase': True,
+                'topicList':frontendTList,
+                'videoData': Serializer.serialize_video(video)
+            })

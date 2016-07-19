@@ -1,0 +1,50 @@
+@import '../mixins.scss';
+@import '../colors.scss';
+
+
+
+
+.takeQuizButton{
+    width:100%;
+    background-color:$grey-topic-button;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color:$structabl-blue;
+    padding: 10px 20px;
+    border-bottom: 1px solid $structabl-bg-blue;
+
+    &#selectedTopicNode {
+        background-color: $enkato-green;
+        color: white;
+
+        .text {
+            color: white;
+        }
+    }
+
+    &:hover {
+        background-color:$grey-topic-button-section-bg-hover;
+        cursor:pointer;
+    }
+
+    .checkIcon{
+        display: inline-block;
+        vertical-align: top;
+        width: 10%;
+        font-size: 20px;
+    }
+
+    .textWrapper {
+        display: inline-block;
+        width: 90%;
+        padding-left:5px;
+    }
+
+    .text {
+        display: inline-block;
+        vertical-align: top;
+        float: left;
+        font-weight: bold;
+    }
+}

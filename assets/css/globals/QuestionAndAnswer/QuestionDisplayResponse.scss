@@ -1,0 +1,77 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.questionDisplayResponse {
+
+  color: $structabl-blue;
+  border-bottom: 10px solid $bg-grey;
+
+  &.instructor {
+    border-top: 14px solid $kato-green;
+  }
+
+  &.endorsed {
+    border-top: 14px solid $enkato-green;
+  }
+
+  .responseText {
+    padding: 15px 20px;
+    width: 70%;
+    display: inline-block;
+  }
+
+  .responseBadges {
+    width: 30%;
+    display: inline-block;
+    text-transform: uppercase;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 700;
+    vertical-align: top;
+    padding: 18px 20px 15px;
+
+    .fa {
+      font-size: 1.4em;
+      padding-right: 6px;
+      padding-bottom: 8px;
+
+      &.endorsed {
+        color: $enkato-green;
+      }
+
+      &.instructor {
+        color: $kato-green;
+      }
+    }
+  }
+
+  .responseFooter {
+    border-top: 2px solid $bg-grey;
+    padding: 10px 30px;
+
+    .studentName {
+      font-weight: bold;
+    }
+
+    .plainBtn {
+      display: inline-block;
+      float: right;
+      font-weight: bold;
+      font-size: 16px;
+      margin-left: 20px;
+      margin-top: 5px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  }
+
+}
