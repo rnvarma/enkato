@@ -39,7 +39,7 @@ class QuestionEditForm extends React.Component {
       /* TODO: do the topic */
     };
     $.ajax({
-      url: `/api/videos/${this.props.videoUUID}/questions/${this.props.question.id}`,
+      url: `/api/questions/${this.props.question.id}`,
       type: 'PATCH',
       data,
       beforeSend(xhr) {

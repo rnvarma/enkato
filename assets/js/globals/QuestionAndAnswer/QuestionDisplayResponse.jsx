@@ -28,7 +28,7 @@ class QuestionDisplayResponse extends React.Component {
   delete() {
     /* TODO: verify before deleting, error handling on failing to delete */
     $.ajax({
-      url: `/api/videos/${this.props.videoUUID}/responses/${this.props.response.id}`,
+      url: `/api/responses/${this.props.response.id}`,
       type: 'DELETE',
       beforeSend(xhr) {
         xhr.withCredentials = true;
@@ -46,7 +46,7 @@ class QuestionDisplayResponse extends React.Component {
       endorsed: !this.props.response.endorsed,
     }
     $.ajax({
-      url: `/api/videos/${this.props.videoUUID}/responses/${this.props.response.id}`,
+      url: `/api/responses/${this.props.response.id}`,
       type: 'PATCH',
       data,
       beforeSend(xhr) {
@@ -64,7 +64,6 @@ class QuestionDisplayResponse extends React.Component {
       return (
         <Row className="questionDisplayResponse">
           <QuestionResponseEditForm
-            videoUUID={this.props.videoUUID}
             question={this.props.question}
             response={this.props.response}
             delete={this.delete}
@@ -101,9 +100,9 @@ class QuestionDisplayResponse extends React.Component {
           {badges}
           <div className="responseFooter">
             <img></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> asked {created.fromNow()}{modified ? ", modified: "+modified.fromNow() : ""}
-            {/* check is user/instructor is logged in */true ? <div onClick={this.delete} className="plainBtn">Delete</div> : '' }
-            {/* check if user is logged in */true ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
-            {/* check if instructor is logged in and not instructor post */false ? '' : <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div>}
+            {/* TODO: check is user/instructor is logged in */true ? <div onClick={this.delete} className="plainBtn">Delete</div> : '' }
+            {/* TODO: check if user is logged in */true ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
+            {/* TODO: check if instructor is logged in and not instructor post */false ? '' : <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div>}
           </div>
         </div>
       </Row>

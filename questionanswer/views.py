@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
 from backend.models import *
@@ -87,6 +88,32 @@ class QuestionResponseViewset(viewsets.ViewSet):
             return Response()
 
 
+class QuestionViewset(viewsets.ModelViewSet):
+    """ The question API """
+
+    serializer_class = QuestionSerializer
+
+    def get_queryset(self):
+        video = self.request.query_params.get('video_uuid')
+
+        if video:
+            return Question.objects.filter(video__uuid=video)
+        else:
+            return Question.objects.all()
+
+    def perform_create(self, serializer):
+        student = self.request.user.customuser.id
+        video = get_object_or_404(Video, uuid=self.request.data.get('video_uuid'))
+
+        serializer.save(student_id=student, video=video)
+
+    def perform_update(self, serializer):
+        if any(field in self.request.data for field in ('title', 'text', 'topic')):
+            serializer.save(modified=timezone.now())
+        else:
+            serializer.save()
+
+
 class QuestionResponseViewset(viewsets.ModelViewSet):
     """ The question response API """
 
@@ -105,3 +132,9 @@ class QuestionResponseViewset(viewsets.ModelViewSet):
         is_instructor = user == get_object_or_404(Question, pk=self.request.data.get('question_pk')).video.creator.id
 
         serializer.save(user_id=user, is_instructor=is_instructor)
+
+    def perform_update(self, serializer):
+        if 'text' in self.request.data:
+            serializer.save(modified=timezone.now())
+        else:
+            serializer.save()

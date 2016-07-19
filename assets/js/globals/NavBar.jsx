@@ -76,7 +76,7 @@ module.exports = React.createClass({
                     <FontAwesome name="fa fa-bell" aria-hidden="true"></FontAwesome>
                     <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown">
                         {this.state.notifications.map(function(notification) {
-                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description} {moment(notification.timestamp).format('LLL')}</div></MenuItem>);
+                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description} {moment(notification.timestamp).fromNow()}</div></MenuItem>);
                         })}
                     </NavDropdown>
                 </Nav>

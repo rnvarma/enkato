@@ -1,11 +1,16 @@
 @import '../mixins.scss';
 @import '../colors.scss';
 
+.videoTitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: $structabl-blue;
+    padding-bottom: 15px;
+}
 
 .ynVideoPlayer{
     overflow: hidden;
     background-color:$white;
-    border-top: 5px solid $structabl-blue;
 }
 
 .topicButtonColumn{
@@ -13,6 +18,7 @@
     height:100%;
     width:25%;
 }
+
 .videoDiv {
     float: right;
     width: 75%;

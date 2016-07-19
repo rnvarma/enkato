@@ -43,6 +43,7 @@ class QuestionModal extends React.Component {
   postQuestion() {
     if (this.state.title && this.state.text) {
       const data = {
+        video_uuid: this.props.videoUUID,
         title: this.state.title,
         text: this.state.text,
         time: this.props.getCurrentTime(),
@@ -53,7 +54,7 @@ class QuestionModal extends React.Component {
       }
 
       $.ajax({
-        url: `/api/videos/${this.props.videoUUID}/questions`,
+        url: '/api/questions',
         dataType: 'json',
         type: 'POST',
         data,

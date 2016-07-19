@@ -63,7 +63,7 @@ class Serializers(object):
 			videoid = first.action_object.video.uuid
 
 			if countint > 1:
-				data["description"] = count + ' people asked a question in the video ' + videoname
+				data["description"] = count + ' new questions in the video ' + videoname
 				data["link"] = '/s/' + seriesid + '/watch#' + videoid
 				return data
 
@@ -84,7 +84,7 @@ class Serializers(object):
 
 
 			if countint > 1:
-				data["description"] = count + ' people responded to your question in the video ' + videoname
+				data["description"] = count + ' new responses to your question in the video ' + videoname
 				data["link"] = '/s/' + seriesid + '/watch#' + videoid
 				return data
 
