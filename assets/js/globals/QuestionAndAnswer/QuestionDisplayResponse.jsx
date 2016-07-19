@@ -44,6 +44,7 @@ class QuestionDisplayResponse extends React.Component {
       },
       success: () => {
         this.props.removeResponse(this.props.question.id, this.props.response.id);
+        this.toggleDelete();
       },
     });
   }
