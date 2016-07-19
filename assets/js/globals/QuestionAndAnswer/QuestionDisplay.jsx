@@ -29,7 +29,7 @@ class QuestionDisplay extends React.Component {
   delete() {
     /* TODO: verify before deleting, error handling on failing to delete */
     $.ajax({
-      url: `/api/videos/${this.props.videoUUID}/questions/${this.props.question.id}`,
+      url: `/api/questions/${this.props.question.id}`,
       type: 'DELETE',
       beforeSend(xhr) {
         xhr.withCredentials = true;
@@ -98,7 +98,6 @@ class QuestionDisplay extends React.Component {
             key={response.id}
             question={this.props.question}
             response={response}
-            videoUUID={this.props.videoUUID}
             pushResponseText={this.props.pushResponseText}
             pushResponseEditText={this.props.pushResponseEditText}
             pushResponseNewText={this.props.pushResponseNewText}
@@ -131,8 +130,8 @@ class QuestionDisplay extends React.Component {
             <div className="questionBox">
               <div className="questionHeader">
                 {topic}
-                <Button onClick={this.toggleEdit}>Edit</Button>
-                <Button onClick={this.delete}>Delete</Button>
+                {/* TODO: only creator */}<Button onClick={this.toggleEdit}>Edit</Button>
+                {/* TODO: only creator/instructor */}<Button onClick={this.delete}>Delete</Button>
               </div>
               <div className="questionTitle">
                 {this.props.question.title}

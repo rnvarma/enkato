@@ -32,7 +32,7 @@ class QuestionResponseEditForm extends React.Component {
             text: this.props.response.input,
         };
         $.ajax({
-            url: `/api/videos/${this.props.videoUUID}/responses/${this.props.response.id}`,
+            url: `/api/responses/${this.props.response.id}`,
             type: 'PATCH',
             data,
             beforeSend(xhr) {

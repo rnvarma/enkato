@@ -68,7 +68,7 @@ class QuestionView extends React.Component {
       return;
     }
     $.ajax({
-      url: `/api/videos/${videoUUID}/questions`,
+      url: `/api/questions?v_uuid=${videoUUID}`,
       dataType: 'json',
       cache: false,
       success: onSuccess,
@@ -82,7 +82,6 @@ class QuestionView extends React.Component {
     /* add data to support persistent editing and other shit */
     this.questionData = data;
     this.questionData.forEach((question, index, array) => {
-      console.log(question);
       question.responses.forEach((response, i, arr) => {
         response.input = response.text;
         arr[i] = response;
@@ -180,7 +179,10 @@ class QuestionView extends React.Component {
     });
     const index = this.questionData.indexOf(question);
     this.questionData.splice(index, 1);
-    this.setState({ question: this.questionData });
+    this.setState({
+      question: this.questionData,
+      currentQuestion: this.questionData[0],
+    });
   }
 
   pushQuestionEditText(questionId, questionEditTitle, questionEditText) {
