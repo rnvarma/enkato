@@ -17,14 +17,17 @@ class Serializers(object):
 		groups = defaultdict(list)
 		
 		for obj in notifications:
-			if obj.verb == 'new series video':
-				groups[(obj.verb, obj.action_object.series.id)].append(obj)
+			if obj.action_object == None:
+				obj.delete()
+			else:
+				if obj.verb == 'new series video':
+					groups[(obj.verb, obj.action_object.series.id)].append(obj)
 
-			if obj.verb == 'new question':
- 				groups[(obj.verb, obj.action_object.video.id)].append(obj)
+				if obj.verb == 'new question':
+ 					groups[(obj.verb, obj.action_object.video.id)].append(obj)
 
-			if obj.verb == 'new question response':
-				groups[(obj.verb, obj.action_object.is_instructor, obj.action_object.question.id)].append(obj)
+				if obj.verb == 'new question response':
+					groups[(obj.verb, obj.action_object.is_instructor, obj.action_object.question.id)].append(obj)
 
 		aggregated_list = groups.values()
 
@@ -33,6 +36,9 @@ class Serializers(object):
 	
 	@staticmethod
 	def notification_serializer(notifications):
+		if len(notifications) == 0:
+			return []
+			
 		sorted(notifications, key = lambda x : x.timestamp, reverse = True)
 		first = notifications[0]
 		verb = first.verb
