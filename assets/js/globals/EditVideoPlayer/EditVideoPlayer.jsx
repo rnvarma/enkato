@@ -14,6 +14,8 @@ import Video from 'js/globals/videoPlayer/Video';
 import ControlBar from 'js/globals/videoPlayer/ControlBar';
 import Player from 'js/globals/videoPlayer/Player';
 import EditableTopicList from 'js/globals/EditVideoPlayer/EditableTopicList';
+import EditControlBar from 'js/globals/EditVideoPlayer/EditControlBar';
+
 
 const pollInterval = 100;
 
@@ -206,6 +208,7 @@ module.exports = React.createClass({
         //set time
         var seconds = Math.round(this.state.Player.getCurrentTime())
         this.setState({currentTime:styleTime(seconds)})
+        this.setState({currentSecond:seconds})
         var percentDone = (seconds / this.state.Player.getDuration())*100
         this.setState({percentDone:percentDone})
         
@@ -225,6 +228,7 @@ module.exports = React.createClass({
             topicObjList: [], 
             isPlaying:false, 
             currentTime:"0:00",
+            currentSecond:0,
             percentDone:0,
             Player: null,
             videoDivHeight: 0,
@@ -246,6 +250,7 @@ module.exports = React.createClass({
         this.setState({
             isPlaying: true,
             currentTime: "0:00",
+            currentSecond: 0,
             percentDone: 0
         })
         window.onresize=this.setWindowSize;
@@ -294,6 +299,9 @@ module.exports = React.createClass({
     playInContext: function(context){
         this.state.Player.play()
     },
+    playerSeekTo: function(seconds){
+        this.state.Player.seekTo(seconds)
+    },
     render: function() {
         if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
 
@@ -313,18 +321,21 @@ module.exports = React.createClass({
                             renderVideo={this.state.Player.renderVideo}
                             videoDivHeight={this.state.videoDivHeight}
                             controlBarHeight={$('.ControlBar').height()}/>
-                        <ControlBar 
+                        <EditControlBar 
                             className="ControlBar"
                             isPlaying={this.state.isPlaying}
+                            videoDuration={this.state.Player.getDuration()}
                             topicObjList={this.state.topicObjList}
                             getDuration={this.state.Player.getDuration}
                             handlePlayPauseClick={this.handlePlayPauseClick}
                             handleScrub={this.handleScrub}
                             currentTime={this.state.currentTime}
+                            currentSecond={this.state.currentSecond}
                             totalTime={this.totalTime}
                             percentDone={this.state.percentDone}
                             setPlaybackRate={this.state.Player.setPlaybackRate}
-                            playerContext={this.state.Player.getContext()}/>
+                            playerContext={this.state.Player.getContext()}
+                            seekTo={this.playerSeekTo}/>
                     </div>
                 </div>
         )

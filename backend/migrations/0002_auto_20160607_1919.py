@@ -210,7 +210,7 @@ class Migration(migrations.Migration):
                 ('time', models.IntegerField(default=0)),
                 ('name', models.CharField(default='', max_length=200)),
                 ('description', models.TextField(default='')),
-                ('num_clicks', models.IntegerField(default='')),
+                ('num_clicks', models.IntegerField(default=0)),
             ],
         ),
         migrations.CreateModel(

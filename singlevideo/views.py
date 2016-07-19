@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.views.generic.base import View
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from backend.models import *
 
@@ -8,10 +7,12 @@ from backend.views import Serializer
 
 import json
 
+
 # Create your views here.
 class SingleVideoPage(View):
-    def get(self, request,v_uuid):
-        return render(request, 'singlevideo/singlevideo.html', {'v_uuid':v_uuid})
+    def get(self, request, v_uuid):
+        return render(request, 'singlevideo/singlevideo.html', {'v_uuid': v_uuid})
+
 
 class AddTopic(View):
     def post(self, request, v_uuid):
@@ -24,9 +25,10 @@ class AddTopic(View):
         )
         newTopic.save()
         return JsonResponse({
-            'status': True, 
+            'status': True,
             'newTopic': Serializer.serialize_topic(newTopic)
         })
+
 
 class UpdateTopics(View):
     def post(self, request, v_uuid):
@@ -39,12 +41,14 @@ class UpdateTopics(View):
             topic_obj.save()
         return JsonResponse({'status': True})
 
+
 class DeleteTopic(View):
     def post(self, request):
         t_uuid = request.POST.get('uuid')
         topic = Topic.objects.get(uuid=t_uuid)
         topic.delete()
         return JsonResponse({'status': True})
+
 
 class EditVideoTesting(View):
     def get(self, request):
@@ -66,9 +70,10 @@ class UpdateQuiz(View):
                 cObj.is_correct = choice["is_correct"]
                 cObj.save()
             qObj.save()
-            count+=1
-        
+            count += 1
+
         return JsonResponse({'status': True})
+
 
 class AddQuizQuestion(View):
     def post(self, request, v_uuid):
@@ -87,6 +92,19 @@ class AddQuizQuestion(View):
             'new_question': Serializer.serialize_quiz_question(new_question)
         })
 
+
+class DeleteQuizQuestion(View):
+    def post(self, request, v_uuid):
+        q_id = request.POST.get('qid')
+        question = QuizQuestion.objects.get(id=q_id)
+        question.delete()
+
+        return JsonResponse({
+            'status': True,
+            'qid': q_id
+        })
+
+
 class AddQuizOption(View):
     def post(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
@@ -104,6 +122,7 @@ class AddQuizOption(View):
             'new_choice': new_choice_data
         })
 
+
 class DeleteQuizOption(View):
     def post(self, request, v_uuid):
         q_id = request.POST.get('qid')
@@ -116,7 +135,3 @@ class DeleteQuizOption(View):
             'cid': c_id,
             'qid': q_id
         })
-
-
-
-

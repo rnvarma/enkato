@@ -1,25 +1,14 @@
-var path = require("path")
+var path = require('path')
 var webpack = require('webpack')
 var BundleTracker = require('webpack-bundle-tracker')
+var CleanWebpackPlugin = require('clean-webpack-plugin')
 var pathtoassets = require('./pathtoassets')
+var entrypoints = require('./entrypoints')
 
 module.exports = {
   context: __dirname,
 
-  entry: {
-    homepage: './assets/js/home/homepage/HomePage.jsx',
-    profile: './assets/js/userprofile/profile/Profile.jsx',
-    educator: './assets/js/home/creator/Educator.jsx',
-    register: './assets/js/authentication/register/Register.jsx',
-    login: './assets/js/authentication/login/Login.jsx',
-    createclass: './assets/js/classroom/createclass/CreateClass.jsx',
-    classroom: './assets/js/classroom/classroom/Classroom.jsx',
-    singlevideo: './assets/js/singlevideo/singlevideoview/SingleVideoPage.jsx',
-    upload: './assets/js/upload/upload/UploadSingleVideo.jsx',
-    createseries: './assets/js/series/create/CreateSeries.jsx',
-    seriespage: './assets/js/series/seriespage/SeriesPage.jsx',
-    quizaddingform: './assets/js/testinggrounds/QuizAddingForm/QuizAddingForm.jsx',
-  },
+  entry: entrypoints,
 
   output: {
       path: path.resolve(pathtoassets + '/assets/bundles/'),
@@ -32,6 +21,7 @@ module.exports = {
             jQuery: "jquery"
         }),
         new BundleTracker({filename: pathtoassets + '/webpack-stats.json'}),
+        new CleanWebpackPlugin(['assets/bundles'])
   ],
 
   module: {

@@ -7,7 +7,7 @@ var Button = require('react-bootstrap').Button;
 
 module.exports = React.createClass({
     render: function() {
-        var hasVideos = (this.props.data.videos.length > 0)
+        var hasVideos = (this.props.videos.length > 0)
         var title = hasVideos ? "Add more videos to this series." : "This series is currently empty."
         var overAllClass = hasVideos ? "noVideosArea hasVideos" : "noVideosArea"
 

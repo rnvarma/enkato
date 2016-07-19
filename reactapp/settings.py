@@ -29,9 +29,12 @@ CLASS_DIR = os.path.join(BASE_DIR, 'classroom')
 SECRET_KEY = 'k3di=5f2_to8g!^(c_)6#9!uex9e65i4n&rllc*a@bu8l$(!#)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if "ENKATO_SERVER" in os.environ and os.environ["ENKATO_SERVER"] == "PROD":
+    DEBUG = False
+else:
+    DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = '/login'
 
@@ -45,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'storages',
     'webpack_loader',
     'structabl',
     'home',
@@ -52,7 +56,10 @@ INSTALLED_APPS = [
     'authentication',
     'classroom',
     'upload',
-    'series'
+    'series',
+    'instructortools',
+    'questionanswer',
+    'notifications',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -92,13 +99,41 @@ WSGI_APPLICATION = 'reactapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+DEV_GLOBAL_DB = {
+    'ENGINE': 'django_postgrespool',
+    'NAME': 'enkatodev',
+    'USER': 'enkatodev',
+    'PASSWORD': 'khanacademy23',
+    'HOST': 'enkato-dev.caubwydik7md.us-east-1.rds.amazonaws.com',
+    'PORT': '5432'
 }
 
+DEV_LOCAL_DB = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+}
+
+PROD_DB = {
+    'ENGINE': 'django_postgrespool',
+    'NAME': 'enkatoprod',
+    'USER': 'enkatoprod',
+    'PASSWORD': 'khanacademy23',
+    'HOST': 'enkato-prod.caubwydik7md.us-east-1.rds.amazonaws.com',
+    'PORT': '5432'
+}
+
+PROD_DB = {
+    'ENGINE': 'django_postgrespool',
+    'NAME': 'd74djt258l9ik',
+    'USER': 'iahgregulfpcnh',
+    'PASSWORD': '5Oh_TIClof5UxpOgUaoymaMVm3',
+    'HOST': 'ec2-107-21-219-235.compute-1.amazonaws.com',
+    'PORT': '5432'
+}
+
+DATABASES = {
+    'default': DEV_LOCAL_DB if DEBUG else PROD_DB
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -132,24 +167,51 @@ USE_L10N = True
 
 USE_TZ = True
 
+AWS_ACCESS_KEY_ID = 'AKIAIA5XRYWUZJOKIMFA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'enkato-static-files'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
+MEDIAFILES_LOCATION = 'media'
+MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
+DEFAULT_FILE_STORAGE = 'reactapp.storage.MediaStorage'
 
-STATIC_URL = '/static/'
+if DEBUG:
+    STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'assets'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
-)
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'assets/'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
+        os.path.join(BASE_DIR, 'images/')
+    )
 
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'bundles/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    WEBPACK_LOADER = {
+        'DEFAULT': {
+            'BUNDLE_DIR_NAME': 'bundles/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        }
     }
-}
+else:
+    STATICFILES_LOCATION = 'static'
+    STATICFILES_STORAGE = 'reactapp.storage.StaticStorage'
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'assets/prod-assets/'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
+        os.path.join(BASE_DIR, 'images/')
+    )
+
+    WEBPACK_LOADER = {
+        'DEFAULT': {
+            'BUNDLE_DIR_NAME': 'prod-bundles/',
+            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-prod-stats.json'),
+        }
+    }
 
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'team@enkato.com'
+EMAIL_HOST_PASSWORD = 'khanacademy23'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
-
+ACCOUNT_ACTIVATION_DAYS = 1

@@ -5,8 +5,8 @@ require("css/classroom/classroom/Classroom.scss");
 var React = require('react')
 var ReactDOM = require('react-dom')
 
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 
 var NavBar = require('js/globals/NavBar');
 var ClassHeader = require('js/classroom/classroom/ClassHeader');

@@ -7,16 +7,21 @@ var Row = require('react-bootstrap').Row;
 
 module.exports = React.createClass({
     render: function() {
-        var seriesPanels = this.props.data.series.map(function(series) {
+        var seriesPanels = this.props.series.map(function(series) {
             return (
                 <ProfileSeriesPanel
                     series={series}/>
             )
         })
         return (
-            <Row className="profileSeriesList">
-                {seriesPanels}
-            </Row>
+            <div className="profileSeriesList">
+                <div className="title">
+                    {this.props.name}
+                </div>
+                <Row className="panels">
+                    {seriesPanels}
+                </Row>
+            </div>
         )
     }
 })

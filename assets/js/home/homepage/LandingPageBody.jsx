@@ -22,6 +22,8 @@ var Button = require('react-bootstrap').Button;
 var ControlLabel = require('react-bootstrap').ControlLabel;
 var InputGroup = require('react-bootstrap').InputGroup;
 
+var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
+
 module.exports = React.createClass({
     onFormSubmit: function(data) {
         $.ajax({
@@ -76,9 +78,15 @@ module.exports = React.createClass({
         this.onFormSubmit(this.state);
     },
     render: function() {
+        var headerStyle = {
+            backgroundImage: "url(" + DjangoImageLinkHandler("splash_page.png") + ")"
+        }
+        var katoGirlStyle = {
+            backgroundImage: "url(" + DjangoImageLinkHandler("katogirl.png") + ")"
+        }
         return (
             <div>
-                <div className="header">
+                <div className="header" style={headerStyle}>
                     <div className="left">
                         <div className="logo">
                             Education starts with you.
@@ -124,7 +132,7 @@ module.exports = React.createClass({
                                     <div className="bold">Learn anything,</div> from anyone.
                                 </div>
                                 <div className="imageArea">
-                                    <img src="/static/imgs/iKato.png" />
+                                    <img src={DjangoImageLinkHandler("iKato.png")} />
                                 </div>
                             </div>
                         </Col>
@@ -186,7 +194,7 @@ module.exports = React.createClass({
                         </Col>
                     </Row>
                 </div>
-                <div className="katoGirl">
+                <div className="katoGirl" style={katoGirlStyle}>
                     <Row>
                         <Col sm={8} smOffset={2} xs={12} md={6} mdOffset={6}>
                             <div className="content">

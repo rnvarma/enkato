@@ -4,13 +4,13 @@ var React = require('react')
 
 var FontAwesome = require('react-fontawesome');
 
-var Form = require('react-bootstrap').Form;
-var FormGroup = require('react-bootstrap').FormGroup;
-var Col = require('react-bootstrap').Col;
-var FormControl = require('react-bootstrap').FormControl;
-var Button = require('react-bootstrap').Button;
-var ControlLabel = require('react-bootstrap').ControlLabel;
-var InputGroup = require('react-bootstrap').InputGroup;
+import Form from 'react-bootstrap/lib/Form';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import Col from 'react-bootstrap/lib/Col';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import Button from 'react-bootstrap/lib/Button';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import InputGroup from 'react-bootstrap/lib/InputGroup';
 
 module.exports = React.createClass({
     getInitialState: function() {

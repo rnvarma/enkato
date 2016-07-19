@@ -5,8 +5,11 @@ var React = require('react')
 
 import { Button } from 'react-bootstrap';
 
-var NoVideosArea = require('js/series/seriespage/NoVideosArea');
-var SeriesVideoList = require('js/series/seriespage/SeriesVideoList');
+import { pluralize } from 'js/globals/utility';
+
+import NoVideosArea from 'js/series/seriespage/NoVideosArea';
+import SeriesVideoList from 'js/series/seriespage/SeriesVideoList';
+var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
 
 export default class SeriesMainArea extends React.Component {
     constructor(props) {
@@ -14,22 +17,23 @@ export default class SeriesMainArea extends React.Component {
     }
 
     render() {
-        const img_src = this.props.data.image || '/static/imgs/blank_thumbnail.png'
-        if (this.props.data.videos.length == 0) {
+        const img_src = this.props.image || DjangoImageLinkHandler('blank_thumbnail.png')
+        if (this.props.videos.length == 0) {
             var video_area = <NoVideosArea
-                                 data={this.props.data}
+                                 videos={this.props.videos}
                                  reloadPageData={this.props.reloadPageData}
                                  openModal={this.props.openModal}/>
-
             var annotateVideosButton = "";
-        } else {
+        } else if (this.props.is_creator) {
             var video_area = (
                 <div>
-                    <SeriesVideoList data={this.props.data} />
+                    <SeriesVideoList
+                        videos={this.props.videos}
+                        s_id={this.props.s_id}
+                        is_creator={this.props.is_creator}/>
                     <NoVideosArea
-                        data={this.props.data}
-                        openModal={this.props.openModal}
-                    />
+                        videos={this.props.videos}
+                        openModal={this.props.openModal}/>
                 </div>
             )
             var annotateVideosButton =  (
@@ -39,6 +43,33 @@ export default class SeriesMainArea extends React.Component {
                     </Button>
                 </div>
             );
+        } else {
+            var video_area = (
+                <div>
+                    <SeriesVideoList
+                        videos={this.props.videos}
+                        s_id={this.props.s_id}
+                        is_creator={this.props.is_creator}/>
+                </div>
+            )
+            
+            if (this.props.is_subscribed) {
+                var annotateVideosButton = (
+                    <div className="annotate-box">
+                        <Button onClick={this.props.onUnsubscribe}>
+                            Unsubscribe
+                        </Button>
+                    </div>
+                )
+            } else {
+                var annotateVideosButton = (
+                    <div className="annotate-box">
+                        <Button onClick={this.props.onSubscribe}>
+                            Subscribe
+                        </Button>
+                    </div>
+                )
+            }
         }
         return (
             <div className="seriesMainArea">
@@ -48,20 +79,20 @@ export default class SeriesMainArea extends React.Component {
                     </div>
                     <div className="metadata-area">
                         <div className="name">
-                            {this.props.data.name}
+                            {this.props.name}
                         </div>
                         <div className="description">
-                            {this.props.data.description}
+                            {this.props.description}
                         </div>
                         <div className="stats">
                             <div className="creator">
-                                <a href={"/userprofile/" + this.props.data.creator.user_id}>{this.props.data.creator.name}</a>
+                                <a href={"/userprofile/" + this.props.creator.user_id}>{this.props.creator.name}</a>
                             </div>
                             <div className="num-videos">
-                                {this.props.data.num_videos} videos
+                                {this.props.num_videos} {pluralize("video", this.props.num_videos)}
                             </div>
                             <div className="num-mins">
-                                {this.props.data.total_len}
+                                {this.props.total_len}
                             </div>
                             {annotateVideosButton}
                         </div>

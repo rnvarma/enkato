@@ -1,11 +1,8 @@
-from django.shortcuts import render
 from django.views.generic.base import View
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
 from backend.models import *
 from backend.utility import *
@@ -39,7 +36,7 @@ class Serializer(object):
         return data
 
     @staticmethod
-    def serialize_series(series):
+    def serialize_series(series, request=None):
         data = {}
         data["uuid"] = series.uuid
         data["name"] = series.name
@@ -56,6 +53,8 @@ class Serializer(object):
         data["total_len"] = sanetizeTime(total_time)
         videos = map(lambda sv: sv.video, series_videos)
         data["videos"] = map(Serializer.serialize_video, videos)
+        data["is_creator"] = False if not request else series.creator == request.user.customuser
+        data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
         return data
 
     @staticmethod
@@ -69,11 +68,13 @@ class Serializer(object):
         data["description"] = video.description
         data["thumbnail"] = video.thumbnail
         data["duration_raw"] = video.duration
-        data["duration_clean"] = convertSecondsToTime(video.duration)
+        data["duration_clean"] = convert_seconds_to_duration(video.duration)
         data["duration_san"] = sanetizeTime(video.duration)
         data["creator"] = Serializer.serialize_user(video.creator)
         data["num_views"] = video.num_views
         data["order"] = video.order if 'order' in video.__dict__ else 0
+        data["num_topics"] = video.topics.count()
+        data["num_quiz_questions"] = video.quiz_questions.count()
         return data
         
     @staticmethod
@@ -81,9 +82,9 @@ class Serializer(object):
         data = {}
         data["name"] = topic.name
         data["time"] = topic.time
-        data["time_clean"] = convertSecondsToTime(topic.time)
+        data["time_clean"] = convert_seconds_to_duration(topic.time)
         data["id"] = topic.uuid
-        data["isCurrentTopic"] = False #used in frontend
+        data["isCurrentTopic"] = False  # used in frontend
         return data
 
     @staticmethod
@@ -106,6 +107,7 @@ class Serializer(object):
         data["is_correct"] = choice.is_correct
         return data
 
+
 class UserData(APIView):
     def get(self, request):
         if request.user.is_anonymous():
@@ -123,7 +125,8 @@ class UserProfileData(APIView):
         cu = CustomUser.objects.get(id=u_id)
         data = {}
         data["userdata"] = Serializer.serialize_userprofiledata(cu)
-        data["series"] = map(Serializer.serialize_series, cu.created_series.all())
+        data["created_series"] = map(Serializer.serialize_series, cu.created_series.all())
+        data["subscribed_series"] = map(Serializer.serialize_series, cu.student_series.all())
         return Response(data)
 
 class ClassroomData(APIView):
@@ -135,7 +138,7 @@ class ClassroomData(APIView):
 class SeriesData(APIView):
     def get(self, request, s_id):
         series = Series.objects.get(uuid=s_id)
-        series_data = Serializer.serialize_series(series)
+        series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
 
 class VideoData(View):
@@ -143,10 +146,15 @@ class VideoData(View):
         video = Video.objects.get(uuid=v_uuid)
         topicList = video.topics.all().order_by('time')
         frontendTList = map(Serializer.serialize_topic, topicList)
+        #get QuizList
+        quizQs = video.quiz_questions.all()
+        questions = map(Serializer.serialize_quiz_question, quizQs)
         return JsonResponse({
-            'videoID':video.vid_id,
-            'topicList':frontendTList,
-            'videoData': Serializer.serialize_video(video)
+            'videoID': video.vid_id,
+            'topicList': frontendTList,
+            'videoData': Serializer.serialize_video(video),
+            'questions': questions,
+            'numQuestions':quizQs.count()
         })
 
 class QuizData(APIView):
@@ -183,3 +191,96 @@ class VideoIdData(View):
                 'topicList':frontendTList,
                 'videoData': Serializer.serialize_video(video)
             })
+
+def secondify(time):
+    timeL = time.split(":")
+    seconds = 0
+    print(timeL)
+    if(len(timeL) == 2):
+        seconds = int(timeL[0])*60 + int(timeL[1])
+    elif(len(timeL)==3):
+        seconds = int(timeL[0])*3600 + int(timeL[1])*60 + int(timeL[2])
+    return seconds
+
+class YTIndexScript(APIView):
+    def get(self, request, v_uuid):
+        video = Video.objects.get(uuid=v_uuid)
+        topics = '''02:25 : Primitives
+06:32 : Output
+08:51 : Math
+11:18 : Conditionals
+14:38 : Looping
+17:14 : Strings
+22:05 : Input
+26:08 : Arrays
+27:32 : Vectors
+28:58 : Tuples
+30:02 : Functions
+32:14 : Closures
+33:48 : Pointers
+37:41 : Structs
+41:12 : Traits
+43:37 : Enums
+'''
+        topicObjsList = []
+        for topic in topics.splitlines():
+            topicL = topic.split(" : ")
+            topicName = topicL[1]
+            topicTime = secondify(topicL[0])
+            topicObj = Topic(video = video, time = topicTime, name = topicName)
+            topicObjsList.append(topicObj)
+            print(topicName)
+        for topicObj in topicObjsList:
+            topicObj.save()
+        return JsonResponse({'hey':True})
+
+def getCorrectAnswer(choices):
+    #returns index of correct answer
+    #returns -1 if no answer was said to be correct by instructor
+    for i in range(len(choices)):
+        if(choices[i].is_correct):
+            return i
+    return -1
+
+
+class LoadQuizData(APIView):
+    def get(self, request, s_id, v_id):
+        print("hi----------------------------")
+        s = Series.objects.get(uuid=s_id)
+        ssd = StudentSeriesData.objects.get(user=request.user.customuser, series=s)
+
+        v = Video.objects.get(uuid=v_id)
+        ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
+
+        quizQuestions = v.quiz_questions.all()
+        seriesQuizQuestionData = ssvd.quizzes_data.all()
+
+        result = []
+        numCorrect=0
+
+        if(len(quizQuestions)!=len(seriesQuizQuestionData)):
+            print("quiz not taken!!!!")
+            return JsonResponse({'result':result, 'numCorrect':numCorrect})
+        else: 
+            print("quiz taken!!!!")
+        
+        for i in range(len(quizQuestions)):
+            question = quizQuestions[i]
+            takenQuizData = seriesQuizQuestionData[i]
+            correct=False
+            choices=question.mc_responses.all()
+
+            studentAnswer = int(takenQuizData.answer)
+            correctAnswer = getCorrectAnswer(choices)
+
+            if(correctAnswer==studentAnswer):
+                correct=True
+                numCorrect+=1
+
+            result.append({
+                "studentAnswer":studentAnswer,
+                "correctAnswer":correctAnswer,
+                "isCorrect":correct
+            })
+        return JsonResponse({'result':result, 'numCorrect':numCorrect})
+

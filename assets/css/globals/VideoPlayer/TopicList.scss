@@ -12,43 +12,53 @@
 .topicNode{
     width:100%;
     background-color:$grey-topic-button;
-    border-color: $grey-topic-button-section-bg;
-    border-width:1px;
-    border-style:solid;
     overflow: hidden;
-    margin:2px;
     white-space: nowrap;
     text-overflow: ellipsis;
-    color:$grey-topic-button-text;
-    @include respond-to(xsmall) {
-        font-size:7vh;
-        padding:1vh;
-        height:15vh;
+    color:$structabl-blue;
+    padding: 10px 15px;
+    border-bottom: 1px solid $structabl-bg-blue;
+
+    &#selectedTopicNode {
+        background-color: $enkato-green;
+        color: white;
+
+        .name {
+            color: white;
+        }
     }
-    @include respond-to(small) {
-        font-size:2.5vh;
-        padding:2.5vh;
-        height:9vh;
+
+    &:hover {
+        background-color:$grey-topic-button-section-bg-hover;
+        cursor:pointer;
+
+        .name {
+            margin-left: -300px;
+        }
     }
-    @include respond-to(medium) {
-        font-size:2.5vh;
-        padding:2.5vh;
-        height:9vh;
+
+    .time {
+        display: inline-block;
+        vertical-align: top;
+        width: 20%;
+
     }
-    @include respond-to(large) {
-        font-size:2.5vh;
-        padding:2.5vh;
-        height:9vh;
+
+    .nameContainer {
+        overflow: hidden;
+        display: inline-block;
+        width: 80%;
+    }
+
+    .name {
+        display: inline-block;
+        vertical-align: top;
+        font-weight: 500;
+        overflow: hidden;
+        padding-left: 2px;
+
+        transition: 5s margin-left;     
+        transition-timing-function: linear;
     }
 }
-
-.topicNode:hover{
-    background-color:$grey-topic-button-section-bg-hover;
-    cursor:pointer;
-}
-
-#selectedTopicNode{
-    font-weight: 800;
-}
-
 

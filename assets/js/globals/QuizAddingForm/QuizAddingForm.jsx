@@ -1,24 +1,18 @@
+require('css/globals/QuizAddingForm/quizaddingform.scss');
 
-require('css/globals/QuizAddingForm/quizaddingform.scss')
-var React = require('react')
-var ReactDOM = require('react-dom')
- 
-var getCookie = require('js/globals/GetCookie')
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var FontAwesome = require('react-fontawesome');
-var ScrollArea = require('react-scrollbar')
+import { getCookie } from 'js/globals/utility';
 
-var Form = require('react-bootstrap').Form;
-var FormGroup = require('react-bootstrap').FormGroup;
-var Row = require('react-bootstrap').Row;
-var FormControl = require('react-bootstrap').FormControl;
-var ControlLabel = require('react-bootstrap').ControlLabel;
-var InputGroup = require('react-bootstrap').InputGroup;
-var FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome';
+import ScrollArea from 'react-scrollbar';
 
-var SingleQuizForm = require('js/globals/QuizAddingForm/SingleQuizForm.jsx')
-var QuizFormsList = require('js/globals/QuizAddingForm/QuizFormsList');
-var ScrollButtonList = require('js/globals/QuizAddingForm/ScrollButtonList');
+import { Row, Form, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
+
+import SingleQuizForm from 'js/globals/QuizAddingForm/SingleQuizForm';
+import QuizFormsList from 'js/globals/QuizAddingForm/QuizFormsList';
+import ScrollButtonList from 'js/globals/QuizAddingForm/ScrollButtonList';
 
 module.exports = React.createClass({
     loadDataFromServer: function(vuuid){
@@ -27,7 +21,6 @@ module.exports = React.createClass({
           dataType: 'json',
           cache: false,
           success: function(data) {
-            console.log(data)
             this.setState(data)
           }.bind(this),
           error: function(xhr, status, err) {
@@ -49,7 +42,6 @@ module.exports = React.createClass({
             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
           },
           success: function(data) {
-            console.log("yay we done")
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -143,7 +135,7 @@ module.exports = React.createClass({
           }.bind(this)
         });
     },
-    deleteChoice: function(qid, cid, index) {
+    deleteChoice: function(qid, cid, qIndex, cIndex) {
         var data = {
             qid: qid,
             cid: cid
@@ -160,18 +152,9 @@ module.exports = React.createClass({
           success: function(data) {
             if (data.status) {
                 var questions = this.state.questions
-                for (var i = 0; i < questions.length; i++) {
-                    if (questions[i].id == data.qid) {
-                        for (var j = 0; j < questions[i].choiceList.length; j++) {
-                            if (questions[i].choiceList[j].id == cid) {
-                                questions[i].choiceList[j - 1].focus = true;
-                                questions[i].choiceList.splice(j, 1)
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
+                questions[qIndex].choiceList.splice(cIndex, 1)
+                if (cIndex > 0) 
+                    questions[qIndex].choiceList[cIndex].focus = true;
                 this.setState({questions: questions})
             } else {
                 console.log("Internal Server Error: Adding Quiz Option Failed")
@@ -198,6 +181,7 @@ module.exports = React.createClass({
                 var questions = this.state.questions
                 questions.push(data.new_question)
                 this.setState({questions: questions})
+                this.scrollToFromButton(data.new_question.id, questions.length - 1)
             } else {
                 console.log("Internal Server Error: Adding Quiz Question Failed")
             }
@@ -218,10 +202,45 @@ module.exports = React.createClass({
         }
         this.setState({questions: tempQuestionList})
     },
-    render: function(){
-        return(
+    deleteQuestion: function(qid, qIndex) {
+        var data = {
+            qid: qid
+        }
+        $.ajax({
+          url: "/v/" + this.state.uuid + "/deletequizquestion",
+          dataType: 'json',
+          type: 'POST',
+          data: data,
+          beforeSend: function (xhr) {
+            xhr.withCredentials = true;
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          },
+          success: function(data) {
+            if (data.status) {
+                var questions = this.state.questions
+                questions.splice(qIndex, 1)
+                this.setState({questions: questions})
+                if (qIndex > 0) {
+                    var newQuestionID = questions[qIndex - 1].id
+                    this.scrollToFromButton(newQuestionID, qIndex - 1)
+                }
+            } else {
+                console.log("Internal Server Error: Deleting Quiz Question Failed")
+            }
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
+    },
+    render: function() {
+        let height = $('.quizAddingForm').height() - 10;
+        if (isNaN(height)) {
+            height = 530;
+        }
+        return (
             <div className="quizAddingForm">
-                <div className="questionNumberButtons">
+                <div className="questionNumberButtons" style={{height}}>
                     <ScrollButtonList 
                         scrollToFromButton={this.scrollToFromButton}
                         questions={this.state.questions}/>
@@ -236,6 +255,7 @@ module.exports = React.createClass({
                     handleQuizQuestionChange={this.handleQuizQuestionChange}
                     addNewChoice={this.addNewChoice}
                     deleteChoice={this.deleteChoice}
+                    deleteQuestion={this.deleteQuestion}
                     makeChoiceIsCorrect={this.makeChoiceIsCorrect}
                     scrollToFromButton={this.scrollToFromButton}
                     questions={this.state.questions}/>

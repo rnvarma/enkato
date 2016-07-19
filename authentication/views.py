@@ -7,6 +7,9 @@ from django.http import JsonResponse
 
 from backend.models import *
 
+from registration.backends.hmac.views import RegistrationView
+from registration.forms import RegistrationForm
+
 class Login(View):
     def get(self, request):
         if request.user.is_anonymous() == False:
@@ -17,13 +20,16 @@ class Login(View):
         user = authenticate(username=request.POST.get('user_name'),
                             password=request.POST.get('password'))
         if user is not None:
-            login(request, user)
-            return JsonResponse({'status': True})
+            if user.is_active == True:
+                login(request, user)
+                return JsonResponse({'status': True})
+            else:
+                return JsonResponse({'status': False, 'issue': 'This account has not been activated'})
         else:
             return JsonResponse({'status': False, 'issue': 'Incorrect username or password'})
 
 
-class Register(View):
+class Register(RegistrationView):
     def get(self, request):
         if request.user.is_anonymous() == False:
             return HttpResponseRedirect('/')
@@ -40,6 +46,7 @@ class Register(View):
         )
         new_user.first_name = request.POST.get('first_name')
         new_user.last_name = request.POST.get('last_name')
+        new_user.is_active = False
         new_user.save()
 
 
@@ -52,9 +59,7 @@ class Register(View):
         )
         cu.save()
 
-        user = authenticate(username=request.POST.get('user_name'),
-                            password=request.POST.get('password'))
-        login(request, user)
+        self.send_activation_email(new_user)
 
         return JsonResponse({'status': True})
 

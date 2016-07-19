@@ -1,24 +1,43 @@
 require("css/globals/NavBar.scss")
 
 var React = require('react')
+var moment = require('moment')
 
-var Navbar = require('react-bootstrap').Navbar;
-var Nav = require('react-bootstrap').Nav;
-var NavItem = require('react-bootstrap').NavItem;
-var MenuItem = require('react-bootstrap').MenuItem;
-var NavDropdown = require('react-bootstrap').NavDropdown;
+import Navbar from 'react-bootstrap/lib/Navbar';
+import Nav from 'react-bootstrap/lib/Nav';
+import NavItem from 'react-bootstrap/lib/NavItem';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
+import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 
 var CreateSeriesModal = require('js/globals/CreateSeriesModal')
+var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
+var FontAwesome = require('react-fontawesome');
 
 module.exports = React.createClass({
     getInitialState: function() {
         return {
             logged_in: false,
             username: '',
-            user_id: 0
+            user_id: 0,
+            num_notifications: 0,
+            notifications: []
         }
     },
     componentWillMount: function() {
+        $.ajax({
+          url: "/1/getnotifications",
+          dataType: 'json',
+          cache: false,
+          success: function(data) {
+            this.setState({
+                notifications: data.notifications,
+                num_notifications: data.num
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
         $.ajax({
           url: "/1/userdata",
           dataType: 'json',
@@ -48,11 +67,18 @@ module.exports = React.createClass({
           <NavItem eventKey={2} href="/register">SIGN UP</NavItem>
         )
         if (this.state.logged_in) {
+            var numstring = this.state.num_notifications
             var RightBar = (
                 <Nav pullRight>
                     <CreateSeriesModal />
                     <NavItem eventKey={2} href="/logout">Logout</NavItem>
                     <NavItem eventKey={1} href="/userprofile">{this.state.username}</NavItem>
+                    <FontAwesome name="fa fa-bell" aria-hidden="true"></FontAwesome>
+                    <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown">
+                        {this.state.notifications.map(function(notification) {
+                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description} {moment(notification.timestamp).format('LLL')}</div></MenuItem>);
+                        })}
+                    </NavDropdown>
                 </Nav>
             )
         } else {
@@ -68,7 +94,7 @@ module.exports = React.createClass({
                 <Navbar.Header>
                   <Navbar.Brand>
                     <a href="/">
-                        <span className="logo"><img className="headerLogo" src="/static/imgs/enkato_logo.png" /></span>
+                        <span className="logo"><img className="headerLogo" src={DjangoImageLinkHandler("enkato_logo.png")} /></span>
                     </a>
                   </Navbar.Brand>
                   <Navbar.Toggle />
