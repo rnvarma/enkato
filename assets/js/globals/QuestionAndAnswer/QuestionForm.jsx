@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionForm.scss');
+require('css/globals/QuestionAndAnswer/QuestionForm.scss');
 
 import React from 'react';
 
@@ -10,6 +10,9 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 
 class QuestionForm extends React.Component {
   render() {
+    const options = this.props.topicList.map((topic) => {
+      return (<option key={topic.id} value={topic.id}>{topic.name}</option>);
+    });
     return (
       <div className="questionForm">
         <Form horizontal onSubmit={this.props.onSubmit}>
@@ -20,7 +23,7 @@ class QuestionForm extends React.Component {
             <Col sm={9}>
               <FormControl onChange={this.props.onTopicChange} componentClass="select">
                 <option>General</option>
-                <option value={10}>Actual Topic</option>
+                {options}
               </FormControl>
             </Col>
           </FormGroup>

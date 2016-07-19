@@ -11,15 +11,21 @@
   }
 
   .filterOption {
+    cursor: pointer;
     color: $structabl-blue;
     padding: 12px 20px;
     background-color: white;
     font-size: 18px;
     width: 12%;
     display: inline-block;
+    text-align: center;
 
     &.selected {
       font-weight: bold;
+    }
+
+    &:hover {
+      background: #efefef;
     }
   }
 

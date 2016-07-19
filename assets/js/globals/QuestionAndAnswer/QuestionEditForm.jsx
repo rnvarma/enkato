@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionEditForm.scss');
+require('css/globals/QuestionAndAnswer/QuestionEditForm.scss');
 
 import React from 'react';
 
@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/lib/Button';
 
 import getCookie from 'js/globals/GetCookie';
 
-import QuestionForm from 'js/singlevideo/singlevideoview/QuestionForm';
+import QuestionForm from 'js/globals/QuestionAndAnswer/QuestionForm';
 
 class QuestionEditForm extends React.Component {
   constructor() {
@@ -36,6 +36,7 @@ class QuestionEditForm extends React.Component {
     const data = {
       title: this.props.question.input.title,
       text: this.props.question.input.text,
+      /* TODO: do the topic */
     };
     $.ajax({
       url: `/api/videos/${this.props.videoUUID}/questions/${this.props.question.id}`,
@@ -56,6 +57,7 @@ class QuestionEditForm extends React.Component {
     return (
       <div className="questionEditForm">
         <QuestionForm
+          topicList={this.props.topicList}
           onSubmit={this.onSubmit}
           onTopicChange={null}
           onTitleChange={this.onTitleChange}
@@ -63,7 +65,7 @@ class QuestionEditForm extends React.Component {
           titleValue={this.props.question.input.title}
           textValue={this.props.question.input.text}
         />
-        <Button onClick={this.onSubmit}>Edit</Button>
+        <Button onClick={this.onSubmit}>Publish</Button>
         <Button onClick={this.props.toggleEdit}>Cancel</Button>
         <Button onClick={this.props.delete}>Delete</Button>
       </div>

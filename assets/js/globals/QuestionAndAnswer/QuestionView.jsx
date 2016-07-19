@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionView.scss');
+require('css/globals/QuestionAndAnswer/QuestionView.scss');
 
 import React from 'react';
 
@@ -10,10 +10,10 @@ import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
-import QuestionModal from 'js/singlevideo/singlevideoview/QuestionModal';
-import QuestionFilterBar from 'js/singlevideo/singlevideoview/QuestionFilterBar';
-import QuestionList from 'js/singlevideo/singlevideoview/QuestionList';
-import QuestionDisplay from 'js/singlevideo/singlevideoview/QuestionDisplay';
+import QuestionModal from 'js/globals/QuestionAndAnswer/QuestionModal';
+import QuestionFilterBar from 'js/globals/QuestionAndAnswer/QuestionFilterBar';
+import QuestionList from 'js/globals/QuestionAndAnswer/QuestionList';
+import QuestionDisplay from 'js/globals/QuestionAndAnswer/QuestionDisplay';
 
 class QuestionView extends React.Component {
   constructor(props) {
@@ -43,6 +43,10 @@ class QuestionView extends React.Component {
     this.toggleEndorsedResponse = this.toggleEndorsedResponse.bind(this);
     this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
     this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
+    this.toggleEditQuestion = this.toggleEditQuestion.bind(this);
+    this.toggleEditResponse = this.toggleEditResponse.bind(this);
+    this.getQuestionData = this.getQuestionData.bind(this);
+    this.processQuestionData = this.processQuestionData.bind(this);
   }
 
   componentDidMount() {
@@ -50,33 +54,44 @@ class QuestionView extends React.Component {
   }
 
   getQuestionData(videoUUID) {
-    if (!videoUUID) return;
+    if (!videoUUID && !this.props.loadQuestionData) return;
+    const onSuccess = (data) => {
+      this.processQuestionData(data);
+
+      this.setState({
+        questions: this.questionData,
+        currentQuestion: this.questionData[0],
+      });
+    };
+    if (this.props.loadQuestionData) {
+      this.props.loadQuestionData(onSuccess);
+      return;
+    }
     $.ajax({
-      url: "/api/video/" + videoUUID + "/questions",
+      url: `/api/videos/${videoUUID}/questions`,
       dataType: 'json',
       cache: false,
-      success: (data) => {
-        this.questionData = data.questions;
-        /* set response.input, used for editing responses */
-        this.questionData.forEach((question, index, array) => {
-          question.responses.forEach((response, i, arr) => {
-            response.input = response.text;
-            arr[i] = response;
-          });
-          question.input = {
-            title: question.title,
-            text: question.text,
-          };
-          array[index] = question;
-        });
-        this.setState({
-          questions: this.questionData,
-          currentQuestion: this.questionData[0],
-        });
-      },
+      success: onSuccess,
       error: (xhr, status, err) => {
         console.error(status, err.toString());
       },
+    });
+  }
+
+  processQuestionData(data) {
+    /* add data to support persistent editing and other shit */
+    this.questionData = data;
+    this.questionData.forEach((question, index, array) => {
+      console.log(question);
+      question.responses.forEach((response, i, arr) => {
+        response.input = response.text;
+        arr[i] = response;
+      });
+      question.input = {
+        title: question.title,
+        text: question.text,
+      };
+      array[index] = question;
     });
   }
 
@@ -186,8 +201,8 @@ class QuestionView extends React.Component {
     question.title = questionNewTitle;
     question.text = questionNewText;
     question.input = {
-      title: questionEditTitle,
-      text: questionEditText,
+      title: questionNewTitle,
+      text: questionNewText,
     };
     this.setState({ question: this.questionData });
   }
@@ -262,6 +277,33 @@ class QuestionView extends React.Component {
     this.setState({ questions: this.questionData });
   }
 
+  toggleEditQuestion(questionId) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    if (question.editing) { /*  checks if it's undefined */
+      question.editing = false;
+    } else {
+      question.editing = true;
+    }
+    this.setState({ questions: this.questionData });
+  }
+
+  toggleEditResponse(questionId, responseId) {
+    const question = this.questionData.find(question => {
+      return questionId === question.id;
+    });
+    const response = question.responses.find(response => {
+      return responseId === response.id;
+    });
+    if (response.editing) {
+      response.editing = false;
+    } else {
+      response.editing = true;
+    }
+    this.setState({ questions: this.questionData });
+  }
+
   componentWillReceiveProps(nextProps) {
       if (this.props.videoUUID != nextProps.videoUUID) {
           this.getQuestionData(nextProps.videoUUID);
@@ -269,24 +311,36 @@ class QuestionView extends React.Component {
   }
 
   render() {
+    var askModal, askButton;
+    if (this.props.videoUUID) {
+      askModal = (
+        <QuestionModal
+          topicList={this.props.topicList}
+          getCurrentTime={this.props.getCurrentTime}
+          videoUUID={this.props.videoUUID}
+          showing={this.state.addingQuestion}
+          close={this.closeModal}
+          pushQuestion={this.pushQuestion}
+        />
+      );
+      askButton = (
+        <Button className="addQuestionBtn" onClick={this.addQuestion}>
+          <FontAwesome name="plus-circle" />
+          Ask A Question
+        </Button>
+      );
+    }
+
     return (
       <div className="questionView">
         <Row>
-          <QuestionModal
-            videoUUID={this.props.videoUUID}
-            showing={this.state.addingQuestion}
-            close={this.closeModal}
-            pushQuestion={this.pushQuestion}
-          />
+          {askModal}
           <Row>
             <Col md={5}>
               <div className="qaTitle">Question & Answers</div>
             </Col>
             <Col mdOffset={10}>
-              <Button className="addQuestionBtn" onClick={this.addQuestion}>
-                <FontAwesome name="plus-circle" />
-                Ask A Question
-              </Button>
+              {askButton}
             </Col>
           </Row>
           <QuestionFilterBar
@@ -302,6 +356,8 @@ class QuestionView extends React.Component {
               currentQuestion={this.state.currentQuestion}
               setCurrentQuestion={this.setCurrentQuestion}/>
             <QuestionDisplay
+              topicList={this.props.topicList}
+              getCurrentTime={this.props.getCurrentTime}
               question={this.state.currentQuestion}
               removeQuestion={this.removeQuestion}
               pushQuestionEditText={this.pushQuestionEditText}
@@ -312,6 +368,8 @@ class QuestionView extends React.Component {
               pushResponseNewText={this.pushResponseNewText}
               removeResponse={this.removeResponse}
               toggleEndorsedResponse={this.toggleEndorsedResponse}
+              toggleEditQuestion={this.toggleEditQuestion}
+              toggleEditResponse={this.toggleEditResponse}
               videoUUID={this.props.videoUUID}/>
           </Row>
         </Row>

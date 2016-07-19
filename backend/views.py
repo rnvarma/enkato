@@ -1,15 +1,11 @@
-from django.shortcuts import render
 from django.views.generic.base import View
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
 from backend.models import *
 from backend.utility import *
-
 
 class Serializer(object):
     @staticmethod
@@ -72,7 +68,7 @@ class Serializer(object):
         data["description"] = video.description
         data["thumbnail"] = video.thumbnail
         data["duration_raw"] = video.duration
-        data["duration_clean"] = convertSecondsToTime(video.duration)
+        data["duration_clean"] = convert_seconds_to_duration(video.duration)
         data["duration_san"] = sanetizeTime(video.duration)
         data["creator"] = Serializer.serialize_user(video.creator)
         data["num_views"] = video.num_views
@@ -86,7 +82,7 @@ class Serializer(object):
         data = {}
         data["name"] = topic.name
         data["time"] = topic.time
-        data["time_clean"] = convertSecondsToTime(topic.time)
+        data["time_clean"] = convert_seconds_to_duration(topic.time)
         data["id"] = topic.uuid
         data["isCurrentTopic"] = False  # used in frontend
         return data
@@ -213,10 +209,52 @@ class YTIndexScript(APIView):
             topicObj.save()
         return JsonResponse({'hey':True})
 
-# access via /api/video/<v_uuid>/questions
-class QuestionData(APIView):
-    def get(self, request, v_uuid):
-        questions = Question.objects.filter(video__uuid=v_uuid)
-        return JsonResponse({
-            'questions': QuestionSerializer(questions, many=True).data
-        })
+def getCorrectAnswer(choices):
+    #returns index of correct answer
+    #returns -1 if no answer was said to be correct by instructor
+    for i in range(len(choices)):
+        if(choices[i].is_correct):
+            return i
+    return -1
+
+
+class LoadQuizData(APIView):
+    def get(self, request, s_id, v_id):
+        print("hi----------------------------")
+        s = Series.objects.get(uuid=s_id)
+        ssd = StudentSeriesData.objects.get(user=request.user.customuser, series=s)
+
+        v = Video.objects.get(uuid=v_id)
+        ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
+
+        quizQuestions = v.quiz_questions.all()
+        seriesQuizQuestionData = ssvd.quizzes_data.all()
+
+        result = []
+        numCorrect=0
+
+        if(len(quizQuestions)!=len(seriesQuizQuestionData)):
+            print("quiz not taken!!!!")
+            return JsonResponse({'result':result, 'numCorrect':numCorrect})
+        else: 
+            print("quiz taken!!!!")
+        
+        for i in range(len(quizQuestions)):
+            question = quizQuestions[i]
+            takenQuizData = seriesQuizQuestionData[i]
+            correct=False
+            choices=question.mc_responses.all()
+
+            studentAnswer = int(takenQuizData.answer)
+            correctAnswer = getCorrectAnswer(choices)
+
+            if(correctAnswer==studentAnswer):
+                correct=True
+                numCorrect+=1
+
+            result.append({
+                "studentAnswer":studentAnswer,
+                "correctAnswer":correctAnswer,
+                "isCorrect":correct
+            })
+        return JsonResponse({'result':result, 'numCorrect':numCorrect})

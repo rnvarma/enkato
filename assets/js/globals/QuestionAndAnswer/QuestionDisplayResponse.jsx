@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionDisplayResponse.scss');
+require('css/globals/QuestionAndAnswer/QuestionDisplayResponse.scss');
 
 import React from 'react';
 
@@ -7,40 +7,22 @@ import moment from 'moment';
 import FontAwesome from 'react-fontawesome';
 
 import Row from 'react-bootstrap/lib/Row';
-import Button from 'react-bootstrap/lib/Button';
 
 import getCookie from 'js/globals/GetCookie';
 
-import QuestionResponseEditForm from 'js/singlevideo/singlevideoview/QuestionResponseEditForm';
+import QuestionResponseEditForm from 'js/globals/QuestionAndAnswer/QuestionResponseEditForm';
 
 class QuestionDisplayResponse extends React.Component {
   constructor() {
     super();
-    this.state = {
-      editing: false,
-    };
 
     this.toggleEdit = this.toggleEdit.bind(this);
     this.delete = this.delete.bind(this);
     this.toggleEndorse = this.toggleEndorse.bind(this);
   }
 
-  componentDidMount() {
-    /* if you have unique input saved, then you're editing */
-    this.setState({
-      editing: this.props.response.input !== this.props.response.text,
-    });
-  }
-
-  componentWillReceiveProps(newProps) {
-    /* if you have unique input saved, then you're editing */
-    this.setState({
-      editing: newProps.response.input !== newProps.response.text,
-    });
-  }
-
   toggleEdit() {
-    this.setState({ editing: !this.state.editing });
+    this.props.toggleEditResponse(this.props.question.id, this.props.response.id);
   }
 
   delete() {
@@ -78,7 +60,7 @@ class QuestionDisplayResponse extends React.Component {
   }
 
   render() {
-    if (this.state.editing) {
+    if (this.props.response.editing) {
       return (
         <Row className="questionDisplayResponse">
           <QuestionResponseEditForm

@@ -82,7 +82,12 @@ module.exports  = React.createClass({
                 end: 0
             },
             s_id: this.props.s_id,
-            videoTitle: ""
+            videoTitle: "",
+            quizTaken: false,
+            completedQuizInfo:{
+                result:[],
+                numCorrect:0
+            },
         };
     },
     trackView: function(uuid, end) {
@@ -123,12 +128,33 @@ module.exports  = React.createClass({
         } else if (event.data == 1) {
         }
     },
+    loadQuizData: function(v_id){
+        var s_id = $("#s_id").attr("data-sid")
+
+        $.ajax({
+            url: "/api/quiz/s/"+s_id+"/v/" + v_id,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                console.log("hello")
+                console.log(data)
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });    
+    },
     loadDataFromServer: function(v_id){
         $.ajax({
           url: "/1/v/" + v_id,
           dataType: 'json',
           cache: false,
           success: function(data) {
+
+              /* an optional prop */
+              if (this.props.setTopicList) {
+                  this.props.setTopicList(data.topicList);
+              }
             if (this.state.Player) {
                 this.state.Player.destroy();
             }
@@ -143,14 +169,24 @@ module.exports  = React.createClass({
               this.videoPlayerClass = "full";
             }
             this.totalTime = data.videoData.duration_clean;
+<<<<<<< HEAD
             this.setState({
                 videoTitle: data.videoData.name
             });
+=======
+
+              /* optional prop */
+              if (this.props.setGetCurrentTime) {
+                  this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
+              }
+
+>>>>>>> 87a872a0de3d51a546bd49ffffcb462526cb8a0d
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
           }.bind(this)
         });
+        this.loadQuizData(v_id)
     },
     updateCurrentState: function(){
         //set time
@@ -172,16 +208,17 @@ module.exports  = React.createClass({
     },
     showOverlay: function(){
         this.setState({
-            showingOverlay: true
+            showingOverlay: true,
+            takingQuiz: false
         });
         this.state.Player.pause();
     },
     showQuiz: function(){
-        console.log("wooo")
         this.setState({
-            showingOverlay: true,
+            showingOverlay: false,
             takingQuiz: true
         })
+        this.state.Player.pause()
     },
     closeModal: function() {
         this.setState({
@@ -234,12 +271,7 @@ module.exports  = React.createClass({
         if(this.state.isPlaying){
             this.state.Player.pause();
         } else{
-            if(this.state.showingOverlay) 
-                this.setState(
-                    {
-                        showingOverlay:false,
-                        takingQuiz:false
-                    });
+            this.closeModal()
             this.state.Player.play();
         }
     },
@@ -262,6 +294,11 @@ module.exports  = React.createClass({
         //TopicList, but aashley said this design isn't definite. 
         //              --Arman 7/11/16
 
+        // this was an attempt at efficiency but it failed
+        // im sorry
+        // the more i think about this the more i think this class is all messed up
+        //              --moorejs 7/14/16
+
         if (this.state.topicObjList.length != 0) {
             this.topicList = (
                 <div className="topicButtonColumn">
@@ -278,11 +315,16 @@ module.exports  = React.createClass({
             );
         }
     },
+    playVideo: function() {
+        this.closeModal();
+        this.state.Player.play();
+    },
     render: function() {
         if (this.state.Player == null) {
             return (<div className="loading">Loading video player...</div>);
         }
         return (
+<<<<<<< HEAD
             <div>
                 <div className="videoTitle">
                     {this.state.videoTitle}
@@ -313,6 +355,36 @@ module.exports  = React.createClass({
                             setPlaybackRate={this.state.Player.setPlaybackRate}
                             playerContext={this.state.Player.getContext()}/>
                     </div>
+=======
+            <div className="ynVideoPlayer"> 
+                {this.topicList}
+                <div className={`videoDiv ${this.videoPlayerClass}`}>
+                    <Video
+                        renderVideo={this.state.Player.renderVideo}
+                        videoDivHeight={this.state.videoDivHeight}
+                        controlBarHeight={$('.ControlBar').height()}
+                        showingOverlay={this.state.showingOverlay}
+                        takingQuiz={this.state.takingQuiz}
+                        showQuiz={this.showQuiz}
+                        videoUUID={this.state.uuid}
+                        closeModal={this.closeModal}
+                        nextVideo={this.props.nextVideo}
+                        playVideo={this.playVideo}/>
+                    <ControlBar 
+                        className="ControlBar"
+                        isPlaying={this.state.isPlaying}
+                        videoDuration={this.state.Player.getDuration()}
+                        handleTopicClick={this.handleTopicClick}
+                        topicObjList={this.state.topicObjList}
+                        handlePlayPauseClick={this.handlePlayPauseClick}
+                        handleScrub={this.handleScrub}
+                        currentTime={this.state.currentTime}
+                        totalTime={this.totalTime}
+                        percentDone={this.state.percentDone}
+                        setPlaybackRate={this.state.Player.setPlaybackRate}
+                        playerContext={this.state.Player.getContext()}
+                        showQuiz={this.showQuiz}/>
+>>>>>>> 87a872a0de3d51a546bd49ffffcb462526cb8a0d
                 </div>
             </div>
         );

@@ -42,7 +42,7 @@ var Login = React.createClass({
             if (data.status) {
                 window.location.href = "/";
             } else {
-                console.log("sad face");
+                alert(data.issue)
             }
           }.bind(this),
           error: function(xhr, status, err) {

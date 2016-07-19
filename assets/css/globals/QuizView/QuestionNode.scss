@@ -1,10 +1,13 @@
 @import '../colors.scss';
 
+$questionIndent:50px; 
+
 .questionNode{
     padding-top:40px;
     padding-left:50px;
     height:100%;
     width:100%;
+    position:relative;
     .title{
         font-size:20px;
         color:$structabl-blue;
@@ -17,7 +20,42 @@
         }
     }
     .choiceList{
-        padding-left:50px;
+        padding-left:$questionIndent;
         padding-top:35px;
     }
+
+    &.noQuiz {
+        font-weight: bold;
+        color: $structabl-blue;
+        font-size: 20px;
+        text-align: center;
+        padding-top: 50px;
+    }
+
+    .quizSubmitAnswerButton{
+        background-color:$kato-green;
+        color:white;
+        font-weight:800;
+        margin-left:$questionIndent;
+    }
+
+    .quizSubmitButtonHR{
+        margin-left:$questionIndent;
+        width:calc(100% - #{$questionIndent}*2);
+    }
+
+    .showNumAnswered{
+        color:$kato-green;
+        font-size:12px;
+        font-weight:700;
+
+        position:absolute;
+        bottom:0;
+        left:$questionIndent*2;
+    }
 }
+
+
+
+
+

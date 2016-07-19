@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionModal.scss');
+require('css/globals/QuestionAndAnswer/QuestionModal.scss');
 
 import React from 'react';
 
@@ -8,7 +8,7 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 
 import getCookie from 'js/globals/GetCookie';
 
-import QuestionForm from 'js/singlevideo/singlevideoview/QuestionForm';
+import QuestionForm from 'js/globals/QuestionAndAnswer/QuestionForm';
 
 class QuestionModal extends React.Component {
   constructor() {
@@ -45,6 +45,7 @@ class QuestionModal extends React.Component {
       const data = {
         title: this.state.title,
         text: this.state.text,
+        time: this.props.getCurrentTime(),
       };
 
       if (this.state.topic && this.state.topic !== 0) {
@@ -52,7 +53,7 @@ class QuestionModal extends React.Component {
       }
 
       $.ajax({
-        url: `/v/${this.props.videoUUID}/question/add`,
+        url: `/api/videos/${this.props.videoUUID}/questions`,
         dataType: 'json',
         type: 'POST',
         data,
@@ -63,6 +64,11 @@ class QuestionModal extends React.Component {
         success: (newQuestion) => {
           this.props.pushQuestion(newQuestion);
           this.props.close();
+          this.setState({
+            title: '',
+            text: '',
+            topic: '',
+          })
         },
         error: (xhr, status, err) => {
           console.log('POST failed, could be invalid data or just general server problems', status, err);
@@ -103,6 +109,7 @@ class QuestionModal extends React.Component {
           </Modal.Header>
           <Modal.Body>
             <QuestionForm
+              topicList={this.props.topicList}
               onSubmit={this.onSubmit}
               onTopicChange={this.onTopicChange}
               onTitleChange={this.onTitleChange}

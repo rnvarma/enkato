@@ -1,10 +1,10 @@
-require('css/series/seriesviewer/SerivesViewerSidebarVideoPanel.scss');
+require('css/series/seriesviewer/SeriesViewerSidebarVideoPanel.scss');
 
 import React from 'react';
 
 import { pluralize, truncate } from 'js/globals/utility'
 
-class SerivesViewerSidebarVideoPanel extends React.Component {
+class SeriesViewerSidebarVideoPanel extends React.Component {
     constructor() {
         super()
         this.onClick = this.onClick.bind(this)
@@ -17,7 +17,7 @@ class SerivesViewerSidebarVideoPanel extends React.Component {
     render() {
         return (
             <div
-                className={"serivesViewerSidebarVideoPanel" + (this.props.active ? " active" : "")}
+                className={"seriesViewerSidebarVideoPanel" + (this.props.active ? " active" : "")}
                 onClick={this.onClick}
                 id={"panel-" + this.props.video.uuid}>
                 <div className="imageArea">
@@ -41,4 +41,4 @@ class SerivesViewerSidebarVideoPanel extends React.Component {
     }
 }
 
-export default SerivesViewerSidebarVideoPanel;
+export default SeriesViewerSidebarVideoPanel;

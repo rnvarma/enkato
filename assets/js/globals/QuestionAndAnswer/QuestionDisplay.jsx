@@ -1,4 +1,4 @@
-require('css/singlevideo/singlevideoview/QuestionDisplay.scss');
+require('css/globals/QuestionAndAnswer/QuestionDisplay.scss');
 
 import React from 'react';
 
@@ -11,34 +11,19 @@ import Button from 'react-bootstrap/lib/Button';
 import getCookie from 'js/globals/GetCookie';
 import { styleDuration } from 'js/globals/utility';
 
-import QuestionDisplayResponse from 'js/singlevideo/singlevideoview/QuestionDisplayResponse';
-import QuestionResponseForm from 'js/singlevideo/singlevideoview/QuestionResponseForm';
-import QuestionEditForm from 'js/singlevideo/singlevideoview/QuestionEditForm';
+import QuestionDisplayResponse from 'js/globals/QuestionAndAnswer/QuestionDisplayResponse';
+import QuestionResponseForm from 'js/globals/QuestionAndAnswer/QuestionResponseForm';
+import QuestionEditForm from 'js/globals/QuestionAndAnswer/QuestionEditForm';
 
 class QuestionDisplay extends React.Component {
   constructor() {
     super();
-    this.state = {
-      editing: false,
-    };
+
     this.delete = this.delete.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.postResponse = this.postResponse.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
-  }
-
-  componentDidMount() {
-    /* if you have unique input saved, then you're editing */
-    this.setState({ /* TODO: CHECK TOPIC CHANGE */
-      editing: this.props.question && (this.props.question.input.title !== this.props.question.title || this.props.question.input.text !== this.props.question.text),
-    });
-  }
-
-  componentWillReceiveProps(newProps) {
-    /* if you have unique input saved, then you're editing */
-    this.setState({ /* TODO: CHECK TOPIC CHANGE */
-      editing: newProps.question.input.title !== newProps.question.title || newProps.question.input.text !== newProps.question.text,
-    });
   }
 
   delete() {
@@ -57,19 +42,23 @@ class QuestionDisplay extends React.Component {
   }
 
   toggleEdit() {
-    this.setState({ editing: !this.state.editing });
+    this.props.toggleEditQuestion(this.props.question.id);
   }
 
   onSubmit(event) {
     event.preventDefault();
+    this.postResponse();
+  }
+
+  postResponse() {
     if (this.props.question.responseInput) {
       const data = {
+        question_pk: this.props.question.id,
         text: this.props.question.responseInput,
-        question: this.props.question.id,
       };
 
       $.ajax({
-        url: `/api/videos/${this.props.videoUUID}/responses`,
+        url: '/api/responses',
         dataType: 'json',
         type: 'POST',
         data,
@@ -115,6 +104,7 @@ class QuestionDisplay extends React.Component {
             pushResponseNewText={this.props.pushResponseNewText}
             removeResponse={this.props.removeResponse}
             toggleEndorsedResponse={this.props.toggleEndorsedResponse}
+            toggleEditResponse={this.props.toggleEditResponse}
           />
         );
       });
@@ -126,9 +116,10 @@ class QuestionDisplay extends React.Component {
     return (
       <Col md={8} className="questionDisplay">
         <Row>
-          {this.state.editing
+          {this.props.question.editing
             ? (
             <QuestionEditForm
+              topicList={this.props.topicList}
               videoUUID={this.props.videoUUID}
               question={this.props.question}
               pushQuestionNewText={this.props.pushQuestionNewText}
@@ -139,7 +130,7 @@ class QuestionDisplay extends React.Component {
           ) : (
             <div className="questionBox">
               <div className="questionHeader">
-                {styleDuration(this.props.question.time)} {topic}
+                {topic}
                 <Button onClick={this.toggleEdit}>Edit</Button>
                 <Button onClick={this.delete}>Delete</Button>
               </div>

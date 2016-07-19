@@ -8,9 +8,11 @@ API_KEY = "AIzaSyCy8238lONTrmV2DdyDpBViFoqke3wuk7A"
 VIDEO_URL = "https://www.googleapis.com/youtube/v3/videos?"
 PLAYLIST_URL = "https://www.googleapis.com/youtube/v3/playlistItems?"
 
+
 def capitalize(s):
     if not len(s): return ""
-    return s[0].upper() + s[1:] 
+    return s[0].upper() + s[1:]
+
 
 def getYTIdFromURL(url):
     """ Gets video id from url or returns None if the id doesn't seem right """
@@ -26,29 +28,40 @@ def getYTIdFromURL(url):
 
     return yt_id
 
+
 def getYTPlaylistIdFromURL(url):
     return url.split("list=")[1].split("&")[0]
 
-def convertSecondsToTime(s):
-    minutes = s / 60
-    seconds = s % 60
-    return "%02d:%02d" % (minutes, seconds)
+
+def convert_seconds_to_duration(secs):
+    """ Seconds to h:mm:ss """
+
+    minutes, seconds = divmod(secs, 60)
+    hours, minutes = divmod(minutes, 60)
+    if not hours:
+        return "{}:{:02}".format(minutes, seconds)
+    return "{}:{:02}:{:02}".format(hours, minutes, seconds)
+
 
 def sanetizeTime(s):
+    """ Seconds to 4h 20m """
+
     minutes = s / 60
     seconds = s % 60
     hours = minutes / 60
     minutes = minutes % 60
-    if (not hours and not minutes):
+    if not hours and not minutes:
         return "%ds" % seconds
-    elif (not hours):
+    elif not hours:
         return "%dm" % minutes
     else:
         return "%dh %dm" % (hours, minutes)
 
+
 def convertYTDurationToSeconds(yt_dur):
     seconds = 0
     times = yt_dur[2:]
+
     def getNextNum(s):
         num = ""
         while s and s[0] in string.digits:
@@ -58,15 +71,17 @@ def convertYTDurationToSeconds(yt_dur):
         denom = s[0]
         s = s[1:]
         return (num, denom, s)
+
     while times:
         num, denom, times = getNextNum(times)
         seconds += num if denom == "S" else (num * 60) if denom == "M" else (num * 60 * 60)
     return seconds
 
+
 def getDataFromURL(url, params):
     """ Contacts api at base_url with params and returns data retrieved """
 
-    params_str = urllib.urlencode(params) # encodes into GET parameters
+    params_str = urllib.urlencode(params)  # encodes into GET parameters
     request_url = url + params_str
     response = urllib.urlopen(request_url)
 
@@ -80,6 +95,7 @@ def getDataFromURL(url, params):
 
     return data
 
+
 def getInfoFromYTSnippet(video_data):
     return {
         'id': video_data['id'],
@@ -89,6 +105,7 @@ def getInfoFromYTSnippet(video_data):
         'tags': video_data['snippet']['tags'] if 'tags' in video_data['snippet'] else [],
         'duration': convertYTDurationToSeconds(video_data['contentDetails']['duration'])
     }
+
 
 def getPlaylistVideos(p_id):
     params = {
@@ -148,18 +165,19 @@ def getYTMetaData(yt_id):
     }
 
     data = getDataFromURL(VIDEO_URL, params)
-    if not data['pageInfo']['totalResults']: return None # no results
+    if not data['pageInfo']['totalResults']: return None  # no results
 
     # search by id will only yield one result
     video_data = data['items'][0]
 
     return getInfoFromYTSnippet(video_data)
 
+
 def getStringsFromStringList(strings):
     """ Supports string seperated by new lines or commas """
 
     strings = strings.splitlines()
-    strings = map(lambda l: l.split(","), strings) # in case commas are involved
+    strings = map(lambda l: l.split(","), strings)  # in case commas are involved
 
     # flatten strings in case some were actually comma seperated
     string_list = []
@@ -170,6 +188,7 @@ def getStringsFromStringList(strings):
 
     return string_list
 
+
 def getSeriesThumbnails(series):
     series_videos = series.videos.all()
     thumbnails = []
@@ -179,5 +198,3 @@ def getSeriesThumbnails(series):
     if (num_videos > 2): thumbnails.append(series_videos[2].video.thumbnail)
     if (num_videos > 3): thumbnails.append(series_videos[3].video.thumbnail)
     return thumbnails
-
-

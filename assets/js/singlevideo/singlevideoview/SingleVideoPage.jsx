@@ -9,21 +9,48 @@ import Col from 'react-bootstrap/lib/Col';
 
 import NavBar from 'js/globals/NavBar';
 import VideoPlayer from 'js/globals/VideoPlayer/VideoPlayer';
-import QuestionView from 'js/singlevideo/singlevideoview/QuestionView';
+import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
 
 class SingleVideoPage extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      topicList: [],
+      getCurrentTime: null,
+    };
+
+    this.setTopicList = this.setTopicList.bind(this);
+    this.setGetCurrentTime = this.setGetCurrentTime.bind(this);
+  }
+
+  setTopicList(topicList) {
+    this.setState({ topicList });
+  }
+
+  setGetCurrentTime(getCurrentTime) {
+    this.setState({ getCurrentTime });
+  }
+
   render() {
     return (
       <div>
         <NavBar />
         <Row className="videoPlayerWrapper">
           <Col mdOffset={1} md={10}>
-            <VideoPlayer videoUUID={this.props.videoUUID} />
+            <VideoPlayer
+              videoUUID={this.props.videoUUID}
+              setTopicList={this.setTopicList}
+              setGetCurrentTime={this.setGetCurrentTime}
+            />
           </Col>
         </Row>
         <Row className="questionWrapper">
           <Col mdOffset={1} md={10}>
-            <QuestionView videoUUID={this.props.videoUUID} />
+            <QuestionView
+              videoUUID={this.props.videoUUID}
+              topicList={this.state.topicList}
+              getCurrentTime={this.state.getCurrentTime}
+            />
           </Col>
         </Row>
       </div>

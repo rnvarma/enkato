@@ -1,10 +1,29 @@
 from django.shortcuts import render
 from django.views.generic.base import View
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
 from backend.models import *
 from backend.notification import *
+from backend.serializers import SeriesSerializer
+
+from rest_framework import viewsets
+
+
+class SeriesViewset(viewsets.ModelViewSet):
+    """ The series API """
+
+    serializer_class = SeriesSerializer
+
+    def get_queryset(self):
+        creator = self.request.query_params.get('creator')
+
+        if creator:
+            return Series.objects.filter(creator=creator)
+        else:
+            return Series.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user.customuser)
 
 class CreateSeries(View):
     def post(self, request):

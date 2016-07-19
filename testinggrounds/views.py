@@ -7,3 +7,4 @@ from backend.models import *
 class QuizAddingFormWrapper(View):
     def get(self, request):
         return render(request, 'testinggrounds/quizaddingform.html')
+

@@ -3,6 +3,8 @@ from django.views.generic.base import View
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
+from collections import defaultdict
+
 class UserProfile(View):
     def get(self, request, u_id):
         if not u_id: u_id = request.user.customuser.id
@@ -11,22 +13,111 @@ class UserProfile(View):
 
 class Serializers(object):
 	@staticmethod
+	def notifications_aggregator(notifications):
+		groups = defaultdict(list)
+		
+		for obj in notifications:
+			if obj.verb == 'new series video':
+				groups[(obj.verb, obj.action_object.series.id)].append(obj)
+
+			if obj.verb == 'new question':
+ 				groups[(obj.verb, obj.action_object.video.id)].append(obj)
+
+			if obj.verb == 'new question response':
+				groups[(obj.verb, obj.action_object.is_instructor, obj.action_object.question.id)].append(obj)
+
+		aggregated_list = groups.values()
+
+		return aggregated_list
+
+	
+	@staticmethod
+	def notification_serializer(notifications):
+		sorted(notifications, key = lambda x : x.timestamp, reverse = True)
+		first = notifications[0]
+		verb = first.verb
+		countint = len(notifications)
+		count = str(countint)
+		data = {}
+		data["timestamp"] = first.timestamp
+
+		if verb == 'new series video':
+			username = first.actor.username
+			seriesname = first.action_object.series.name
+			seriesid = first.action_object.series.uuid
+			videoid = first.action_object.video.uuid
+
+			if countint > 1:
+				data["description"] = username + ' added ' + count + ' videos to the series ' + seriesname
+				data["link"] = '/s/' + seriesid
+				return data
+
+			else:
+				data["description"] = username + ' added a video to the series ' + seriesname
+				data["link"] = '/s/' + seriesid + '/watch#' + videoid
+				return data
+
+		if verb == 'new question':
+			videoname = first.action_object.video.name
+			seriesid = first.action_object.video.series_video.series.uuid
+			videoid = first.action_object.video.uuid
+
+			if countint > 1:
+				data["description"] = count + ' people asked a question in the video ' + videoname
+				data["link"] = '/s/' + seriesid + '/watch#' + videoid
+				return data
+
+			else:
+				data["description"] = 'Someone asked a question in the video ' + videoname
+				data["link"] = '/s/' + seriesid + '/watch#' + videoid
+				return data
+
+		if verb == 'new question response':
+			videoname = first.action_object.question.video.name
+			seriesid = first.action_object.question.video.series_video.series.uuid
+			videoid = first.action_object.question.video.uuid
+
+			if first.action_object.is_instructor:
+				data["description"] = 'An instructor responded to your question in the video ' + videoname
+				data["link"] = '/s/' + seriesid + '/watch#' + videoid
+				return data
+
+
+			if countint > 1:
+				data["description"] = count + ' people responded to your question in the video ' + videoname
+				data["link"] = '/s/' + seriesid + '/watch#' + videoid
+				return data
+
+			else:
+				data["description"] = 'Someone responded to your question in the video ' + videoname
+				data["link"] = '/s/' + seriesid + '/watch#' + videoid
+				return data
+
+	'''
+
+	@staticmethod
 	def notification_serializer(notification):
 		data = {}
-
+		data["timestamp"] = str(notification.timestamp)
+		
 		if notification.verb == 'new series video':
-			data["description"] = notification.actor.username + ' added a series video\n' + str(notification.timestamp)
-			data["link"] = notification.action_object.series.uuid + '/watch#' + notification.action_object.video.uuid
+			data["description"] = notification.actor.username + ' added a series video'
+			data["link"] = '/s/' + notification.action_object.series.uuid + '/watch#' + notification.action_object.video.uuid
+
+		if notification.verb == 'new question':
+			data["description"] = notification.actor.username + ' asked a question in ' + notification.action_object.video.name
+			data["link"] = ""
+			
+		if notification.verb == 'new question response':
+			data["description"] = notification.actor.username + ' answered your question ' + notification.action_object.question.title
+			data["link"] = ""
 		return data
+	'''
 
 class GetNotifications(View):
 	def get(self, request):
-		unread = map(Serializers.notification_serializer, request.user.notifications.unread().all())
+		unread = map(Serializers.notification_serializer, Serializers.notifications_aggregator(request.user.notifications.unread().all()))
 		#notifications.mark_all_as_read()
 		num = len(unread)
-		return JsonResponse({'notifications': unread,
+		return JsonResponse({'notifications': sorted(unread, key = lambda x : x["timestamp"], reverse = True),
 							 'num': num})
-
-class GetNotificationsNum(View):
-	def get(self, request):
-		return JsonResponse({'num': request.user.notifications.unread().count()})
