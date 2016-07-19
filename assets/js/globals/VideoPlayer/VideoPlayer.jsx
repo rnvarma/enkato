@@ -130,17 +130,18 @@ module.exports  = React.createClass({
     loadQuizData: function(v_id){
         var s_id = $("#s_id").attr("data-sid")
 
-        // $.ajax({
-        //     url: "/api/quiz/s/"+s_id+"/v/" + v_id,
-        //     dataType: 'json',
-        //     cache: false,
-        //     success: function(data) {
-        //         console.log("hello")
-        //     }.bind(this),
-        //     error: function(xhr, status, err) {
-        //         console.error(this.props.url, status, err.toString());
-        //     }.bind(this)
-        // });    
+        $.ajax({
+            url: "/api/quiz/s/"+s_id+"/v/" + v_id,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                console.log("hello")
+                console.log(data)
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });    
     },
     loadDataFromServer: function(v_id){
         $.ajax({
