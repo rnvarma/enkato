@@ -8,9 +8,21 @@ import SeriesViewerSidebarVideoPanel from 'js/series/seriesviewer/SeriesViewerSi
 import FontAwesome from 'react-fontawesome';
 
 module.exports= React.createClass({
+    getInitialState: function(){
+        return {goToReviewMode:false}
+    },
+    componentDidMount: function(){
+        this.setState({goToReviewMode:false})
+    },
+    onReviewQuizClicked: function(){
+        console.log("we clickan")
+        this.setState({goToReviewMode:true})
+        this.props.showQuiz()
+    },
     render:function(){
+        var goToReviewMode = false;
         var bg_style = (this.props.showingOverlay ? {} : {display:"none"})
-        var q_style = (this.props.takingQuiz ? {} : {display:"none"})
+
         var overlay_style = (this.props.takingQuiz || this.props.showingOverlay ? {} : {display:"none"})
         var nextVideo;
         if (this.props.nextVideo) {
@@ -26,16 +38,54 @@ module.exports= React.createClass({
         }
 
         var TitleText = ""
-
+        var greenButton = <div></div>
+        var whiteTextButton = <div></div>
         if(this.props.quizTaken){
             var numCorrect = this.props.completedQuizInfo.numCorrect
             var numQuestions = this.props.completedQuizInfo.result.length
             TitleText = "You answered "+numCorrect+" of "+numQuestions+" correctly."
+
+            greenButton = (
+                <Button className="takeQuizButton" onClick={this.onReviewQuizClicked}>
+                    Review Answers
+                </Button>
+            )
+
+            whiteTextButton=(
+                <div className="noThanks" onClick={this.props.showQuiz}>
+                    Retake Quiz
+                </div>
+            )
         } else {
             TitleText = "Would You Like to Check Your Understanding?"
+
+            greenButton = (
+                <Button className="takeQuizButton" onClick={this.props.showQuiz}>
+                    Take The Quiz
+                </Button>
+            )
+
+            whiteTextButton=(
+                <div className="noThanks">
+                    No, Thanks
+                </div>
+            )
         }
 
-
+        var quizForm = <div></div>
+        if(this.props.takingQuiz){
+            quizForm = (
+                <div className="quizModal">
+                    <QuizForm
+                        videoUUID={this.props.videoUUID}
+                        closeModal={this.props.closeModal}
+                        onFinishButton={this.props.onFinishButton}
+                        goToReviewMode={this.state.goToReviewMode}
+                        completedQuizInfo={this.props.completedQuizInfo}
+                    />
+                </div>
+            )
+        }
 
         return(
             <div>
@@ -45,12 +95,8 @@ module.exports= React.createClass({
                     <div className="questionText">
                         {TitleText}
                     </div>
-                    <Button className="takeQuizButton" onClick={this.props.showQuiz}>
-                        Take The Quiz
-                    </Button>
-                    <div className="noThanks">
-                        No, Thanks
-                    </div>
+                    {greenButton}
+                    {whiteTextButton}
                     <div className="rewatch" onClick={this.props.playVideo}>
                         <FontAwesome className="undoIcon" name="undo" />
                         <div className="text">
@@ -59,12 +105,7 @@ module.exports= React.createClass({
                     </div>
                     {nextVideo}
                 </div>
-                <div className="quizModal" style={q_style}>
-                    <QuizForm
-                        videoUUID={this.props.videoUUID}
-                        closeModal={this.props.closeModal}
-                        onFinishButton={this.props.onFinishButton}/>
-                </div>
+                {quizForm}
             </div>
         )
     }

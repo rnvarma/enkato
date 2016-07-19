@@ -37,7 +37,7 @@ module.exports = React.createClass({
         var BottomText = (<div></div>)
 
         if(this.props.reviewMode){
-            if(this.props.currentQuestionResults.isCorrect){
+            if(this.props.currentQuestionResults.isCorrect){  
                 BottomText = (
                     <BottomReviewText correct={true} />
                 )
