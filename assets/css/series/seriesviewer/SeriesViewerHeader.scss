@@ -2,17 +2,21 @@
 @import '../../globals/mixins.scss';
 
 .seriesViewerHeader {
-    padding: 20px 15px;
-    height: 100px;
+    padding: 20px 20px;
+    //height: 100px;
 
-    .seriesName {
-        font-weight: bold;
-        color: $enkato-green;
-        font-size: 13px;
+    .seriesCreator {
+        font-weight: 500;
+        padding-top: 5px;
+
+        a {
+            font-weight: 600;
+            color: $enkato-green;
+        }
     }
 
-    .currVideoName {
-        font-weight: bold;
+    .seriesName {
+        font-weight: 500;
         color: $structabl-blue;
         font-size: 18px;
     }

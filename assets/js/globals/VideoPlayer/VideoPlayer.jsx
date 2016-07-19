@@ -81,7 +81,8 @@ module.exports  = React.createClass({
                 duration: 0,
                 end: 0
             },
-            s_id: this.props.s_id
+            s_id: this.props.s_id,
+            videoTitle: ""
         };
     },
     trackView: function(uuid, end) {
@@ -142,7 +143,9 @@ module.exports  = React.createClass({
               this.videoPlayerClass = "full";
             }
             this.totalTime = data.videoData.duration_clean;
-
+            this.setState({
+                videoTitle: data.videoData.name
+            });
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -280,31 +283,36 @@ module.exports  = React.createClass({
             return (<div className="loading">Loading video player...</div>);
         }
         return (
-            <div className="ynVideoPlayer"> 
-                {this.topicList}
-                <div className={`videoDiv ${this.videoPlayerClass}`}>
-                    <Video
-                        renderVideo={this.state.Player.renderVideo}
-                        videoDivHeight={this.state.videoDivHeight}
-                        controlBarHeight={$('.ControlBar').height()}
-                        showingOverlay={this.state.showingOverlay}
-                        takingQuiz={this.state.takingQuiz}
-                        showQuiz={this.showQuiz}
-                        videoUUID={this.state.uuid}
-                        closeModal={this.closeModal}/>
-                    <ControlBar 
-                        className="ControlBar"
-                        isPlaying={this.state.isPlaying}
-                        videoDuration={this.state.Player.getDuration()}
-                        handleTopicClick={this.handleTopicClick}
-                        topicObjList={this.state.topicObjList}
-                        handlePlayPauseClick={this.handlePlayPauseClick}
-                        handleScrub={this.handleScrub}
-                        currentTime={this.state.currentTime}
-                        totalTime={this.totalTime}
-                        percentDone={this.state.percentDone}
-                        setPlaybackRate={this.state.Player.setPlaybackRate}
-                        playerContext={this.state.Player.getContext()}/>
+            <div>
+                <div className="videoTitle">
+                    {this.state.videoTitle}
+                </div>
+                <div className="ynVideoPlayer"> 
+                    {this.topicList}
+                    <div className={`videoDiv ${this.videoPlayerClass}`}>
+                        <Video
+                            renderVideo={this.state.Player.renderVideo}
+                            videoDivHeight={this.state.videoDivHeight}
+                            controlBarHeight={$('.ControlBar').height()}
+                            showingOverlay={this.state.showingOverlay}
+                            takingQuiz={this.state.takingQuiz}
+                            showQuiz={this.showQuiz}
+                            videoUUID={this.state.uuid}
+                            closeModal={this.closeModal}/>
+                        <ControlBar 
+                            className="ControlBar"
+                            isPlaying={this.state.isPlaying}
+                            videoDuration={this.state.Player.getDuration()}
+                            handleTopicClick={this.handleTopicClick}
+                            topicObjList={this.state.topicObjList}
+                            handlePlayPauseClick={this.handlePlayPauseClick}
+                            handleScrub={this.handleScrub}
+                            currentTime={this.state.currentTime}
+                            totalTime={this.totalTime}
+                            percentDone={this.state.percentDone}
+                            setPlaybackRate={this.state.Player.setPlaybackRate}
+                            playerContext={this.state.Player.getContext()}/>
+                    </div>
                 </div>
             </div>
         );

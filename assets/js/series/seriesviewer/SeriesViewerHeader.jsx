@@ -11,8 +11,8 @@ class SeriesViewerHeader extends React.Component {
                 <div className="seriesName">
                     {truncate(this.props.seriesName, 50, true)}
                 </div>
-                <div className="currVideoName">
-                    {this.props.currVideo ? truncate(this.props.currVideo.name, 25, true) : ""}
+                <div className="seriesCreator">
+                    by <a className="name" href={"/userprofile/" + this.props.seriesCreator.user_id}>{this.props.seriesCreator.name}</a>
                 </div>
             </div>
         );

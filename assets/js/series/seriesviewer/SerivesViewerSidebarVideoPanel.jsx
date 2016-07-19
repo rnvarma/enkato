@@ -27,9 +27,6 @@ class SerivesViewerSidebarVideoPanel extends React.Component {
                     <div className="name">
                         {truncate(this.props.video.name, 35, true)}
                     </div>
-                    <div className="author">
-                        by <a className="name" href={"/userprofile/" + this.props.video.creator.user_id}>{this.props.video.creator.name}</a>
-                    </div>
                     <div className="metadata">
                         <div className="numTopics">
                             {this.props.video.num_views} {pluralize("view", this.props.video.num_views)}
