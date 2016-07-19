@@ -191,6 +191,7 @@ module.exports = React.createClass({
                     closeModal={this.closeModal} 
                     showGradingPage={this.state.showGradingPage}
                     reviewMode={this.state.reviewMode}
+                    onFinishButton={this.props.onFinishButton}
                 />
             </div>
         )

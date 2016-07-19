@@ -232,10 +232,18 @@ class LoadQuizData(APIView):
 
         result = []
         numCorrect=0
-
+        print("yoooooooooooo")
+        print(len(quizQuestions))
+        print(len(seriesQuizQuestionData))
         if(len(quizQuestions)!=len(seriesQuizQuestionData)):
             print("quiz not taken!!!!")
-            return JsonResponse({'result':result, 'numCorrect':numCorrect})
+            completedQuizInfo={
+                'result':result, 
+                'numCorrect':numCorrect
+            }
+            return JsonResponse({
+                'completedQuizInfo':completedQuizInfo,
+                'quizTaken':False})
         else: 
             print("quiz taken!!!!")
         
@@ -257,4 +265,13 @@ class LoadQuizData(APIView):
                 "correctAnswer":correctAnswer,
                 "isCorrect":correct
             })
-        return JsonResponse({'result':result, 'numCorrect':numCorrect})
+
+
+        completedQuizInfo={
+            'result':result, 
+            'numCorrect':numCorrect
+        }
+        return JsonResponse({
+            'completedQuizInfo':completedQuizInfo,
+            'quizTaken':True
+        })

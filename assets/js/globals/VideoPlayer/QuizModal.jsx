@@ -24,13 +24,26 @@ module.exports= React.createClass({
                 </div>
             )
         }
+
+        var TitleText = ""
+
+        if(this.props.quizTaken){
+            var numCorrect = this.props.completedQuizInfo.numCorrect
+            var numQuestions = this.props.completedQuizInfo.result.length
+            TitleText = "You answered "+numCorrect+" of "+numQuestions+" correctly."
+        } else {
+            TitleText = "Would You Like to Check Your Understanding?"
+        }
+
+
+
         return(
             <div>
                 <div className="greyBackground" style={overlay_style}>
                 </div>
                 <div className="greyBackground" style={bg_style}>
                     <div className="questionText">
-                        Would You Like to Check Your Understanding?
+                        {TitleText}
                     </div>
                     <Button className="takeQuizButton" onClick={this.props.showQuiz}>
                         Take The Quiz
@@ -49,7 +62,8 @@ module.exports= React.createClass({
                 <div className="quizModal" style={q_style}>
                     <QuizForm
                         videoUUID={this.props.videoUUID}
-                        closeModal={this.props.closeModal}/>
+                        closeModal={this.props.closeModal}
+                        onFinishButton={this.props.onFinishButton}/>
                 </div>
             </div>
         )
