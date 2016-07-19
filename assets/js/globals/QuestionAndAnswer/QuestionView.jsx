@@ -262,10 +262,7 @@ class QuestionView extends React.Component {
     });
     const index = question.responses.indexOf(response);
     question.responses.splice(index, 1);
-    this.setState({
-      questions: this.questionData,
-      currentQuestion: this.questionData[0],
-    });
+    this.setState({ questions: this.questionData });
   }
 
   toggleEndorsedResponse(questionId, responseId) {

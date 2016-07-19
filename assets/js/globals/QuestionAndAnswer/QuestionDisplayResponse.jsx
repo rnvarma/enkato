@@ -10,15 +10,23 @@ import Row from 'react-bootstrap/lib/Row';
 
 import getCookie from 'js/globals/GetCookie';
 
+import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
 import QuestionResponseEditForm from 'js/globals/QuestionAndAnswer/QuestionResponseEditForm';
 
 class QuestionDisplayResponse extends React.Component {
   constructor() {
     super();
-
+    this.state = {
+      deleting: false,
+    };
     this.toggleEdit = this.toggleEdit.bind(this);
+    this.toggleDelete = this.toggleDelete.bind(this);
     this.delete = this.delete.bind(this);
     this.toggleEndorse = this.toggleEndorse.bind(this);
+  }
+
+  toggleDelete() {
+    this.setState({ deleting: !this.state.deleting });
   }
 
   toggleEdit() {
@@ -93,6 +101,12 @@ class QuestionDisplayResponse extends React.Component {
 
     return (
       <Row>
+        <DeleteConfirmModal
+          deleting={this.state.deleting}
+          description="You're deleting this response. Are you sure you want to continue? This is irreversible."
+          deleteCallback={this.delete}
+          cancelCallback={this.toggleDelete}
+        />
         <div className={(this.props.response.is_instructor ? 'instructor ' : '') + 'questionDisplayResponse'}>
           <div className="responseText">
             {this.props.response.text}
@@ -100,7 +114,7 @@ class QuestionDisplayResponse extends React.Component {
           {badges}
           <div className="responseFooter">
             <img></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> asked {created.fromNow()}{modified ? ", modified: "+modified.fromNow() : ""}
-            {/* TODO: check is user/instructor is logged in */true ? <div onClick={this.delete} className="plainBtn">Delete</div> : '' }
+            {/* TODO: check is user/instructor is logged in */true ? <div onClick={this.toggleDelete} className="plainBtn">Delete</div> : '' }
             {/* TODO: check if user is logged in */true ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
             {/* TODO: check if instructor is logged in and not instructor post */false ? '' : <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div>}
           </div>
