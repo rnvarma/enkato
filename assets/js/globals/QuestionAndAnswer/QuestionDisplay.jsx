@@ -24,6 +24,7 @@ class QuestionDisplay extends React.Component {
     this.delete = this.delete.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
     this.toggleDelete = this.toggleDelete.bind(this);
+    this.patchAsResolved = this.patchAsResolved.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.postResponse = this.postResponse.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
@@ -36,6 +37,24 @@ class QuestionDisplay extends React.Component {
   onSubmit(event) {
     event.preventDefault();
     this.postResponse();
+  }
+
+  patchAsResolved() {
+    const payload = {
+      resolved: !this.props.question.resolved,
+    };
+    $.ajax({
+      url: `/api/questions/${this.props.question.id}`,
+      type: 'PATCH',
+      data: payload,
+      beforeSend(xhr) {
+        xhr.withCredentials = true;
+        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+      },
+      success: (data) => {
+        this.props.replaceQuestion(data.id, data);
+      },
+    });
   }
 
   delete() {
@@ -113,6 +132,8 @@ class QuestionDisplay extends React.Component {
             removeResponse={this.props.removeResponse}
             toggleEndorsedResponse={this.props.toggleEndorsedResponse}
             toggleEditResponse={this.props.toggleEditResponse}
+            currentUser={this.props.currentUser}
+            replaceResponse={this.props.replaceResponse}
           />
         );
       });
@@ -121,6 +142,10 @@ class QuestionDisplay extends React.Component {
     const created = moment(this.props.question.created).fromNow();
     const modified = moment(this.props.question.modified).fromNow();
     const topic = this.props.question.topic ? this.props.question.topic : 'General';
+
+    const isOwner = this.props.currentUser && this.props.currentUser.id === this.props.question.student.id;
+    const isInstructor = false;// this.props.currentUser && this.props.currentUser.id === this.props
+    const resolvedText = this.props.question.resolved ? 'unresolved' : 'resolved';
     return (
       <Col md={8} className="questionDisplay">
         <DeleteConfirmModal
@@ -145,8 +170,9 @@ class QuestionDisplay extends React.Component {
             <div className="questionBox">
               <div className="questionHeader">
                 {topic}
-                {/* TODO: only creator */}<Button onClick={this.toggleEdit}>Edit</Button>
-                {/* TODO: only creator/instructor */}<Button onClick={this.toggleDelete}>Delete</Button>
+                {isOwner ? <Button onClick={this.toggleEdit}>Edit</Button> : ''}
+                {isOwner || isInstructor ? <Button onClick={this.toggleDelete}>Delete</Button> : ''}
+                {isOwner || isInstructor ? <Button onClick={this.patchAsResolved}>Mark as {resolvedText}</Button> : ''}
               </div>
               <div className="questionTitle">
                 {this.props.question.title}

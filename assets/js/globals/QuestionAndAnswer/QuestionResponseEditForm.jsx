@@ -27,23 +27,25 @@ class QuestionResponseEditForm extends React.Component {
     }
 
     patch() {
-        /* TODO: error handling on failing to patch */
-        const data = {
-            text: this.props.response.input,
-        };
-        $.ajax({
-            url: `/api/responses/${this.props.response.id}`,
-            type: 'PATCH',
-            data,
-            beforeSend(xhr) {
-                xhr.withCredentials = true;
-                xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-            },
-            success: () => {
-                this.props.toggleEdit();
-                this.props.pushResponseNewText(this.props.question.id, this.props.response.id, this.props.response.input);
-            },
-        });
+        if (this.props.response.input !== this.props.response.text) {
+            /* TODO: error handling on failing to patch */
+            const data = {
+                text: this.props.response.input,
+            };
+            $.ajax({
+                url: `/api/responses/${this.props.response.id}`,
+                type: 'PATCH',
+                data,
+                beforeSend(xhr) {
+                    xhr.withCredentials = true;
+                    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+                },
+                success: (data) => {
+                    this.props.toggleEdit();
+                    this.props.replaceResponse(this.props.question.id, data.id, data);
+                },
+            });
+        }
     }
 
     render() {
