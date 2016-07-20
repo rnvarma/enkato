@@ -17,19 +17,18 @@ def make_owner_permission(user_field, instructor_field=None, instructor_edit_fie
                 return True
 
             # check if is owner
-            custom_user = request.user.customuser
-            if getattr(obj, user_field).id == custom_user.id:
+            current_user = request.user.customuser
+            if getattr(obj, user_field).id == current_user.id:
                 return True
 
             # check if is instructor
             if instructor_field:
-                if instructor_edit_fields and request.method == request.PATCH:
+                if instructor_edit_fields and request.method == 'PATCH':
                     # if instructor fields are set, we ensure the request is only trying to modify them
-                    if set(request.data).issubset(set(instructor_field)):
-                        return reduce(getattr, instructor_field.split('.'), obj).id == custom_user.id
-
-                if request.method == request.DELELTE:
-                    return reduce(getattr, instructor_field.split('.'), obj).id == custom_user.id
+                    if set(request.data).issubset(set(instructor_edit_fields)):
+                        return reduce(getattr, instructor_field.split('.'), obj).id == current_user.id
+                elif request.method == 'DELETE':
+                    return reduce(getattr, instructor_field.split('.'), obj).id == current_user.id
 
             return False
 

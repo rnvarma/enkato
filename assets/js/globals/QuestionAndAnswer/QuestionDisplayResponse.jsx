@@ -114,7 +114,7 @@ class QuestionDisplayResponse extends React.Component {
           </div>
           {badges}
           <div className="responseFooter">
-            <img></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> asked {created.fromNow()}{modified ? ", modified: "+modified.fromNow() : ""}
+            <img></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> answered {created.fromNow()}{modified ? ", modified: "+modified.fromNow() : ""}
             {/* TODO: check is user/instructor is logged in */true ? <div onClick={this.toggleDelete} className="plainBtn">Delete</div> : '' }
             {/* TODO: check if user is logged in */true ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
             {/* TODO: check if instructor is logged in and not instructor post */false ? '' : <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div>}
