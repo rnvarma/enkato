@@ -1,9 +1,10 @@
 from rest_framework import permissions
 
 
-def make_owner_permission(user_field, instructor_field=None, instructor_edit_fields=None):
+def make_owner_permission(user_field, user_edit_fields=None, instructor_field=None, instructor_edit_fields=None):
     """
-    :param user_field: foreign key field to user
+    :param user_field: foreign key field to user e.g. 'creator' or 'user' or 'student'
+    :param user_edit_fields: fields that user can modify (optional, default none)
     :param instructor_field: foreign key path to get to an instructor for (optional) e.g. 'question.video.creator'
     :param instructor_edit_fields: fields that instructor can modify (optional, default none) e.g. ('endorsed',)
     :return: Permission class
@@ -18,8 +19,13 @@ def make_owner_permission(user_field, instructor_field=None, instructor_edit_fie
 
             # check if is owner
             current_user = request.user.customuser
-            if getattr(obj, user_field).id == current_user.id:
-                return True
+            if request.method == 'PATCH':
+                if set(request.data).issubset(set(user_edit_fields)) and \
+                                getattr(obj, user_field).id == current_user.id:
+                    return True
+            else:
+                if getattr(obj, user_field).id == current_user.id:
+                    return True
 
             # check if is instructor
             if instructor_field:
