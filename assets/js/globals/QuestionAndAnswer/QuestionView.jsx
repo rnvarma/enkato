@@ -364,7 +364,7 @@ class QuestionView extends React.Component {
           {askModal}
           <Row>
             <Col md={5}>
-              <div className="qaTitle">Question & Answers</div>
+              <div className="qaTitle">Question & Answer</div>
             </Col>
             <Col mdOffset={10}>
               {askButton}

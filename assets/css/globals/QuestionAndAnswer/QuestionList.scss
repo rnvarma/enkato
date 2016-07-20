@@ -54,5 +54,12 @@ $background: white;
     .questionPreviewText {
       color: $structabl-blue;
     }
+
+    .questionPreviewFooter {
+      padding-top: 8px;
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
   }
 }
