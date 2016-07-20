@@ -31,12 +31,26 @@ module.exports = React.createClass({
         });
     },
     componentDidMount: function(){
-        this.setState({uuid: this.props.videoUUID})
+        console.log("componentDidMount aryyyyy")
+        this.setState({currentQuestion:0})
+        this.setState({uuid: this.props.videoUUID});
         this.loadDataFromServer(this.props.videoUUID);
+        if(this.props.goToReviewMode){
+            this.setState({reviewMode:true})
+            this.setState({showGradingPage:true})
+            console.log("ay")
+        } else {
+            this.setState({reviewMode:false})
+            this.setState({showGradingPage:false})
+            console.log("nah")
+        }
     },
     componentWillReceiveProps: function(nextProps){
         if (nextProps.videoUUID != this.props.videoUUID)
             this.loadDataFromServer(nextProps.videoUUID)
+        if(nextProps.completedQuizInfo.result!=[]){
+            this.setState({completedQuizInfo:nextProps.completedQuizInfo})
+        }
     },
     getInitialState:function(){
         return {
@@ -191,6 +205,7 @@ module.exports = React.createClass({
                     closeModal={this.closeModal} 
                     showGradingPage={this.state.showGradingPage}
                     reviewMode={this.state.reviewMode}
+                    onFinishButton={this.props.onFinishButton}
                 />
             </div>
         )

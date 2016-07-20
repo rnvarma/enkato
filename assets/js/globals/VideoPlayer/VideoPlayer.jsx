@@ -82,6 +82,7 @@ module.exports  = React.createClass({
                 end: 0
             },
             s_id: this.props.s_id,
+            videoTitle: "",
             quizTaken: false,
             completedQuizInfo:{
                 result:[],
@@ -137,6 +138,8 @@ module.exports  = React.createClass({
             success: function(data) {
                 console.log("hello")
                 console.log(data)
+                this.setState({completedQuizInfo:data.completedQuizInfo})
+                this.setState({quizTaken:data.quizTaken})
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -168,6 +171,10 @@ module.exports  = React.createClass({
               this.videoPlayerClass = "full";
             }
             this.totalTime = data.videoData.duration_clean;
+
+            this.setState({
+                videoTitle: data.videoData.name
+            });
 
               /* optional prop */
               if (this.props.setGetCurrentTime) {
@@ -268,6 +275,11 @@ module.exports  = React.createClass({
             this.state.Player.play();
         }
     },
+    onFinishButton: function(){
+        this.setState({showingOverlay:true})
+        this.setState({takingQuiz:false})
+        this.loadQuizData(this.props.videoUUID)
+    },
     componentWillReceiveProps: function(nextProps) {
         if (this.state.uuid != nextProps.videoUUID) {
             this.trackView(this.state.uuid)
@@ -317,34 +329,43 @@ module.exports  = React.createClass({
             return (<div className="loading">Loading video player...</div>);
         }
         return (
-            <div className="ynVideoPlayer"> 
-                {this.topicList}
-                <div className={`videoDiv ${this.videoPlayerClass}`}>
-                    <Video
-                        renderVideo={this.state.Player.renderVideo}
-                        videoDivHeight={this.state.videoDivHeight}
-                        controlBarHeight={$('.ControlBar').height()}
-                        showingOverlay={this.state.showingOverlay}
-                        takingQuiz={this.state.takingQuiz}
-                        showQuiz={this.showQuiz}
-                        videoUUID={this.state.uuid}
-                        closeModal={this.closeModal}
-                        nextVideo={this.props.nextVideo}
-                        playVideo={this.playVideo}/>
-                    <ControlBar 
-                        className="ControlBar"
-                        isPlaying={this.state.isPlaying}
-                        videoDuration={this.state.Player.getDuration()}
-                        handleTopicClick={this.handleTopicClick}
-                        topicObjList={this.state.topicObjList}
-                        handlePlayPauseClick={this.handlePlayPauseClick}
-                        handleScrub={this.handleScrub}
-                        currentTime={this.state.currentTime}
-                        totalTime={this.totalTime}
-                        percentDone={this.state.percentDone}
-                        setPlaybackRate={this.state.Player.setPlaybackRate}
-                        playerContext={this.state.Player.getContext()}
-                        showQuiz={this.showQuiz}/>
+            <div>
+                <div className="videoTitle">
+                    {this.state.videoTitle}
+                </div>
+                <div className="ynVideoPlayer"> 
+                    {this.topicList}
+                    <div className={`videoDiv ${this.videoPlayerClass}`}>
+                        <Video
+                            renderVideo={this.state.Player.renderVideo}
+                            videoDivHeight={this.state.videoDivHeight}
+                            controlBarHeight={$('.ControlBar').height()}
+                            showingOverlay={this.state.showingOverlay}
+                            takingQuiz={this.state.takingQuiz}
+                            showQuiz={this.showQuiz}
+                            videoUUID={this.state.uuid}
+                            closeModal={this.closeModal}
+                            nextVideo={this.props.nextVideo}
+                            playVideo={this.playVideo}
+                            completedQuizInfo={this.state.completedQuizInfo}
+                            quizTaken={this.state.quizTaken}
+                            onFinishButton={this.onFinishButton}
+                        />
+                        <ControlBar 
+                            className="ControlBar"
+                            isPlaying={this.state.isPlaying}
+                            videoDuration={this.state.Player.getDuration()}
+                            handleTopicClick={this.handleTopicClick}
+                            topicObjList={this.state.topicObjList}
+                            handlePlayPauseClick={this.handlePlayPauseClick}
+                            handleScrub={this.handleScrub}
+                            currentTime={this.state.currentTime}
+                            totalTime={this.totalTime}
+                            percentDone={this.state.percentDone}
+                            setPlaybackRate={this.state.Player.setPlaybackRate}
+                            playerContext={this.state.Player.getContext()}
+                            showQuiz={this.showQuiz}/>
+                    </div>
                 </div>
             </div>
         );

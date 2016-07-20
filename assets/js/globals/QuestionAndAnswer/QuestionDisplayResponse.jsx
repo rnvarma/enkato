@@ -10,15 +10,23 @@ import Row from 'react-bootstrap/lib/Row';
 
 import getCookie from 'js/globals/GetCookie';
 
+import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
 import QuestionResponseEditForm from 'js/globals/QuestionAndAnswer/QuestionResponseEditForm';
 
 class QuestionDisplayResponse extends React.Component {
   constructor() {
     super();
-
+    this.state = {
+      deleting: false,
+    };
     this.toggleEdit = this.toggleEdit.bind(this);
+    this.toggleDelete = this.toggleDelete.bind(this);
     this.delete = this.delete.bind(this);
     this.toggleEndorse = this.toggleEndorse.bind(this);
+  }
+
+  toggleDelete() {
+    this.setState({ deleting: !this.state.deleting });
   }
 
   toggleEdit() {
@@ -28,7 +36,7 @@ class QuestionDisplayResponse extends React.Component {
   delete() {
     /* TODO: verify before deleting, error handling on failing to delete */
     $.ajax({
-      url: `/api/videos/${this.props.videoUUID}/responses/${this.props.response.id}`,
+      url: `/api/responses/${this.props.response.id}`,
       type: 'DELETE',
       beforeSend(xhr) {
         xhr.withCredentials = true;
@@ -36,6 +44,7 @@ class QuestionDisplayResponse extends React.Component {
       },
       success: () => {
         this.props.removeResponse(this.props.question.id, this.props.response.id);
+        this.toggleDelete();
       },
     });
   }
@@ -46,7 +55,7 @@ class QuestionDisplayResponse extends React.Component {
       endorsed: !this.props.response.endorsed,
     }
     $.ajax({
-      url: `/api/videos/${this.props.videoUUID}/responses/${this.props.response.id}`,
+      url: `/api/responses/${this.props.response.id}`,
       type: 'PATCH',
       data,
       beforeSend(xhr) {
@@ -64,7 +73,6 @@ class QuestionDisplayResponse extends React.Component {
       return (
         <Row className="questionDisplayResponse">
           <QuestionResponseEditForm
-            videoUUID={this.props.videoUUID}
             question={this.props.question}
             response={this.props.response}
             delete={this.delete}
@@ -94,6 +102,12 @@ class QuestionDisplayResponse extends React.Component {
 
     return (
       <Row>
+        <DeleteConfirmModal
+          deleting={this.state.deleting}
+          description="You're deleting this response. Are you sure you want to continue? This is irreversible."
+          deleteCallback={this.delete}
+          cancelCallback={this.toggleDelete}
+        />
         <div className={(this.props.response.is_instructor ? 'instructor ' : '') + 'questionDisplayResponse'}>
           <div className="responseText">
             {this.props.response.text}
@@ -101,9 +115,9 @@ class QuestionDisplayResponse extends React.Component {
           {badges}
           <div className="responseFooter">
             <img></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> asked {created.fromNow()}{modified ? ", modified: "+modified.fromNow() : ""}
-            {/* check is user/instructor is logged in */true ? <div onClick={this.delete} className="plainBtn">Delete</div> : '' }
-            {/* check if user is logged in */true ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
-            {/* check if instructor is logged in and not instructor post */false ? '' : <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div>}
+            {/* TODO: check is user/instructor is logged in */true ? <div onClick={this.toggleDelete} className="plainBtn">Delete</div> : '' }
+            {/* TODO: check if user is logged in */true ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
+            {/* TODO: check if instructor is logged in and not instructor post */false ? '' : <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div>}
           </div>
         </div>
       </Row>

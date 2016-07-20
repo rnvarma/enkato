@@ -10,7 +10,7 @@ class QuizNavFooter extends React.Component {
         var rightButton = <div></div>
         if(this.props.reviewMode&&(this.props.currentQuestion == this.props.numQuestions -1)){
             rightButton = (
-                <Button className="finishButton">
+                <Button className="finishButton" onClick={this.props.onFinishButton}>
                     Finish
                 </Button>
             )
