@@ -1,42 +1,12 @@
-from rest_framework import serializers, exceptions, permissions
+from rest_framework import serializers
 
 from .models import *
 
-# Serializer helpers
-class SerializationHelpers:
 
-    @staticmethod
-    def is_logged_in(user):
-        return hasattr(user, 'customuser')
+class CustomUserSerializer(serializers.ModelSerializer):
 
-    @staticmethod
-    def can_make_changes(user, owner, video_uuid):
-        if SerializationHelpers.is_logged_in(user):
-            custom_user = user.customuser
-            if (owner == custom_user or
-                custom_user == Video.objects.get(uuid=video_uuid).creator):
-                return True
-
-        raise exceptions.PermissionDenied()
-
-    @staticmethod
-    def get_update_data(data, partial_object, allowed_fields):
-        if not len(data):
-            raise exceptions.ValidationError('Add at least one of the following: ' + ', '.join(allowed_fields))
-        for field in data:
-            if field not in allowed_fields:
-                raise exceptions.ValidationError(field + ' is not a supported field')
-
-        updated_fields = []
-        update_data = {}
-        for key in allowed_fields:
-            if key in data:
-                updated_fields.append(key)
-                update_data[key] = data[key]
-            else:
-                update_data[key] = getattr(partial_object, key)
-
-        return update_data, updated_fields
+    class Meta:
+        model = CustomUser
 
 
 class QuestionResponseSerializer(serializers.ModelSerializer):

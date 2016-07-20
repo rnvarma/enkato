@@ -316,6 +316,13 @@ class QuestionView extends React.Component {
     this.setState({ questions: this.questionData });
   }
 
+  /* query user data for validation purposes */
+  loadUserData() {
+    /*$.ajax({
+      url: `/api`
+    });*/
+  }
+
   render() {
     var askModal, askButton;
     if (this.props.videoUUID) {
