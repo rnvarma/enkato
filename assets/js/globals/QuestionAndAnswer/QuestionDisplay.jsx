@@ -9,7 +9,6 @@ import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
 import getCookie from 'js/globals/GetCookie';
-import { styleDuration } from 'js/globals/utility';
 
 import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
 import QuestionDisplayResponse from 'js/globals/QuestionAndAnswer/QuestionDisplayResponse';
@@ -28,6 +27,15 @@ class QuestionDisplay extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.postResponse = this.postResponse.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
+  }
+
+  onTextChange(event) {
+    this.props.pushResponseText(this.props.question.id, event.target.value);
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    this.postResponse();
   }
 
   delete() {
@@ -52,11 +60,6 @@ class QuestionDisplay extends React.Component {
 
   toggleDelete() {
     this.setState({ deleting: !this.state.deleting });
-  }
-
-  onSubmit(event) {
-    event.preventDefault();
-    this.postResponse();
   }
 
   postResponse() {
@@ -86,11 +89,8 @@ class QuestionDisplay extends React.Component {
     }
   }
 
-  onTextChange(event) {
-    this.props.pushResponseText(this.props.question.id, event.target.value);
-  }
-
   render() {
+    console.log(this.props.videoUUID);
     if (this.props.question == null) {
       return (
         <Col md={8} className="questionDisplay empty">

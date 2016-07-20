@@ -53,6 +53,12 @@ class QuestionView extends React.Component {
     this.getQuestionData(this.props.videoUUID);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.videoUUID !== nextProps.videoUUID) {
+      this.getQuestionData(nextProps.videoUUID);
+    }
+  }
+
   getQuestionData(videoUUID) {
     if (!videoUUID && !this.props.loadQuestionData) return;
     const onSuccess = (data) => {
@@ -68,7 +74,7 @@ class QuestionView extends React.Component {
       return;
     }
     $.ajax({
-      url: `/api/questions?v_uuid=${videoUUID}`,
+      url: `/api/questions?video_uuid=${videoUUID}`,
       dataType: 'json',
       cache: false,
       success: onSuccess,
@@ -308,12 +314,6 @@ class QuestionView extends React.Component {
       response.editing = true;
     }
     this.setState({ questions: this.questionData });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.videoUUID != nextProps.videoUUID) {
-      this.getQuestionData(nextProps.videoUUID);
-    }
   }
 
   render() {
