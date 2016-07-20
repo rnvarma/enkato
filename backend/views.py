@@ -76,7 +76,7 @@ class Serializer(object):
         data["num_topics"] = video.topics.count()
         data["num_quiz_questions"] = video.quiz_questions.count()
         return data
-
+        
     @staticmethod
     def serialize_topic(topic):
         data = {}
@@ -142,6 +142,24 @@ class SeriesData(APIView):
         series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
 
+class SeriesVideoData(View):
+    def get(self, request, v_id):
+        try:
+            video = Video.objects.filter(vid_id = v_id).first()
+            videoData = Serializer.serialize_video(video)
+            series = Series.objects.get(videos__contains= videoData)
+            return JsonResponse({
+                'inSeries': True,
+                'seriesID': series.uuid
+            })
+        except Series.DoesNotExist:
+            return JsonResponse({
+                'inSeries': False
+            })
+
+
+
+
 class VideoData(View):
     def get(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
@@ -167,6 +185,22 @@ class QuizData(APIView):
             'questions': questions,
             'numQuestions': quizQs.count()
         })
+
+class VideoIdData(View):
+    def get(self, request, v_id):
+        try:
+            video = Video.objects.filter(vid_id=v_id).first()
+            topicList = video.topics.all().order_by('time')
+            frontendTList = map(Serializer.serialize_topic, topicList)
+            return JsonResponse({
+                'inDatabase': True,
+                'topicList':frontendTList,
+                'videoData': Serializer.serialize_video(video)
+            })
+        except Video.DoesNotExist:
+            return JsonResponse({
+                'inDatabase': False
+            })
 
 def secondify(time):
     timeL = time.split(":")
@@ -266,7 +300,6 @@ class LoadQuizData(APIView):
                 "correctAnswer":correctAnswer,
                 "isCorrect":correct
             })
-
 
         completedQuizInfo={
             'result':result, 

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Enkato Popup</title>
+    <style>
+      body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background: #ECEFF5;
+        width: 500px;
+        height: 350px;
+      }
+      #header{
+        height: 40px;
+        background: #0E133E;
+        text-align: center;
+      }
+      #upper-level-wrapper{
+        width: 500px;
+        overflow: hidden;
+        color: #0E133E;
+      }
+      #main-video-wrapper{
+        float: left;
+        width: 250px;
+        text-align: center;
+      }
+      #topic-list-wrapper{
+        overflow: hidden;
+        width: calc(100%-250px);
+        border: 1px solid #0E133E;
+        text-align: center;
+        align-content: stretch;
+      }
+      .thumbnail-wrapper{
+        padding: 3px;
+      }
+      .topics-list{
+        font-size: 14px;
+        text-align: left;
+      }
+    </style>
+    <script src = "thirdParty/jquery.js"></script>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+    <div id = "header">
+      <img class = "logo" src ="whitelogo.png" height = "30px" style = "position: relative; top: 5px"> 
+    </div>
+    <div id = "upper-level-wrapper">
+      <div id = "main-video-wrapper">
+        <div class = "thumbnail-wrapper">
+          <div class ="thumbnail"></div>
+          <div class = "video-title"></div>
+          <div class = "video-button"></div>
+        </div>
+      </div>
+      <div id = "topic-list-wrapper">
+        <div class = "topic-header"></div>
+        <ul class = "topics-list"></ul>
+      </div>
+    </div>
+  </body>
+</html>
+
