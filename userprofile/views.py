@@ -122,8 +122,11 @@ class Serializers(object):
 
 class GetNotifications(View):
 	def get(self, request):
-		unread = map(Serializers.notification_serializer, Serializers.notifications_aggregator(request.user.notifications.unread().all()))
-		#notifications.mark_all_as_read()
-		num = len(unread)
-		return JsonResponse({'notifications': sorted(unread, key = lambda x : x["timestamp"], reverse = True),
+		if request.user.is_anonymous():
+			return JsonResponse({'notifications': [], 'num': 0})
+		else:
+			unread = map(Serializers.notification_serializer, Serializers.notifications_aggregator(request.user.notifications.unread().all()))
+			#notifications.mark_all_as_read()
+			num = len(unread)
+			return JsonResponse({'notifications': sorted(unread, key = lambda x : x["timestamp"], reverse = True),
 							 'num': num})
