@@ -141,6 +141,24 @@ class SeriesData(APIView):
         series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
 
+class SeriesVideoData(View):
+    def get(self, request, v_id):
+        try:
+            video = Video.objects.filter(vid_id = v_id).first()
+            videoData = Serializer.serialize_video(video)
+            series = Series.objects.get(videos__contains= videoData)
+            return JsonResponse({
+                'inSeries': True,
+                'seriesID': series.uuid
+            })
+        except Series.DoesNotExist:
+            return JsonResponse({
+                'inSeries': False
+            })
+
+
+
+
 class VideoData(View):
     def get(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
@@ -170,7 +188,7 @@ class QuizData(APIView):
 class VideoIdData(View):
     def get(self, request, v_id):
         try:
-            video = Video.objects.get(vid_id=v_id)
+            video = Video.objects.filter(vid_id=v_id).first()
             topicList = video.topics.all().order_by('time')
             frontendTList = map(Serializer.serialize_topic, topicList)
             return JsonResponse({
@@ -181,15 +199,6 @@ class VideoIdData(View):
         except Video.DoesNotExist:
             return JsonResponse({
                 'inDatabase': False
-            })
-        except Video.MultipleObjectsReturned:
-            video = Video.objects.filter(vid_id=v_id).first()
-            topicList = video.topics.all().order_by('time')
-            frontendTList = map(Serializer.serialize_topic, topicList)
-            return JsonResponse({
-                'inDatabase': True,
-                'topicList':frontendTList,
-                'videoData': Serializer.serialize_video(video)
             })
 
 def secondify(time):

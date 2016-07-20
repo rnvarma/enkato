@@ -111,16 +111,16 @@ function getYTID(url){
 }
 
 
-function findInDatabase(vid_id, vid_num, vidUUID, callback) {
+function findInDatabase(vid_id, vid_num, callback) {
   $.ajax({
           url: "http://127.0.0.1:8000/2/v/" + vid_id,
           dataType: 'json',
           cache: false,
           success: function(data) {
-            inDB = JSON.parse(data.inDatabase);
+            var inDB = JSON.parse(data.inDatabase);
             if (inDB){
-              vidData = data.videoData;
-              vidUUID = vidData.uuid;
+              var vidData = data.videoData;
+              var vidUUID = vidData.uuid;
             }
             callback(inDB, vid_num, vidUUID);
           },
@@ -137,8 +137,7 @@ $(document).ready( function() {
   var vid_id = getYTID(windURL);
   if(vid_id != false){
     var mainNum = 0;
-    var mainUUID = "";
-    findInDatabase(vid_id, mainNum, mainUUID, function(inDB, mainNum, mainUUID){
+    findInDatabase(vid_id, mainNum, function(inDB, mainNum, mainUUID){
       if (inDB){
         showMainMessage("Watch this at enkato", mainUUID);
       }
@@ -146,8 +145,7 @@ $(document).ready( function() {
     console.log("beginning side videos");
     var sideVidIds = getSidebarInfo();
     for (var i =0; i<sideVidIds.length; i++){
-      var sideUUID = "";
-      findInDatabase(sideVidIds[i], i, sideUUID, function(inDB, i, sideUUID){
+      findInDatabase(sideVidIds[i], i, function(inDB, i, sideUUID){
         if(inDB){
           showSideMessage("Watch at enkato", i, sideUUID);
         }
@@ -159,7 +157,7 @@ $(document).ready( function() {
     if(searchIds != false){
       for(var i =0; i<searchIds.length; i++){
         var searchUUID = "";
-        findInDatabase(searchIds[i], i, searchUUID, function(inDB, i, searchUUID){
+        findInDatabase(searchIds[i], i, function(inDB, i, searchUUID){
           if(inDB){
             showSearchMessage(i, searchUUID);
           }
@@ -171,7 +169,7 @@ $(document).ready( function() {
 })
 
 
-chrome.runtime.onMessage.addListener(function(message, sender,response){
+chrome.runtime.onMessage.addListener(function(message, sender, response){
   if((message.from== "popup") && (message.subject == "url")){
     console.log("got message from popup");
     
@@ -182,26 +180,13 @@ chrome.runtime.onMessage.addListener(function(message, sender,response){
     var title = metaInfo[0].content;
 
     var vidId = getYTID(windURL);
-    findInDatabase(vidId, vid_num=0, vidUUID="", function(inDB, vid_num, vidUUID){
-      if(inDB){
-        var info = {
-        videoId: vidId,
-        timestampText: timestamp,
-        videoTitle: title,
-        videoUUID: vidUUID
-        };
-        response(info);
-      }
-      else{
-        var info = {
-          videoId: vidId
-        };
-        response(info);
-      }
-    })
-
-
-    
+    var info = {};
+    info = {
+      videoId: vidId,
+      timestampText: timestamp,
+      videoTitle: title,
+    };
+    response(info);
   }
   else{
     console.log("got message from bkg");
