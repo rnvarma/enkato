@@ -101,7 +101,7 @@ class QuestionDisplayResponse extends React.Component {
     const endorseText = (this.props.response.endorsed ? 'Unendorse' : 'Endorse');
 
     const isOwner = this.props.currentUser && this.props.currentUser.id === this.props.response.user.id;
-    const isInstructor = true;// this.props.currentUser && this.props.currentUser.id === this.props
+    const isInstructor = this.props.currentUser && this.props.currentUser.id === this.props.question.video.creator;
 
     return (
       <Row>

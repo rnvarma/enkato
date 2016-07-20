@@ -144,7 +144,7 @@ class QuestionDisplay extends React.Component {
     const topic = this.props.question.topic ? this.props.question.topic : 'General';
 
     const isOwner = this.props.currentUser && this.props.currentUser.id === this.props.question.student.id;
-    const isInstructor = false;// this.props.currentUser && this.props.currentUser.id === this.props
+    const isInstructor = this.props.currentUser && this.props.currentUser.id === this.props.question.video.creator;
     const resolvedText = this.props.question.resolved ? 'unresolved' : 'resolved';
     return (
       <Col md={8} className="questionDisplay">
