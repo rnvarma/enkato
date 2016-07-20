@@ -89,7 +89,11 @@ class QuestionView extends React.Component {
       question.input = {
         title: question.title,
         text: question.text,
+        topic: question.topic,
       };
+      if (question.topic) {
+        question.input.topic = question.topic.id;
+      }
       array[index] = question;
     });
   }
@@ -165,6 +169,7 @@ class QuestionView extends React.Component {
     newQuestion.input = {
       title: newQuestion.title,
       text: newQuestion.text,
+      topic: newQuestion.topic,
     };
     this.questionData = [...this.questionData, newQuestion];
     this.setState({
@@ -185,24 +190,26 @@ class QuestionView extends React.Component {
     });
   }
 
-  pushQuestionEditText(questionId, questionEditTitle, questionEditText) {
+  pushQuestionEditText(questionId, questionEditTopic, questionEditTitle, questionEditText) {
     const question = this.questionData.find(question => {
       return questionId == question.id;
     });
     question.input = {
+      topic: questionEditTopic,
       title: questionEditTitle,
       text: questionEditText,
     };
     this.setState({ question: this.questionData });
   }
 
-  pushQuestionNewText(questionId, questionNewTitle, questionNewText) {
+  pushQuestionNewText(questionId, questionNewTopic, questionNewTitle, questionNewText) {
     const question = this.questionData.find(question => {
       return questionId == question.id;
     });
     question.title = questionNewTitle;
     question.text = questionNewText;
     question.input = {
+      topic: questionNewTopic,
       title: questionNewTitle,
       text: questionNewText,
     };
@@ -304,9 +311,9 @@ class QuestionView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-      if (this.props.videoUUID != nextProps.videoUUID) {
-          this.getQuestionData(nextProps.videoUUID);
-      }
+    if (this.props.videoUUID != nextProps.videoUUID) {
+      this.getQuestionData(nextProps.videoUUID);
+    }
   }
 
   render() {

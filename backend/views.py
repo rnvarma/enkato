@@ -84,6 +84,7 @@ class Serializer(object):
         data["time"] = topic.time
         data["time_clean"] = convert_seconds_to_duration(topic.time)
         data["id"] = topic.uuid
+        data['real_id'] = topic.id
         data["isCurrentTopic"] = False  # used in frontend
         return data
 
@@ -275,3 +276,13 @@ class LoadQuizData(APIView):
             'completedQuizInfo':completedQuizInfo,
             'quizTaken':True
         })
+
+
+class DatedModelMixin(object):
+    """ Add fields to modified_update_fields if you would like them to update modified on PATCH """
+
+    def perform_update(self, serializer):
+        if any(field in self.request.data for field in self.modified_update_fields):
+            serializer.save(modified=timezone.now())
+        else:
+            serializer.save()

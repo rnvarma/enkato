@@ -1,20 +1,23 @@
-from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
 from backend.models import *
-from backend.serializers import QuestionSerializer, QuestionResponseSerializer, make_owner_permission
+from backend.serializers import QuestionSerializer, QuestionResponseSerializer
+from backend.views import DatedModelMixin
+from backend.permissions import make_owner_permission
 
 from rest_framework import viewsets, filters, permissions
 
 
-class QuestionViewset(viewsets.ModelViewSet):
+class QuestionViewset(DatedModelMixin, viewsets.ModelViewSet):
     """ The question API """
 
     serializer_class = QuestionSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, make_owner_permission('student')) # also allow instructor
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          make_owner_permission('student', 'video.creator'))
     filter_backends = (filters.OrderingFilter,)
     ordering = ('modified',)
     ordering_fields = ('responses',)
+    modified_update_fields = ('title', 'text', 'topic')
 
     def get_queryset(self):
         video = self.request.query_params.get('video_uuid')
@@ -32,18 +35,14 @@ class QuestionViewset(viewsets.ModelViewSet):
 
         serializer.save(student_id=student, video=video)
 
-    def perform_update(self, serializer):
-        if any(field in self.request.data for field in ('title', 'text', 'topic')):
-            serializer.save(modified=timezone.now())
-        else:
-            serializer.save()
 
-
-class QuestionResponseViewset(viewsets.ModelViewSet):
+class QuestionResponseViewset(DatedModelMixin, viewsets.ModelViewSet):
     """ The question response API """
 
     serializer_class = QuestionResponseSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, make_owner_permission('user'),)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          make_owner_permission('user', 'question.video.creator', instructor_edit_fields=('endorsed',)))
+    modified_update_fields = ('text',)
 
     def get_queryset(self):
         question = self.request.query_params.get('question_id')
@@ -58,9 +57,3 @@ class QuestionResponseViewset(viewsets.ModelViewSet):
         is_instructor = user == get_object_or_404(Question, pk=self.request.data.get('question_pk')).video.creator.id
 
         serializer.save(user_id=user, is_instructor=is_instructor)
-
-    def perform_update(self, serializer):
-        if 'text' in self.request.data:
-            serializer.save(modified=timezone.now())
-        else:
-            serializer.save()

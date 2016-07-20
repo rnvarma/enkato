@@ -50,8 +50,9 @@ class QuestionModal extends React.Component {
       };
 
       if (this.state.topic && this.state.topic !== 0) {
-        data.topic = this.state.topic;
+        data.topic_id = this.state.topic;
       }
+      console.log('data', data, this.state.topic);
 
       $.ajax({
         url: '/api/questions',
@@ -69,7 +70,7 @@ class QuestionModal extends React.Component {
             title: '',
             text: '',
             topic: '',
-          })
+          });
         },
         error: (xhr, status, err) => {
           console.log('POST failed, could be invalid data or just general server problems', status, err);
@@ -117,6 +118,7 @@ class QuestionModal extends React.Component {
               onTextChange={this.onTextChange}
               titleValue={this.state.title}
               textValue={this.state.text}
+              topicValue={this.state.topic}
             />
           </Modal.Body>
           <Modal.Footer>
