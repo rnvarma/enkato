@@ -18,19 +18,21 @@ module.exports = React.createClass({
         var numVideos = this.props.series.thumbnails.length;
         return (
             <Col md={4} lg={3} sm={6} xs={12} className="profileSeriesPanelCol">
-                <div className="profileSeriesPanel" onClick={this.onClick}>
-                    <div className={"thumbnailArea" + (numVideos == 1 ? " one" : "")}>
-                        {thumbnails}
-                    </div>
-                    <div className="seriesInfo">
-                        <div className="name">
-                            {this.props.series.name}
+                <a href={"/s/" + this.props.series.uuid}>
+                    <div className="profileSeriesPanel">
+                        <div className={"thumbnailArea" + (numVideos == 1 ? " one" : "")}>
+                            {thumbnails}
                         </div>
-                        <div className="description">
-                            {this.props.series.description}
+                        <div className="seriesInfo">
+                            <div className="name">
+                                {this.props.series.name}
+                            </div>
+                            <div className="description">
+                                {this.props.series.description}
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </Col>
         )
     }

@@ -42,7 +42,7 @@ class Serializer(object):
     @staticmethod
     def serialize_series(series, request=None):
         data = {}
-        
+        data["uuid"] = series.uuid
         data["name"] = series.name
         data["description"] = series.description
         data["image"] = series.image
