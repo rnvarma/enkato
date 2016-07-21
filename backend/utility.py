@@ -13,6 +13,24 @@ def capitalize(s):
     if not len(s): return ""
     return s[0].upper() + s[1:]
 
+def getYTIdFromVideoData(video):
+    return video.vid_id
+
+def findYTId(uuids, vidId):
+    videoIdList = uuids.values()
+    allIds = []
+    for dictId in videoIdList:
+        allIds.extend(dictId.values())
+    seriesIds = uuids.keys()
+    for series in allIds:
+        for ids in series:
+            if ids==vidId:
+                element = allIds.index(series)
+                return seriesIds[element]
+    return None
+
+
+
 
 def getYTIdFromURL(url):
     """ Gets video id from url or returns None if the id doesn't seem right """
