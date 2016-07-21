@@ -31,7 +31,7 @@ module.exports = React.createClass({
     saveDataToServer: function(){
         var data = {
             'questions': JSON.stringify(this.state.questions)
-        }
+        };
         $.ajax({
           url: "/v/" + this.state.uuid + "/updatequiz",
           dataType: 'json',
@@ -49,33 +49,33 @@ module.exports = React.createClass({
         });
     },
     setChoiceList: function(choiceList, questionNumber){
-        var tempQuestionList = this.state.questions
-        tempQuestionList[questionNumber].choiceList = choiceList
+        var tempQuestionList = this.state.questions;
+        tempQuestionList[questionNumber].choiceList = choiceList;
         this.setState({questions: tempQuestionList})
     },
     setShouldRefocus: function(shouldRefocus, questionNumber){
-        var tempQuestionList = this.state.questions
-        tempQuestionList[questionNumber - 1].shouldRefocus = shouldRefocus
+        var tempQuestionList = this.state.questions;
+        tempQuestionList[questionNumber - 1].shouldRefocus = shouldRefocus;
         this.setState({questions: tempQuestionList})
     },
     handleQuizQuestionChange: function(questionText, index){
-        var tempQuestionList = this.state.questions
-        tempQuestionList[index].quizQuestionText = questionText
+        var tempQuestionList = this.state.questions;
+        tempQuestionList[index].quizQuestionText = questionText;
         this.setState({questions: tempQuestionList})
     },
     scrollToFromButton: function(idNum, index){
-        var height = $("#" + idNum + "q").height()
-        var scrollTop = height * index
+        var height = $("#" + idNum + "q").height();
+        var scrollTop = height * index;
         $(".quizAddingForm").animate({scrollTop: scrollTop}, 500);
-        var tempQuestionList = this.state.questions
+        var tempQuestionList = this.state.questions;
         for (var i = 0; i < tempQuestionList.length; i++) {
           tempQuestionList[i].active = false;
         }
-        tempQuestionList[index].active = true
+        tempQuestionList[index].active = true;
         this.setState({questions: tempQuestionList})
     },
     componentDidMount: function(){
-        this.setState({uuid: this.props.videoUUID})
+        this.setState({uuid: this.props.videoUUID});
         this.loadDataFromServer(this.props.videoUUID);
         $(window).unload(this.saveDataToServer)
     },
@@ -84,8 +84,8 @@ module.exports = React.createClass({
     },
     componentWillReceiveProps: function(nextProps) {
         if (this.state.uuid != nextProps.videoUUID) {
-            this.saveDataToServer()
-            this.setState({uuid: nextProps.videoUUID})
+            this.saveDataToServer();
+            this.setState({uuid: nextProps.videoUUID});
             this.loadDataFromServer(nextProps.videoUUID);
         }
     },
@@ -106,7 +106,7 @@ module.exports = React.createClass({
     addNewChoice: function(qid) {
         var data = {
             qid: qid
-        }
+        };
         $.ajax({
           url: "/v/" + this.state.uuid + "/addquizoption",
           dataType: 'json',
@@ -118,10 +118,14 @@ module.exports = React.createClass({
           },
           success: function(data) {
             if (data.status) {
-                var questions = this.state.questions
+                var questions = this.state.questions;
                 for (var i = 0; i < questions.length; i++) {
                     if (questions[i].id == qid) {
-                        questions[i].choiceList.push(data.new_choice)
+                      if (questions[i].choiceList.length === 0) {
+                        data.new_choice.is_correct = true;
+                        data.new_choice.focus = false;
+                      }
+                        questions[i].choiceList.push(data.new_choice);
                         break;
                     }
                 }
@@ -139,7 +143,7 @@ module.exports = React.createClass({
         var data = {
             qid: qid,
             cid: cid
-        }
+        };
         $.ajax({
           url: "/v/" + this.state.uuid + "/deletequizoption",
           dataType: 'json',
@@ -151,11 +155,24 @@ module.exports = React.createClass({
           },
           success: function(data) {
             if (data.status) {
-                var questions = this.state.questions
-                questions[qIndex].choiceList.splice(cIndex, 1)
-                if (cIndex > 0) 
-                    questions[qIndex].choiceList[cIndex].focus = true;
-                this.setState({questions: questions})
+              let questions = this.state.questions;
+              let needNewCorrect = questions[qIndex].choiceList[cIndex].is_correct;
+
+              if (cIndex > 0) { /* prevent first from being removed */
+                questions[qIndex].choiceList.splice(cIndex, 1);
+                if (cIndex < questions[qIndex].choiceList.length) { /* not last elem */
+                  questions[qIndex].choiceList[cIndex].focus = true;
+                  if (needNewCorrect) {
+                    questions[qIndex].choiceList[cIndex].is_correct = true;
+                  }
+                } else {
+                  questions[qIndex].choiceList[cIndex - 1].focus = true;
+                  if (needNewCorrect) {
+                    questions[qIndex].choiceList[cIndex - 1].is_correct = true;
+                  }
+                }
+              }
+              this.setState({questions: questions})
             } else {
                 console.log("Internal Server Error: Adding Quiz Option Failed")
             }
@@ -178,9 +195,11 @@ module.exports = React.createClass({
           },
           success: function(data) {
             if (data.status) {
-                var questions = this.state.questions
-                questions.push(data.new_question)
-                this.setState({questions: questions})
+                var questions = this.state.questions;
+              data.new_question.focus = true;
+                questions.push(data.new_question);
+                this.setState({questions: questions});
+              this.addNewChoice(data.new_question.id); /* always have at least one choice */
                 this.scrollToFromButton(data.new_question.id, questions.length - 1)
             } else {
                 console.log("Internal Server Error: Adding Quiz Question Failed")
@@ -192,7 +211,7 @@ module.exports = React.createClass({
         });
     },
     makeChoiceIsCorrect: function(cid, qIndex) {
-        var tempQuestionList = this.state.questions
+        var tempQuestionList = this.state.questions;
         for (var i = 0; i < tempQuestionList[qIndex].choiceList.length; i++) {
             if (tempQuestionList[qIndex].choiceList[i].id == cid) {
                 tempQuestionList[qIndex].choiceList[i].is_correct = true;
@@ -205,7 +224,7 @@ module.exports = React.createClass({
     deleteQuestion: function(qid, qIndex) {
         var data = {
             qid: qid
-        }
+        };
         $.ajax({
           url: "/v/" + this.state.uuid + "/deletequizquestion",
           dataType: 'json',
@@ -217,11 +236,11 @@ module.exports = React.createClass({
           },
           success: function(data) {
             if (data.status) {
-                var questions = this.state.questions
-                questions.splice(qIndex, 1)
-                this.setState({questions: questions})
+                var questions = this.state.questions;
+                questions.splice(qIndex, 1);
+                this.setState({questions: questions});
                 if (qIndex > 0) {
-                    var newQuestionID = questions[qIndex - 1].id
+                    var newQuestionID = questions[qIndex - 1].id;
                     this.scrollToFromButton(newQuestionID, qIndex - 1)
                 }
             } else {
@@ -262,4 +281,4 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+});
