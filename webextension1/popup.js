@@ -130,14 +130,16 @@ function findInDatabase(vid_id, callback) {
 $(document).ready( function(){
 	chrome.tabs.query({active:true, currentWindow:true}, function(tabs){
 		chrome.tabs.sendMessage(tabs[0].id, {from: "popup", subject:"url"}, function(info){
-			if(info.videoId != false){
-				findInDatabase(info.videoId, function(inDB, vidUUID){
-					showVideo(info.videoId, info.timestampText, info.videoTitle, vidUUID);
+			var vidId = info.videoId;
+			if(vidId != false){
+				findInDatabase(vidId, function(inDB, vidUUID){
+					showVideo(vidId, info.timestampText, info.videoTitle, vidUUID);
 					findTopicList(vidUUID, function(topics){
 						if (topics != null){
 							showTopics(topics);
 						}
 					});
+					chrome.tabs.sendMessage(tabs[0].id, {from:"popup", subject: "videoId for series data", content: vidId});
 				});
 			}
 			else{

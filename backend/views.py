@@ -42,7 +42,7 @@ class Serializer(object):
     @staticmethod
     def serialize_series(series, request=None):
         data = {}
-        data["uuid"] = series.uuid
+        
         data["name"] = series.name
         data["description"] = series.description
         data["image"] = series.image
@@ -57,8 +57,19 @@ class Serializer(object):
         data["total_len"] = sanetizeTime(total_time)
         videos = map(lambda sv: sv.video, series_videos)
         data["videos"] = map(Serializer.serialize_video, videos)
+        data["videoIDs"] = map(getYTIdFromVideoData, videos)
         data["is_creator"] = False if not request else series.creator == request.user.customuser
         data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
+        return data    
+
+    @staticmethod
+    def serialize_series_videos(series):
+        data = {}
+        series_videos = series.videos.all().order_by("order")
+        for series_video in series_videos:
+            series_video.video.order = series_video.order
+        videos = map(lambda sv: sv.video, series_videos)
+        data["videoIDs"] = map(getYTIdFromVideoData, videos)
         return data
 
     @staticmethod
@@ -155,18 +166,22 @@ class SeriesData(APIView):
         series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
 
-class SeriesVideoData(View):
+class SeriesVideoData(APIView):
     def get(self, request, v_id):
         try:
             video = Video.objects.filter(vid_id = v_id).first()
             videoData = Serializer.serialize_video(video)
-            series = Series.objects.get(videos__contains= videoData)
-            return JsonResponse({
-                'inSeries': True,
-                'seriesID': series.uuid
-            })
+            series = Series.objects.filter(creator= video.creator).first()
+            response = {}
+            response['inSeries'] = True
+            uuids = {}
+            for serie in series:
+                uuids[serie.uuid] = Serializer.serialize_series_videos(serie)
+            seriesId = findYTId(uuids, v_id)
+            response["seriesId"] = seriesId
+            return Response(response)
         except Series.DoesNotExist:
-            return JsonResponse({
+            return Response({
                 'inSeries': False
             })
 
@@ -187,16 +202,6 @@ class VideoData(View):
             'numQuestions':quizQs.count()
         })
 
-class QuizData(APIView):
-    def get(self, request, v_uuid):
-        video = Video.objects.get(uuid=v_uuid)
-        quizQs = video.quiz_questions.all()
-        questions = map(Serializer.serialize_quiz_question, quizQs)
-        return JsonResponse({
-            'questions': questions,
-            'numQuestions': quizQs.count()
-        })
-
 class VideoIdData(View):
     def get(self, request, v_id):
         try:
@@ -212,6 +217,17 @@ class VideoIdData(View):
             return JsonResponse({
                 'inDatabase': False
             })
+
+class QuizData(APIView):
+    def get(self, request, v_uuid):
+        video = Video.objects.get(uuid=v_uuid)
+        quizQs = video.quiz_questions.all()
+        questions = map(Serializer.serialize_quiz_question, quizQs)
+        return JsonResponse({
+            'questions': questions,
+            'numQuestions': quizQs.count()
+        })
+
 
 def secondify(time):
     timeL = time.split(":")
