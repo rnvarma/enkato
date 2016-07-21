@@ -189,25 +189,26 @@ module.exports = React.createClass({
                 />
             )
         }
-        return(
-            <div className="quizForm">
-                <div className="header">
-                    Check Your Understanding
-                    <FontAwesome className="closeForm" name="close" onClick={this.closeModal}/>
+      return (
+        <div className="quizForm">
+          <div className="header">
+            Check Your Understanding
+            <FontAwesome className="closeForm" name="close" onClick={this.closeModal}/>
                 </div>
-                {navigation}
-                {modalBody}
-                <QuizNavFooter
-                    currentQuestion={this.state.currentQuestion}
-                    numQuestions={this.state.numQuestions}
-                    nextQuestion={this.nextQuestion}
-                    prevQuestion={this.prevQuestion}
-                    closeModal={this.closeModal} 
-                    showGradingPage={this.state.showGradingPage}
-                    reviewMode={this.state.reviewMode}
-                    onFinishButton={this.props.onFinishButton}
-                />
-            </div>
-        )
+          {navigation}
+          {modalBody}
+          <QuizNavFooter
+            quizExists={Boolean(this.state.questions[this.state.currentQuestion])}
+            currentQuestion={this.state.currentQuestion}
+            numQuestions={this.state.numQuestions}
+            nextQuestion={this.nextQuestion}
+            prevQuestion={this.prevQuestion}
+            closeModal={this.closeModal}
+            showGradingPage={this.state.showGradingPage}
+            reviewMode={this.state.reviewMode}
+            onFinishButton={this.props.onFinishButton}
+          />
+        </div>
+      );
     }
 })

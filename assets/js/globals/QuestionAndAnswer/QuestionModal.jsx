@@ -42,23 +42,18 @@ class QuestionModal extends React.Component {
 
   postQuestion() {
     if (this.state.title && this.state.text) {
-      const data = {
+      const payload = {
         video_uuid: this.props.videoUUID,
         title: this.state.title,
         text: this.state.text,
         time: this.props.getCurrentTime(),
+        topic_pk: this.state.topic,
       };
-
-      if (this.state.topic && this.state.topic !== 0) {
-        data.topic_id = this.state.topic;
-      }
-      console.log('data', data, this.state.topic);
-
       $.ajax({
         url: '/api/questions',
         dataType: 'json',
         type: 'POST',
-        data,
+        data: payload,
         beforeSend: (xhr) => {
           xhr.withCredentials = true;
           xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));

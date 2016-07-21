@@ -48,6 +48,7 @@
   .responseFooter {
     border-top: 2px solid $bg-grey;
     padding: 10px 30px;
+    font-size: 0.90em;
 
     .studentName {
       font-weight: bold;
@@ -59,7 +60,10 @@
       font-weight: bold;
       font-size: 16px;
       margin-left: 20px;
-      margin-top: 5px;
+      &:last-child {
+        margin-left: 0px;
+      }
+      margin-top: 6px;
 
       &:hover {
         cursor: pointer;

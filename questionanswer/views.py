@@ -13,12 +13,12 @@ class QuestionViewset(DatedModelMixin, viewsets.ModelViewSet):
 
     serializer_class = QuestionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          make_owner_permission(user_field='student', user_edit_fields=('title', 'text', 'topic', 'resolved'),
+                          make_owner_permission(user_field='student', user_edit_fields=('title', 'text', 'topic_pk', 'resolved'),
                                                 instructor_field='video.creator', instructor_edit_fields=('resolved',)))
     filter_backends = (filters.OrderingFilter,)
     ordering = ('modified',)
     ordering_fields = ('responses',)
-    modified_update_fields = ('title', 'text', 'topic')
+    modified_update_fields = ('title', 'text', 'topic_pk')
 
     def get_queryset(self):
         video = self.request.query_params.get('video_uuid')

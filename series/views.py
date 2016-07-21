@@ -5,14 +5,18 @@ from django.http import JsonResponse
 from backend.models import *
 from backend.notification import *
 from backend.serializers import SeriesSerializer
+from backend.permissions import make_owner_permission
 
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 
 
 class SeriesViewset(viewsets.ModelViewSet):
     """ The series API """
 
+    lookup_field = 'uuid'
     serializer_class = SeriesSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          make_owner_permission(user_field='creator', user_edit_fields=None))
 
     def get_queryset(self):
         creator = self.request.query_params.get('creator')

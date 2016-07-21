@@ -38,28 +38,27 @@ class QuestionEditForm extends React.Component {
 
   patch() {
     /* TODO: error handling on failing to patch */
-    const data = {
+    const payload = {
       title: this.props.question.input.title,
       text: this.props.question.input.text,
-      topic: this.props.question.input.topic.real_id,
+      topic_pk: this.props.question.input.topic,
     };
     $.ajax({
       url: `/api/questions/${this.props.question.id}`,
       type: 'PATCH',
-      data,
+      data: payload,
       beforeSend(xhr) {
         xhr.withCredentials = true;
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
       },
-      success: () => {
+      success: (data) => {
         this.props.toggleEdit();
-        this.props.pushQuestionNewText(this.props.question.id, this.props.question.input.topic, this.props.question.input.title, this.props.question.input.text);
+        this.props.replaceQuestion(data.id, data);
       },
     });
   }
 
   render() {
-    console.log(this.props.question.input);
     return (
       <div className="questionEditForm">
         <QuestionForm

@@ -16,7 +16,7 @@ class QuestionForm extends React.Component {
     var topicListValue;
     if (this.props.topicValue) {
       topicListValue = this.props.topicValue;
-    }console.log("OY", topicListValue);
+    }
     return (
       <div className="questionForm">
         <Form horizontal onSubmit={this.props.onSubmit}>
