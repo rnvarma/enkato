@@ -1,1 +1,1 @@
-web: gunicorn reactapp.wsgi --log-file
+web: gunicorn reactapp.wsgi
