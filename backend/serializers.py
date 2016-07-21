@@ -22,6 +22,7 @@ class QuestionResponseSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     responses = QuestionResponseSerializer(many=True, read_only=True)
     video_pk = serializers.PrimaryKeyRelatedField(read_only=True, source='video')
+    topic_pk = serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Topic.objects.all(), source='topic')
 
     class Meta:
         model = Question
