@@ -379,10 +379,13 @@ class QuestionView extends React.Component {
             toggleUnansweredFilter={this.toggleUnansweredFilter}/>
           <Row>
             <QuestionList
+              showingSeries={!this.props.videoUUID}
               questions={this.state.questions}
               currentQuestion={this.state.currentQuestion}
-              setCurrentQuestion={this.setCurrentQuestion}/>
+              setCurrentQuestion={this.setCurrentQuestion}
+            />
             <QuestionDisplay
+              showingSeries={!this.props.videoUUID}
               topicList={this.props.topicList}
               getCurrentTime={this.props.getCurrentTime}
               question={this.state.currentQuestion}

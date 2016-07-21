@@ -35,6 +35,10 @@ $background: white;
       font-size: 15px;
       text-transform: uppercase;
 
+      .questionPreviewHeaderTopic {
+        width: 92%;
+      }
+
       .questionPreviewUnresolved {
         width: 13px;
         height: 13px;
@@ -48,7 +52,7 @@ $background: white;
       color: $structabl-blue;
       font-weight: 700;
       font-size: 18px;
-      padding-bottom: 10px;
+      margin-bottom: 10px;
     }
 
     .questionPreviewText {
