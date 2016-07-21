@@ -5,7 +5,7 @@ import React from 'react';
 
 class QuizNavFooter extends React.Component {
     render() {
-        var disableAll = this.props.showGradingPage || !this.props.quizExists;
+        var disableAll = this.props.showGradingPage;
 
         var rightButton = <div></div>
         if(this.props.reviewMode&&(this.props.currentQuestion == this.props.numQuestions -1)){
@@ -25,22 +25,32 @@ class QuizNavFooter extends React.Component {
             )
         }
 
-        return (
-            <div className="quizNavFooter">
-                <Button
-                    className="cancelButton"
-                    onClick={this.props.closeModal}>
-                    Cancel
-                </Button>
-                <Button
-                    disabled={this.props.currentQuestion == 0 || disableAll}
-                    className="backButton"
-                    onClick={this.props.prevQuestion}>
-                    Back
-                </Button>
-                {rightButton}
-            </div>
+      let prevNextBtns;
+      if (this.props.quizExists) {
+        prevNextBtns = (
+          <span>
+            <Button
+              disabled={this.props.currentQuestion == 0 || disableAll}
+              className="backButton"
+              onClick={this.props.prevQuestion}
+            >
+              Back
+            </Button>
+            {rightButton}
+          </span>
         );
+      }
+
+      return (
+        <div className="quizNavFooter">
+          <Button
+            className="cancelButton"
+            onClick={this.props.closeModal}>
+            Cancel
+          </Button>
+          {prevNextBtns}
+        </div>
+      );
     }
 }
 
