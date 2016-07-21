@@ -6,6 +6,10 @@ from rest_framework.response import Response
 
 from backend.models import *
 from backend.utility import *
+from backend.serializers import CustomUserSerializer
+
+from rest_framework import viewsets, permissions
+
 
 class Serializer(object):
     @staticmethod
@@ -119,6 +123,15 @@ class Serializer(object):
         data["is_correct"] = choice.is_correct
         return data
 
+
+class UserViewset(viewsets.ReadOnlyModelViewSet):
+
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user.customuser
 
 class UserData(APIView):
     def get(self, request):

@@ -30,6 +30,8 @@ class QuestionView extends React.Component {
     this.setFilter = this.setFilter.bind(this);
     this.filterQuestions = this.filterQuestions.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.getQuestion = this.getQuestion.bind(this);
+    this.getResponse = this.getResponse.bind(this);
     this.addQuestion = this.addQuestion.bind(this);
     this.pushQuestion = this.pushQuestion.bind(this);
     this.removeQuestion = this.removeQuestion.bind(this);
@@ -47,10 +49,20 @@ class QuestionView extends React.Component {
     this.toggleEditResponse = this.toggleEditResponse.bind(this);
     this.getQuestionData = this.getQuestionData.bind(this);
     this.processQuestionData = this.processQuestionData.bind(this);
+    this.loadUserData = this.loadUserData.bind(this);
+    this.replaceQuestion = this.replaceQuestion.bind(this);
+    this.replaceResponse = this.replaceResponse.bind(this);
   }
 
   componentDidMount() {
     this.getQuestionData(this.props.videoUUID);
+    this.loadUserData();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.videoUUID !== nextProps.videoUUID) {
+      this.getQuestionData(nextProps.videoUUID);
+    }
   }
 
   getQuestionData(videoUUID) {
@@ -68,7 +80,7 @@ class QuestionView extends React.Component {
       return;
     }
     $.ajax({
-      url: `/api/questions?v_uuid=${videoUUID}`,
+      url: `/api/questions?video_uuid=${videoUUID}`,
       dataType: 'json',
       cache: false,
       success: onSuccess,
@@ -178,10 +190,20 @@ class QuestionView extends React.Component {
     });
   }
 
-  removeQuestion(questionId) {
-    const question = this.questionData.find(question => {
-      return questionId == question.id;
+  getQuestion(questionId) {
+    return this.questionData.find(question => {
+      return questionId === question.id;
     });
+  }
+
+  getResponse(questionId, responseId) {
+    return this.getQuestion(questionId).responses.find(response => {
+      return responseId === response.id;
+    });
+  }
+
+  removeQuestion(questionId) {
+    const question = this.getQuestion(questionId);
     const index = this.questionData.indexOf(question);
     this.questionData.splice(index, 1);
     this.setState({
@@ -191,9 +213,7 @@ class QuestionView extends React.Component {
   }
 
   pushQuestionEditText(questionId, questionEditTopic, questionEditTitle, questionEditText) {
-    const question = this.questionData.find(question => {
-      return questionId == question.id;
-    });
+    const question = this.getQuestion(questionId);
     question.input = {
       topic: questionEditTopic,
       title: questionEditTitle,
@@ -203,9 +223,7 @@ class QuestionView extends React.Component {
   }
 
   pushQuestionNewText(questionId, questionNewTopic, questionNewTitle, questionNewText) {
-    const question = this.questionData.find(question => {
-      return questionId == question.id;
-    });
+    const question = this.getQuestion(questionId);
     question.title = questionNewTitle;
     question.text = questionNewText;
     question.input = {
@@ -218,9 +236,7 @@ class QuestionView extends React.Component {
 
   /* actually adds the response after it has been POSTed */
   pushResponse(questionId, newResponse) {
-    const questionToAppend = this.questionData.find(question => {
-      return questionId === question.id;
-    });
+    const questionToAppend = this.getQuestion(questionId);
     newResponse.input = newResponse.text;
     questionToAppend.responses.push(newResponse);
     this.setState({ questions: this.questionData });
@@ -228,9 +244,7 @@ class QuestionView extends React.Component {
 
   /* stores to response input, unique for each question */
   pushResponseText(questionId, responseText) {
-    const question = this.questionData.find(question => {
-      return questionId === question.id;
-    });
+    const question = this.getQuestion(questionId);
     question.responseInput = responseText;
     this.setState({ questions: this.questionData });
   }
@@ -238,35 +252,21 @@ class QuestionView extends React.Component {
   /* similar to above, but for the case in which you are editing responses */
   /* does not update actual response.text, internal */
   pushResponseEditText(questionId, responseId, responseEditText) {
-    const question = this.questionData.find(question => {
-      return questionId === question.id;
-    });
-    const response = question.responses.find(response => {
-      return responseId === response.id;
-    });
+    const response = this.getResponse(questionId, responseId);
     response.input = responseEditText;
     this.setState({ questions: this.questionData });
   }
 
   pushResponseNewText(questionId, responseId, newText) {
-    const question = this.questionData.find(question => {
-      return questionId === question.id;
-    });
-    const response = question.responses.find(response => {
-      return responseId === response.id;
-    });
+    const response = this.getResponse(questionId, responseId);
     response.text = newText;
     response.input = response.text;
     this.setState({ questions: this.questionData });
   }
 
   removeResponse(questionId, responseId) {
-    const question = this.questionData.find(question => {
-      return questionId === question.id;
-    });
-    const response = question.responses.find(response => {
-      return responseId === response.id;
-    });
+    const question = this.getQuestion(questionId);
+    const response = this.getResponse(questionId, responseId);
     const index = question.responses.indexOf(response);
     question.responses.splice(index, 1);
     this.setState({ questions: this.questionData });
@@ -310,10 +310,31 @@ class QuestionView extends React.Component {
     this.setState({ questions: this.questionData });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.videoUUID != nextProps.videoUUID) {
-      this.getQuestionData(nextProps.videoUUID);
-    }
+  replaceQuestion(questionId, newQuestion) {
+    let question = this.getQuestion(questionId);
+    $.extend(question, newQuestion);
+    this.setState({ questions: this.questionData });
+  }
+
+  replaceResponse(questionId, responseId, newResponse) {
+    let response = this.getResponse(questionId, responseId);
+    $.extend(response, newResponse);
+    this.setState({ questions: this.questionData });
+  }
+
+  /* query user data for validation purposes */
+  loadUserData() {
+    $.ajax({
+      url: '/api/users/current',
+      dataType: 'json',
+      cache: false,
+      success: (data) => {
+        this.currentUser = data;
+      },
+      error: (xhr, status, err) => {
+        console.error(status, err.toString());
+      },
+    });
   }
 
   render() {
@@ -343,7 +364,7 @@ class QuestionView extends React.Component {
           {askModal}
           <Row>
             <Col md={5}>
-              <div className="qaTitle">Question & Answers</div>
+              <div className="qaTitle">Question & Answer</div>
             </Col>
             <Col mdOffset={10}>
               {askButton}
@@ -376,7 +397,11 @@ class QuestionView extends React.Component {
               toggleEndorsedResponse={this.toggleEndorsedResponse}
               toggleEditQuestion={this.toggleEditQuestion}
               toggleEditResponse={this.toggleEditResponse}
-              videoUUID={this.props.videoUUID}/>
+              replaceQuestion={this.replaceQuestion}
+              replaceResponse={this.replaceResponse}
+              videoUUID={this.props.videoUUID}
+              currentUser={this.currentUser}
+            />
           </Row>
         </Row>
       </div>

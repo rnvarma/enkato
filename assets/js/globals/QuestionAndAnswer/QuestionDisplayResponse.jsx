@@ -51,19 +51,19 @@ class QuestionDisplayResponse extends React.Component {
 
   toggleEndorse() {
     /* TODO: verify endorsing worked */
-    const data = {
+    const payload = {
       endorsed: !this.props.response.endorsed,
     }
     $.ajax({
       url: `/api/responses/${this.props.response.id}`,
       type: 'PATCH',
-      data,
+      data: payload,
       beforeSend(xhr) {
         xhr.withCredentials = true;
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
       },
-      success: () => {
-        this.props.toggleEndorsedResponse(this.props.question.id, this.props.response.id);
+      success: (data) => {
+        this.props.replaceResponse(this.props.question.id, data.id, data);
       },
     });
   }
@@ -79,7 +79,7 @@ class QuestionDisplayResponse extends React.Component {
             toggleEdit={this.toggleEdit}
             removeResponse={this.props.removeResponse}
             pushResponseEditText={this.props.pushResponseEditText}
-            pushResponseNewText={this.props.pushResponseNewText}
+            replaceResponse={this.props.replaceResponse}
           />
         </Row>
       );
@@ -100,6 +100,9 @@ class QuestionDisplayResponse extends React.Component {
 
     const endorseText = (this.props.response.endorsed ? 'Unendorse' : 'Endorse');
 
+    const isOwner = this.props.currentUser && this.props.currentUser.id === this.props.response.user.id;
+    const isInstructor = this.props.currentUser && this.props.currentUser.id === this.props.question.video.creator;
+
     return (
       <Row>
         <DeleteConfirmModal
@@ -108,16 +111,16 @@ class QuestionDisplayResponse extends React.Component {
           deleteCallback={this.delete}
           cancelCallback={this.toggleDelete}
         />
-        <div className={(this.props.response.is_instructor ? 'instructor ' : '') + 'questionDisplayResponse'}>
+        <div className={(this.props.response.is_instructor ? 'instructor ' : this.props.response.endorsed ? 'endorsed ' : '') + 'questionDisplayResponse'}>
           <div className="responseText">
             {this.props.response.text}
           </div>
           {badges}
           <div className="responseFooter">
-            <img></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> asked {created.fromNow()}{modified ? ", modified: "+modified.fromNow() : ""}
-            {/* TODO: check is user/instructor is logged in */true ? <div onClick={this.toggleDelete} className="plainBtn">Delete</div> : '' }
-            {/* TODO: check if user is logged in */true ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
-            {/* TODO: check if instructor is logged in and not instructor post */false ? '' : <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div>}
+            <img></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> answered {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
+            {isOwner || isInstructor ? <div onClick={this.toggleDelete} className="plainBtn">Delete</div> : '' }
+            {isOwner ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
+            {!isOwner && isInstructor ? <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div> : ''}
           </div>
         </div>
       </Row>

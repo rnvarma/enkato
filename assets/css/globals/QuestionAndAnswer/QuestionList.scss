@@ -34,6 +34,14 @@ $background: white;
       font-weight: 500;
       font-size: 15px;
       text-transform: uppercase;
+
+      .questionPreviewUnresolved {
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background-color: red;
+        float: right;
+      }
     }
 
     .questionPreviewTitle {
@@ -45,6 +53,13 @@ $background: white;
 
     .questionPreviewText {
       color: $structabl-blue;
+    }
+
+    .questionPreviewFooter {
+      padding-top: 8px;
+      font-weight: bold;
+      font-size: 12px;
+      text-transform: uppercase;
     }
   }
 }

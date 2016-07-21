@@ -13,7 +13,8 @@ class QuestionViewset(DatedModelMixin, viewsets.ModelViewSet):
 
     serializer_class = QuestionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          make_owner_permission('student', 'video.creator'))
+                          make_owner_permission(user_field='student', user_edit_fields=('title', 'text', 'topic', 'resolved'),
+                                                instructor_field='video.creator', instructor_edit_fields=('resolved',)))
     filter_backends = (filters.OrderingFilter,)
     ordering = ('modified',)
     ordering_fields = ('responses',)
@@ -41,7 +42,8 @@ class QuestionResponseViewset(DatedModelMixin, viewsets.ModelViewSet):
 
     serializer_class = QuestionResponseSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          make_owner_permission('user', 'question.video.creator', instructor_edit_fields=('endorsed',)))
+                          make_owner_permission(user_field='user', user_edit_fields=('text',),
+                                                instructor_field='question.video.creator', instructor_edit_fields=('endorsed',)),)
     modified_update_fields = ('text',)
 
     def get_queryset(self):
@@ -50,7 +52,7 @@ class QuestionResponseViewset(DatedModelMixin, viewsets.ModelViewSet):
         if question:
             return QuestionResponse.objects.filter(question=question)
         else:
-            return QuestionResponse.objects.filter(user=self.request.user.customuser)
+            return QuestionResponse.objects.all()
 
     def perform_create(self, serializer):
         user = self.request.user.customuser.id

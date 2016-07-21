@@ -92,12 +92,12 @@ module.exports = React.createClass({
                             Education starts with you.
                         </div>
                         <div className="sub-logo">
-                            Our mission is to optimze the educational environment in which video-based learning occurs
+                            Our mission is to optimize the educational environment in which video-based learning occurs
                         </div>
                     </div>
                     <div className="right">
                         <div className="signUpTitle">
-                            <span className="bold">Sign up</span> (its free!)
+                            <span className="bold">Sign up</span> (it's free!)
                         </div>
                         <Form onSubmit={this.onSubmit}>
                             <FormGroup controlId="first-name">
@@ -205,7 +205,7 @@ module.exports = React.createClass({
                                     Organize educational videos in public or private classrooms, collaborate with teaching assistants to address questions, analyze student interaction, and create custom quizzes.
                                 </div>
                                 <Button className="button greenBtn">
-                                    Become on Educator
+                                    Become an Educator
                                 </Button>
                             </div>
                         </Col>
