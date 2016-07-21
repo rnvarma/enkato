@@ -13,6 +13,8 @@ var CreateSeriesModal = require('js/globals/CreateSeriesModal')
 var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
 var FontAwesome = require('react-fontawesome');
 
+import getCookie from 'js/globals/GetCookie';
+
 module.exports = React.createClass({
     getInitialState: function() {
         return {
@@ -23,21 +25,44 @@ module.exports = React.createClass({
             notifications: []
         }
     },
-    componentWillMount: function() {
+    getNotifications: function() {
         $.ajax({
           url: "/1/getnotifications",
           dataType: 'json',
           cache: false,
           success: function(data) {
             this.setState({
-                notifications: data.notifications,
-                num_notifications: data.num
+              notifications: data.notifications,
+              num_notifications: data.num
             });
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
           }.bind(this)
         });
+    },
+    markAsRead: function() {
+        if (this.state.notifications.length > 0) {
+            var timestamp = this.state.notifications[0].timestamp;
+            $.ajax({
+              url: "/1/markasread",
+              type: 'POST',
+              data: {timestamp: timestamp},
+              beforeSend(xhr) {
+                  xhr.withCredentials = true;
+                  xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+              },
+              success: function() {
+
+              }.bind(this),
+              error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+              }.bind(this)
+            });
+        }
+    },
+    componentWillMount: function() {
+        this.getNotifications();
         $.ajax({
           url: "/1/userdata",
           dataType: 'json',
@@ -53,6 +78,11 @@ module.exports = React.createClass({
             console.error(this.props.url, status, err.toString());
           }.bind(this)
         });
+    },
+    dropdownToggle: function(isOpen) {
+        if (isOpen) {
+          this.markAsRead();
+        }
     },
     render: function() {
         var active = this.props.active;
@@ -74,7 +104,7 @@ module.exports = React.createClass({
                     <NavItem eventKey={2} href="/logout">Logout</NavItem>
                     <NavItem eventKey={1} href="/userprofile">{this.state.username}</NavItem>
                     <FontAwesome name="fa fa-bell" aria-hidden="true"></FontAwesome>
-                    <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown">
+                    <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown" onToggle = {this.dropdownToggle}>
                         {this.state.notifications.map(function(notification) {
                             return (<MenuItem href={notification.link}><div className = "notification">{notification.description} {moment(notification.timestamp).fromNow()}</div></MenuItem>);
                         })}

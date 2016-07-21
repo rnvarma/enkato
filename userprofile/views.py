@@ -124,8 +124,17 @@ class GetNotifications(View):
 		if request.user.is_anonymous():
 			return JsonResponse({'notifications': [], 'num': 0})
 		else:
-			unread = map(Serializers.notification_serializer, Serializers.notifications_aggregator(request.user.notifications.unread().all()))
-			#notifications.mark_all_as_read()
-			num = len(unread)
-			return JsonResponse({'notifications': sorted(unread, key = lambda x : x["timestamp"], reverse = True),
+			unread = request.user.notifications.unread()
+
+			aggregated_unread = map(Serializers.notification_serializer, Serializers.notifications_aggregator(unread.all()))
+			num = len(aggregated_unread)
+
+			return JsonResponse({'notifications': sorted(aggregated_unread, key = lambda x : x["timestamp"], reverse = True),
 							 'num': num})
+
+class MarkAsRead(View):
+	def post(self, request):
+		if not request.user.is_anonymous():
+			request.user.notifications.unread().filter(timestamp__lte=request.POST.get('timestamp')).mark_all_as_read()
+
+		return JsonResponse({})
