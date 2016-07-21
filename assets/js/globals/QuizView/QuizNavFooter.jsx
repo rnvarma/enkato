@@ -5,7 +5,7 @@ import React from 'react';
 
 class QuizNavFooter extends React.Component {
     render() {
-        var disableAll = this.props.showGradingPage
+        var disableAll = this.props.showGradingPage || !this.props.quizExists;
 
         var rightButton = <div></div>
         if(this.props.reviewMode&&(this.props.currentQuestion == this.props.numQuestions -1)){
