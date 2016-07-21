@@ -124,9 +124,12 @@ class GetNotifications(View):
 		if request.user.is_anonymous():
 			return JsonResponse({'notifications': [], 'num': 0})
 		else:
-			unread = request.user.notifications.unread()
+			unread = request.user.notifications.unread().all()
 
-			aggregated_unread = map(Serializers.notification_serializer, Serializers.notifications_aggregator(unread.all()))
+			if len(unread) == 0:
+				return JsonResponse({'notifications': [{"description": "No new notifications at this time", "timestamp": ""}], 'num': 0})
+
+			aggregated_unread = map(Serializers.notification_serializer, Serializers.notifications_aggregator(unread))
 			num = len(aggregated_unread)
 
 			return JsonResponse({'notifications': sorted(aggregated_unread, key = lambda x : x["timestamp"], reverse = True),

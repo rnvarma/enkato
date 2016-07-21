@@ -42,7 +42,7 @@ module.exports = React.createClass({
         });
     },
     markAsRead: function() {
-        if (this.state.notifications.length > 0) {
+        if (this.state.num_notifications > 0) {
             var timestamp = this.state.notifications[0].timestamp;
             $.ajax({
               url: "/1/markasread",
@@ -103,10 +103,15 @@ module.exports = React.createClass({
                     <CreateSeriesModal />
                     <NavItem eventKey={2} href="/logout">Logout</NavItem>
                     <NavItem eventKey={1} href="/userprofile">{this.state.username}</NavItem>
-                    <FontAwesome name="fa fa-bell" aria-hidden="true"></FontAwesome>
                     <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown" onToggle = {this.dropdownToggle}>
                         {this.state.notifications.map(function(notification) {
-                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description} {moment(notification.timestamp).fromNow()}</div></MenuItem>);
+                            if (notification.timestamp != "") {
+                                var timestring = moment(notification.timestamp).fromNow();
+                            }
+                            else {
+                                var timestring = ""
+                            }
+                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description} {timestring}</div></MenuItem>);
                         })}
                     </NavDropdown>
                 </Nav>
