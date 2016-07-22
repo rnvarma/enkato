@@ -201,6 +201,7 @@ module.exports = React.createClass({
             quizExists={Boolean(this.state.questions[this.state.currentQuestion])}
             currentQuestion={this.state.currentQuestion}
             numQuestions={this.state.numQuestions}
+            numQsAnswered={this.state.numQsAnswered}
             nextQuestion={this.nextQuestion}
             prevQuestion={this.prevQuestion}
             closeModal={this.closeModal}

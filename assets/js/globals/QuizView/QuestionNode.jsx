@@ -46,14 +46,7 @@ module.exports = React.createClass({
                     <BottomReviewText correct={false} />
                 )
             }
-        } else {
-            BottomText = (
-                <div className="showNumAnswered">
-                    {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
-                </div>
-            )
         }
-
         return(
             <div className="questionNode">
                 <div className="title"> 
@@ -68,8 +61,7 @@ module.exports = React.createClass({
                     choiceList={this.props.question.choiceList}
                     selectedAnswer={this.props.selectedAnswer}
                     currentQuestionResults={this.props.currentQuestionResults}
-                    reviewMode={this.props.reviewMode}
-                />
+                    reviewMode={this.props.reviewMode}/>
                 {submitSection}
                 {BottomText}
             </div>
