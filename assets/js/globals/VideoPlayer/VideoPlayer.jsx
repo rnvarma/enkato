@@ -132,14 +132,14 @@ module.exports  = React.createClass({
         var s_id = $("#s_id").attr("data-sid")
 
         $.ajax({
-            url: "/api/quiz/s/"+s_id+"/v/" + v_id,
+            url: "/1/studentakenquiz/" + v_id,
             dataType: 'json',
             cache: false,
             success: function(data) {
-                console.log("hello")
-                console.log(data)
-                this.setState({completedQuizInfo:data.completedQuizInfo})
-                this.setState({quizTaken:data.quizTaken})
+                this.setState({
+                    completedQuizInfo: data.completedQuizInfo,
+                    quizTaken: data.quizTaken
+                })
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -153,10 +153,10 @@ module.exports  = React.createClass({
           cache: false,
           success: function(data) {
 
-              /* an optional prop */
-              if (this.props.setTopicList) {
-                  this.props.setTopicList(data.topicList);
-              }
+            /* an optional prop */
+            if (this.props.setTopicList) {
+              this.props.setTopicList(data.topicList);
+            }
             if (this.state.Player) {
                 this.state.Player.destroy();
             }

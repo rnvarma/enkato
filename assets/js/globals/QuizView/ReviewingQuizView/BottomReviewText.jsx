@@ -16,8 +16,7 @@ module.exports = React.createClass({
                 <FontAwesome
                     className="correctness-icon"
                     name={(this.props.correct)?"check-circle":"times-circle"}
-                    id={(this.props.correct)?"check-correct":"check-incorrect"}
-                />
+                    id={(this.props.correct)?"check-correct":"check-incorrect"}/>
                 <span className="correctnessText">
                     {text}
                 </span>

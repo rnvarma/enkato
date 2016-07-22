@@ -321,7 +321,7 @@ def getCorrectAnswer(choices):
 
 
 class LoadQuizData(APIView):
-    def get(self, request, s_id, v_id):
+    def get(self, request, v_id):
         s = Series.objects.get(uuid=s_id)
         ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=s)
 

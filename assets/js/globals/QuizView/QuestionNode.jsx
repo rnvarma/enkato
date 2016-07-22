@@ -54,8 +54,7 @@ module.exports = React.createClass({
                     className="choiceList"
                     choiceList={this.props.question.choiceList}
                     selectedAnswer={this.props.selectedAnswer}
-                    currentQuestionResults={this.props.currentQuestionResults}
-
+                    currentQuestionResults={this.props.currentQuestionResults} 
                     reviewing={this.props.reviewMode}
                 />
                 {submitSection}

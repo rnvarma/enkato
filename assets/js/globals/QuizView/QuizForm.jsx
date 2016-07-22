@@ -18,6 +18,7 @@ module.exports = React.createClass({
           dataType: 'json',
           cache: false,
           success: function(data) {
+            console.log(data)
             this.setState(data)
             this.setState({
                 currentQuestion: 0,
@@ -39,7 +40,7 @@ module.exports = React.createClass({
     componentWillReceiveProps: function(nextProps){
         if (nextProps.videoUUID != this.props.videoUUID)
             this.loadDataFromServer(nextProps.videoUUID)
-        if(nextProps.completedQuizInfo.result!=[]){
+        if(nextProps.completedQuizInfo.result != []){
             this.setState({completedQuizInfo:nextProps.completedQuizInfo})
         }
     },
@@ -171,8 +172,7 @@ module.exports = React.createClass({
                   submitInfo={this.submitInfo}
                   reviewMode={this.state.reviewMode}
                   currentQuestionResults={currentQuestionResults}
-                  setCurrentQuestion={this.setCurrentQuestion}
-                />
+                  setCurrentQuestion={this.setCurrentQuestion}/>
             )
         }
       return (
