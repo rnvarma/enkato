@@ -103,7 +103,7 @@ class QuestionView extends React.Component {
       question.input = {
         title: question.title,
         text: question.text,
-        topic: question.topic,
+        topic: question.topic_pk,
       };
       if (question.topic) {
         question.input.topic = question.topic.id;
