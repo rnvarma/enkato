@@ -1,6 +1,6 @@
 
 module.exports = function(imgName) {
-    var production = false;
+    var production = true;
     if (production)
         return "https://enkato-static-files.s3.amazonaws.com/static/imgs/" + imgName
     else
