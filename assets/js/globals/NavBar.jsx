@@ -87,14 +87,14 @@ module.exports = React.createClass({
     render: function() {
         var active = this.props.active;
         var LoginButton = active == "login" ? (
-          <NavItem eventKey={1} className="active" href="/login">SIGN IN</NavItem>
+          <NavItem eventKey={1} className="active" href="/login">Sign In</NavItem>
         ) : (
-          <NavItem eventKey={1} href="/login">SIGN IN</NavItem>
+          <NavItem eventKey={1} href="/login">Sign In</NavItem>
         )
         var RegisterButton = active == "register" ? (
-          <NavItem eventKey={2} className="active" href="/register">SIGN UP</NavItem>
+          <NavItem eventKey={2} className="active" href="/register">Sign Up</NavItem>
         ) : (
-          <NavItem eventKey={2} href="/register">SIGN UP</NavItem>
+          <NavItem eventKey={2} href="/register">Sign Up</NavItem>
         )
         if (this.state.logged_in) {
             var numstring = this.state.num_notifications
