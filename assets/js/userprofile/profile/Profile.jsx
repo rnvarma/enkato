@@ -13,6 +13,8 @@ var Col = require('react-bootstrap').Col;
 var ProfileSeriesList = require('js/userprofile/profile/ProfileSeriesList');
 var CreateSeriesArea = require("js/userdashboard/UserDashboard/CreateSeriesArea.jsx")
 
+var DjangoImageLinkHandler = require("js/globals/DjangoImageLinkHandler.js");
+
 var Profile = React.createClass({
     getInitialState: function() {
         return {
@@ -42,7 +44,7 @@ var Profile = React.createClass({
         this.setState({viewseries: false})
     },
     render: function() {
-        var profile_img = this.state.userdata.image || "/static/imgs/blank_avatar.jpg"
+        var profile_img = this.state.userdata.image || DjangoImageLinkHandler("blank_avatar.jpg")
         var subscribed_series = (
             <ProfileSeriesList
                 series={this.state.subscribed_series}
