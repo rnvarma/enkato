@@ -125,7 +125,7 @@ module.exports = React.createClass({
             )
         }
         return(
-            <Navbar>
+            <Navbar fixedTop>
                 <Navbar.Header>
                   <Navbar.Brand>
                     <a href="/">

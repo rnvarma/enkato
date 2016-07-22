@@ -1,5 +1,6 @@
 require('bootstrap-loader');
 require("css/globals/NavBar.scss")
+require("css/globals/base.scss")
 require("css/userprofile/profile/Profile")
 
 var React = require('react')
