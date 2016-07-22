@@ -2,7 +2,6 @@ require('bootstrap-loader');
 var React = require('react');
 import getCookie from 'js/globals/GetCookie';
 require("css/globals/QuizView/QuizForm");
-var QuestionList = require('js/globals/QuizView/QuestionList');
 var QuestionNode = require('js/globals/QuizView/QuestionNode');
 var ReviewingQuizNav = require("js/globals/QuizView/ReviewingQuizView/ReviewingQuizNav")
 var CompletedQuizPage = require("js/globals/QuizView/ReviewingQuizView/CompletedQuizPage")
@@ -109,28 +108,26 @@ module.exports = React.createClass({
         this.setState({currentQuestion:qNum})
     },
     submitInfo: function(){
-        var selectedAnswers=this.state.selectedAnswers
-        var data = {
-            selectedAnswers:selectedAnswers
+        const payload = {
+            selectedAnswers: this.state.selectedAnswers,
         }
-        console.log(data)
-        var s_id = $("#s_id").attr("data-sid")
+        const s_id = $("#s_id").attr("data-sid");
         $.ajax({
           url: "/logquiz/s/"+s_id+"/v/"+this.props.videoUUID,
           dataType: 'json',
           type: 'POST',
-          data: data,
+          data: payload,
           beforeSend: function (xhr) {
             xhr.withCredentials = true;
             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
           },
           success: function(data) {
-            console.log("data")
-            console.log(data)
-            console.log("post request worked")
-            this.setState({showGradingPage:true})
-            this.setState({reviewMode:true})
-            this.setState({completedQuizInfo:data})
+            console.log("data, from submitInfo", data);
+            this.setState({
+              showGradingPage: true,
+              reviewMode: true,
+              completedQuizInfo: data,
+            });
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -176,16 +173,16 @@ module.exports = React.createClass({
         } else {
             modalBody = (
                 <QuestionNode
-                    question={currentQuestionData}
-                    selectChoice={this.selectChoice}
-                    isLast={isLast}
-                    numQsAnswered={this.state.numQsAnswered}
-                    numQuestions={this.state.numQuestions}
-                    selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}
-                    submitInfo={this.submitInfo}
-                    reviewMode={this.state.reviewMode}
-                    currentQuestionResults={currentQuestionResults}
-                    setCurrentQuestion={this.setCurrentQuestion}
+                  question={currentQuestionData}
+                  selectChoice={this.selectChoice}
+                  isLast={isLast}
+                  numQsAnswered={this.state.numQsAnswered}
+                  numQuestions={this.state.numQuestions}
+                  selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}
+                  submitInfo={this.submitInfo}
+                  reviewMode={this.state.reviewMode}
+                  currentQuestionResults={currentQuestionResults}
+                  setCurrentQuestion={this.setCurrentQuestion}
                 />
             )
         }

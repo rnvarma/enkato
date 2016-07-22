@@ -118,22 +118,22 @@ class SeriesViewer extends React.Component {
     return (
       <div>
         <NavBar />
+        <SeriesViewerSideBar
+          {...this.state}/>
         <div className="seriesViewer">
-          <SeriesViewerSideBar
-            {...this.state}/>
           <SeriesViewerVideoArea
             setTopicList={this.setTopicList}
             setGetCurrentTime={this.setGetCurrentTime}
             currUUID={this.state.currUUID}
             s_id={this.state.s_id}
             nextVideo={this.state.nextVideo}/>
-        </div>
-        <div className="questionArea">
-          <QuestionView
-            videoUUID={this.state.currUUID}
-            topicList={this.state.topicList}
-            getCurrentTime={this.state.getCurrentTime}
-          />
+          <div className="questionArea">
+            <QuestionView
+              videoUUID={this.state.currUUID}
+              topicList={this.state.topicList}
+              getCurrentTime={this.state.getCurrentTime}
+            />
+          </div>
         </div>
       </div>
     );
