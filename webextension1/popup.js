@@ -1,7 +1,3 @@
-function renderStatus(statusText) {
-	document.getElementById('status').textContent = statusText;
-}
-
 function getYTID(url){
 	var regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
 	var match = url.match(regex);
@@ -88,14 +84,17 @@ function showTopics(topics){
 	}
 }
 
+function showSeriesTitle(){
+	var title = document.getElementById("series-wrapper").querySelector(".series-title");
+	title.innerHTML = "More in this series";
+}
+
 function findTopicList(vid_uuid, callback){
-	console.log("topic list being found");
 	$.ajax({
 		url: "http://127.0.0.1:8000/1/v/" + vid_uuid,
 		dataType: 'json',
 		cache: false,
 		success: function(data) {
-			console.log("got the data");
 			var topics = data.topicList;
 			console.log(topics);
 			callback(topics);
@@ -115,7 +114,7 @@ function findInDatabase(vid_id, callback) {
 		success: function(data) {
 			inDB = JSON.parse(data.inDatabase);
 			if (inDB){
-				vidData = data.videoData;
+				var vidData = data.videoData;
 				var vidUUID = vidData.uuid;
 			}
 			callback(inDB, vidUUID);
@@ -126,6 +125,29 @@ function findInDatabase(vid_id, callback) {
 	});
 }
 
+function getThumbnails(videoId, callback){
+	$.ajax({
+		url: "http://127.0.0.1:8000/2/s/" + videoId,
+		dataType: 'json',
+		cache: false,
+		success: function(data) {
+			console.log(data);
+			partOfSeries = JSON.parse(data.inSeries);
+			if (partOfSeries){
+				var seriesInfo = data.seriesData;
+				var vidUUIDs = seriesInfo.videoUUIDs;
+				var seriesId = seriesInfo.seriesUUID;
+				var thumbnails = seriesInfo.seriesThumbnails;
+			}
+			callback(partOfSeries, seriesId, thumbnails, vidUUIDs);
+			},
+		error: function(status, err) {
+			console.error(status, err.toString());
+		}
+	});
+}
+
+
 
 $(document).ready( function(){
 	chrome.tabs.query({active:true, currentWindow:true}, function(tabs){
@@ -133,13 +155,19 @@ $(document).ready( function(){
 			var vidId = info.videoId;
 			if(vidId != false){
 				findInDatabase(vidId, function(inDB, vidUUID){
+
 					showVideo(vidId, info.timestampText, info.videoTitle, vidUUID);
 					findTopicList(vidUUID, function(topics){
 						if (topics != null){
 							showTopics(topics);
 						}
 					});
-					chrome.tabs.sendMessage(tabs[0].id, {from:"popup", subject: "videoId for series data", content: vidId});
+					showSeriesTitle();
+					getThumbnails(vidId, function(inSeries, seriesId, thumbnails, vidUUIDs){
+						console.log("got the thumbnails");
+						showSlideshowImages(thumbnails, vidUUIDs, seriesId);
+
+					});
 				});
 			}
 			else{
