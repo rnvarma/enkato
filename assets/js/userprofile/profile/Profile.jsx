@@ -11,6 +11,7 @@ var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
 
 var ProfileSeriesList = require('js/userprofile/profile/ProfileSeriesList');
+var CreateSeriesArea = require("js/userdashboard/UserDashboard/CreateSeriesArea.jsx")
 
 var Profile = React.createClass({
     getInitialState: function() {
@@ -42,6 +43,24 @@ var Profile = React.createClass({
     },
     render: function() {
         var profile_img = this.state.userdata.image || "/static/imgs/blank_avatar.jpg"
+        var subscribed_series = (
+            <ProfileSeriesList
+                series={this.state.subscribed_series}
+                name={"Series You Subscribe To"}/>
+        )
+        var created_series = (
+            <ProfileSeriesList
+                series={this.state.created_series}
+                name={"Series by You"}/>
+        )
+        if (!this.state.subscribed_series.length) {
+            subscribed_series = <div></div>
+        }
+        if (!this.state.created_series.length) {
+            created_series = (
+                <CreateSeriesArea />
+            )
+        }
         return (
             <div>
                 <NavBar />
@@ -66,12 +85,8 @@ var Profile = React.createClass({
                             </div>
                         </div>
                     </div>
-                    <ProfileSeriesList
-                        series={this.state.subscribed_series}
-                        name={"Series You Subscribe To"}/>
-                    <ProfileSeriesList
-                        series={this.state.created_series}
-                        name={"Series by You"}/>
+                    {subscribed_series}
+                    {created_series}
                 </div>
             </div>
         )
