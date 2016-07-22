@@ -108,19 +108,28 @@ DEV_GLOBAL_DB = {
     'PORT': '5432'
 }
 
+DEV_GLOBAL_DB = {
+    'ENGINE': 'django_postgrespool',
+    'NAME': 'dc5mvj4f3he88c',
+    'USER': 'nayyjhepsofypx',
+    'PASSWORD': '2NPvEhkVdqlfieq5XsoRnmpKhv',
+    'HOST': 'ec2-54-243-201-58.compute-1.amazonaws.com',
+    'PORT': '5432'
+}
+
 DEV_LOCAL_DB = {
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 }
 
-PROD_DB = {
-    'ENGINE': 'django_postgrespool',
-    'NAME': 'enkatoprod',
-    'USER': 'enkatoprod',
-    'PASSWORD': 'khanacademy23',
-    'HOST': 'enkato-prod.caubwydik7md.us-east-1.rds.amazonaws.com',
-    'PORT': '5432'
-}
+# PROD_DB = {
+#     'ENGINE': 'django_postgrespool',
+#     'NAME': 'enkatoprod',
+#     'USER': 'enkatoprod',
+#     'PASSWORD': 'khanacademy23',
+#     'HOST': 'enkato-prod.caubwydik7md.us-east-1.rds.amazonaws.com',
+#     'PORT': '5432'
+# }
 
 PROD_DB = {
     'ENGINE': 'django_postgrespool',
@@ -132,7 +141,7 @@ PROD_DB = {
 }
 
 DATABASES = {
-    'default': DEV_LOCAL_DB if DEBUG else PROD_DB
+    'default': DEV_GLOBAL_DB if DEBUG else PROD_DB
 }
 
 # Password validation

@@ -1,7 +1,7 @@
-require('bootstrap-loader');
-var React = require('react');
 require("css/globals/QuizView/ChoiceNode");
-var ChoiceNode = require('js/globals/QuizView/ChoiceNode')
+
+var React = require('react');
+
 var FontAwesome = require('react-fontawesome');
 
 module.exports = React.createClass({
@@ -17,7 +17,7 @@ module.exports = React.createClass({
                     name={(this.props.isSelected)?"circle":"circle-thin"}
                     onClick={this.selectChoice}
                 />
-                <span className="choiceText">
+                <span className="choiceText" onClick={this.selectChoice}>
                     {this.props.choiceText}
                 </span>
             </div>

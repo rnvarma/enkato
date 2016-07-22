@@ -43,6 +43,9 @@ class QuizNavFooter extends React.Component {
 
       return (
         <div className="quizNavFooter">
+          <div className="showNumAnswered">
+              {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
+          </div>
           <Button
             className="cancelButton"
             onClick={this.props.closeModal}>

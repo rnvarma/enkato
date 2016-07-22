@@ -76,7 +76,6 @@ class Serializer(object):
         data["total_len"] = sanetizeTime(total_time)
         videos = map(lambda sv: sv.video, series_videos)
         data["videos"] = map(Serializer.serialize_video, videos)
-        data["videoIDs"] = map(getYTIdFromVideoData, videos)
         data["is_creator"] = False if not request else series.creator == request.user.customuser
         data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
         return data    
@@ -89,6 +88,8 @@ class Serializer(object):
             series_video.video.order = series_video.order
         videos = map(lambda sv: sv.video, series_videos)
         data["videoIDs"] = map(getYTIdFromVideoData, videos)
+        data["videoUUIDs"] = map(getUUIDFromVideoData, videos)
+        data["thumbnails"] = map(getThumbnailFromVideoData,videos)
         return data
 
     @staticmethod
@@ -196,22 +197,22 @@ class SeriesData(APIView):
         series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
 
-class SeriesVideoData(APIView):
+class SeriesVideoData(View):
     def get(self, request, v_id):
         try:
             video = Video.objects.filter(vid_id = v_id).first()
             videoData = Serializer.serialize_video(video)
-            series = Series.objects.filter(creator= video.creator).first()
+            series = Series.objects.filter(creator= video.creator)
             response = {}
             response['inSeries'] = True
-            uuids = {}
+            seriesData = {}
             for serie in series:
-                uuids[serie.uuid] = Serializer.serialize_series_videos(serie)
-            seriesId = findYTId(uuids, v_id)
-            response["seriesId"] = seriesId
-            return Response(response)
+                seriesData[serie.uuid] = Serializer.serialize_series_videos(serie)
+            seriesData = findSeriesIdAndThumbnails(seriesData, v_id)
+            response["seriesData"]=seriesData
+            return JsonResponse(response)
         except Series.DoesNotExist:
-            return Response({
+            return JsonResponse({
                 'inSeries': False
             })
 
@@ -235,6 +236,15 @@ class VideoData(View):
 class VideoIdData(View):
     def get(self, request, v_id):
         try:
+            video = Video.objects.get(vid_id=v_id)
+            topicList = video.topics.all().order_by('time')
+            frontendTList = map(Serializer.serialize_topic, topicList)
+            return JsonResponse({
+                'inDatabase': True,
+                'topicList':frontendTList,
+                'videoData': Serializer.serialize_video(video)
+            })
+        except Video.MultipleObjectsReturned:
             video = Video.objects.filter(vid_id=v_id).first()
             topicList = video.topics.all().order_by('time')
             frontendTList = map(Serializer.serialize_topic, topicList)
@@ -314,10 +324,10 @@ class LoadQuizData(APIView):
     def get(self, request, s_id, v_id):
         print("hi----------------------------")
         s = Series.objects.get(uuid=s_id)
-        ssd = StudentSeriesData.objects.get(user=request.user.customuser, series=s)
+        ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=s)
 
         v = Video.objects.get(uuid=v_id)
-        ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
+        ssvd, _ = StudentSeriesVideoData.objects.get_or_create(ss_data=ssd, video=v)
 
         quizQuestions = v.quiz_questions.all()
         seriesQuizQuestionData = ssvd.quizzes_data.all()

@@ -72,10 +72,11 @@ class LogQuiz(View):
         print(int(selectedAnswers[0]) , "dataaaaaaaaaaaaaa")
 
         s = Series.objects.get(uuid=s_id)
-        ssd = StudentSeriesData.objects.get(user=request.user.customuser, series=s)
+        ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=s)
 
         v = Video.objects.get(uuid=v_uuid)
-        ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
+        ssvd, _ = StudentSeriesVideoData.objects.get_or_create(ss_data=ssd.id,
+                                                               video=v)
 
         quizQuestions = v.quiz_questions.all()
 

@@ -25,8 +25,8 @@ export default class QuestionFilterBar extends React.Component {
   }
 
   render() {
-    var viewAll;
-    if (this.props.showSeries) {
+    let viewAll;
+    if (!this.props.showingSeries) {
       viewAll = (
         <div
           className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}

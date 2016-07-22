@@ -8,6 +8,8 @@ $questionIndent:50px;
     height:100%;
     width:100%;
     position:relative;
+    overflow-y: scroll;
+
     .title{
         font-size:20px;
         color:$structabl-blue;
