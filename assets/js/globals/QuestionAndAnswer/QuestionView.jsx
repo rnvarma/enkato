@@ -239,9 +239,12 @@ class QuestionView extends React.Component {
   /* actually adds the response after it has been POSTed */
   pushResponse(questionId, newResponse) {
     const questionToAppend = this.getQuestion(questionId);
+    if (newResponse.is_instructor) {
+      questionToAppend.resolved = true;
+    }
     newResponse.input = newResponse.text;
     questionToAppend.responses.push(newResponse);
-    this.setState({ questions: this.questionData });
+    this.setState({ questions: this.questionData }, this.filterQuestions);
   }
 
   /* stores to response input, unique for each question */
