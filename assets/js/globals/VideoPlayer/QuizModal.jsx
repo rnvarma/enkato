@@ -10,28 +10,36 @@ import FontAwesome from 'react-fontawesome';
 module.exports= React.createClass({
     getInitialState: function(){
         return {
-            goToReviewMode:false,
-            retakeQuiz: false
+            reviewMode: false,
+            resultsPage: false
         }
     },
-    componentDidMount: function(){
+    componentDidMount: function() {
         this.setState({
-            goToReviewMode: false
+            resultsPage: this.props.quizTaken
         })
     },
     onReviewQuizClicked: function(){
         this.setState({
-            goToReviewMode: true
+            reviewMode: true,
+            resultsPage: false
         })
         this.props.showQuiz()
     },
-    onRetakeQuiz: function() {
+    showReviewMode: function() {
         this.setState({
-            retakeQuiz: true
+            reviewMode: true,
+            resultsPage: false
         })
     },
+    closeModal: function() {
+        this.setState({
+            reviewMode: false,
+            resultsPage: this.props.quizTaken
+        })
+        this.props.closeModal()
+    },
     render:function(){
-        var goToReviewMode = false;
         var bg_style = (this.props.showingOverlay ? {} : {display:"none"})
 
         var overlay_style = (this.props.takingQuiz || this.props.showingOverlay ? {} : {display:"none"})
@@ -89,11 +97,13 @@ module.exports= React.createClass({
                 <div className="quizModal">
                     <QuizForm
                         videoUUID={this.props.videoUUID}
-                        closeModal={this.props.closeModal}
+                        closeModal={this.closeModal}
                         onFinishButton={this.props.onFinishButton}
-                        goToReviewMode={this.state.goToReviewMode}
+                        reviewMode={this.state.reviewMode}
                         completedQuizInfo={this.props.completedQuizInfo}
-                        retakeQuiz={this.props.retakeQuiz}/>
+                        resultsPage={this.state.resultsPage}
+                        questions={this.props.questions}
+                        showReviewMode={this.showReviewMode}/>
                 </div>
             )
         }

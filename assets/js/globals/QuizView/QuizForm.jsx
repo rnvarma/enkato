@@ -12,52 +12,11 @@ import QuizNavFooter from 'js/globals/QuizView/QuizNavFooter';
 import FontAwesome from 'react-fontawesome';
 
 module.exports = React.createClass({
-    loadDataFromServer: function(vuuid){
-        $.ajax({
-          url: "/api/quizdata/" + vuuid,
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            console.log(data)
-            this.setState(data)
-            this.setState({
-                currentQuestion: 0,
-                selectedAnswers: new Array(data.numQuestions),
-                reviewMode: this.props.goToReviewMode || data.quizTaken,
-                showGradingPage: !(this.props.goToReviewMode || data.quizTaken)
-            })
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    componentDidMount: function(){
-        this.setState({currentQuestion:0})
-        this.setState({uuid: this.props.videoUUID});
-        this.loadDataFromServer(this.props.videoUUID);
-    },
-    componentWillReceiveProps: function(nextProps){
-        if (nextProps.videoUUID != this.props.videoUUID)
-            this.loadDataFromServer(nextProps.videoUUID)
-        if(nextProps.completedQuizInfo.result != []){
-            this.setState({completedQuizInfo:nextProps.completedQuizInfo})
-        }
-    },
     getInitialState:function(){
         return {
-            questions:[],
-            numQuestions: 0,
-            uuid: '',
             currentQuestion: 0,
-            selectedAnswers:[],
-            numQsAnswered:0,
-            reviewMode:false,
-            showGradingPage:false,
-            completedQuizInfo:{
-                result:[],
-                numCorrect:0
-            },
+            selectedAnswers: [],
+            numQsAnswered: 0,
         }
     },
     closeModal: function() {
@@ -80,12 +39,12 @@ module.exports = React.createClass({
     },
     selectChoice: function(choiceIndex){
         var tempChoiceList = this.state.selectedAnswers
-        if(choiceIndex==tempChoiceList[this.state.currentQuestion]){
+        if(choiceIndex == tempChoiceList[this.state.currentQuestion]){
             tempChoiceList[this.state.currentQuestion] = null
         } else {
             tempChoiceList[this.state.currentQuestion] = choiceIndex
         }
-        this.setState({selectedAnswers:tempChoiceList}, this.setNumQsAnswered)
+        this.setState({selectedAnswers: tempChoiceList}, this.setNumQsAnswered)
 
     },
     setNumQsAnswered:function(){
@@ -95,10 +54,10 @@ module.exports = React.createClass({
                 count++;
             }
         }
-        this.setState({numQsAnswered:count})
+        this.setState({numQsAnswered: count})
     },
     setQuestion: function(qNum){
-        this.setState({currentQuestion:qNum})
+        this.setState({currentQuestion: qNum})
     },
     submitInfo: function(){
         const payload = {
@@ -116,7 +75,7 @@ module.exports = React.createClass({
           },
           success: function(data) {
             this.setState({
-              showGradingPage: true,
+              resultsPage: true,
               reviewMode: true,
               completedQuizInfo: data,
             });
@@ -131,34 +90,33 @@ module.exports = React.createClass({
         this.setState({currentQuestion:0})
     },
     setShowGradingPage: function(mode){
-        this.setState({showGradingPage:mode})
+        this.setState({resultsPage:mode})
     },
     render:function(){
-        var currentQuestionData = this.state.questions[this.state.currentQuestion]
+        var currentQuestionData = this.props.questions[this.state.currentQuestion]
         var currentQuestionResults=[]
-        var isLast = (this.state.currentQuestion==this.state.numQuestions-1)
+        var isLast = (this.state.currentQuestion == this.props.questions.length - 1)
         var modalBody = <div></div>
         var navigation = <div></div>
 
-        if(this.state.reviewMode){
+        if(this.props.reviewMode){
             navigation = <ReviewingQuizNav />
-            currentQuestionResults=this.state.completedQuizInfo.result[this.state.currentQuestion]
-        } else {
+            currentQuestionResults = this.props.completedQuizInfo.result[this.state.currentQuestion]
+        } else if (!this.props.resultsPage){
             navigation = (
                 <QuizNav 
-                    questions={this.state.questions}
+                    questions={this.props.questions}
                     currentQuestion={this.state.currentQuestion}
                     setQuestion={this.setQuestion}/>
             )
         }
 
-        if(this.state.showGradingPage){
+        if(this.props.resultsPage){
             modalBody = (
                 <CompletedQuizPage 
-                    numCorrect={this.state.completedQuizInfo.numCorrect}
-                    numQuestions={this.state.numQuestions}
-                    setReviewMode={this.setReviewMode}
-                    setShowGradingPage={this.setShowGradingPage}/>
+                    numCorrect={this.props.completedQuizInfo.numCorrect}
+                    numQuestions={this.props.questions.length}
+                    showReviewMode={this.props.showReviewMode}/>
             )
         } else {
             modalBody = (
@@ -167,10 +125,10 @@ module.exports = React.createClass({
                   selectChoice={this.selectChoice}
                   isLast={isLast}
                   numQsAnswered={this.state.numQsAnswered}
-                  numQuestions={this.state.numQuestions}
+                  numQuestions={this.props.questions.length}
                   selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}
                   submitInfo={this.submitInfo}
-                  reviewMode={this.state.reviewMode}
+                  reviewMode={this.props.reviewMode}
                   currentQuestionResults={currentQuestionResults}
                   setCurrentQuestion={this.setCurrentQuestion}/>
             )
@@ -184,15 +142,15 @@ module.exports = React.createClass({
           {navigation}
           {modalBody}
           <QuizNavFooter
-            quizExists={Boolean(this.state.questions[this.state.currentQuestion])}
+            quizExists={Boolean(this.props.questions[this.state.currentQuestion])}
             currentQuestion={this.state.currentQuestion}
-            numQuestions={this.state.numQuestions}
+            numQuestions={this.props.questions.length}
             numQsAnswered={this.state.numQsAnswered}
             nextQuestion={this.nextQuestion}
             prevQuestion={this.prevQuestion}
             closeModal={this.closeModal}
-            showGradingPage={this.state.showGradingPage}
-            reviewMode={this.state.reviewMode}
+            showGradingPage={this.props.resultsPage}
+            reviewMode={this.props.reviewMode}
             onFinishButton={this.props.onFinishButton}
           />
         </div>
