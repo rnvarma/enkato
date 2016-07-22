@@ -34,8 +34,7 @@ class ChoiceList extends Component {
           choiceText={choice.text}
           selectChoice={this.props.selectChoice}
           isSelected={isSelected}
-          correctness={correctness}
-        />
+          correctness={correctness}/>
       );
     });
 

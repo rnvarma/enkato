@@ -9,15 +9,26 @@ import FontAwesome from 'react-fontawesome';
 
 module.exports= React.createClass({
     getInitialState: function(){
-        return {goToReviewMode:false}
+        return {
+            goToReviewMode:false,
+            retakeQuiz: false
+        }
     },
     componentDidMount: function(){
-        this.setState({goToReviewMode:false})
+        this.setState({
+            goToReviewMode: false
+        })
     },
     onReviewQuizClicked: function(){
-        console.log("we clickan")
-        this.setState({goToReviewMode:true})
+        this.setState({
+            goToReviewMode: true
+        })
         this.props.showQuiz()
+    },
+    onRetakeQuiz: function() {
+        this.setState({
+            retakeQuiz: true
+        })
     },
     render:function(){
         var goToReviewMode = false;
@@ -52,7 +63,7 @@ module.exports= React.createClass({
             )
 
             whiteTextButton=(
-                <div className="noThanks" onClick={this.props.showQuiz}>
+                <div className="noThanks" onClick={this.onRetakeQuiz}>
                     Retake Quiz
                 </div>
             )
@@ -82,7 +93,7 @@ module.exports= React.createClass({
                         onFinishButton={this.props.onFinishButton}
                         goToReviewMode={this.state.goToReviewMode}
                         completedQuizInfo={this.props.completedQuizInfo}
-                    />
+                        retakeQuiz={this.props.retakeQuiz}/>
                 </div>
             )
         }
