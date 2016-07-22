@@ -52,13 +52,13 @@ export default class QuestionFilterBar extends React.Component {
           className={(this.props.filterAnswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.toggleAnsweredFilter}
         >
-          Answered
+          Resolved
         </div>
         <div
           className={(this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.toggleUnansweredFilter}
         >
-          Unanswered
+          Unresolved
         </div>
         <div className="filterQuery">
           <InputGroup>
