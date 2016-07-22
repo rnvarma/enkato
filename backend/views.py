@@ -145,6 +145,11 @@ class Serializer(object):
 
 
 class UserViewset(viewsets.ReadOnlyModelViewSet):
+    """
+    User API
+    List users: api/users
+    Current user: api/users/current
+    """
 
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
@@ -152,6 +157,7 @@ class UserViewset(viewsets.ReadOnlyModelViewSet):
 
     def get_object(self):
         return self.request.user.customuser
+
 
 class UserData(APIView):
     def get(self, request):
