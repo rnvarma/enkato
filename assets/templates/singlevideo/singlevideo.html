@@ -1,11 +1,12 @@
 {% extends 'globals/base.html' %}
 {% load render_bundle from webpack_loader %}
 
-{% block title %}Video - Youniversity{% endblock %}
+{% block title %}Video - Enkato{% endblock %}
 
 {% block content %}
     <div id="page-anchor"></div>
     <div type="hidden" id="v_uuid" data-vuuid="{{ v_uuid }}"></div>
+    <div type="hidden" id ="time" data-time = "{{ t }}"></div>
 {% endblock %}
 
 {% block js %}

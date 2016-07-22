@@ -90,6 +90,7 @@ class Serializer(object):
         data["videoIDs"] = map(getYTIdFromVideoData, videos)
         data["videoUUIDs"] = map(getUUIDFromVideoData, videos)
         data["thumbnails"] = map(getThumbnailFromVideoData,videos)
+        data["videoTitles"] = map(getTitlesFromVideoData, videos)
         return data
 
     @staticmethod
@@ -145,6 +146,11 @@ class Serializer(object):
 
 
 class UserViewset(viewsets.ReadOnlyModelViewSet):
+    """
+    User API
+    List users: api/users
+    Current user: api/users/current
+    """
 
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
@@ -152,6 +158,7 @@ class UserViewset(viewsets.ReadOnlyModelViewSet):
 
     def get_object(self):
         return self.request.user.customuser
+
 
 class UserData(APIView):
     def get(self, request):
@@ -208,7 +215,7 @@ class SeriesVideoData(View):
             seriesData = {}
             for serie in series:
                 seriesData[serie.uuid] = Serializer.serialize_series_videos(serie)
-            seriesData = findSeriesIdAndThumbnails(seriesData, v_id)
+            seriesData = findSeriesVideoData(seriesData, v_id)
             response["seriesData"]=seriesData
             return JsonResponse(response)
         except Series.DoesNotExist:
