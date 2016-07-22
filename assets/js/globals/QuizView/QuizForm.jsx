@@ -20,9 +20,11 @@ module.exports = React.createClass({
           success: function(data) {
             this.setState(data)
             this.setState({
-                currentQuestion: 0
+                currentQuestion: 0,
+                selectedAnswers: new Array(data.numQuestions),
+                reviewMode: this.props.goToReviewMode || data.quizTaken,
+                showGradingPage: !(this.props.goToReviewMode || data.quizTaken)
             })
-            this.setState({selectedAnswers:new Array(data.numQuestions)})
           }.bind(this),
           error: function(xhr, status, err) {
             console.error(this.props.url, status, err.toString());
@@ -30,19 +32,9 @@ module.exports = React.createClass({
         });
     },
     componentDidMount: function(){
-        console.log("componentDidMount aryyyyy")
         this.setState({currentQuestion:0})
         this.setState({uuid: this.props.videoUUID});
         this.loadDataFromServer(this.props.videoUUID);
-        if(this.props.goToReviewMode){
-            this.setState({reviewMode:true})
-            this.setState({showGradingPage:true})
-            console.log("ay")
-        } else {
-            this.setState({reviewMode:false})
-            this.setState({showGradingPage:false})
-            console.log("nah")
-        }
     },
     componentWillReceiveProps: function(nextProps){
         if (nextProps.videoUUID != this.props.videoUUID)
@@ -122,7 +114,6 @@ module.exports = React.createClass({
             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
           },
           success: function(data) {
-            console.log("data, from submitInfo", data);
             this.setState({
               showGradingPage: true,
               reviewMode: true,
@@ -156,8 +147,7 @@ module.exports = React.createClass({
                 <QuizNav 
                     questions={this.state.questions}
                     currentQuestion={this.state.currentQuestion}
-                    setQuestion={this.setQuestion}
-                />
+                    setQuestion={this.setQuestion}/>
             )
         }
 
@@ -167,8 +157,7 @@ module.exports = React.createClass({
                     numCorrect={this.state.completedQuizInfo.numCorrect}
                     numQuestions={this.state.numQuestions}
                     setReviewMode={this.setReviewMode}
-                    setShowGradingPage={this.setShowGradingPage}
-                />
+                    setShowGradingPage={this.setShowGradingPage}/>
             )
         } else {
             modalBody = (

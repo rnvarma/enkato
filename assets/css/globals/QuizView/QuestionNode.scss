@@ -45,16 +45,6 @@ $questionIndent:50px;
         margin-left:$questionIndent;
         width:calc(100% - #{$questionIndent}*2);
     }
-
-    .showNumAnswered{
-        color:$kato-green;
-        font-size:12px;
-        font-weight:700;
-
-        position:absolute;
-        bottom:0;
-        left:$questionIndent*2;
-    }
 }
 
 

@@ -322,7 +322,6 @@ def getCorrectAnswer(choices):
 
 class LoadQuizData(APIView):
     def get(self, request, s_id, v_id):
-        print("hi----------------------------")
         s = Series.objects.get(uuid=s_id)
         ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=s)
 
@@ -334,48 +333,43 @@ class LoadQuizData(APIView):
 
         result = []
         numCorrect=0
-        print("yoooooooooooo")
-        print(len(quizQuestions))
-        print(len(seriesQuizQuestionData))
-        if(len(quizQuestions)!=len(seriesQuizQuestionData)):
-            print("quiz not taken!!!!")
+        if(len(quizQuestions) != len(seriesQuizQuestionData)):
             completedQuizInfo={
                 'result':result, 
                 'numCorrect':numCorrect
             }
             return JsonResponse({
-                'completedQuizInfo':completedQuizInfo,
-                'quizTaken':False})
-        else: 
-            print("quiz taken!!!!")
-        
-        for i in range(len(quizQuestions)):
-            question = quizQuestions[i]
-            takenQuizData = seriesQuizQuestionData[i]
-            correct=False
-            choices=question.mc_responses.all()
-
-            studentAnswer = int(takenQuizData.answer)
-            correctAnswer = getCorrectAnswer(choices)
-
-            if(correctAnswer==studentAnswer):
-                correct=True
-                numCorrect+=1
-
-            result.append({
-                "studentAnswer":studentAnswer,
-                "correctAnswer":correctAnswer,
-                "isCorrect":correct
+                'completedQuizInfo': completedQuizInfo,
+                'quizTaken':False
             })
+        else: 
+            for i in range(len(quizQuestions)):
+                question = quizQuestions[i]
+                takenQuizData = seriesQuizQuestionData[i]
+                correct=False
+                choices=question.mc_responses.all()
 
-        completedQuizInfo={
-            'result':result, 
-            'numCorrect':numCorrect
-        }
-        return JsonResponse({
-            'completedQuizInfo':completedQuizInfo,
-            'quizTaken':True
-        })
+                studentAnswer = int(takenQuizData.answer)
+                correctAnswer = getCorrectAnswer(choices)
+
+                if(correctAnswer==studentAnswer):
+                    correct=True
+                    numCorrect+=1
+
+                result.append({
+                    "studentAnswer":studentAnswer,
+                    "correctAnswer":correctAnswer,
+                    "isCorrect":correct
+                })
+
+            completedQuizInfo={
+                'result':result, 
+                'numCorrect':numCorrect
+            }
+            return JsonResponse({
+                'completedQuizInfo': completedQuizInfo,
+                'quizTaken': True
+            })
 
 
 class DatedModelMixin(object):
