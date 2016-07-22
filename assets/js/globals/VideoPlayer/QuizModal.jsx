@@ -32,6 +32,12 @@ module.exports= React.createClass({
             resultsPage: false
         })
     },
+    onRetakeQuiz: function() {
+        this.setState({
+            reviewMode: false,
+            resultsPage: false
+        })
+    },
     closeModal: function() {
         this.setState({
             reviewMode: false,
@@ -102,7 +108,9 @@ module.exports= React.createClass({
                         completedQuizInfo={this.props.completedQuizInfo}
                         resultsPage={this.state.resultsPage}
                         questions={this.props.questions}
-                        showReviewMode={this.showReviewMode}/>
+                        showReviewMode={this.showReviewMode}
+                        onRetakeQuiz={this.onRetakeQuiz}
+                        submitQuizAnswers={this.props.submitQuizAnswers}/>
                 </div>
             )
         }

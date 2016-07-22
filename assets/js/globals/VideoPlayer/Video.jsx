@@ -22,7 +22,8 @@ module.exports = React.createClass({
                     playVideo={this.props.playVideo}
                     quizTaken={this.props.quizTaken}
                     questions={this.props.questions}
-                    completedQuizInfo={this.props.completedQuizInfo}/>
+                    completedQuizInfo={this.props.completedQuizInfo}
+                    submitQuizAnswers={this.props.submitQuizAnswers}/>
             )
         }
         return (

@@ -63,27 +63,7 @@ module.exports = React.createClass({
         const payload = {
             selectedAnswers: this.state.selectedAnswers,
         }
-        const s_id = $("#s_id").attr("data-sid");
-        $.ajax({
-          url: "/logquiz/s/"+s_id+"/v/"+this.props.videoUUID,
-          dataType: 'json',
-          type: 'POST',
-          data: payload,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            this.setState({
-              resultsPage: true,
-              reviewMode: true,
-              completedQuizInfo: data,
-            });
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
+        this.props.submitQuizAnswers(payload)
     },
     setReviewMode: function(mode){
         this.setState({reviewMode:mode})
@@ -116,7 +96,8 @@ module.exports = React.createClass({
                 <CompletedQuizPage 
                     numCorrect={this.props.completedQuizInfo.numCorrect}
                     numQuestions={this.props.questions.length}
-                    showReviewMode={this.props.showReviewMode}/>
+                    showReviewMode={this.props.showReviewMode}
+                    onRetakeQuiz={this.props.onRetakeQuiz}/>
             )
         } else {
             modalBody = (

@@ -19,6 +19,11 @@ module.exports = React.createClass({
                     onClick={this.props.showReviewMode}>
                     Review Answers
                 </Button>
+                <Button
+                    className="retakeQuizButton"
+                    onClick={this.props.onRetakeQuiz}>
+                    Retake Quiz
+                </Button>
             </div>
         )
     }

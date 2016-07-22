@@ -138,6 +138,27 @@ module.exports  = React.createClass({
             }.bind(this)
         });    
     },
+    submitQuiz: function(answers) {
+        $.ajax({
+          url: "/logquiz/s/" + this.state.s_id + "/v/" + this.state.uuid,
+          dataType: 'json',
+          type: 'POST',
+          data: answers,
+          beforeSend: function (xhr) {
+            xhr.withCredentials = true;
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          },
+          success: function(data) {
+            this.setState({
+                quizTaken: true,
+                completedQuizInfo: data,
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
+    },
     loadDataFromServer: function(v_id){
         $.ajax({
           url: "/1/v/" + v_id,
@@ -345,7 +366,8 @@ module.exports  = React.createClass({
                             quizTaken={this.state.quizTaken}
                             questions={this.state.questions}
                             onFinishButton={this.onFinishButton}
-                            quizDataLoaded={this.state.quizDataLoaded}/>
+                            quizDataLoaded={this.state.quizDataLoaded}
+                            submitQuizAnswers={this.submitQuiz}/>
                         <ControlBar 
                             className="ControlBar"
                             isPlaying={this.state.isPlaying}

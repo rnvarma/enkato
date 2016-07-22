@@ -69,7 +69,6 @@ def getCorrectAnswer(choices):
 class LogQuiz(View):
     def post(self, request, s_id, v_uuid):
         selectedAnswers = request.POST.getlist('selectedAnswers[]')
-        print(int(selectedAnswers[0]) , "dataaaaaaaaaaaaaa")
 
         s = Series.objects.get(uuid=s_id)
         ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=s)
@@ -108,10 +107,5 @@ class LogQuiz(View):
             })
 
         return JsonResponse({'result':result, 'numCorrect':numCorrect})
-
-
-
-
-
 
 
