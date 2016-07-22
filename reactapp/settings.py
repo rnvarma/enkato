@@ -29,10 +29,19 @@ CLASS_DIR = os.path.join(BASE_DIR, 'classroom')
 SECRET_KEY = 'k3di=5f2_to8g!^(c_)6#9!uex9e65i4n&rllc*a@bu8l$(!#)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if "ENKATO_SERVER" in os.environ and os.environ["ENKATO_SERVER"] == "PROD":
-    DEBUG = False
+if "ENKATO_SERVER" in os.environ:
+    if os.environ["ENKATO_SERVER"] == "PROD":
+        DEBUG = False
+        GLOBAL = False
+    if os.environ["ENKATO_SERVER"] == "DEV":
+        DEBUG = True
+        GLOBAL = True
+    else:
+        DEBUG = True
+        GLOBAL = False
 else:
     DEBUG = True
+    GLOBAL = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -141,7 +150,7 @@ PROD_DB = {
 }
 
 DATABASES = {
-    'default': DEV_GLOBAL_DB if DEBUG else PROD_DB
+    'default': DEV_GLOBAL_DB if DEBUG and GLOBAL else DEV_LOCAL_DB if DEBUG and not GLOBAL else PROD_DB
 }
 
 # Password validation
