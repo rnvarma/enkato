@@ -29,7 +29,7 @@ class DatedModel(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:  # Model does not exist yet
             self.created = timezone.now()
-            self.modified = timezone.now()
+            self.modified = self.created
         # modified is updated upon relevant PATCH requests
 
         return super(DatedModel, self).save(*args, **kwargs)

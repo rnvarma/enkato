@@ -189,7 +189,7 @@ class QuestionView extends React.Component {
     this.setState({
       questions: this.questionData,
       currentQuestion: newQuestion,
-    });
+    }, this.filterQuestions);
   }
 
   getQuestion(questionId) {
@@ -211,7 +211,7 @@ class QuestionView extends React.Component {
     this.setState({
       question: this.questionData,
       currentQuestion: this.questionData[0],
-    });
+    }, this.filterQuestions);
   }
 
   pushQuestionEditText(questionId, questionEditTopic, questionEditTitle, questionEditText) {
