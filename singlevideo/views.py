@@ -25,7 +25,8 @@ class VideoViewset(viewsets.ModelViewSet):
 
 class SingleVideoPage(View):
     def get(self, request, v_uuid):
-        return render(request, 'singlevideo/singlevideo.html', {'v_uuid': v_uuid})
+        time = request.GET.get('t')
+        return render(request, 'singlevideo/singlevideo.html', {'v_uuid': v_uuid, 't': time})
 
 
 class AddTopic(View):

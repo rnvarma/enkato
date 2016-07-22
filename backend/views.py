@@ -90,6 +90,7 @@ class Serializer(object):
         data["videoIDs"] = map(getYTIdFromVideoData, videos)
         data["videoUUIDs"] = map(getUUIDFromVideoData, videos)
         data["thumbnails"] = map(getThumbnailFromVideoData,videos)
+        data["videoTitles"] = map(getTitlesFromVideoData, videos)
         return data
 
     @staticmethod
@@ -208,7 +209,7 @@ class SeriesVideoData(View):
             seriesData = {}
             for serie in series:
                 seriesData[serie.uuid] = Serializer.serialize_series_videos(serie)
-            seriesData = findSeriesIdAndThumbnails(seriesData, v_id)
+            seriesData = findSeriesVideoData(seriesData, v_id)
             response["seriesData"]=seriesData
             return JsonResponse(response)
         except Series.DoesNotExist:
