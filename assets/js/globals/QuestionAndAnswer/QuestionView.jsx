@@ -20,6 +20,7 @@ class QuestionView extends React.Component {
     super(props);
     this.state = {
       questions: [],
+      filteredQuestions: [],
       currentQuestion: null,
       filter: '',
       filterAnswered: false,
@@ -72,6 +73,7 @@ class QuestionView extends React.Component {
 
       this.setState({
         questions: this.questionData,
+        filteredQuestions: this.questionData,
         currentQuestion: this.questionData[0],
       });
     };
@@ -142,7 +144,7 @@ class QuestionView extends React.Component {
 
   filterQuestions() {
     /* first remove based on whether the question is answered or not */
-    let questions = this.questionData.filter((question) => {
+    let filteredQuestions = this.questionData.filter((question) => {
       let valid = true;
 
       if (this.state.filterAnswered) {
@@ -158,13 +160,13 @@ class QuestionView extends React.Component {
     /* now do fuzzy search */
     /* https://github.com/krisk/Fuse#options */
     if (this.state.filter) {
-      const fuse = new Fuse(questions, {
+      const fuse = new Fuse(filteredQuestions, {
         keys: ['title', 'text', 'responses.text'],
         /* verbose: true, very useful for debugging */
       });
-      questions = fuse.search(this.state.filter);
+      filteredQuestions = fuse.search(this.state.filter);
     }
-    this.setState({ questions });
+    this.setState({ filteredQuestions });
   }
 
   closeModal() {
@@ -313,7 +315,7 @@ class QuestionView extends React.Component {
   replaceQuestion(questionId, newQuestion) {
     let question = this.getQuestion(questionId);
     $.extend(question, newQuestion);
-    this.setState({ questions: this.questionData });
+    this.setState({ questions: this.questionData }, this.filterQuestions);
   }
 
   replaceResponse(questionId, responseId, newResponse) {
@@ -371,6 +373,7 @@ class QuestionView extends React.Component {
             </Col>
           </Row>
           <QuestionFilterBar
+            showingSeries={!this.props.videoUUID}
             filter={this.state.filter}
             filterAnswered={this.state.filterAnswered}
             filterUnanswered={this.state.filterUnanswered}
@@ -379,10 +382,13 @@ class QuestionView extends React.Component {
             toggleUnansweredFilter={this.toggleUnansweredFilter}/>
           <Row>
             <QuestionList
-              questions={this.state.questions}
+              showingSeries={!this.props.videoUUID}
+              questions={this.state.filteredQuestions}
               currentQuestion={this.state.currentQuestion}
-              setCurrentQuestion={this.setCurrentQuestion}/>
+              setCurrentQuestion={this.setCurrentQuestion}
+            />
             <QuestionDisplay
+              showingSeries={!this.props.videoUUID}
               topicList={this.props.topicList}
               getCurrentTime={this.props.getCurrentTime}
               question={this.state.currentQuestion}

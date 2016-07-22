@@ -44,8 +44,6 @@ def findSeriesIdAndThumbnails(seriesData, v_id):
 	return None
 
 
-
-
 def getYTIdFromURL(url):
 	""" Gets video id from url or returns None if the id doesn't seem right """
 
@@ -222,11 +220,14 @@ def getStringsFromStringList(strings):
 
 
 def getSeriesThumbnails(series):
-	series_videos = series.videos.all()
-	thumbnails = []
-	num_videos = series_videos.count()
-	if (num_videos > 0): thumbnails.append(series_videos[0].video.thumbnail)
-	if (num_videos > 1): thumbnails.append(series_videos[1].video.thumbnail)
-	if (num_videos > 2): thumbnails.append(series_videos[2].video.thumbnail)
-	if (num_videos > 3): thumbnails.append(series_videos[3].video.thumbnail)
-	return thumbnails
+    series_videos = series.videos.all()
+    thumbnails = []
+    num_videos = series_videos.count()
+    if (0 < num_videos < 4):
+        thumbnails.append(series_videos[0].video.thumbnail)
+    elif (num_videos >= 4): 
+        thumbnails.append(series_videos[0].video.thumbnail)
+        thumbnails.append(series_videos[1].video.thumbnail)
+        thumbnails.append(series_videos[2].video.thumbnail)
+        thumbnails.append(series_videos[3].video.thumbnail)
+    return thumbnails

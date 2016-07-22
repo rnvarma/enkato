@@ -3,7 +3,7 @@
 
 .questionFilterBar {
   background: white;
-  border-top: 15px solid $structabl-blue;
+  border-top: 5px solid $structabl-blue;
   border-bottom: 1px solid $bg-grey;
 
   .form-group {
@@ -15,10 +15,12 @@
     color: $structabl-blue;
     padding: 12px 20px;
     background-color: white;
-    font-size: 18px;
-    width: 12%;
     display: inline-block;
     text-align: center;
+
+    &:first-child {
+      width: 16%;
+    }
 
     &.selected {
       font-weight: bold;
@@ -30,8 +32,8 @@
   }
 
   .filterQuery {
-    margin-top: 7px;
-    margin-right: 15px;
+    margin-top: 5px;
+    margin-right: 5px;
     width: 50%;
     float: right;
     background-color: white;
@@ -43,6 +45,7 @@
     .btn {
       padding: 8px 40px;
       background-color: #f1f1f1;
+      border: 1px solid #f1f1f1;
     }
 
     .fa-search {

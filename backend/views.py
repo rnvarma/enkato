@@ -40,9 +40,28 @@ class Serializer(object):
         return data
 
     @staticmethod
+    def serialize_series_light(series, request=None):
+        data = {}
+        data["uuid"] = series.uuid
+        data["name"] = series.name
+        data["description"] = series.description
+        data["image"] = series.image
+        data["creator"] = Serializer.serialize_user(series.creator)
+        data["num_videos"] = len(series.videos.all())
+        data["thumbnails"] = getSeriesThumbnails(series)
+        series_videos = series.videos.all().order_by("order")
+        total_time = 0
+        for series_video in series_videos:
+            total_time += series_video.video.duration
+        data["total_len"] = sanetizeTime(total_time)
+        data["is_creator"] = False if not request else series.creator == request.user.customuser
+        data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
+        return data    
+
+    @staticmethod
     def serialize_series(series, request=None):
         data = {}
-        
+        data["uuid"] = series.uuid
         data["name"] = series.name
         data["description"] = series.description
         data["image"] = series.image
@@ -153,6 +172,17 @@ class UserProfileData(APIView):
         data["userdata"] = Serializer.serialize_userprofiledata(cu)
         data["created_series"] = map(Serializer.serialize_series, cu.created_series.all())
         data["subscribed_series"] = map(Serializer.serialize_series, cu.student_series.all())
+        return Response(data)
+
+class UserDashboardData(APIView):
+    def get(self, request):
+        cu = request.user.customuser
+        data = {}
+        data["subscribed_series"] = map(Serializer.serialize_series_light, cu.student_series.all())
+        subscribed_ids = map(lambda s: s["uuid"], data["subscribed_series"])
+        data["created_series"] = map(Serializer.serialize_series_light, cu.created_series.all())
+        map(lambda s: subscribed_ids.append(s["uuid"]), data["created_series"])
+        data["all_unsubscribed_series"] = map(Serializer.serialize_series_light, Series.objects.exclude(uuid__in=subscribed_ids))
         return Response(data)
 
 class ClassroomData(APIView):

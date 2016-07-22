@@ -4,7 +4,6 @@
 .questionDisplay {
   background-color: white;
   margin: 0;
-  font-size: 18px;
   height: 100%;
   padding-top: 20px;
   overflow-y: scroll;
@@ -20,7 +19,7 @@
   }
 
   .questionBox {
-    border-bottom: 10px solid $bg-grey;
+    border-bottom: 5px solid $bg-grey;
 
     .btn {
       float: right;
@@ -35,9 +34,11 @@
     }
 
     .questionHeader {
+      .questionHeaderTopic {
+      }
+
       color: $enkato-green;
       font-weight: 500;
-      font-size: 15px;
       padding: 0 30px;
     }
 
@@ -60,6 +61,21 @@
 
       .studentName {
         font-weight: bold;
+      }
+
+      .plainBtn {
+        display: inline-block;
+        float: right;
+        font-weight: bold;
+        margin-left: 20px;
+        &:last-child {
+          margin-left: 0;
+        }
+        margin-top: 6px;
+
+        &:hover {
+          cursor: pointer;
+        }
       }
 
       img {

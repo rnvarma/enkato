@@ -89,7 +89,7 @@ class UploadVideoToSeries(View):
         bad_urls = []
         for url in url_list:
             # means that it is a playlist url
-            if "list" in url:
+            if "v=" not in url and "list" in url:
                 data = uploadYTPlaylist(url, creator)
                 videos.extend(data)
             else:

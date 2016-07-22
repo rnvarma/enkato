@@ -5,6 +5,7 @@ body {
     letter-spacing: 0.2px;
     font-size: 14px;
     background-color: $structabl-bg-blue;
+    overflow-x: hidden; 
 }
 
 .form-control {
@@ -27,9 +28,9 @@ form label {
 .btn.structabl-red.btn-default {
     border-radius: 4px;
 
-    background-color: $structabl-red;
+    background-color: $kato-green;
     color: white;
-    border: 1px solid $structabl-red
+    border: 1px solid $kato-green;
 
     &:hover {
         border: 1px solid $structabl-red;
@@ -48,16 +49,18 @@ form label {
 
 .btn.greenBtn.btn-default {
     border-radius: 4px;
-    text-transform: uppercase;
 
     background-color: $kato-green;
     color: white;
     border: 1px solid $kato-green;
+    letter-spacing: 0.3px;
+    font-weight: 500;
 
     &:hover {
-        border: 1px solid $kato-green;
+        border: 1px solid white;
         color: $kato-green;
         background-color: white;
+        cursor: pointer;
     }
 
     &:focus {
@@ -124,5 +127,13 @@ form label {
 .modal-footer {
     border-top: none;
     padding: 15px 30px;
+}
+
+#page-anchor {
+    margin-top: 50px;
+}
+
+li {
+    list-style-type: none;
 }
 

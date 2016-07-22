@@ -4,10 +4,12 @@
 .navbar.navbar-default {
     border-radius: 0px;
     background-color: $structabl-blue;
+    box-shadow: 0px 1px 3px rgba(1, 17, 62, 0.3);
     border: none;
+    margin-bottom: 0px;
 
     .nav {
-        font-weight: 400;
+        font-weight: 500;
     }
 
     .navbar-nav {
@@ -15,22 +17,30 @@
             a {
                 color: white;
             }
+
+            &.active {
+                a {
+                    background-color: $kato-green;
+                }
+            }
         }
     }
 }
+
 
 .notification {
     color: black
 }
 
 .navbar-brand {
-    @include respond-to(xsmall) {
-        margin-left: 25px;
-    }
 
     .logo {
         color: $structabl-blue;
     }
+}
+
+.navbar-toggle {
+    margin-right: 30px;
 }
 
 .headerLogo {

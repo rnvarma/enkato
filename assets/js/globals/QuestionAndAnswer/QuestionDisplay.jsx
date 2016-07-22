@@ -141,7 +141,7 @@ class QuestionDisplay extends React.Component {
     /* TODO: when receiving data, process dates and other shit like topic */
     const created = moment(this.props.question.created).fromNow();
     const modified = moment(this.props.question.modified).fromNow();
-    const topic = this.props.question.topic ? this.props.question.topic : 'General';
+    const topic = this.props.question.topic ? this.props.question.topic.name : 'General';
 
     const isOwner = this.props.currentUser && this.props.currentUser.id === this.props.question.student.id;
     const isInstructor = this.props.currentUser && this.props.currentUser.id === this.props.question.video.creator;
@@ -163,15 +163,14 @@ class QuestionDisplay extends React.Component {
               question={this.props.question}
               pushQuestionNewText={this.props.pushQuestionNewText}
               pushQuestionEditText={this.props.pushQuestionEditText}
+              replaceQuestion={this.props.replaceQuestion}
               toggleEdit={this.toggleEdit}
               delete={this.delete}
             />
           ) : (
             <div className="questionBox">
               <div className="questionHeader">
-                {topic}
-                {isOwner ? <Button onClick={this.toggleEdit}>Edit</Button> : ''}
-                {isOwner || isInstructor ? <Button onClick={this.toggleDelete}>Delete</Button> : ''}
+                <span className="questionHeaderTopic">{topic}</span>
                 {isOwner || isInstructor ? <Button onClick={this.patchAsResolved}>Mark as {resolvedText}</Button> : ''}
               </div>
               <div className="questionTitle">
@@ -182,6 +181,8 @@ class QuestionDisplay extends React.Component {
               </div>
               <div className="questionFooter">
                 <img></img><span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span> asked {created}
+                {isOwner || isInstructor ? <div className="plainBtn" onClick={this.toggleDelete}>Delete</div> : ''}
+                {isOwner && this.props.videoUUID ? <div className="plainBtn" onClick={this.toggleEdit}>Edit Question</div> : ''}
               </div>
             </div>
           )}

@@ -20,4 +20,4 @@ admin.site.register(Topic)
 admin.site.register(QuizQuestion)
 admin.site.register(MCChoice)
 admin.site.register(StudentSeriesVideoQuizQuestionData)
-
+admin.site.register(InterestedUser)
