@@ -30,8 +30,6 @@ def findYTId(uuids, vidId):
     return None
 
 
-
-
 def getYTIdFromURL(url):
     """ Gets video id from url or returns None if the id doesn't seem right """
 
