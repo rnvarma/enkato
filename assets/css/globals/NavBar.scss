@@ -17,9 +17,16 @@
             a {
                 color: white;
             }
+
+            &.active {
+                a {
+                    background-color: $kato-green;
+                }
+            }
         }
     }
 }
+
 
 .notification {
     color: black
