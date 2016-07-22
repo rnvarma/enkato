@@ -38,7 +38,7 @@ module.exports = React.createClass({
 
         if(this.props.reviewMode){
             BottomText = (
-              <BottomReviewText correct={this.props.currentQuestionResults.isCorrect} />
+              <BottomReviewText correct={this.props.question.isCorrect} />
             );
         }
         return(

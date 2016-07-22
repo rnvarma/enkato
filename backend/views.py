@@ -324,10 +324,10 @@ class LoadQuizData(APIView):
     def get(self, request, s_id, v_id):
         print("hi----------------------------")
         s = Series.objects.get(uuid=s_id)
-        ssd = StudentSeriesData.objects.get(user=request.user.customuser, series=s)
+        ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=s)
 
         v = Video.objects.get(uuid=v_id)
-        ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
+        ssvd, _ = StudentSeriesVideoData.objects.get_or_create(ss_data=ssd, video=v)
 
         quizQuestions = v.quiz_questions.all()
         seriesQuizQuestionData = ssvd.quizzes_data.all()
