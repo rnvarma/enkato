@@ -26,13 +26,14 @@
 }
 
 .navbar-brand {
-    @include respond-to(xsmall) {
-        margin-left: 25px;
-    }
 
     .logo {
         color: $structabl-blue;
     }
+}
+
+.navbar-toggle {
+    margin-right: 30px;
 }
 
 .headerLogo {
