@@ -56,6 +56,10 @@ class QuestionResponseViewset(DatedModelMixin, viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         user = self.request.user.customuser.id
-        is_instructor = user == get_object_or_404(Question, pk=self.request.data.get('question_pk')).video.creator.id
+        related_question = get_object_or_404(Question, pk=self.request.data.get('question_pk'))
+        is_instructor = user == related_question.video.creator.id  # TODO: make efficient
+        if is_instructor:
+            related_question.resolved = True
+            related_question.save()
 
         serializer.save(user_id=user, is_instructor=is_instructor)

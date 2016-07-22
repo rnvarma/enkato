@@ -18,12 +18,16 @@ export default class SeriesMainArea extends React.Component {
 
     render() {
         const img_src = this.props.image || DjangoImageLinkHandler('blank_thumbnail.png')
+        var noVideos=false; 
+        //noVideos^^ is used to get rid of the border on the right side
+        //of the totalSeconds if there's no Videos
         if (this.props.videos.length == 0) {
             var video_area = <NoVideosArea
                                  videos={this.props.videos}
                                  reloadPageData={this.props.reloadPageData}
                                  openModal={this.props.openModal}/>
-            var annotateVideosButton = "";
+            var annotateVideosButton = null;
+            noVideos=true;
         } else if (this.props.is_creator) {
             var video_area = (
                 <div>
@@ -56,7 +60,9 @@ export default class SeriesMainArea extends React.Component {
             if (this.props.is_subscribed) {
                 var annotateVideosButton = (
                     <div className="annotate-box">
-                        <Button onClick={this.props.onUnsubscribe}>
+                        <Button 
+                            className="unsubscribeButton" 
+                            onClick={this.props.onUnsubscribe}>
                             Unsubscribe
                         </Button>
                     </div>
@@ -64,7 +70,9 @@ export default class SeriesMainArea extends React.Component {
             } else {
                 var annotateVideosButton = (
                     <div className="annotate-box">
-                        <Button onClick={this.props.onSubscribe}>
+                        <Button  
+                            className="subscribeButton" 
+                            onClick={this.props.onSubscribe}>
                             Subscribe
                         </Button>
                     </div>
@@ -91,7 +99,9 @@ export default class SeriesMainArea extends React.Component {
                             <div className="num-videos">
                                 {this.props.num_videos} {pluralize("video", this.props.num_videos)}
                             </div>
-                            <div className="num-mins">
+                            <div 
+                                className="num-mins"
+                                id={noVideos?"noVideos":""}>
                                 {this.props.total_len}
                             </div>
                             {annotateVideosButton}
