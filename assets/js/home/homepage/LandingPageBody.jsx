@@ -81,7 +81,7 @@ module.exports = React.createClass({
                                 Education starts with you.
                             </div>
                             <div className="sub-logo">
-                                Our mission is to optimize the educational environment in which video-based learning occurs
+                                 Our mission is to unlock the full potential of online learning.
                             </div>
                         </Col>
                         <Col md={6} sm={12} className="right">
@@ -98,7 +98,7 @@ module.exports = React.createClass({
 
                                 <FormGroup>
                                     <Button className="greenBtn" type="submit">
-                                        Submit
+                                        Sign Up
                                     </Button>
                                 </FormGroup>
                             </Form>
@@ -125,7 +125,7 @@ module.exports = React.createClass({
                                     </div>
                                     <div className="textArea">
                                         <div className="title">
-                                            Your questions, answered.
+                                            Get your questions answered.
                                         </div>
                                         <div className="text">
                                             Ask questions right when you have them and learn from previously asked questions.
@@ -138,7 +138,7 @@ module.exports = React.createClass({
                                     </div>
                                     <div className="textArea">
                                         <div className="title">
-                                            Your topics, skipped.
+                                            Easily skip through topics.
                                         </div>
                                         <div className="text">
                                             Quickly navigate through different topics within videos.
@@ -151,10 +151,10 @@ module.exports = React.createClass({
                                     </div>
                                     <div className="textArea">
                                         <div className="title">
-                                            Your progress, tracked.
+                                            Track your progress.
                                         </div>
                                         <div className="text">
-                                            Join classrooms, interact with eduacators and teaching assistants, and track your progress!
+                                            Join classrooms, interact with educators and teaching assistants, and track your progress!
                                         </div>
                                     </div>
                                 </div>
@@ -164,10 +164,10 @@ module.exports = React.createClass({
                                     </div>
                                     <div className="textArea">
                                         <div className="title">
-                                            Your understanding, checked.
+                                            Check your understanding.
                                         </div>
                                         <div className="text">
-                                            Diagnostic quizzes help your check your understanding.
+                                            Diagnostic quizzes and post-assessments help you check your understanding.
                                         </div>
                                     </div>
                                 </div>
@@ -180,10 +180,10 @@ module.exports = React.createClass({
                         <Col sm={8} smOffset={2} xs={12} md={6} mdOffset={6}>
                             <div className="content">
                                 <div className="title">
-                                    Becoming an <span className="bold">enkato educator</span> is easy.
+                                    Becoming an <span className="bold">Enkato educator</span> is easy.
                                 </div>
                                 <div className="text">
-                                    Organize educational videos in public or private classrooms, collaborate with teaching assistants to address questions, analyze student interaction, and create custom quizzes.
+                                    Organize and enhance your online content, and interact directly with your students to provide a better learning experience.
                                 </div>
                                 <Button className="button greenBtn">
                                     Become an Educator
