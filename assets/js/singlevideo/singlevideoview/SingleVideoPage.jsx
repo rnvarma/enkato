@@ -33,7 +33,7 @@ class SingleVideoPage extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="singleVideoPage">
         <NavBar />
         <Row className="videoPlayerWrapper">
           <Col mdOffset={1} md={10}>

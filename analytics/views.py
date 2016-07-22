@@ -78,7 +78,8 @@ class LogQuiz(View):
         ssvd = StudentSeriesVideoData.objects.get(ss_data=ssd, video=v)
 
         quizQuestions = v.quiz_questions.all()
-        print(quizQuestions)
+
+        ssvd.quizzes_data.all().delete()
 
         result = []
         numCorrect=0

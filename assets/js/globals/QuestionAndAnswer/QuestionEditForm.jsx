@@ -13,6 +13,7 @@ class QuestionEditForm extends React.Component {
     super();
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.onTopicChange = this.onTopicChange.bind(this);
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
     this.patch = this.patch.bind(this);
@@ -23,32 +24,36 @@ class QuestionEditForm extends React.Component {
     this.patch();
   }
 
+  onTopicChange(event) {
+    this.props.pushQuestionEditText(this.props.question.id, event.target.value, this.props.question.input.title, this.props.question.input.text);
+  }
+
   onTitleChange(event) {
-    this.props.pushQuestionEditText(this.props.question.id, event.target.value, this.props.question.input.text);
+    this.props.pushQuestionEditText(this.props.question.id, this.props.question.input.topic, event.target.value, this.props.question.input.text);
   }
 
   onTextChange(event) {
-    this.props.pushQuestionEditText(this.props.question.id, this.props.question.input.title, event.target.value);
+    this.props.pushQuestionEditText(this.props.question.id, this.props.question.input.topic, this.props.question.input.title, event.target.value);
   }
 
   patch() {
     /* TODO: error handling on failing to patch */
-    const data = {
+    const payload = {
       title: this.props.question.input.title,
       text: this.props.question.input.text,
-      /* TODO: do the topic */
+      topic_pk: this.props.question.input.topic,
     };
     $.ajax({
-      url: `/api/videos/${this.props.videoUUID}/questions/${this.props.question.id}`,
+      url: `/api/questions/${this.props.question.id}`,
       type: 'PATCH',
-      data,
+      data: payload,
       beforeSend(xhr) {
         xhr.withCredentials = true;
         xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
       },
-      success: () => {
+      success: (data) => {
         this.props.toggleEdit();
-        this.props.pushQuestionNewText(this.props.question.id, this.props.question.input.title, this.props.question.input.text);
+        this.props.replaceQuestion(data.id, data);
       },
     });
   }
@@ -59,11 +64,12 @@ class QuestionEditForm extends React.Component {
         <QuestionForm
           topicList={this.props.topicList}
           onSubmit={this.onSubmit}
-          onTopicChange={null}
+          onTopicChange={this.onTopicChange}
           onTitleChange={this.onTitleChange}
           onTextChange={this.onTextChange}
           titleValue={this.props.question.input.title}
           textValue={this.props.question.input.text}
+          topicValue={this.props.question.input.topic}
         />
         <Button onClick={this.onSubmit}>Publish</Button>
         <Button onClick={this.props.toggleEdit}>Cancel</Button>

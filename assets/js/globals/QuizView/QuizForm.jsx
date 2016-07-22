@@ -31,12 +31,26 @@ module.exports = React.createClass({
         });
     },
     componentDidMount: function(){
-        this.setState({uuid: this.props.videoUUID})
+        console.log("componentDidMount aryyyyy")
+        this.setState({currentQuestion:0})
+        this.setState({uuid: this.props.videoUUID});
         this.loadDataFromServer(this.props.videoUUID);
+        if(this.props.goToReviewMode){
+            this.setState({reviewMode:true})
+            this.setState({showGradingPage:true})
+            console.log("ay")
+        } else {
+            this.setState({reviewMode:false})
+            this.setState({showGradingPage:false})
+            console.log("nah")
+        }
     },
     componentWillReceiveProps: function(nextProps){
         if (nextProps.videoUUID != this.props.videoUUID)
             this.loadDataFromServer(nextProps.videoUUID)
+        if(nextProps.completedQuizInfo.result!=[]){
+            this.setState({completedQuizInfo:nextProps.completedQuizInfo})
+        }
     },
     getInitialState:function(){
         return {
@@ -175,24 +189,26 @@ module.exports = React.createClass({
                 />
             )
         }
-        return(
-            <div className="quizForm">
-                <div className="header">
-                    Check Your Understanding
-                    <FontAwesome className="closeForm" name="close" onClick={this.closeModal}/>
+      return (
+        <div className="quizForm">
+          <div className="header">
+            Check Your Understanding
+            <FontAwesome className="closeForm" name="close" onClick={this.closeModal}/>
                 </div>
-                {navigation}
-                {modalBody}
-                <QuizNavFooter
-                    currentQuestion={this.state.currentQuestion}
-                    numQuestions={this.state.numQuestions}
-                    nextQuestion={this.nextQuestion}
-                    prevQuestion={this.prevQuestion}
-                    closeModal={this.closeModal} 
-                    showGradingPage={this.state.showGradingPage}
-                    reviewMode={this.state.reviewMode}
-                />
-            </div>
-        )
+          {navigation}
+          {modalBody}
+          <QuizNavFooter
+            quizExists={Boolean(this.state.questions[this.state.currentQuestion])}
+            currentQuestion={this.state.currentQuestion}
+            numQuestions={this.state.numQuestions}
+            nextQuestion={this.nextQuestion}
+            prevQuestion={this.prevQuestion}
+            closeModal={this.closeModal}
+            showGradingPage={this.state.showGradingPage}
+            reviewMode={this.state.reviewMode}
+            onFinishButton={this.props.onFinishButton}
+          />
+        </div>
+      );
     }
 })

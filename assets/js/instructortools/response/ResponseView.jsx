@@ -1,9 +1,14 @@
 require('bootstrap-loader');
+require('css/globals/base.scss');
 require('css/instructortools/response/ResponseView.scss');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+
+import NavBar from 'js/globals/NavBar';
 import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
 
 class ResponseView extends React.Component {
@@ -15,7 +20,7 @@ class ResponseView extends React.Component {
 
   loadQuestionData(onSuccess) {
     $.ajax({
-      url: `/api/series?creator=${this.props.userId}`,
+      url: `/api/series?creator=${this.props.userId}&order_by=responses`,
       dataType: 'json',
       cache: false,
       success: (data) => {
@@ -38,9 +43,14 @@ class ResponseView extends React.Component {
   render() {
     return (
       <div className="responseView">
-        <QuestionView
-          loadQuestionData={this.loadQuestionData}
-        />
+        <NavBar />
+        <Row>
+          <Col mdOffset={1} md={10}>
+            <QuestionView
+              loadQuestionData={this.loadQuestionData}
+            />
+          </Col>
+        </Row>
       </div>
     );
   }

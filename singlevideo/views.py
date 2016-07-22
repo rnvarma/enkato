@@ -5,10 +5,24 @@ from backend.models import *
 
 from backend.views import Serializer
 
+from backend.serializers import VideoSerializer
+from rest_framework import viewsets
+
 import json
 
 
-# Create your views here.
+class VideoViewset(viewsets.ModelViewSet):
+    """ The video API """
+
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        return Video.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user.customuser)
+
+
 class SingleVideoPage(View):
     def get(self, request, v_uuid):
         return render(request, 'singlevideo/singlevideo.html', {'v_uuid': v_uuid})

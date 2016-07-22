@@ -7,37 +7,43 @@
     padding-top: 0px;
     padding-left: 0px;
 
-    .profileSeriesPanel {
-        background-color: white;
+    a {
 
-        transition: 0.5s background-color;
+        color: inherit; /* blue colors for links too */
+        text-decoration: inherit; /* no underline */
 
-        &:hover {
-            cursor: pointer;
-            background-color: #ddd;
-        }
+        .profileSeriesPanel {
+            background-color: white;
 
-        .thumbnailArea {
-            .image {
-                width: 50%;
-                display: inline-block;
+            transition: 0.5s background-color;
+
+            &:hover {
+                cursor: pointer;
+                background-color: #ddd;
             }
 
-            &.one {
+            .thumbnailArea {
                 .image {
-                    width: 100%;
+                    width: 50%;
                     display: inline-block;
                 }
+
+                &.one {
+                    .image {
+                        width: 100%;
+                        display: inline-block;
+                    }
+                }
             }
-        }
 
-        .seriesInfo {
-            padding: 20px;
-            height: 150px;
+            .seriesInfo {
+                padding: 20px;
+                height: 150px;
 
-            .name {
-                font-weight: bold;
-                color: $structabl-blue;
+                .name {
+                    font-weight: bold;
+                    color: $structabl-blue;
+                }
             }
         }
     }

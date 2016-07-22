@@ -42,21 +42,18 @@ class QuestionModal extends React.Component {
 
   postQuestion() {
     if (this.state.title && this.state.text) {
-      const data = {
+      const payload = {
+        video_uuid: this.props.videoUUID,
         title: this.state.title,
         text: this.state.text,
         time: this.props.getCurrentTime(),
+        topic_pk: this.state.topic,
       };
-
-      if (this.state.topic && this.state.topic !== 0) {
-        data.topic = this.state.topic;
-      }
-
       $.ajax({
-        url: `/api/videos/${this.props.videoUUID}/questions`,
+        url: '/api/questions',
         dataType: 'json',
         type: 'POST',
-        data,
+        data: payload,
         beforeSend: (xhr) => {
           xhr.withCredentials = true;
           xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
@@ -68,7 +65,7 @@ class QuestionModal extends React.Component {
             title: '',
             text: '',
             topic: '',
-          })
+          });
         },
         error: (xhr, status, err) => {
           console.log('POST failed, could be invalid data or just general server problems', status, err);
@@ -116,6 +113,7 @@ class QuestionModal extends React.Component {
               onTextChange={this.onTextChange}
               titleValue={this.state.title}
               textValue={this.state.text}
+              topicValue={this.state.topic}
             />
           </Modal.Body>
           <Modal.Footer>

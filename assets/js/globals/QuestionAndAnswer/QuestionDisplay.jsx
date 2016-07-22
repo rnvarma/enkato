@@ -9,8 +9,8 @@ import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
 import getCookie from 'js/globals/GetCookie';
-import { styleDuration } from 'js/globals/utility';
 
+import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
 import QuestionDisplayResponse from 'js/globals/QuestionAndAnswer/QuestionDisplayResponse';
 import QuestionResponseForm from 'js/globals/QuestionAndAnswer/QuestionResponseForm';
 import QuestionEditForm from 'js/globals/QuestionAndAnswer/QuestionEditForm';
@@ -18,18 +18,49 @@ import QuestionEditForm from 'js/globals/QuestionAndAnswer/QuestionEditForm';
 class QuestionDisplay extends React.Component {
   constructor() {
     super();
-
+    this.state = {
+      deleting: false,
+    };
     this.delete = this.delete.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
+    this.toggleDelete = this.toggleDelete.bind(this);
+    this.patchAsResolved = this.patchAsResolved.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.postResponse = this.postResponse.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
   }
 
+  onTextChange(event) {
+    this.props.pushResponseText(this.props.question.id, event.target.value);
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    this.postResponse();
+  }
+
+  patchAsResolved() {
+    const payload = {
+      resolved: !this.props.question.resolved,
+    };
+    $.ajax({
+      url: `/api/questions/${this.props.question.id}`,
+      type: 'PATCH',
+      data: payload,
+      beforeSend(xhr) {
+        xhr.withCredentials = true;
+        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+      },
+      success: (data) => {
+        this.props.replaceQuestion(data.id, data);
+      },
+    });
+  }
+
   delete() {
     /* TODO: verify before deleting, error handling on failing to delete */
     $.ajax({
-      url: `/api/videos/${this.props.videoUUID}/questions/${this.props.question.id}`,
+      url: `/api/questions/${this.props.question.id}`,
       type: 'DELETE',
       beforeSend(xhr) {
         xhr.withCredentials = true;
@@ -37,6 +68,7 @@ class QuestionDisplay extends React.Component {
       },
       success: () => {
         this.props.removeQuestion(this.props.question.id);
+        this.toggleDelete();
       },
     });
   }
@@ -45,9 +77,8 @@ class QuestionDisplay extends React.Component {
     this.props.toggleEditQuestion(this.props.question.id);
   }
 
-  onSubmit(event) {
-    event.preventDefault();
-    this.postResponse();
+  toggleDelete() {
+    this.setState({ deleting: !this.state.deleting });
   }
 
   postResponse() {
@@ -77,11 +108,8 @@ class QuestionDisplay extends React.Component {
     }
   }
 
-  onTextChange(event) {
-    this.props.pushResponseText(this.props.question.id, event.target.value);
-  }
-
   render() {
+    console.log(this.props.videoUUID);
     if (this.props.question == null) {
       return (
         <Col md={8} className="questionDisplay empty">
@@ -98,13 +126,14 @@ class QuestionDisplay extends React.Component {
             key={response.id}
             question={this.props.question}
             response={response}
-            videoUUID={this.props.videoUUID}
             pushResponseText={this.props.pushResponseText}
             pushResponseEditText={this.props.pushResponseEditText}
             pushResponseNewText={this.props.pushResponseNewText}
             removeResponse={this.props.removeResponse}
             toggleEndorsedResponse={this.props.toggleEndorsedResponse}
             toggleEditResponse={this.props.toggleEditResponse}
+            currentUser={this.props.currentUser}
+            replaceResponse={this.props.replaceResponse}
           />
         );
       });
@@ -112,9 +141,19 @@ class QuestionDisplay extends React.Component {
     /* TODO: when receiving data, process dates and other shit like topic */
     const created = moment(this.props.question.created).fromNow();
     const modified = moment(this.props.question.modified).fromNow();
-    const topic = this.props.question.topic ? this.props.question.topic : 'General';
+    const topic = this.props.question.topic ? this.props.question.topic.name : 'General';
+
+    const isOwner = this.props.currentUser && this.props.currentUser.id === this.props.question.student.id;
+    const isInstructor = this.props.currentUser && this.props.currentUser.id === this.props.question.video.creator;
+    const resolvedText = this.props.question.resolved ? 'unresolved' : 'resolved';
     return (
       <Col md={8} className="questionDisplay">
+        <DeleteConfirmModal
+          deleting={this.state.deleting}
+          description="You're deleting this question. Are you sure you want to continue? This is irreversible."
+          deleteCallback={this.delete}
+          cancelCallback={this.toggleDelete}
+        />
         <Row>
           {this.props.question.editing
             ? (
@@ -124,15 +163,15 @@ class QuestionDisplay extends React.Component {
               question={this.props.question}
               pushQuestionNewText={this.props.pushQuestionNewText}
               pushQuestionEditText={this.props.pushQuestionEditText}
+              replaceQuestion={this.props.replaceQuestion}
               toggleEdit={this.toggleEdit}
               delete={this.delete}
             />
           ) : (
             <div className="questionBox">
               <div className="questionHeader">
-                {topic}
-                <Button onClick={this.toggleEdit}>Edit</Button>
-                <Button onClick={this.delete}>Delete</Button>
+                <span className="questionHeaderTopic">{topic}</span>
+                {isOwner || isInstructor ? <Button onClick={this.patchAsResolved}>Mark as {resolvedText}</Button> : ''}
               </div>
               <div className="questionTitle">
                 {this.props.question.title}
@@ -142,6 +181,8 @@ class QuestionDisplay extends React.Component {
               </div>
               <div className="questionFooter">
                 <img></img><span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span> asked {created}
+                {isOwner || isInstructor ? <div className="plainBtn" onClick={this.toggleDelete}>Delete</div> : ''}
+                {isOwner && this.props.videoUUID ? <div className="plainBtn" onClick={this.toggleEdit}>Edit Question</div> : ''}
               </div>
             </div>
           )}

@@ -25,14 +25,29 @@ export default class QuestionFilterBar extends React.Component {
   }
 
   render() {
-    return (
-      <Row className="questionFilterBar">
+    var viewAll;
+    if (this.props.showSeries) {
+      viewAll = (
         <div
           className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.setFilter.bind(null, '', true)}
         >
           View All
         </div>
+      );
+    } else {
+      viewAll = (
+        <div
+          className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
+          onClick={this.props.setFilter.bind(null, '', true)}
+        >
+          View All Series
+        </div>
+      );
+    }
+    return (
+      <Row className="questionFilterBar">
+        {viewAll}
         <div
           className={(this.props.filterAnswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.toggleAnsweredFilter}

@@ -27,7 +27,7 @@ var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
 module.exports = React.createClass({
     onFormSubmit: function(data) {
         $.ajax({
-          url: "/register",
+          url: "/interesteduser",
           dataType: 'json',
           type: 'POST',
           data: data,
@@ -51,27 +51,15 @@ module.exports = React.createClass({
     },
     getInitialState: function() {
         return {
-            first_name: '',
-            last_name: '',
+            name: '',
             email: '',
-            user_name: '',
-            password: ''
         }
     },
-    onFirstNameChange: function(e) {
-        this.setState({first_name: e.target.value})
-    },
-    onLastNameChange: function(e) {
-        this.setState({last_name: e.target.value})
+    onNameChange: function(e) {
+        this.setState({name: e.target.value})
     },
     onEmailChange: function(e) {
         this.setState({email: e.target.value})
-    },
-    onUserNameChange: function(e) {
-        this.setState({user_name: e.target.value})
-    },
-    onPasswordChange: function(e) {
-        this.setState({password: e.target.value})
     },
     onSubmit: function(e) {
         e.preventDefault();
@@ -87,42 +75,35 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className="header" style={headerStyle}>
-                    <div className="left">
-                        <div className="logo">
-                            Education starts with you.
-                        </div>
-                        <div className="sub-logo">
-                            Our mission is to optimze the educational environment in which video-based learning occurs
-                        </div>
-                    </div>
-                    <div className="right">
-                        <div className="signUpTitle">
-                            <span className="bold">Sign up</span> (its free!)
-                        </div>
-                        <Form onSubmit={this.onSubmit}>
-                            <FormGroup controlId="first-name">
-                                <FormControl onChange={this.onFirstNameChange} type="text" placeholder="First Name" />
-                            </FormGroup>
-                            <FormGroup controlId="last-name">
-                                <FormControl onChange={this.onLastNameChange} type="text" placeholder="Last Name" />
-                            </FormGroup>
-                            <FormGroup controlId="user-name">
-                                <FormControl onChange={this.onUserNameChange} type="text" placeholder="User Name" />
-                            </FormGroup>
-                            <FormGroup controlId="email">
-                                <FormControl onChange={this.onEmailChange} type="text" placeholder="Email" />
-                            </FormGroup>
-                            <FormGroup controlId="password">
-                                <FormControl onChange={this.onPasswordChange} type="password" placeholder="Password" />
-                            </FormGroup>
+                    <Row>
+                        <Col md={6} sm={12} className="left">
+                            <div className="logo">
+                                Education starts with you.
+                            </div>
+                            <div className="sub-logo">
+                                Our mission is to optimize the educational environment in which video-based learning occurs
+                            </div>
+                        </Col>
+                        <Col md={6} sm={12} className="right">
+                            <div className="signUpTitle">
+                                <span className="bold">Sign up</span> for our free beta!
+                            </div>
+                            <Form onSubmit={this.onSubmit}>
+                                <FormGroup controlId="name">
+                                    <FormControl onChange={this.onNameChange} type="text" placeholder="Your Name" />
+                                </FormGroup>
+                                <FormGroup controlId="email">
+                                    <FormControl onChange={this.onEmailChange} type="text" placeholder="Email" />
+                                </FormGroup>
 
-                            <FormGroup>
-                                <Button className="greenBtn" type="submit">
-                                    Start Learning Today
-                                </Button>
-                            </FormGroup>
-                        </Form>
-                    </div>
+                                <FormGroup>
+                                    <Button className="greenBtn" type="submit">
+                                        Submit
+                                    </Button>
+                                </FormGroup>
+                            </Form>
+                        </Col>
+                    </Row>
                 </div>
                 <div className="studentBenefits">
                     <Row>
@@ -205,7 +186,7 @@ module.exports = React.createClass({
                                     Organize educational videos in public or private classrooms, collaborate with teaching assistants to address questions, analyze student interaction, and create custom quizzes.
                                 </div>
                                 <Button className="button greenBtn">
-                                    Become on Educator
+                                    Become an Educator
                                 </Button>
                             </div>
                         </Col>

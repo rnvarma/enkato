@@ -6,6 +6,10 @@ from rest_framework.response import Response
 
 from backend.models import *
 from backend.utility import *
+from backend.serializers import CustomUserSerializer
+
+from rest_framework import viewsets, permissions
+
 
 class Serializer(object):
     @staticmethod
@@ -53,8 +57,19 @@ class Serializer(object):
         data["total_len"] = sanetizeTime(total_time)
         videos = map(lambda sv: sv.video, series_videos)
         data["videos"] = map(Serializer.serialize_video, videos)
+        data["videoIDs"] = map(getYTIdFromVideoData, videos)
         data["is_creator"] = False if not request else series.creator == request.user.customuser
         data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
+        return data    
+
+    @staticmethod
+    def serialize_series_videos(series):
+        data = {}
+        series_videos = series.videos.all().order_by("order")
+        for series_video in series_videos:
+            series_video.video.order = series_video.order
+        videos = map(lambda sv: sv.video, series_videos)
+        data["videoIDs"] = map(getYTIdFromVideoData, videos)
         return data
 
     @staticmethod
@@ -76,7 +91,7 @@ class Serializer(object):
         data["num_topics"] = video.topics.count()
         data["num_quiz_questions"] = video.quiz_questions.count()
         return data
-
+        
     @staticmethod
     def serialize_topic(topic):
         data = {}
@@ -84,6 +99,7 @@ class Serializer(object):
         data["time"] = topic.time
         data["time_clean"] = convert_seconds_to_duration(topic.time)
         data["id"] = topic.uuid
+        data['real_id'] = topic.id
         data["isCurrentTopic"] = False  # used in frontend
         return data
 
@@ -107,6 +123,15 @@ class Serializer(object):
         data["is_correct"] = choice.is_correct
         return data
 
+
+class UserViewset(viewsets.ReadOnlyModelViewSet):
+
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user.customuser
 
 class UserData(APIView):
     def get(self, request):
@@ -141,6 +166,26 @@ class SeriesData(APIView):
         series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
 
+class SeriesVideoData(APIView):
+    def get(self, request, v_id):
+        try:
+            video = Video.objects.filter(vid_id = v_id).first()
+            videoData = Serializer.serialize_video(video)
+            series = Series.objects.filter(creator= video.creator).first()
+            response = {}
+            response['inSeries'] = True
+            uuids = {}
+            for serie in series:
+                uuids[serie.uuid] = Serializer.serialize_series_videos(serie)
+            seriesId = findYTId(uuids, v_id)
+            response["seriesId"] = seriesId
+            return Response(response)
+        except Series.DoesNotExist:
+            return Response({
+                'inSeries': False
+            })
+
+
 class VideoData(View):
     def get(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
@@ -157,6 +202,22 @@ class VideoData(View):
             'numQuestions':quizQs.count()
         })
 
+class VideoIdData(View):
+    def get(self, request, v_id):
+        try:
+            video = Video.objects.filter(vid_id=v_id).first()
+            topicList = video.topics.all().order_by('time')
+            frontendTList = map(Serializer.serialize_topic, topicList)
+            return JsonResponse({
+                'inDatabase': True,
+                'topicList':frontendTList,
+                'videoData': Serializer.serialize_video(video)
+            })
+        except Video.DoesNotExist:
+            return JsonResponse({
+                'inDatabase': False
+            })
+
 class QuizData(APIView):
     def get(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
@@ -166,6 +227,7 @@ class QuizData(APIView):
             'questions': questions,
             'numQuestions': quizQs.count()
         })
+
 
 def secondify(time):
     timeL = time.split(":")
@@ -232,10 +294,18 @@ class LoadQuizData(APIView):
 
         result = []
         numCorrect=0
-
+        print("yoooooooooooo")
+        print(len(quizQuestions))
+        print(len(seriesQuizQuestionData))
         if(len(quizQuestions)!=len(seriesQuizQuestionData)):
             print("quiz not taken!!!!")
-            return JsonResponse({'result':result, 'numCorrect':numCorrect})
+            completedQuizInfo={
+                'result':result, 
+                'numCorrect':numCorrect
+            }
+            return JsonResponse({
+                'completedQuizInfo':completedQuizInfo,
+                'quizTaken':False})
         else: 
             print("quiz taken!!!!")
         
@@ -257,4 +327,22 @@ class LoadQuizData(APIView):
                 "correctAnswer":correctAnswer,
                 "isCorrect":correct
             })
-        return JsonResponse({'result':result, 'numCorrect':numCorrect})
+
+        completedQuizInfo={
+            'result':result, 
+            'numCorrect':numCorrect
+        }
+        return JsonResponse({
+            'completedQuizInfo':completedQuizInfo,
+            'quizTaken':True
+        })
+
+
+class DatedModelMixin(object):
+    """ Add fields to modified_update_fields if you would like them to update modified on PATCH """
+
+    def perform_update(self, serializer):
+        if any(field in self.request.data for field in self.modified_update_fields):
+            serializer.save(modified=timezone.now())
+        else:
+            serializer.save()

@@ -13,4 +13,6 @@ urlpatterns = [
     url(r'^v/(?P<v_uuid>[a-zA-Z0-9_.-]+)/deletequizoption$', DeleteQuizOption.as_view()),
     url(r'^deletetopic$', DeleteTopic.as_view()),
     url(r'editvideo$', EditVideoTesting.as_view()),
+    url(r'api/videos$', VideoViewset.as_view({'get': 'list', 'post': 'create'})),
+    url(r'api/videos/(?P<pk>[0-9]+)$', VideoViewset.as_view({'delete': 'destroy'})),
 ]

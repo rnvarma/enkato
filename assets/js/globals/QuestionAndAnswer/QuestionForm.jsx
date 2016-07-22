@@ -11,8 +11,12 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 class QuestionForm extends React.Component {
   render() {
     const options = this.props.topicList.map((topic) => {
-      return (<option key={topic.id} value={topic.id}>{topic.name}</option>);
+      return (<option key={topic.real_id} value={topic.real_id}>{topic.name}</option>);
     });
+    var topicListValue;
+    if (this.props.topicValue) {
+      topicListValue = this.props.topicValue;
+    }
     return (
       <div className="questionForm">
         <Form horizontal onSubmit={this.props.onSubmit}>
@@ -21,7 +25,7 @@ class QuestionForm extends React.Component {
               Topic
             </Col>
             <Col sm={9}>
-              <FormControl onChange={this.props.onTopicChange} componentClass="select">
+              <FormControl onChange={this.props.onTopicChange} componentClass="select" value={topicListValue}>
                 <option>General</option>
                 {options}
               </FormControl>

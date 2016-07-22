@@ -18,6 +18,10 @@
     display: inline-block;
     text-align: center;
 
+    &:first-child {
+      width: 16%;
+    }
+
     &.selected {
       font-weight: bold;
     }

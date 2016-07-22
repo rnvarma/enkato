@@ -12,3 +12,4 @@ shortuuid==0.4.3
 six==1.10.0
 django-postgrespool==0.3.0
 psycopg2==2.5.1
+gunicorn==19.3.0

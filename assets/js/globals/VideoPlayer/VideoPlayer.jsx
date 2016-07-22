@@ -138,6 +138,8 @@ module.exports  = React.createClass({
             success: function(data) {
                 console.log("hello")
                 console.log(data)
+                this.setState({completedQuizInfo:data.completedQuizInfo})
+                this.setState({quizTaken:data.quizTaken})
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -273,6 +275,11 @@ module.exports  = React.createClass({
             this.state.Player.play();
         }
     },
+    onFinishButton: function(){
+        this.setState({showingOverlay:true})
+        this.setState({takingQuiz:false})
+        this.loadQuizData(this.props.videoUUID)
+    },
     componentWillReceiveProps: function(nextProps) {
         if (this.state.uuid != nextProps.videoUUID) {
             this.trackView(this.state.uuid)
@@ -339,7 +346,11 @@ module.exports  = React.createClass({
                             videoUUID={this.state.uuid}
                             closeModal={this.closeModal}
                             nextVideo={this.props.nextVideo}
-                            playVideo={this.playVideo}/>
+                            playVideo={this.playVideo}
+                            completedQuizInfo={this.state.completedQuizInfo}
+                            quizTaken={this.state.quizTaken}
+                            onFinishButton={this.onFinishButton}
+                        />
                         <ControlBar 
                             className="ControlBar"
                             isPlaying={this.state.isPlaying}

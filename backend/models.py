@@ -9,6 +9,13 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 
+class InterestedUser(models.Model):
+    name = models.CharField(max_length=200, default="")
+    email = models.CharField(max_length=200, default="")
+
+    def __str__(self):
+        return self.email
+
 class DatedModel(models.Model):
     """ Generic model with created, modified, and modified count fields """
 
@@ -20,15 +27,10 @@ class DatedModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        update_modified = kwargs.pop('update_modified', True)
-
         if not self.id:  # Model does not exist yet
             self.created = timezone.now()
-        else:
-            if update_modified:
-                self.modified_count += 1
-        if update_modified:
             self.modified = timezone.now()
+        # modified is updated upon relevant PATCH requests
 
         return super(DatedModel, self).save(*args, **kwargs)
 
