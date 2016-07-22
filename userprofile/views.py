@@ -122,12 +122,12 @@ class Serializers(object):
 class GetNotifications(View):
 	def get(self, request):
 		if request.user.is_anonymous():
-			return JsonResponse({'notifications': [], 'num': 0})
+			return JsonResponse({'notifications': [], 'num': "0"})
 		else:
 			unread = request.user.notifications.unread().all()
 
 			if len(unread) == 0:
-				return JsonResponse({'notifications': [{"description": "No new notifications at this time", "timestamp": ""}], 'num': 0})
+				return JsonResponse({'notifications': [{"description": "No new notifications at this time", "timestamp": ""}], 'num': "0"})
 
 			aggregated_unread = map(Serializers.notification_serializer, Serializers.notifications_aggregator(unread))
 			num = len(aggregated_unread)

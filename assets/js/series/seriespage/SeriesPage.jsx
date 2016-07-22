@@ -42,6 +42,7 @@ var SeriesPage = React.createClass({
             annotateMode: false,
             quizMode: false
         });
+        this.loadPageData();
     },
     onURLImport: function(event) {
         this.setState({ urls: event.target.value });
