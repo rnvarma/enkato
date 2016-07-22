@@ -37,6 +37,8 @@ module.exports= React.createClass({
             reviewMode: false,
             resultsPage: false
         })
+        this.props.showQuiz()
+        
     },
     closeModal: function() {
         this.setState({
