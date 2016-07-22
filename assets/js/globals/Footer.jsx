@@ -8,7 +8,7 @@ module.exports = React.createClass({
         return (
             <div className="footer">
                 <div className="name">
-                    <img src={DjangoImageLinkHandler("enkato_logo.png")} className="logo"/>
+                    <img src={DjangoImageLinkHandler("blue_logo.png")} className="logo"/>
                 </div>
                 <div className="footerPart">
                     <div className="title">

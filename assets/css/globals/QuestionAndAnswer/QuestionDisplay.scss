@@ -4,7 +4,6 @@
 .questionDisplay {
   background-color: white;
   margin: 0;
-  font-size: 18px;
   height: 100%;
   padding-top: 20px;
   overflow-y: scroll;
@@ -20,7 +19,7 @@
   }
 
   .questionBox {
-    border-bottom: 10px solid $bg-grey;
+    border-bottom: 5px solid $bg-grey;
 
     .btn {
       float: right;
@@ -41,7 +40,6 @@
 
       color: $enkato-green;
       font-weight: 500;
-      font-size: 15px;
       padding: 0 30px;
     }
 
