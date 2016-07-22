@@ -1,7 +1,7 @@
 require('bootstrap-loader');
 var React = require('react');
 require("css/globals/QuizView/QuestionNode");
-var ChoiceList = require('js/globals/QuizView/ChoiceList')
+import ChoiceList from 'js/globals/QuizView/ChoiceList';
 var FontAwesome = require('react-fontawesome');
 var BottomReviewText = require('js/globals/QuizView/ReviewingQuizView/BottomReviewText')
 
@@ -37,15 +37,9 @@ module.exports = React.createClass({
         var BottomText = (<div></div>)
 
         if(this.props.reviewMode){
-            if(this.props.currentQuestionResults.isCorrect){  
-                BottomText = (
-                    <BottomReviewText correct={true} />
-                )
-            } else {
-                BottomText = (
-                    <BottomReviewText correct={false} />
-                )
-            }
+            BottomText = (
+              <BottomReviewText correct={this.props.currentQuestionResults.isCorrect} />
+            );
         } else {
             BottomText = (
                 <div className="showNumAnswered">
@@ -68,7 +62,7 @@ module.exports = React.createClass({
                     choiceList={this.props.question.choiceList}
                     selectedAnswer={this.props.selectedAnswer}
                     currentQuestionResults={this.props.currentQuestionResults}
-                    reviewMode={this.props.reviewMode}
+                    reviewing={this.props.reviewMode}
                 />
                 {submitSection}
                 {BottomText}
