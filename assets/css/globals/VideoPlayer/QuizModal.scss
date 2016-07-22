@@ -8,7 +8,7 @@
     position:absolute;
     top:0;
     left:0;
-    padding-top:20%;
+    padding-top:10%;
     .questionText {
         color: white;
         font-weight: 700;
@@ -17,14 +17,13 @@
         margin-bottom:10px;
     }
     .takeQuizButton {
-        width:wrap-text;
-        width:180px;
+        width:150px;
         margin-left: calc(calc(100% - 180px) / 2);
         background-color:$enkato-bright-green;
         border:none;
         color:white;
-        font-size: 20px;
-        margin-top: 20px;
+        font-size: 15px;
+        margin-top: 10px;
     }
     .noThanks {
         color: white;
@@ -57,14 +56,12 @@
     .rewatch {
         text-align: center;
         color: white;
-        margin-top: 40px;
+        margin-top: 20px;
 
         &:hover {
             cursor: pointer;
-            font-weight: bold;
-
             .undoIcon {
-                font-size: 42px;
+                font-size: 33px;
             }
         }
 
@@ -73,11 +70,11 @@
         }
 
         .undoIcon {
-            font-size: 40px;
+            font-size: 30px;
         }
 
         .text {
-            font-size: 20px;
+            font-size: 16px;
             margin-top: 10px;
         }
     }

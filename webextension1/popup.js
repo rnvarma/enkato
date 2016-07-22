@@ -10,12 +10,12 @@ function showVideo(vidId, timestamp, vidTitle, vidUUID){
 	var thumbnailUrl = "http://img.youtube.com/vi/" + vidId + "/mqdefault.jpg";
 	document.getElementById("main-video-wrapper").querySelector(".thumbnail").appendChild(thumbnail);
 	thumbnail.setAttribute("src", thumbnailUrl);
-	thumbnail.setAttribute("width", "240px");
+	thumbnail.setAttribute("width", "250px");
 
 	var titleBox = document.getElementById("main-video-wrapper").querySelector(".video-title");
 	titleBox.innerHTML = vidTitle;
 	titleBox.style.fontSize="14px";
-	titleBox.style.margin ="3px";
+	titleBox.style.margin ="7px";
 
 	var watchButton = document.createElement("img");
 	document.getElementById("main-video-wrapper").querySelector(".video-button").appendChild(watchButton);
@@ -23,7 +23,7 @@ function showVideo(vidId, timestamp, vidTitle, vidUUID){
 	
 	watchButton.setAttribute("src", imgurl);
   watchButton.setAttribute("height", "20px");
-  watchButton.style.margin="3px"; 
+  watchButton.style.margin="10px"; 
   watchButton.style.padding = "3px";
   watchButton.style.backgroundColor = "white";
   watchButton.style.border = "1px solid #0E133E";
@@ -87,6 +87,7 @@ function showTopics(topics){
 function showSeriesTitle(){
 	var title = document.getElementById("series-wrapper").querySelector(".series-title");
 	title.innerHTML = "More in this series";
+	title.style.fontSize = "16px";
 }
 
 function findTopicList(vid_uuid, callback){
@@ -138,8 +139,9 @@ function getThumbnails(videoId, callback){
 				var vidUUIDs = seriesInfo.videoUUIDs;
 				var seriesId = seriesInfo.seriesUUID;
 				var thumbnails = seriesInfo.seriesThumbnails;
+				var vidTitles = seriesInfo.videoTitles;
 			}
-			callback(partOfSeries, seriesId, thumbnails, vidUUIDs);
+			callback(partOfSeries, seriesId, thumbnails, vidUUIDs, vidTitles);
 			},
 		error: function(status, err) {
 			console.error(status, err.toString());
@@ -163,9 +165,9 @@ $(document).ready( function(){
 						}
 					});
 					showSeriesTitle();
-					getThumbnails(vidId, function(inSeries, seriesId, thumbnails, vidUUIDs){
+					getThumbnails(vidId, function(inSeries, seriesId, thumbnails, vidUUIDs, vidTitles){
 						console.log("got the thumbnails");
-						showSlideshowImages(thumbnails, vidUUIDs, seriesId);
+						showSlideshowImages(thumbnails, vidUUIDs, seriesId, vidId, vidTitles);
 
 					});
 				});

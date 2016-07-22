@@ -73,7 +73,7 @@ module.exports = React.createClass({
                   </Modal.Body>
                   <Modal.Footer>
                     <Button onClick={this.close}>Close</Button>
-                    <Button onClick={this.onFormSubmit}>Create</Button>
+                    <Button disabled = {!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Create</Button>
                   </Modal.Footer>
                 </Modal>
             </li>

@@ -83,10 +83,9 @@ module.exports= React.createClass({
                     Take The Quiz
                 </Button>
             )
-
+            //nothanks button. just deleted text till we figure out what to do here
             whiteTextButton=(
                 <div className="noThanks">
-                    No, Thanks
                 </div>
             )
         }
