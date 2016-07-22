@@ -23,14 +23,18 @@ module.exports = React.createClass({
         this.props.closeModal()
     },
     nextQuestion: function() {
-        this.setState({
-            currentQuestion: this.state.currentQuestion + 1
-        })
+        if (this.state.currentQuestion < this.props.questions.length - 1) {
+            this.setState({
+                currentQuestion: this.state.currentQuestion + 1
+            })
+        }
     },
     prevQuestion: function() {
-        this.setState({
-            currentQuestion: this.state.currentQuestion - 1
-        })
+        if (this.state.currentQuestion > 0) {
+            this.setState({
+                currentQuestion: this.state.currentQuestion - 1
+            })
+        }
     },
     setCurrentQuestion: function(num){
         this.setState({
@@ -64,13 +68,8 @@ module.exports = React.createClass({
             selectedAnswers: this.state.selectedAnswers,
         }
         this.props.submitQuizAnswers(payload)
-    },
-    setReviewMode: function(mode){
-        this.setState({reviewMode:mode})
-        this.setState({currentQuestion:0})
-    },
-    setShowGradingPage: function(mode){
-        this.setState({resultsPage:mode})
+        this.setState(this.getInitialState())
+        this.props.showResultsPage()
     },
     render:function(){
         var currentQuestionData = this.props.questions[this.state.currentQuestion]
@@ -92,6 +91,7 @@ module.exports = React.createClass({
         }
 
         if(this.props.resultsPage){
+            console.log(this.props.completedQuizInfo)
             modalBody = (
                 <CompletedQuizPage 
                     numCorrect={this.props.completedQuizInfo.numCorrect}

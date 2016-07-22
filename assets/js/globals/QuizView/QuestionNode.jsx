@@ -11,7 +11,6 @@ import Button from 'react-bootstrap/lib/Button';
 module.exports = React.createClass({
     submitInfo:function(){
         this.props.submitInfo()
-        this.props.setCurrentQuestion(-1)
     },
     render:function(){
         if (!this.props.question) {

@@ -352,6 +352,7 @@ class LoadQuizData(APIView):
             data['quizTaken'] = False
         else: 
             for i in range(len(quizQuestions)):
+                if seriesQuizQuestionData[i].is_correct: numCorrect += 1
                 result.append({
                     "studentAnswer": int(seriesQuizQuestionData[i].answer),
                     "correctAnswer": getCorrectAnswer(quizQuestions[i].mc_responses.all()),

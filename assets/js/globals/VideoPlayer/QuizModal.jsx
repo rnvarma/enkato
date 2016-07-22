@@ -26,6 +26,12 @@ module.exports= React.createClass({
         })
         this.props.showQuiz()
     },
+    showResultsPage: function() {
+        this.setState({
+            reviewMode: false,
+            resultsPage: true
+        })
+    },
     showReviewMode: function() {
         this.setState({
             reviewMode: true,
@@ -112,7 +118,8 @@ module.exports= React.createClass({
                         questions={this.props.questions}
                         showReviewMode={this.showReviewMode}
                         onRetakeQuiz={this.onRetakeQuiz}
-                        submitQuizAnswers={this.props.submitQuizAnswers}/>
+                        submitQuizAnswers={this.props.submitQuizAnswers}
+                        showResultsPage={this.showResultsPage}/>
                 </div>
             )
         }
