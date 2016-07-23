@@ -9,6 +9,8 @@
     top:0;
     left:0;
     padding-top:10%;
+    text-align: center;
+
     .questionText {
         color: white;
         font-weight: 700;
@@ -18,7 +20,6 @@
     }
     .takeQuizButton {
         width:150px;
-        margin-left: calc(calc(100% - 180px) / 2);
         background-color:$enkato-bright-green;
         border:none;
         color:white;

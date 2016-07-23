@@ -34,6 +34,8 @@ module.exports = React.createClass({
             this.setState({
                 currentQuestion: this.state.currentQuestion - 1
             })
+        } else if (this.props.reviewMode) {
+            this.props.showResultsPage()
         }
     },
     setCurrentQuestion: function(num){
