@@ -30,7 +30,7 @@ class TopicNode extends React.Component {
                 <div className="name">
                     <ScrollingOverflow
                         text={this.props.topic.name}
-                        elementSizePercent={"80%"}/>
+                        elementSize={"80%"}/>
                 </div>
             </div>
         );
