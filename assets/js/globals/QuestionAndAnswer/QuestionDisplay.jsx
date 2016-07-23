@@ -189,13 +189,15 @@ class QuestionDisplay extends React.Component {
         </Row>
         {responses}
         <Row>
-          <QuestionResponseForm
-            onSubmit={this.onSubmit}
-            onTextChange={this.onTextChange}
-            textValue={this.props.question.responseInput}
-            key={this.props.question.id}
-          />
-          <Button onClick={this.onSubmit}>Submit</Button>
+          <div className="questionEnterResponse">
+            <QuestionResponseForm
+              onSubmit={this.onSubmit}
+              onTextChange={this.onTextChange}
+              textValue={this.props.question.responseInput}
+              key={this.props.question.id}
+            />
+            <Button className="publishResponse" onClick={this.onSubmit}>Publish</Button>
+          </div>
         </Row>
       </Col>
     );
