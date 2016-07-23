@@ -33,7 +33,7 @@ if "ENKATO_SERVER" in os.environ:
     if os.environ["ENKATO_SERVER"] == "PROD":
         DEBUG = False
         GLOBAL = False
-    if os.environ["ENKATO_SERVER"] == "DEV":
+    elif os.environ["ENKATO_SERVER"] == "DEV":
         DEBUG = True
         GLOBAL = True
     else:

@@ -32,7 +32,7 @@ class QuizNavFooter extends React.Component {
         prevNextBtns = (
           <span>
             <Button
-              disabled={this.props.currentQuestion == 0 || disableAll}
+              disabled={(this.props.currentQuestion == 0 && !this.props.reviewMode) || disableAll}
               className="backButton"
               onClick={this.props.prevQuestion}
             >

@@ -34,6 +34,8 @@ module.exports = React.createClass({
             this.setState({
                 currentQuestion: this.state.currentQuestion - 1
             })
+        } else if (this.props.reviewMode) {
+            this.props.showResultsPage()
         }
     },
     setCurrentQuestion: function(num){
@@ -97,7 +99,6 @@ module.exports = React.createClass({
         }
 
         if(this.props.resultsPage){
-            console.log(this.props.completedQuizInfo)
             modalBody = (
                 <CompletedQuizPage 
                     numCorrect={this.props.completedQuizInfo.numCorrect}
@@ -139,7 +140,7 @@ module.exports = React.createClass({
             resultsPage={this.props.resultsPage}
             reviewMode={this.props.reviewMode}
             onFinishButton={this.props.onFinishButton}
-            isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect}
+            isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion] ? this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect : false}
           />
         </div>
       );
