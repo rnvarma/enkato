@@ -108,8 +108,8 @@ export default class UploadAnnotateModal extends React.Component {
                       videos={this.props.videos}
                       quizMode={this.props.quizMode} />
           }
-          nextText = "Finish";
-          toggleBtns = (<div><Button
+          nextText = "Save and Publish";
+          toggleBtns = (<div className="toggleMode"><Button
                             className={"toggleAnnotating topics" + (this.props.quizMode ? "" : " active")}
                             onClick={this.props.setTopicMode}>Topics</Button>
           <Button className={"toggleAnnotating quizzes" + (this.props.quizMode ? " active" : "")}

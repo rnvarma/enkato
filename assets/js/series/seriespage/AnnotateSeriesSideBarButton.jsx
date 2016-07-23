@@ -16,8 +16,6 @@ module.exports = React.createClass({
                     <div className="name">
                         {this.props.video.name}
                     </div>
-                    <div className="shadow">
-                    </div>
                 </div>
             </div>
         )
