@@ -33,13 +33,6 @@ module.exports = React.createClass({
                 </div>
             )
         }
-        var BottomText = (<div></div>)
-
-        if(this.props.reviewMode){
-            BottomText = (
-              <BottomReviewText correct={this.props.question.isCorrect} />
-            );
-        }
         return(
             <div className="questionNode">
                 <div className="title"> 
@@ -57,7 +50,6 @@ module.exports = React.createClass({
                     reviewing={this.props.reviewMode}
                 />
                 {submitSection}
-                {BottomText}
             </div>
         )
     }

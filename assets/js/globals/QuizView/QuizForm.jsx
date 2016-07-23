@@ -130,9 +130,10 @@ module.exports = React.createClass({
             nextQuestion={this.nextQuestion}
             prevQuestion={this.prevQuestion}
             closeModal={this.closeModal}
-            showGradingPage={this.props.resultsPage}
+            resultsPage={this.props.resultsPage}
             reviewMode={this.props.reviewMode}
             onFinishButton={this.props.onFinishButton}
+            isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect}
           />
         </div>
       );
