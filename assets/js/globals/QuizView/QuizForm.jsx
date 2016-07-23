@@ -79,7 +79,13 @@ module.exports = React.createClass({
         var navigation = <div></div>
 
         if(this.props.reviewMode){
-            navigation = <ReviewingQuizNav />
+            navigation = (
+                <ReviewingQuizNav
+                    questions={this.props.questions}
+                    currentQuestion={this.state.currentQuestion}
+                    setQuestion={this.setQuestion}
+                    quizResults={this.props.completedQuizInfo.result}/>
+            )
             currentQuestionResults = this.props.completedQuizInfo.result[this.state.currentQuestion]
         } else if (!this.props.resultsPage){
             navigation = (
