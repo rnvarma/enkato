@@ -3,7 +3,6 @@ deploy:
 	npm run webpack-prod
 	python manage.py migrate
 	python manage.py collectstatic
-	yes
 	git add .
 	git commit -m “push”
 	git push origin master
