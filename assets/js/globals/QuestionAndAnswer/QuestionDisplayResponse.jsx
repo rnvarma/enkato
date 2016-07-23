@@ -13,6 +13,8 @@ import getCookie from 'js/globals/GetCookie';
 import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
 import QuestionResponseEditForm from 'js/globals/QuestionAndAnswer/QuestionResponseEditForm';
 
+import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
+
 class QuestionDisplayResponse extends React.Component {
   constructor() {
     super();
@@ -117,7 +119,7 @@ class QuestionDisplayResponse extends React.Component {
           </div>
           {badges}
           <div className="responseFooter">
-            <img></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> answered {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
+            <img src={DjangoImageLinkHandler("blank_avatar.jpg")}></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> answered {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
             {isOwner || isInstructor ? <div onClick={this.toggleDelete} className="plainBtn">Delete</div> : '' }
             {isOwner ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
             {!isOwner && isInstructor ? <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div> : ''}
