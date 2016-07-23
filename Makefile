@@ -1,6 +1,7 @@
 deploy:
 	export ENKATO_SERVER=PROD
 	npm run webpack-prod
+	python manage.py migrate
 	python manage.py collectstatic
 	yes
 	git add .
