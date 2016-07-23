@@ -1,11 +1,13 @@
 require('css/globals/QuizView/QuizNavFooter.scss');
 import Button from 'react-bootstrap/lib/Button';
+var BottomReviewText = require('js/globals/QuizView/ReviewingQuizView/BottomReviewText')
+
 
 import React from 'react';
 
 class QuizNavFooter extends React.Component {
     render() {
-        var disableAll = this.props.showGradingPage;
+        var disableAll = this.props.resultsPage;
 
         var rightButton = <div></div>
         if(this.props.reviewMode&&(this.props.currentQuestion == this.props.numQuestions -1)){
@@ -41,8 +43,23 @@ class QuizNavFooter extends React.Component {
         );
       }
 
+      var bottomLeftText = <div></div>
+
+      if(this.props.reviewMode){
+        bottomLeftText = (
+          <BottomReviewText correct={this.props.isCorrect} />
+        );
+      } else if(!disableAll) {
+        bottomLeftText = (
+          <div className="showNumAnswered">
+              {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
+          </div>
+        )
+      }
+
       return (
         <div className="quizNavFooter">
+          {bottomLeftText}
           <Button
             className="cancelButton"
             onClick={this.props.closeModal}>

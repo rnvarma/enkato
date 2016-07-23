@@ -29,7 +29,7 @@ class DatedModel(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:  # Model does not exist yet
             self.created = timezone.now()
-            self.modified = timezone.now()
+            self.modified = self.created
         # modified is updated upon relevant PATCH requests
 
         return super(DatedModel, self).save(*args, **kwargs)
@@ -346,10 +346,6 @@ class StudentClassVideoData(models.Model):
 #     context = models.CharField(max_length=20, default="")  # either diagnostic, post-video, unit, class, etc
 #     timestamp = models.DateTimeField(default=timezone.now)
 
-
-
-
-
 class StudentSeriesData(models.Model):
     user = models.ForeignKey(CustomUser, related_name="series_data")
     series = models.ForeignKey(Series, related_name="students_data")
@@ -370,10 +366,6 @@ class StudentSeriesVideoQuizQuestionData(models.Model):
     is_correct = models.BooleanField(default=False)
     context = models.CharField(max_length=20, default="")  # either diagnostic, post-video, unit, class, etc
     timestamp = models.DateTimeField(default=timezone.now)
-
-
-
-
 
 class StudentPlaylistData(models.Model):
     user = models.ForeignKey(CustomUser, related_name="playlists_data")

@@ -8,11 +8,9 @@ import { Button, Modal } from 'react-bootstrap';
 module.exports = React.createClass({ 
     render:function(){
         var height = this.props.videoDivHeight - this.props.controlBarHeight;
-        return (
-            <div 
-                style={{height:height+"px"}}
-                className="iframeWrapper">
-                {this.props.renderVideo()}
+        var quizModal;
+        if (this.props.quizDataLoaded) {
+            quizModal = (
                 <QuizModal 
                     onFinishButton={this.props.onFinishButton}
                     showingOverlay={this.props.showingOverlay}
@@ -23,7 +21,17 @@ module.exports = React.createClass({
                     nextVideo={this.props.nextVideo}
                     playVideo={this.props.playVideo}
                     quizTaken={this.props.quizTaken}
-                    completedQuizInfo={this.props.completedQuizInfo}/>
+                    questions={this.props.questions}
+                    completedQuizInfo={this.props.completedQuizInfo}
+                    submitQuizAnswers={this.props.submitQuizAnswers}/>
+            )
+        }
+        return (
+            <div 
+                style={{height:height+"px"}}
+                className="iframeWrapper">
+                {this.props.renderVideo()}
+                {quizModal}
             </div>
         )
     }

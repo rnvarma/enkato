@@ -5,10 +5,6 @@ import Button from 'react-bootstrap/lib/Button';
 
 
 module.exports = React.createClass({
-    reviewAnswers: function(){
-        this.props.setReviewMode(true)
-        this.props.setShowGradingPage(false)
-    },
     render:function(){
         return(
             <div className="CompletedQuizPage">
@@ -20,8 +16,13 @@ module.exports = React.createClass({
                 </div>
                 <Button
                     className="reviewQuizButton"
-                    onClick={this.reviewAnswers}>
+                    onClick={this.props.showReviewMode}>
                     Review Answers
+                </Button>
+                <Button
+                    className="retakeQuizButton"
+                    onClick={this.props.onRetakeQuiz}>
+                    Retake Quiz
                 </Button>
             </div>
         )

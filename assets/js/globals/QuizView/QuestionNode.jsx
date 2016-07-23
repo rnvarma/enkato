@@ -1,7 +1,7 @@
 require('bootstrap-loader');
 var React = require('react');
 require("css/globals/QuizView/QuestionNode");
-var ChoiceList = require('js/globals/QuizView/ChoiceList')
+import ChoiceList from 'js/globals/QuizView/ChoiceList';
 var FontAwesome = require('react-fontawesome');
 var BottomReviewText = require('js/globals/QuizView/ReviewingQuizView/BottomReviewText')
 
@@ -11,7 +11,6 @@ import Button from 'react-bootstrap/lib/Button';
 module.exports = React.createClass({
     submitInfo:function(){
         this.props.submitInfo()
-        this.props.setCurrentQuestion(-1)
     },
     render:function(){
         if (!this.props.question) {
@@ -34,26 +33,6 @@ module.exports = React.createClass({
                 </div>
             )
         }
-        var BottomText = (<div></div>)
-
-        if(this.props.reviewMode){
-            if(this.props.currentQuestionResults.isCorrect){  
-                BottomText = (
-                    <BottomReviewText correct={true} />
-                )
-            } else {
-                BottomText = (
-                    <BottomReviewText correct={false} />
-                )
-            }
-        } else {
-            BottomText = (
-                <div className="showNumAnswered">
-                    {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
-                </div>
-            )
-        }
-
         return(
             <div className="questionNode">
                 <div className="title"> 
@@ -67,11 +46,10 @@ module.exports = React.createClass({
                     className="choiceList"
                     choiceList={this.props.question.choiceList}
                     selectedAnswer={this.props.selectedAnswer}
-                    currentQuestionResults={this.props.currentQuestionResults}
-                    reviewMode={this.props.reviewMode}
+                    currentQuestionResults={this.props.currentQuestionResults} 
+                    reviewing={this.props.reviewMode}
                 />
                 {submitSection}
-                {BottomText}
             </div>
         )
     }

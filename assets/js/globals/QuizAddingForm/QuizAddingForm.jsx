@@ -139,50 +139,59 @@ module.exports = React.createClass({
           }.bind(this)
         });
     },
-    deleteChoice: function(qid, cid, qIndex, cIndex) {
-        var data = {
-            qid: qid,
-            cid: cid
-        };
-        $.ajax({
-          url: "/v/" + this.state.uuid + "/deletequizoption",
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            if (data.status) {
-              let questions = this.state.questions;
-              let needNewCorrect = questions[qIndex].choiceList[cIndex].is_correct;
+  validateDeleteChoice(choiceIndex) {
+      return choiceIndex > 0; /* anything that isn't the first one can be deleted */
+  },
+  displayDeleteChoice(questionIndex, choiceIndex) {
+    const questions = $.extend(true, {}, this.state.questions);
+    const choices = questions[questionIndex].choiceList;
+    const correctRemoved = choices[choiceIndex].is_correct;
 
-              if (cIndex > 0) { /* prevent first from being removed */
-                questions[qIndex].choiceList.splice(cIndex, 1);
-                if (cIndex < questions[qIndex].choiceList.length) { /* not last elem */
-                  questions[qIndex].choiceList[cIndex].focus = true;
-                  if (needNewCorrect) {
-                    questions[qIndex].choiceList[cIndex].is_correct = true;
-                  }
-                } else {
-                  questions[qIndex].choiceList[cIndex - 1].focus = true;
-                  if (needNewCorrect) {
-                    questions[qIndex].choiceList[cIndex - 1].is_correct = true;
-                  }
-                }
-              }
-              this.setState({questions: questions})
-            } else {
-                console.log("Internal Server Error: Adding Quiz Option Failed")
-            }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
+    if (choiceIndex > 0) {
+      choices.splice(choiceIndex, 1);
+      let newFocus; /* new choice to focus on */
+      if (choiceIndex < choices.length) { /* not last elem */
+        newFocus = choices[choiceIndex];
+      } else {
+        newFocus = choices[choiceIndex - 1];
+      }
+      newFocus.focus = true;
+      if (correctRemoved) {
+        newFocus.is_correct = ture;
+      }
+    }
+
+    this.setState({ questions });
+  },
+  deleteChoice: function(qid, cid, qIndex, cIndex) {
+    if (this.validateDeleteChoice(cIndex)) {
+      const payload = {
+        qid: qid,
+        cid: cid,
+      };
+      $.ajax({
+        url: `/v/${this.state.uuid}/deletequizoption`,
+        dataType: 'json',
+        type: 'POST',
+        data: payload,
+        beforeSend: function (xhr) {
+          xhr.withCredentials = true;
+          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        },
+        success: function (data) {
+          if (data.status) {
+            this.displayDeleteChoice(qIndex, cIndex);
+          } else {
+            console.log("Internal Server Error: Adding Quiz Option Failed")
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
           }.bind(this)
-        });
-    },
-    addQuestion: function() {
+      });
+    }
+  },
+  addQuestion: function() {
         var data = this.state;
         $.ajax({
           url: "/v/" + this.state.uuid + "/addquizquestion",

@@ -9,18 +9,51 @@ import FontAwesome from 'react-fontawesome';
 
 module.exports= React.createClass({
     getInitialState: function(){
-        return {goToReviewMode:false}
+        return {
+            reviewMode: false,
+            resultsPage: false
+        }
     },
-    componentDidMount: function(){
-        this.setState({goToReviewMode:false})
+    componentDidMount: function() {
+        this.setState({
+            resultsPage: this.props.quizTaken
+        })
     },
     onReviewQuizClicked: function(){
-        console.log("we clickan")
-        this.setState({goToReviewMode:true})
+        this.setState({
+            reviewMode: true,
+            resultsPage: false
+        })
         this.props.showQuiz()
     },
+    showResultsPage: function() {
+        this.setState({
+            reviewMode: false,
+            resultsPage: true
+        })
+    },
+    showReviewMode: function() {
+        this.setState({
+            reviewMode: true,
+            resultsPage: false
+        })
+    },
+    onRetakeQuiz: function() {
+        this.setState({
+            reviewMode: false,
+            resultsPage: false
+        })
+        this.props.showQuiz()
+        
+    },
+    closeModal: function() {
+        this.setState({
+            reviewMode: false,
+            resultsPage: this.props.quizTaken
+        })
+        this.props.closeModal()
+    },
     render:function(){
-        var goToReviewMode = false;
         var bg_style = (this.props.showingOverlay ? {} : {display:"none"})
 
         var overlay_style = (this.props.takingQuiz || this.props.showingOverlay ? {} : {display:"none"})
@@ -52,7 +85,7 @@ module.exports= React.createClass({
             )
 
             whiteTextButton=(
-                <div className="noThanks" onClick={this.props.showQuiz}>
+                <div className="noThanks" onClick={this.onRetakeQuiz}>
                     Retake Quiz
                 </div>
             )
@@ -64,10 +97,9 @@ module.exports= React.createClass({
                     Take The Quiz
                 </Button>
             )
-
+            //nothanks button. just deleted text till we figure out what to do here
             whiteTextButton=(
                 <div className="noThanks">
-                    No, Thanks
                 </div>
             )
         }
@@ -78,11 +110,16 @@ module.exports= React.createClass({
                 <div className="quizModal">
                     <QuizForm
                         videoUUID={this.props.videoUUID}
-                        closeModal={this.props.closeModal}
+                        closeModal={this.closeModal}
                         onFinishButton={this.props.onFinishButton}
-                        goToReviewMode={this.state.goToReviewMode}
+                        reviewMode={this.state.reviewMode}
                         completedQuizInfo={this.props.completedQuizInfo}
-                    />
+                        resultsPage={this.state.resultsPage}
+                        questions={this.props.questions}
+                        showReviewMode={this.showReviewMode}
+                        onRetakeQuiz={this.onRetakeQuiz}
+                        submitQuizAnswers={this.props.submitQuizAnswers}
+                        showResultsPage={this.showResultsPage}/>
                 </div>
             )
         }

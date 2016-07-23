@@ -138,9 +138,12 @@ class QuestionDisplay extends React.Component {
         );
       });
     }
-    /* TODO: when receiving data, process dates and other shit like topic */
-    const created = moment(this.props.question.created).fromNow();
-    const modified = moment(this.props.question.modified).fromNow();
+
+    const created = moment(this.props.question.created);
+    let modified;
+    if (!created.isSame(this.props.question.modified)) {
+      modified = moment(this.props.question.modified);
+    }
     const topic = this.props.question.topic ? this.props.question.topic.name : 'General';
 
     const isOwner = this.props.currentUser && this.props.currentUser.id === this.props.question.student.id;
@@ -180,7 +183,7 @@ class QuestionDisplay extends React.Component {
                 {this.props.question.text}
               </div>
               <div className="questionFooter">
-                <img></img><span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span> asked {created}
+                <img></img><span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span> asked {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
                 {isOwner || isInstructor ? <div className="plainBtn" onClick={this.toggleDelete}>Delete</div> : ''}
                 {isOwner && this.props.videoUUID ? <div className="plainBtn" onClick={this.toggleEdit}>Edit Question</div> : ''}
               </div>

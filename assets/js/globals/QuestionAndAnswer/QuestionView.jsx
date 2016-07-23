@@ -103,7 +103,7 @@ class QuestionView extends React.Component {
       question.input = {
         title: question.title,
         text: question.text,
-        topic: question.topic,
+        topic: question.topic_pk,
       };
       if (question.topic) {
         question.input.topic = question.topic.id;
@@ -189,7 +189,7 @@ class QuestionView extends React.Component {
     this.setState({
       questions: this.questionData,
       currentQuestion: newQuestion,
-    });
+    }, this.filterQuestions);
   }
 
   getQuestion(questionId) {
@@ -211,7 +211,7 @@ class QuestionView extends React.Component {
     this.setState({
       question: this.questionData,
       currentQuestion: this.questionData[0],
-    });
+    }, this.filterQuestions);
   }
 
   pushQuestionEditText(questionId, questionEditTopic, questionEditTitle, questionEditText) {
@@ -239,9 +239,12 @@ class QuestionView extends React.Component {
   /* actually adds the response after it has been POSTed */
   pushResponse(questionId, newResponse) {
     const questionToAppend = this.getQuestion(questionId);
+    if (newResponse.is_instructor) {
+      questionToAppend.resolved = true;
+    }
     newResponse.input = newResponse.text;
     questionToAppend.responses.push(newResponse);
-    this.setState({ questions: this.questionData });
+    this.setState({ questions: this.questionData }, this.filterQuestions);
   }
 
   /* stores to response input, unique for each question */

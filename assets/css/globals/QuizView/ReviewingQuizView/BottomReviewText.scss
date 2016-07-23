@@ -1,26 +1,26 @@
 @import '../../colors.scss';
 
 
-.correctOrNot{
-    width:100%;
-    position:absolute;
-    bottom:-40; // this will put it on the navbar
-    left:100;
-    .correctness-icon{
+.correctOrNot {
+    width: 40%;
+    position: absolute;
+    bottom: 20;
+    left: 20;
+    .correctness-icon {
         margin-right: 10px;
-        font-size:20px;
+        font-size: 20px;
     }
-    .correctnessText{
-        font-size:16px;
-        font-weight:600;
-        color:$structabl-blue;
+    .correctnessText {
+        font-size: 16px;
+        font-weight: 600;
+        color: $structabl-blue;
     }
 }
 
-#check-correct{
-    color:$kato-green;
+#check-correct {
+    color: $kato-green;
 }
 
-#check-incorrect{
-    color:red;
+#check-incorrect {
+    color: red;
 }

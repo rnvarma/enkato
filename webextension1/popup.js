@@ -1,7 +1,3 @@
-function renderStatus(statusText) {
-	document.getElementById('status').textContent = statusText;
-}
-
 function getYTID(url){
 	var regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
 	var match = url.match(regex);
@@ -14,12 +10,12 @@ function showVideo(vidId, timestamp, vidTitle, vidUUID){
 	var thumbnailUrl = "http://img.youtube.com/vi/" + vidId + "/mqdefault.jpg";
 	document.getElementById("main-video-wrapper").querySelector(".thumbnail").appendChild(thumbnail);
 	thumbnail.setAttribute("src", thumbnailUrl);
-	thumbnail.setAttribute("width", "240px");
+	thumbnail.setAttribute("width", "250px");
 
 	var titleBox = document.getElementById("main-video-wrapper").querySelector(".video-title");
 	titleBox.innerHTML = vidTitle;
 	titleBox.style.fontSize="14px";
-	titleBox.style.margin ="3px";
+	titleBox.style.margin ="7px";
 
 	var watchButton = document.createElement("img");
 	document.getElementById("main-video-wrapper").querySelector(".video-button").appendChild(watchButton);
@@ -27,7 +23,7 @@ function showVideo(vidId, timestamp, vidTitle, vidUUID){
 	
 	watchButton.setAttribute("src", imgurl);
   watchButton.setAttribute("height", "20px");
-  watchButton.style.margin="3px"; 
+  watchButton.style.margin="10px"; 
   watchButton.style.padding = "3px";
   watchButton.style.backgroundColor = "white";
   watchButton.style.border = "1px solid #0E133E";
@@ -88,14 +84,18 @@ function showTopics(topics){
 	}
 }
 
+function showSeriesTitle(){
+	var title = document.getElementById("series-wrapper").querySelector(".series-title");
+	title.innerHTML = "More in this series";
+	title.style.fontSize = "16px";
+}
+
 function findTopicList(vid_uuid, callback){
-	console.log("topic list being found");
 	$.ajax({
 		url: "http://127.0.0.1:8000/1/v/" + vid_uuid,
 		dataType: 'json',
 		cache: false,
 		success: function(data) {
-			console.log("got the data");
 			var topics = data.topicList;
 			console.log(topics);
 			callback(topics);
@@ -115,7 +115,7 @@ function findInDatabase(vid_id, callback) {
 		success: function(data) {
 			inDB = JSON.parse(data.inDatabase);
 			if (inDB){
-				vidData = data.videoData;
+				var vidData = data.videoData;
 				var vidUUID = vidData.uuid;
 			}
 			callback(inDB, vidUUID);
@@ -126,6 +126,30 @@ function findInDatabase(vid_id, callback) {
 	});
 }
 
+function getThumbnails(videoId, callback){
+	$.ajax({
+		url: "http://127.0.0.1:8000/2/s/" + videoId,
+		dataType: 'json',
+		cache: false,
+		success: function(data) {
+			console.log(data);
+			partOfSeries = JSON.parse(data.inSeries);
+			if (partOfSeries){
+				var seriesInfo = data.seriesData;
+				var vidUUIDs = seriesInfo.videoUUIDs;
+				var seriesId = seriesInfo.seriesUUID;
+				var thumbnails = seriesInfo.seriesThumbnails;
+				var vidTitles = seriesInfo.videoTitles;
+			}
+			callback(partOfSeries, seriesId, thumbnails, vidUUIDs, vidTitles);
+			},
+		error: function(status, err) {
+			console.error(status, err.toString());
+		}
+	});
+}
+
+
 
 $(document).ready( function(){
 	chrome.tabs.query({active:true, currentWindow:true}, function(tabs){
@@ -133,13 +157,19 @@ $(document).ready( function(){
 			var vidId = info.videoId;
 			if(vidId != false){
 				findInDatabase(vidId, function(inDB, vidUUID){
+
 					showVideo(vidId, info.timestampText, info.videoTitle, vidUUID);
 					findTopicList(vidUUID, function(topics){
 						if (topics != null){
 							showTopics(topics);
 						}
 					});
-					chrome.tabs.sendMessage(tabs[0].id, {from:"popup", subject: "videoId for series data", content: vidId});
+					showSeriesTitle();
+					getThumbnails(vidId, function(inSeries, seriesId, thumbnails, vidUUIDs, vidTitles){
+						console.log("got the thumbnails");
+						showSlideshowImages(thumbnails, vidUUIDs, seriesId, vidId, vidTitles);
+
+					});
 				});
 			}
 			else{

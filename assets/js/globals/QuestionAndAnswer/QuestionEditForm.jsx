@@ -41,7 +41,7 @@ class QuestionEditForm extends React.Component {
     const payload = {
       title: this.props.question.input.title,
       text: this.props.question.input.text,
-      topic_pk: this.props.question.input.topic,
+      topic_pk: (this.props.question.input.topic === 'General') ? null : this.props.question.input.topic,
     };
     $.ajax({
       url: `/api/questions/${this.props.question.id}`,

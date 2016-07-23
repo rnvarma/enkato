@@ -86,7 +86,7 @@ class QuestionDisplayResponse extends React.Component {
     }
 
     const created = moment(this.props.response.created);
-    var modified;
+    let modified;
     if (!created.isSame(this.props.response.modified)) {
       modified = moment(this.props.response.modified);
     }

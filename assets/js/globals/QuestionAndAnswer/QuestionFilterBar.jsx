@@ -25,8 +25,8 @@ export default class QuestionFilterBar extends React.Component {
   }
 
   render() {
-    var viewAll;
-    if (this.props.showSeries) {
+    let viewAll;
+    if (!this.props.showingSeries) {
       viewAll = (
         <div
           className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
@@ -52,13 +52,13 @@ export default class QuestionFilterBar extends React.Component {
           className={(this.props.filterAnswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.toggleAnsweredFilter}
         >
-          Answered
+          Resolved
         </div>
         <div
           className={(this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
           onClick={this.props.toggleUnansweredFilter}
         >
-          Unanswered
+          Unresolved
         </div>
         <div className="filterQuery">
           <InputGroup>

@@ -5,6 +5,15 @@
     padding: 5px 10px;
     border-bottom: 1px solid $structabl-bg-blue;
     border-right: 1px solid $structabl-bg-blue;
+    text-align: center;
+
+    &.review {
+        border-left: 4px solid red;
+
+        &.correct {
+            border-left: 4px solid green;
+        }
+    }
 
     &:hover {
         background-color: $structabl-blue;

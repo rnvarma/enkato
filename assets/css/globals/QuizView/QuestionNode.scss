@@ -8,6 +8,8 @@ $questionIndent:50px;
     height:100%;
     width:100%;
     position:relative;
+    overflow-y: scroll;
+
     .title{
         font-size:20px;
         color:$structabl-blue;
@@ -42,16 +44,6 @@ $questionIndent:50px;
     .quizSubmitButtonHR{
         margin-left:$questionIndent;
         width:calc(100% - #{$questionIndent}*2);
-    }
-
-    .showNumAnswered{
-        color:$kato-green;
-        font-size:12px;
-        font-weight:700;
-
-        position:absolute;
-        bottom:0;
-        left:$questionIndent*2;
     }
 }
 

@@ -59,6 +59,7 @@ function clearCurrentTopic(topicList){
 module.exports  = React.createClass({
     getInitialState: function() {
         return {
+            quizDataLoaded: false,
             topicObjList: [], 
             isPlaying: false, 
             currentTime:"0:00",
@@ -67,14 +68,7 @@ module.exports  = React.createClass({
             videoDivHeight: 0,
             videoDivWidth: 0,
             uuid: this.props.videoUUID,
-            questions:[{
-                text: "",
-                choiceList: [{text:"", id:0}],
-                shouldRefocus: false,
-                currentFocus: 0,
-                id: 1,
-                new: true
-            }],
+            questions:[],
             showingOverlay:false,
             takingQuiz:false,
             viewStats: {
@@ -88,6 +82,7 @@ module.exports  = React.createClass({
                 result:[],
                 numCorrect:0
             },
+            numQuestions: 0
         };
     },
     trackView: function(uuid, end) {
@@ -130,21 +125,39 @@ module.exports  = React.createClass({
     },
     loadQuizData: function(v_id){
         var s_id = $("#s_id").attr("data-sid")
-
         $.ajax({
-            url: "/api/quiz/s/"+s_id+"/v/" + v_id,
+            url: "/1/studentquizdata/s/" + s_id + "/v/" + v_id,
             dataType: 'json',
             cache: false,
             success: function(data) {
-                console.log("hello")
-                console.log(data)
-                this.setState({completedQuizInfo:data.completedQuizInfo})
-                this.setState({quizTaken:data.quizTaken})
+                this.setState(data)
+                this.setState({quizDataLoaded: true})
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });    
+    },
+    submitQuiz: function(answers) {
+        $.ajax({
+          url: "/logquiz/s/" + this.state.s_id + "/v/" + this.state.uuid,
+          dataType: 'json',
+          type: 'POST',
+          data: answers,
+          beforeSend: function (xhr) {
+            xhr.withCredentials = true;
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          },
+          success: function(data) {
+            this.setState({
+                quizTaken: true,
+                completedQuizInfo: data,
+            });
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
     },
     loadDataFromServer: function(v_id){
         $.ajax({
@@ -153,10 +166,10 @@ module.exports  = React.createClass({
           cache: false,
           success: function(data) {
 
-              /* an optional prop */
-              if (this.props.setTopicList) {
-                  this.props.setTopicList(data.topicList);
-              }
+            /* an optional prop */
+            if (this.props.setTopicList) {
+              this.props.setTopicList(data.topicList);
+            }
             if (this.state.Player) {
                 this.state.Player.destroy();
             }
@@ -276,8 +289,10 @@ module.exports  = React.createClass({
         }
     },
     onFinishButton: function(){
-        this.setState({showingOverlay:true})
-        this.setState({takingQuiz:false})
+        this.setState({
+            showingOverlay: true,
+            takingQuiz: false
+        })
         this.loadQuizData(this.props.videoUUID)
     },
     componentWillReceiveProps: function(nextProps) {
@@ -349,8 +364,10 @@ module.exports  = React.createClass({
                             playVideo={this.playVideo}
                             completedQuizInfo={this.state.completedQuizInfo}
                             quizTaken={this.state.quizTaken}
+                            questions={this.state.questions}
                             onFinishButton={this.onFinishButton}
-                        />
+                            quizDataLoaded={this.state.quizDataLoaded}
+                            submitQuizAnswers={this.submitQuiz}/>
                         <ControlBar 
                             className="ControlBar"
                             isPlaying={this.state.isPlaying}
