@@ -82,7 +82,7 @@ export default class QuizModal extends Component {
                         Up Next
                     </div>
                     <SeriesViewerSidebarVideoPanel
-                        video={this.props.nextVideo} />
+                        video={this.props.nextVideo}/>
                 </div>
             )
         }
