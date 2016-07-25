@@ -125,6 +125,7 @@ class SeriesViewer extends Component {
             {...this.state}/>
           <div className="seriesViewer">
             <SeriesViewerVideoArea
+              openRegisterModal={this.props.openRegisterModal}
               setTopicList={this.setTopicList}
               setGetCurrentTime={this.setGetCurrentTime}
               currUUID={this.state.currUUID}

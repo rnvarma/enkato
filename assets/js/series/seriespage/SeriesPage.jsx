@@ -10,6 +10,7 @@ import Row from 'react-bootstrap/lib/Col';
 import SeriesSideBar from 'js/series/seriespage/SeriesSideBar';
 import SeriesMainArea from 'js/series/seriespage/SeriesMainArea';
 import UploadAnnotateModal from 'js/series/seriespage/UploadAnnotateModal';
+import auth from 'auth';
 import request from 'js/globals/HttpRequest';
 
 
@@ -84,11 +85,11 @@ class SeriesPage extends Component {
         }
     }
 
-    onSubscribe() {
-        request.post(`/s/${this.state.seriesUUID}/subscribe`, {
+    subscribeOrUnsubscribe(is_subscribed, prefix) {
+        request.post(`/s/${this.state.seriesUUID}/${prefix}subscribe`, {
             success: (data) => {
                 if (data.status) {
-                    this.setState({is_subscribed: true})
+                    this.setState({is_subscribed: is_subscribed})
                 } else {
                     console.log("sad face");
                 }
@@ -96,16 +97,24 @@ class SeriesPage extends Component {
         })
     }
 
+    onSubscribe() {
+        if (auth.loggedIn()) {
+            this.subscribeOrUnsubscribe(true,'')
+        } else {
+            this.props.openRegisterModal(() => {
+                this.subscribeOrUnsubscribe(true,'')
+            });
+        }
+    }
+
     onUnsubscribe() {
-        request.post(`/s/${this.state.seriesUUID}/subscribe`, {
-            success: (data) => {
-                if (data.status) {
-                    this.setState({is_subscribed: false})
-                } else {
-                    console.log("sad face");
-                }
-            },
-        })
+        if (auth.loggedIn()) {
+            this.subscribeOrUnsubscribe(false,'un')
+        } else {
+            this.props.openRegisterModal(() => {
+                this.subscribeOrUnsubscribe(false,'un')
+            });
+        }
     }
 
     openModal(annotating) {
