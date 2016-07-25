@@ -1,16 +1,14 @@
-function showSlideshowImages(thumbnails, vidUUIDs, seriesId, mainVidId){
+function showSlideshowImages(thumbnails, vidUUIDs, seriesId, mainVidId, vidTitles){
     console.log("showing slideshow");
     var sliderunner = document.getElementById("series-wrapper").querySelector(".slide-runner");
     var mainUrl = "https://i.ytimg.com/vi/" + mainVidId + "/mqdefault.jpg";
-    console.log("mainUrl: " + mainUrl);
     for (var i =0; i<4; i++){
-        console.log(thumbnails[i]);
         if(thumbnails[i] != mainUrl){
-            console.log("^ not the mainUrl");
             var slide = document.createElement("img");
             sliderunner.appendChild(slide);
             slide.setAttribute("class", "mySlides");
             slide.setAttribute("src", thumbnails[i]);
+            slide.setAttribute("title", vidTitles[i]);
             vidId = vidUUIDs[i];
             url = "http://127.0.0.1:8000/s/" + seriesId + "/watch#" + vidId;
             $(slide).click(function(){
@@ -18,12 +16,18 @@ function showSlideshowImages(thumbnails, vidUUIDs, seriesId, mainVidId){
                 url = "http://127.0.0.1:8000/s/" + seriesId + "/watch#" + vidId
                 window.open(url);
             })
+            //addTitle(vidTitles[i]);
 
         } 
     }
     console.log("creating buttons");
     createButtons();
     carousel();
+}
+
+function addTitle(vidTitle){
+    var titleDiv = document.createElement("div");
+    document.getElementById("series-wrapper").querySelector(".")
 }
 
 function createButtons(){
