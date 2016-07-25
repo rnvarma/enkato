@@ -11,10 +11,13 @@ import Button from 'react-bootstrap/lib/Button';
 
 import getCookie from 'js/globals/GetCookie';
 
+import auth from 'auth';
+import request from 'js/globals/HttpRequest'
 import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
 import QuestionDisplayResponse from 'js/globals/QuestionAndAnswer/QuestionDisplayResponse';
 import QuestionResponseForm from 'js/globals/QuestionAndAnswer/QuestionResponseForm';
 import QuestionEditForm from 'js/globals/QuestionAndAnswer/QuestionEditForm';
+
 
 import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 
@@ -39,7 +42,13 @@ class QuestionDisplay extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    this.postResponse();
+    if (auth.loggedIn()) {
+        this.postResponse();
+    } else {
+        this.props.openRegisterModal(() => {
+            this.postResponse();
+        });
+    }
   }
 
   patchAsResolved() {
@@ -91,23 +100,13 @@ class QuestionDisplay extends Component {
         text: this.props.question.responseInput,
       };
 
-      $.ajax({
-        url: '/1/responses',
-        dataType: 'json',
-        type: 'POST',
-        data,
-        beforeSend(xhr) {
-          xhr.withCredentials = true;
-          xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-        },
-        success: (data) => {
-          this.props.pushResponse(this.props.question.id, data);
-          this.props.pushResponseText(this.props.question.id, '');
-        },
-        error: (xhr, status, err) => {
-          console.error(status, err.toString());
-        },
-      });
+      request.post('/1/responses', {
+          data: data,
+          success: (data) => {
+              this.props.pushResponse(this.props.question.id, data);
+              this.props.pushResponseText(this.props.question.id, '');
+          },
+      })
     }
   }
 

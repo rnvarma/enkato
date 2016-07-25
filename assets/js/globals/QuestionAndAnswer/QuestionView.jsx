@@ -3,12 +3,11 @@ require('css/globals/QuestionAndAnswer/QuestionView.scss');
 import React from 'react';
 
 import Fuse from 'fuse.js';
-
 import FontAwesome from 'react-fontawesome';
-
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
+import { Typeahead } from 'react-typeahead'
 
 import request from 'js/globals/HttpRequest';
 import auth from 'auth';
@@ -173,8 +172,6 @@ class QuestionView extends React.Component {
 
   /* prompts user to add question, via modal in QuestionForm */
   addQuestion() {
-    console.log("addQuestion")
-    console.log(auth.loggedIn())
     if (auth.loggedIn()) {
         this.setState({ addingQuestion: true });
     } else {
@@ -346,7 +343,7 @@ class QuestionView extends React.Component {
   }
 
   render() {
-    var askModal, askButton;
+    var askModal, askQuestionBar;
     if (this.props.videoUUID) {
       askModal = (
         <QuestionModal
@@ -358,24 +355,30 @@ class QuestionView extends React.Component {
           pushQuestion={this.pushQuestion}
         />
       );
-      askButton = (
-        <Button className="addQuestionBtn" onClick={this.addQuestion}>
-          <FontAwesome name="plus-circle" />
-          Ask A Question
-        </Button>
+      var questionOptions = this.state.questions.map(function(q) {
+        return q.title;
+      })
+      askQuestionBar = (
+        <div className="askQuestionBar">
+          <Typeahead
+            placeholder="Don't undestand something? Ask aquestion here."
+            options={questionOptions}/>
+          <Button className="addQuestionBtn" onClick={this.addQuestion}>
+            <FontAwesome name="plus-circle" />
+            Ask A Question
+          </Button>
+        </div>
       );
     }
 
     return (
       <div className="questionView">
+        {askQuestionBar}
         <Row>
           {askModal}
           <Row>
             <Col md={5}>
               <div className="qaTitle">Question & Answer</div>
-            </Col>
-            <Col mdOffset={10}>
-              {askButton}
             </Col>
           </Row>
           <QuestionFilterBar
@@ -393,6 +396,7 @@ class QuestionView extends React.Component {
               currentQuestion={this.state.currentQuestion}
               setCurrentQuestion={this.setCurrentQuestion}/>
             <QuestionDisplay
+              openRegisterModal={this.props.openRegisterModal}
               showingSeries={!this.props.videoUUID}
               topicList={this.props.topicList}
               getCurrentTime={this.props.getCurrentTime}
