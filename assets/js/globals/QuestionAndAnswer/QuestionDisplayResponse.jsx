@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/lib/Row';
 
 import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 import request from 'js/globals/HttpRequest'
-import ConfirmModal from 'js/globals/DeleteConfirmModal';
+import ConfirmModal from 'js/globals/ConfirmModal';
 import QuestionResponseEditForm from 'js/globals/QuestionAndAnswer/QuestionResponseEditForm';
 
 class QuestionDisplayResponse extends Component {
