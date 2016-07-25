@@ -1,13 +1,13 @@
 require('css/globals/EditVideoPlayer/AddTopicButton.scss')
 
-var React = require('react')
+import React, { Component } from 'react';
 
-module.exports = React.createClass({
-    render: function() {
+export default class AddTopicButton extends Component {
+    render() {
         return (
             <div className="addTopicButton" onClick={this.props.addNewTopic}>
                 Add a New Topic
             </div>
         )
     }
-})
+}

@@ -1,13 +1,13 @@
 
 require("css/series/seriespage/AnnotateSeriesSideBar.scss");
 
-var React = require('react')
+import React, { Component } from 'react';
 
-var AnnotateSeriesSideBarButton = require('js/series/seriespage/AnnotateSeriesSideBarButton');
-var ScrollArea = require('react-scrollbar')
+import AnnotateSeriesSideBarButton from 'js/series/seriespage/AnnotateSeriesSideBarButton';
+import ScrollArea from 'react-scrollbar';
 
-module.exports = React.createClass({
-    render: function() {
+export default class AnnotateSeriesSideBar extends Component {
+    render() {
         var updateCurrVideo = this.props.updateCurrVideo;
         var currVideoID = this.props.currentVideo.uuid;
         var sideButtons = this.props.videos.map(function(v) {
@@ -27,4 +27,4 @@ module.exports = React.createClass({
             </ScrollArea>
         );
     }
-});
+};

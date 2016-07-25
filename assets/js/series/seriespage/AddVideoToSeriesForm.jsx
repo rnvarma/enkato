@@ -15,7 +15,7 @@ export default class AddToVideoSeriesForm extends React.Component {
         return (
             <div className="addVideoToSeriesForm">
                 <Form>
-                    <ControlLabel>Enter one or more URLs to the youtube videos you would like to add to the series.</ControlLabel>
+                    <ControlLabel>Enter one or more URLs to the YouTube video(s) you would like to add to the series.</ControlLabel>
                     <FormControl className="addVideoTextArea" rows={10} onChange={this.props.onURLAdded} componentClass="textarea" type="text" placeholder="Enter each URL on a new line." value={this.props.urls} />
                 </Form>
             </div>

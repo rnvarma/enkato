@@ -1,0 +1,40 @@
+{% load staticfiles %}
+{% load render_bundle from webpack_loader %}
+
+<html>
+    <head>
+        <title>{% block title %}Enkato{% endblock %}</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
+
+        <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,500,600" rel="stylesheet" type="text/css">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+        <link rel="shortcut icon" href="{% static 'favico.ico' %}" type="image/x-icon" />
+        <script src="//fast.eager.io/1PsF2QU8Ib.js"></script>
+    </head>
+
+    <body>
+        
+        <div id="page-anchor"> </div>
+
+        {% render_bundle 'vendor' %}
+        {% render_bundle 'main' %}
+
+
+
+
+        {% if not debug %}
+            <script>
+              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+              ga('create', 'UA-81239487-1', 'auto');
+              ga('send', 'pageview');
+
+            </script>
+        {% endif %}
+    </body>
+</html>

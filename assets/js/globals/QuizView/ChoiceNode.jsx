@@ -1,14 +1,20 @@
 require("css/globals/QuizView/ChoiceNode");
 
-var React = require('react');
+import React, { Component } from 'react';
 
-var FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome';
 
-module.exports = React.createClass({
-    selectChoice: function(){
+export default class ChoiceNode extends Component {
+    constructor(props) {
+        super(props)
+
+        this.selectChoice = this.selectChoice.bind(this);
+    }
+    selectChoice() {
         this.props.selectChoice(this.props.index)
-    },
-    render:function(){
+    }
+
+    render() {
         return(
             <div className="choiceNode " id={this.props.correctness}>
                 <FontAwesome
@@ -23,4 +29,4 @@ module.exports = React.createClass({
             </div>
         ) 
     }
-})
+}

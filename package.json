@@ -35,6 +35,7 @@
     "react-custom-scrollbars": "^4.0.0-beta.2",
     "react-dom": "^15.2.1",
     "react-fontawesome": "^1.1.0",
+    "react-router": "^2.6.0",
     "react-scrollbar": "^0.4.1",
     "resolve-url": "^0.2.1",
     "resolve-url-loader": "^1.6.0",

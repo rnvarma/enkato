@@ -1,15 +1,16 @@
 
 require("css/userprofile/profile/ProfileSeriesList.scss");
 
-var React = require('react')
-var ProfileSeriesPanel = require('js/userprofile/profile/ProfileSeriesPanel');
-var Row = require('react-bootstrap').Row;
+import React, { Component } from 'react'
+import ProfileSeriesPanel from 'js/userprofile/profile/ProfileSeriesPanel';
+import Row from 'react-bootstrap/lib/Row';
 
-module.exports = React.createClass({
-    render: function() {
+export default class ProfileSeriesList extends Component {
+    render() {
         var seriesPanels = this.props.series.map(function(series) {
             return (
                 <ProfileSeriesPanel
+                    key={series.uuid}
                     series={series}/>
             )
         })
@@ -24,4 +25,4 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}

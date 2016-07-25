@@ -1,13 +1,20 @@
 
 require("css/series/seriespage/AnnotateSeriesSideBarButton.scss");
 
-var React = require('react')
+import React, { Component } from 'react';
 
-module.exports = React.createClass({
-    onClick: function() {
+export default class AnnotateSeriesSideBarButton extends Component {
+    constructor(props) {
+        super(props)
+
+        this.onClick = this.onClick.bind(this)
+    }
+
+    onClick() {
         this.props.updateCurrVideo(this.props.video.uuid);
-    },
-    render: function() {
+    }
+
+    render() {
         var activeClass = this.props.isCurrVideo ? "active" : ""
         return (
             <div className={"annotateSeriesSideBarButton " + activeClass} onClick={this.onClick}>
@@ -16,10 +23,8 @@ module.exports = React.createClass({
                     <div className="name">
                         {this.props.video.name}
                     </div>
-                    <div className="shadow">
-                    </div>
                 </div>
             </div>
         )
     }
-})
+}

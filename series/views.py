@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import JsonResponse
+from rest_framework.views import APIView
 
 from backend.models import *
 from backend.notification import *
@@ -29,7 +30,7 @@ class SeriesViewset(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user.customuser)
 
-class CreateSeries(View):
+class CreateSeries(APIView):
     def post(self, request):
         if request.user.is_anonymous():
             return JsonResponse({'status': False, 'issue': 'Forbidden to anonymous users'})
@@ -73,7 +74,3 @@ class UnsubscribeSeriesPage(View):
         series.students.remove(cu)
         request.user.groups.remove(get_series_notification_group(series))
         return JsonResponse({'status': True})
-
-class SeriesViewerPage(View):
-    def get(self, request, s_id):
-        return render(request, 'series/series_viewer.html', {'s_id': s_id})

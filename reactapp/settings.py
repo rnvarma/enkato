@@ -33,7 +33,7 @@ if "ENKATO_SERVER" in os.environ:
     if os.environ["ENKATO_SERVER"] == "PROD":
         DEBUG = False
         GLOBAL = False
-    if os.environ["ENKATO_SERVER"] == "DEV":
+    elif os.environ["ENKATO_SERVER"] == "DEV":
         DEBUG = True
         GLOBAL = True
     else:
@@ -57,13 +57,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'storages',
     'webpack_loader',
     'structabl',
     'home',
     'backend',
     'authentication',
-    'classroom',
     'upload',
     'series',
     'instructortools',
@@ -81,6 +81,13 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication'   
+    )
+}
 
 ROOT_URLCONF = 'reactapp.urls'
 

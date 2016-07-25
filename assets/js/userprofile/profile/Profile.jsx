@@ -3,47 +3,71 @@ require("css/globals/NavBar.scss")
 require("css/globals/base.scss")
 require("css/userprofile/profile/Profile")
 
-var React = require('react')
-var ReactDOM = require('react-dom')
+import React, { Component } from 'react';
 
-var NavBar = require('js/globals/NavBar');
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
+import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Col';
 
-var ProfileSeriesList = require('js/userprofile/profile/ProfileSeriesList');
-var CreateSeriesArea = require("js/userdashboard/UserDashboard/CreateSeriesArea.jsx")
+import ProfileSeriesList from 'js/userprofile/profile/ProfileSeriesList';
+import CreateSeriesArea from 'js/userdashboard/UserDashboard/CreateSeriesArea.jsx';
+import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler.js';
+import request from 'js/globals/HttpRequest';
 
-var DjangoImageLinkHandler = require("js/globals/DjangoImageLinkHandler.js");
+class Profile extends Component {
+    constructor(props) {
+        super(props)
 
-var Profile = React.createClass({
-    getInitialState: function() {
-        return {
+        this.state = {
+            userId: this.props.params.userId,
             userdata: {},
             created_series: [],
             subscribed_series: [],
             viewseries: true
         }
-    },
-    componentWillMount: function() {
-        $.ajax({
-          url: "/1/userprofile/" + $("#u_id").attr("data-uid"),
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            this.setState(data)
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    onSeriesViewClick: function() {
-        this.setState({viewseries: true})
-    },
-    onAllVideosViewClick: function() {
-        this.setState({viewseries: false})
-    },
-    render: function() {
+
+        this.loadPageData = this.loadPageData.bind(this)
+    }
+
+    componentWillMount() {
+        this.loadPageData()
+    }
+
+    loadPageData(userId, newId) {
+        var url;
+        if (newId)
+            url = userId ? `/1/userprofile/${userId}` : '/1/userprofile';
+        else
+            url = this.state.userId ? `/1/userprofile/${this.state.userId}` : '/1/userprofile';
+        request.get(url, {
+            success: (data) => {
+                this.setState(data);
+            }
+        })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
+        if (nextProps.params.userId != this.state.userId) {
+            this.loadPageData(nextProps.params.userId, true);
+            this.setState({
+                userId: nextProps.params.userId
+            })
+        }
+    }
+
+    onSeriesViewClick() {
+        this.setState({
+            viewseries: true
+        })
+    }
+
+    onAllVideosViewClick() {
+        this.setState({
+            viewseries: false
+        })
+    }
+
+    render() {
         var profile_img = this.state.userdata.image || DjangoImageLinkHandler("blank_avatar.jpg")
         var subscribed_series = (
             <ProfileSeriesList
@@ -64,43 +88,32 @@ var Profile = React.createClass({
             )
         }
         return (
-            <div>
-                <NavBar />
-                <div className="profile">
-                    <div className="header">
-                        <div className="imageArea">
-                            <img src={profile_img} className="image" />
+            <div className="profile">
+                <div className="header">
+                    <div className="imageArea">
+                        <img src={profile_img} className="image" />
+                    </div>
+                    <div className="userInfo">
+                        <div className="name">
+                            {this.state.userdata.name}
                         </div>
-                        <div className="userInfo">
-                            <div className="name">
-                                {this.state.userdata.name}
-                            </div>
-                            <div className="bio">
-                                {this.state.userdata.bio}
-                            </div>
-                        </div>
-                        <div className="toggleMenu">
-                            <div
-                                className={"series" + (this.state.viewseries ? " active" : "")}
-                                onClick={this.onSeriesViewClick}>
-                                Series
-                            </div>
+                        <div className="bio">
+                            {this.state.userdata.bio}
                         </div>
                     </div>
-                    {subscribed_series}
-                    {created_series}
+                    <div className="toggleMenu">
+                        <div
+                            className={"series" + (this.state.viewseries ? " active" : "")}
+                            onClick={this.onSeriesViewClick}>
+                            Series
+                        </div>
+                    </div>
                 </div>
+                {subscribed_series}
+                {created_series}
             </div>
         )
     }
-});
+}
 
-
-// <div
-//     className={"allvideos" + (this.state.viewseries ? "" : " active")}
-//     onClick={this.onAllVideosViewClick}>
-//     All Videos
-// </div>
-
-
-ReactDOM.render(<Profile />, document.getElementById('page-anchor'))
+module.exports = Profile;

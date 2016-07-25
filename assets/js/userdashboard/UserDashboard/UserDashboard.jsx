@@ -2,25 +2,32 @@ require('bootstrap-loader');
 require("css/globals/base.scss")
 require('css/userdashboard/UserDashboard/UserDashboard.scss')
 
-var React = require('react')
-var UnderConstruction = require("js/globals/UnderConstruction.jsx")
+import React, { Component } from 'react'
 
-var ProfileSeriesList = require("js/userprofile/profile/ProfileSeriesList.jsx")
-var CreateSeriesArea = require("js/userdashboard/UserDashboard/CreateSeriesArea.jsx")
+import ProfileSeriesList from "js/userprofile/profile/ProfileSeriesList.jsx";
+import CreateSeriesArea from "js/userdashboard/UserDashboard/CreateSeriesArea.jsx";
 
-module.exports = React.createClass({
-    getInitialState: function() {
-        return {
+import auth from 'auth'
+
+class UserDashboard extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
             subscribed_series: [],
             created_series: [],
             all_unsubscribed_series: [],
         }
-    },
-    componentWillMount: function() {
+    }
+
+    componentWillMount() {
         $.ajax({
           url: "/1/userdashboard",
           dataType: 'json',
           cache: false,
+          headers: {
+            'Authorization': 'Token ' + localStorage.token
+          },
           success: function(data) {
             this.setState(data);
           }.bind(this),
@@ -28,8 +35,9 @@ module.exports = React.createClass({
             console.error(this.props.url, status, err.toString());
           }.bind(this)
         });
-    },
-    render: function() {
+    }
+
+    render() {
         var topList = (
             <ProfileSeriesList
                 name="Subscribed Series"
@@ -69,5 +77,6 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}
 
+module.exports = UserDashboard;

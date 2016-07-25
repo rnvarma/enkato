@@ -18,11 +18,7 @@ def getStudentSeriesVideoData(ssData, video):
     (ssvData, _) = StudentSeriesVideoData.objects.get_or_create(ss_data=ssData, video=video)
     return ssvData
 
-class RecordSingleVideoView(View):
-    def post(self, request):
-        pass
-
-class RecordSeriesVideoView(View):
+class RecordSeriesVideoView(APIView):
     def post(self, request, s_id):
         series = Series.objects.get(uuid=s_id)
 
@@ -66,10 +62,9 @@ def getCorrectAnswer(choices):
     return -1
 
 
-class LogQuiz(View):
+class LogQuiz(APIView):
     def post(self, request, s_id, v_uuid):
         selectedAnswers = request.POST.getlist('selectedAnswers[]')
-        print(int(selectedAnswers[0]) , "dataaaaaaaaaaaaaa")
 
         s = Series.objects.get(uuid=s_id)
         ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=s)
@@ -108,10 +103,5 @@ class LogQuiz(View):
             })
 
         return JsonResponse({'result':result, 'numCorrect':numCorrect})
-
-
-
-
-
 
 

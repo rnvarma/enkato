@@ -1,13 +1,13 @@
 
 require("css/series/seriespage/SeriesSideBar.scss");
 
-var React = require('react')
+import React, { Component } from 'react';
 
-module.exports = React.createClass({
-    render: function() {
+export default class SeriesSideBar extends Component {
+    render() {
         return (
             <div className="seriesSideBar">
             </div>
         )
     }
-})
+}

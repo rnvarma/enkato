@@ -30,10 +30,6 @@
     &:hover {
         background-color:$grey-topic-button-section-bg-hover;
         cursor:pointer;
-
-        .name {
-            margin-left: -300px;
-        }
     }
 
     .time {
@@ -43,21 +39,13 @@
 
     }
 
-    .nameContainer {
-        overflow: hidden;
-        display: inline-block;
-        width: 80%;
-    }
-
     .name {
+        width: 80%;
         display: inline-block;
         vertical-align: top;
         font-weight: 500;
         overflow: hidden;
         padding-left: 2px;
-
-        transition: 5s margin-left;     
-        transition-timing-function: linear;
     }
 }
 

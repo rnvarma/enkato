@@ -113,7 +113,7 @@ function getYTID(url){
 
 function findInDatabase(vid_id, vid_num, callback) {
   $.ajax({
-          url: "http://127.0.0.1:8000/2/v/" + vid_id,
+          url: "http://www.enkato.com/1/s/i7YoL5GbvinzWS5qTerdYG/2/v/" + vid_id,
           dataType: 'json',
           cache: false,
           success: function(data) {

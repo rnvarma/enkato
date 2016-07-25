@@ -8,7 +8,6 @@ import ReactDOM from 'react-dom';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
-import NavBar from 'js/globals/NavBar';
 import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
 
 class ResponseView extends React.Component {
@@ -43,12 +42,10 @@ class ResponseView extends React.Component {
   render() {
     return (
       <div className="responseView">
-        <NavBar />
         <Row>
           <Col mdOffset={1} md={10}>
             <QuestionView
-              loadQuestionData={this.loadQuestionData}
-            />
+              loadQuestionData={this.loadQuestionData}/>
           </Col>
         </Row>
       </div>
@@ -56,5 +53,4 @@ class ResponseView extends React.Component {
   }
 }
 
-ReactDOM.render(<ResponseView userId={$('#uid').attr('data-uid')} />,
-  document.getElementById('page-anchor'));
+module.exports = ResponseView

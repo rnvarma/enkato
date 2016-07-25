@@ -1,17 +1,17 @@
 
 require("css/series/seriespage/SeriesMainArea.scss");
 
-var React = require('react')
-
-import { Button } from 'react-bootstrap';
+import React, { Component } from 'react';
+import { Link } from 'react-router'
+import Button from 'react-bootstrap/lib/Button';
 
 import { pluralize } from 'js/globals/utility';
 
 import NoVideosArea from 'js/series/seriespage/NoVideosArea';
 import SeriesVideoList from 'js/series/seriespage/SeriesVideoList';
-var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
+import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 
-export default class SeriesMainArea extends React.Component {
+export default class SeriesMainArea extends Component {
     constructor(props) {
         super(props);
     }
@@ -33,7 +33,7 @@ export default class SeriesMainArea extends React.Component {
                 <div>
                     <SeriesVideoList
                         videos={this.props.videos}
-                        s_id={this.props.s_id}
+                        seriesUUID={this.props.seriesUUID}
                         is_creator={this.props.is_creator}/>
                     <NoVideosArea
                         videos={this.props.videos}
@@ -52,7 +52,7 @@ export default class SeriesMainArea extends React.Component {
                 <div>
                     <SeriesVideoList
                         videos={this.props.videos}
-                        s_id={this.props.s_id}
+                        seriesUUID={this.props.seriesUUID}
                         is_creator={this.props.is_creator}/>
                 </div>
             )
@@ -94,7 +94,7 @@ export default class SeriesMainArea extends React.Component {
                         </div>
                         <div className="stats">
                             <div className="creator">
-                                <a href={"/userprofile/" + this.props.creator.user_id}>{this.props.creator.name}</a>
+                                <Link to={`/userprofile/${this.props.creator.user_id}`}>{this.props.creator.name}</Link>
                             </div>
                             <div className="num-videos">
                                 {this.props.num_videos} {pluralize("video", this.props.num_videos)}

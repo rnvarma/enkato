@@ -15,6 +15,8 @@ import QuestionDisplayResponse from 'js/globals/QuestionAndAnswer/QuestionDispla
 import QuestionResponseForm from 'js/globals/QuestionAndAnswer/QuestionResponseForm';
 import QuestionEditForm from 'js/globals/QuestionAndAnswer/QuestionEditForm';
 
+import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
+
 class QuestionDisplay extends React.Component {
   constructor() {
     super();
@@ -109,7 +111,6 @@ class QuestionDisplay extends React.Component {
   }
 
   render() {
-    console.log(this.props.videoUUID);
     if (this.props.question == null) {
       return (
         <Col md={8} className="questionDisplay empty">
@@ -183,7 +184,7 @@ class QuestionDisplay extends React.Component {
                 {this.props.question.text}
               </div>
               <div className="questionFooter">
-                <img></img><span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span> asked {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
+                <img src={DjangoImageLinkHandler("blank_avatar.jpg")}></img><span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span> asked {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
                 {isOwner || isInstructor ? <div className="plainBtn" onClick={this.toggleDelete}>Delete</div> : ''}
                 {isOwner && this.props.videoUUID ? <div className="plainBtn" onClick={this.toggleEdit}>Edit Question</div> : ''}
               </div>
@@ -192,13 +193,15 @@ class QuestionDisplay extends React.Component {
         </Row>
         {responses}
         <Row>
-          <QuestionResponseForm
-            onSubmit={this.onSubmit}
-            onTextChange={this.onTextChange}
-            textValue={this.props.question.responseInput}
-            key={this.props.question.id}
-          />
-          <Button onClick={this.onSubmit}>Submit</Button>
+          <div className="questionEnterResponse">
+            <QuestionResponseForm
+              onSubmit={this.onSubmit}
+              onTextChange={this.onTextChange}
+              textValue={this.props.question.responseInput}
+              key={this.props.question.id}
+            />
+            <Button className="publishResponse" onClick={this.onSubmit}>Publish</Button>
+          </div>
         </Row>
       </Col>
     );

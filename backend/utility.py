@@ -22,17 +22,22 @@ def getThumbnailFromVideoData(video):
 def getUUIDFromVideoData(video):
 	return video.uuid
 
-def findSeriesIdAndThumbnails(seriesData, v_id):
+def getTitlesFromVideoData(video):
+	return video.name
+
+def findSeriesVideoData(seriesData, v_id):
 	uuids = seriesData.keys()
 	data = seriesData.values()
 	response={}
 	vidIds =[]
 	vidThumbnails = []
 	vidUUIDs =[]
+	vidTitles=[]
 	for seriesInfo in data:
 		vidThumbnails.append(seriesInfo.get("thumbnails"))
 		vidIds.append(seriesInfo.get("videoIDs"))
 		vidUUIDs.append(seriesInfo.get("videoUUIDs"))
+		vidTitles.append(seriesInfo.get("videoTitles"))
 	for seriesVidIds in vidIds:
 		for vidId in seriesVidIds:
 			if vidId == v_id:
@@ -40,6 +45,7 @@ def findSeriesIdAndThumbnails(seriesData, v_id):
 				response["seriesUUID"]= uuids[index]
 				response["seriesThumbnails"]=vidThumbnails[index]
 				response["videoUUIDs"] = vidUUIDs[index]
+				response["videoTitles"] = vidTitles[index]
 				return response
 	return None
 

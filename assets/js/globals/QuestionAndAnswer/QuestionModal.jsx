@@ -4,15 +4,13 @@ import React from 'react';
 
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
-import FormControl from 'react-bootstrap/lib/FormControl';
-
-import getCookie from 'js/globals/GetCookie';
 
 import QuestionForm from 'js/globals/QuestionAndAnswer/QuestionForm';
+import request from 'js/globals/HttpRequest';
 
 class QuestionModal extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       topic: null,
       title: '',
@@ -49,15 +47,8 @@ class QuestionModal extends React.Component {
         time: this.props.getCurrentTime(),
         topic_pk: this.state.topic,
       };
-      $.ajax({
-        url: '/api/questions',
-        dataType: 'json',
-        type: 'POST',
+      request.post('api/questions', {
         data: payload,
-        beforeSend: (xhr) => {
-          xhr.withCredentials = true;
-          xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-        },
         success: (newQuestion) => {
           this.props.pushQuestion(newQuestion);
           this.props.close();
@@ -67,10 +58,7 @@ class QuestionModal extends React.Component {
             topic: '',
           });
         },
-        error: (xhr, status, err) => {
-          console.log('POST failed, could be invalid data or just general server problems', status, err);
-        },
-      });
+      })
     }
   }
 
@@ -113,11 +101,10 @@ class QuestionModal extends React.Component {
               onTextChange={this.onTextChange}
               titleValue={this.state.title}
               textValue={this.state.text}
-              topicValue={this.state.topic}
-            />
+              topicValue={this.state.topic}/>
           </Modal.Body>
           <Modal.Footer>
-            <FormControl className="pull-left" type="file" onChange={this.attachFile} />
+            {/*<FormControl className="pull-left" type="file" onChange={this.attachFile} />*/}
             <Button onClick={this.close}>Cancel</Button>
             <Button onClick={this.postQuestion}>Publish</Button>
           </Modal.Footer>

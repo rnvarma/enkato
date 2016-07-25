@@ -4,9 +4,15 @@
 .navbar.navbar-default {
     border-radius: 0px;
     background-color: $structabl-blue;
-    box-shadow: 0px 1px 3px rgba(1, 17, 62, 0.3);
+    box-shadow: 0px 1px 3px $main-bg-shadow;
     border: none;
     margin-bottom: 0px;
+
+    .container {
+        width: 100%;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
 
     .nav {
         font-weight: 500;
@@ -16,11 +22,18 @@
         li {
             a {
                 color: white;
-            }
 
-            &.active {
-                a {
+                &.active {
                     background-color: $kato-green;
+                }
+
+                &:hover {
+                    color: white;
+                    background-color: $enkato-green;
+                }
+
+                &:active {
+                    color: white;
                 }
             }
         }

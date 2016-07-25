@@ -1,11 +1,14 @@
 require('css/globals/QuizView/QuizNavFooter.scss');
-import Button from 'react-bootstrap/lib/Button';
 
 import React from 'react';
 
-class QuizNavFooter extends React.Component {
+import Button from 'react-bootstrap/lib/Button';
+
+import BottomReviewText from 'js/globals/QuizView/ReviewingQuizView/BottomReviewText';
+
+export default class QuizNavFooter extends React.Component {
     render() {
-        var disableAll = this.props.showGradingPage;
+        var disableAll = this.props.resultsPage;
 
         var rightButton = <div></div>
         if(this.props.reviewMode&&(this.props.currentQuestion == this.props.numQuestions -1)){
@@ -30,7 +33,7 @@ class QuizNavFooter extends React.Component {
         prevNextBtns = (
           <span>
             <Button
-              disabled={this.props.currentQuestion == 0 || disableAll}
+              disabled={(this.props.currentQuestion == 0 && !this.props.reviewMode) || disableAll}
               className="backButton"
               onClick={this.props.prevQuestion}
             >
@@ -41,11 +44,23 @@ class QuizNavFooter extends React.Component {
         );
       }
 
-      return (
-        <div className="quizNavFooter">
+      var bottomLeftText = <div></div>
+
+      if(this.props.reviewMode){
+        bottomLeftText = (
+          <BottomReviewText correct={this.props.isCorrect} />
+        );
+      } else if(!disableAll) {
+        bottomLeftText = (
           <div className="showNumAnswered">
               {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
           </div>
+        )
+      }
+
+      return (
+        <div className="quizNavFooter">
+          {bottomLeftText}
           <Button
             className="cancelButton"
             onClick={this.props.closeModal}>
@@ -56,5 +71,3 @@ class QuizNavFooter extends React.Component {
       );
     }
 }
-
-export default QuizNavFooter;

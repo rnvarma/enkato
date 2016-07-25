@@ -1,37 +1,76 @@
 require('bootstrap-loader');
-var React = require('react');
 require("css/globals/VideoPlayer/QuizModal");
+
+import React, { Component } from 'react';
+
 import Button from 'react-bootstrap/lib/Button';
 
-var QuizForm = require('js/globals/QuizView/QuizForm');
+import QuizForm from 'js/globals/QuizView/QuizForm';
 import SeriesViewerSidebarVideoPanel from 'js/series/seriesviewer/SeriesViewerSidebarVideoPanel';
 import FontAwesome from 'react-fontawesome';
 
-module.exports= React.createClass({
-    getInitialState: function(){
-        return {
-            goToReviewMode:false,
-            retakeQuiz: false
+export default class QuizModal extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            reviewMode: false,
+            resultsPage: false
         }
-    },
-    componentDidMount: function(){
+
+        this.onReviewQuizClicked = this.onReviewQuizClicked.bind(this)
+        this.showResultsPage = this.showResultsPage.bind(this)
+        this.showReviewMode = this.showReviewMode.bind(this)
+        this.onRetakeQuiz = this.onRetakeQuiz.bind(this)
+        this.closeModal = this.closeModal.bind(this)
+    }
+
+    componentDidMount() {
         this.setState({
-            goToReviewMode: false
+            resultsPage: this.props.quizTaken
         })
-    },
-    onReviewQuizClicked: function(){
+    }
+
+    onReviewQuizClicked(){
         this.setState({
-            goToReviewMode: true
+            reviewMode: true,
+            resultsPage: false
         })
         this.props.showQuiz()
-    },
-    onRetakeQuiz: function() {
+    }
+
+    showResultsPage() {
         this.setState({
-            retakeQuiz: true
+            reviewMode: false,
+            resultsPage: true
         })
-    },
-    render:function(){
-        var goToReviewMode = false;
+    }
+
+    showReviewMode() {
+        this.setState({
+            reviewMode: true,
+            resultsPage: false
+        })
+    }
+
+    onRetakeQuiz() {
+        this.setState({
+            reviewMode: false,
+            resultsPage: false
+        })
+        this.props.showQuiz()
+        
+    }
+
+    closeModal() {
+        this.setState({
+            reviewMode: false,
+            resultsPage: this.props.quizTaken
+        })
+        this.props.closeModal()
+    }
+
+    render(){
         var bg_style = (this.props.showingOverlay ? {} : {display:"none"})
 
         var overlay_style = (this.props.takingQuiz || this.props.showingOverlay ? {} : {display:"none"})
@@ -75,10 +114,9 @@ module.exports= React.createClass({
                     Take The Quiz
                 </Button>
             )
-
+            //nothanks button. just deleted text till we figure out what to do here
             whiteTextButton=(
                 <div className="noThanks">
-                    No, Thanks
                 </div>
             )
         }
@@ -89,11 +127,16 @@ module.exports= React.createClass({
                 <div className="quizModal">
                     <QuizForm
                         videoUUID={this.props.videoUUID}
-                        closeModal={this.props.closeModal}
+                        closeModal={this.closeModal}
                         onFinishButton={this.props.onFinishButton}
-                        goToReviewMode={this.state.goToReviewMode}
+                        reviewMode={this.state.reviewMode}
                         completedQuizInfo={this.props.completedQuizInfo}
-                        retakeQuiz={this.props.retakeQuiz}/>
+                        resultsPage={this.state.resultsPage}
+                        questions={this.props.questions}
+                        showReviewMode={this.showReviewMode}
+                        onRetakeQuiz={this.onRetakeQuiz}
+                        submitQuizAnswers={this.props.submitQuizAnswers}
+                        showResultsPage={this.showResultsPage}/>
                 </div>
             )
         }
@@ -120,4 +163,4 @@ module.exports= React.createClass({
             </div>
         )
     }
-})
+}

@@ -1,46 +1,61 @@
 require('bootstrap-loader');
 require("css/globals/EditVideoPlayer/EditControlBar")
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import FontAwesome from 'react-fontawesome';
+import React, { Component } from 'react';
 
-import { Row, Popover, OverlayTrigger, Button } from 'react-bootstrap';
+import FontAwesome from 'react-fontawesome';
+import Row from 'react-bootstrap/lib/Row'
+import Popover from 'react-bootstrap/lib/Popover'
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger'
+import Button from 'react-bootstrap/lib/Button'
 
 import ProgressBar from 'js/globals/videoPlayer/ProgressBar';
 
-module.exports = React.createClass({
-    showPlaybackSpeedChanger: function(){
-        this.setState({isShowingSpeedChanger:true})
-    },
-    hidePlaybackSpeedChanger: function(){
-        this.setState({isShowingSpeedChanger:false})
-    },
-    getInitialState: function(){
-        return {
-            playBackSpeed:'1x',
-            isShowingSpeedChanger:false
+export default class EditControlBar extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            playBackSpeed: '1x',
+            isShowingSpeedChanger: false
         }
-    },
-    setPlaybackSpeed: function(speed){
+
+        this.showPlaybackSpeedChanger = this.showPlaybackSpeedChanger.bind(this)
+        this.hidePlaybackSpeedChanger = this.hidePlaybackSpeedChanger.bind(this)
+        this.setPlaybackSpeed = this.setPlaybackSpeed.bind(this)
+        this.forward = this.forward.bind(this)
+        this.backward = this.backward.bind(this)
+    }
+
+    showPlaybackSpeedChanger() {
+        this.setState({
+            isShowingSpeedChanger: true
+        })
+    }
+
+    hidePlaybackSpeedChanger() {
+        this.setState({
+            isShowingSpeedChanger: false
+        })
+    }
+
+    setPlaybackSpeed(speed) {
         this.hidePlaybackSpeedChanger()
         this.setState({
             playBackSpeed:speed+'x'
         })
         this.props.setPlaybackRate(speed, this.props.playerContext)
-    },
-    componentDidMount: function() {
-        this.setState({
-            isShowingSpeedChanger:false
-        })
-    },
-    forward: function(){
+    }
+
+    forward() {
         this.props.seekTo(this.props.currentSecond+1)
-    },
-    backward: function(){
+    }
+
+    backward() {
         this.props.seekTo(this.props.currentSecond-1)
-    },
-    render: function() {
+    }
+
+    render() {
         return (
             <div className="controlBar">
                 <ProgressBar 
@@ -108,4 +123,4 @@ module.exports = React.createClass({
             </div>
         );
     }
-});
+}

@@ -6,22 +6,28 @@ var pathtoassets = require('./pathtoassets')
 var entrypoints = require('./entrypoints')
 
 module.exports = {
-  context: __dirname,
+    context: __dirname,
 
-  entry: entrypoints,
+    entry: './assets/app.js',
 
-  output: {
-      path: path.resolve(pathtoassets + '/assets/bundles/'),
-      filename: "[name]-[hash].js",
-  },
+    output: {
+        path: path.resolve(pathtoassets + '/assets/bundles/'),
+        filename: "[name]-[hash].js",
+        chunkFilename: '[id].chunk.js',
+        publicPath: '/static/bundles/'
+    },
 
     plugins: [
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery"
         }),
-        new BundleTracker({filename: pathtoassets + '/webpack-stats.json'}),
-        new CleanWebpackPlugin(['assets/bundles'])
+        new BundleTracker({
+          filename: pathtoassets + '/webpack-stats.json'
+        }),
+        new CleanWebpackPlugin(['assets/bundles']),
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
+        new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(en|ko|ja|zh-cn)$/)
   ],
 
   module: {

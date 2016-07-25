@@ -4,70 +4,35 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
+from rest_framework.authtoken.models import Token
 
 from backend.models import *
 
-from registration.backends.hmac.views import RegistrationView
-from registration.forms import RegistrationForm
-
-class Login(View):
-    def get(self, request):
-        if request.user.is_anonymous() == False:
-            return HttpResponseRedirect('/')
-        return render(request, 'authentication/login.html')
-
+class Register(View):
     def post(self, request):
-        user = authenticate(username=request.POST.get('user_name'),
-                            password=request.POST.get('password'))
-        if user is not None:
-            if user.is_active == True:
-                login(request, user)
-                return JsonResponse({'status': True})
-            else:
-                return JsonResponse({'status': False, 'issue': 'This account has not been activated'})
-        else:
-            return JsonResponse({'status': False, 'issue': 'Incorrect username or password'})
-
-
-class Register(RegistrationView):
-    def get(self, request):
-        if request.user.is_anonymous() == False:
-            return HttpResponseRedirect('/')
-        return render(request, 'authentication/register.html')
-
-    def post(self, request):
-        user = User.objects.filter(username=request.POST.get('user_name'))
+        user = User.objects.filter(username=request.POST.get('username'))
         if user.exists():
             return JsonResponse({'status': False, 'issue': 'Username already exists'})
+        
         new_user = User.objects.create_user(
-            request.POST.get('user_name'),
+            request.POST.get('username'),
             request.POST.get('email'),
             request.POST.get('password')
         )
-        new_user.first_name = request.POST.get('first_name')
-        new_user.last_name = request.POST.get('last_name')
-        new_user.is_active = False
+        new_user.first_name = request.POST.get('firstname')
+        new_user.last_name = request.POST.get('lastname')
         new_user.save()
 
 
         cu = CustomUser(
             email= request.POST.get('email'),
-            first_name= request.POST.get('first_name'),
-            last_name= request.POST.get('last_name'),
-            username= request.POST.get('user_name'),
+            first_name= request.POST.get('firstname'),
+            last_name= request.POST.get('lastname'),
+            username= request.POST.get('username'),
             user=new_user
         )
         cu.save()
 
-        self.send_activation_email(new_user)
-
         return JsonResponse({'status': True})
-
-class Logout(View):
-    def get(self, request):
-        if request.user.is_anonymous():
-            return HttpResponseRedirect('/')
-        logout(request)
-        return HttpResponseRedirect("/login")
 
 

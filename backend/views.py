@@ -90,6 +90,7 @@ class Serializer(object):
         data["videoIDs"] = map(getYTIdFromVideoData, videos)
         data["videoUUIDs"] = map(getUUIDFromVideoData, videos)
         data["thumbnails"] = map(getThumbnailFromVideoData,videos)
+        data["videoTitles"] = map(getTitlesFromVideoData, videos)
         return data
 
     @staticmethod
@@ -145,6 +146,11 @@ class Serializer(object):
 
 
 class UserViewset(viewsets.ReadOnlyModelViewSet):
+    """
+    User API
+    List users: api/users
+    Current user: api/users/current
+    """
 
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
@@ -152,6 +158,7 @@ class UserViewset(viewsets.ReadOnlyModelViewSet):
 
     def get_object(self):
         return self.request.user.customuser
+
 
 class UserData(APIView):
     def get(self, request):
@@ -166,8 +173,11 @@ class UserData(APIView):
         return Response(data)
 
 class UserProfileData(APIView):
-    def get(self, request, u_id):
-        cu = CustomUser.objects.get(id=u_id)
+    def get(self, request, u_id=None):
+        if not u_id:
+            cu = request.user.customuser
+        else:
+            cu = CustomUser.objects.get(id=u_id)
         data = {}
         data["userdata"] = Serializer.serialize_userprofiledata(cu)
         data["created_series"] = map(Serializer.serialize_series, cu.created_series.all())
@@ -208,7 +218,7 @@ class SeriesVideoData(View):
             seriesData = {}
             for serie in series:
                 seriesData[serie.uuid] = Serializer.serialize_series_videos(serie)
-            seriesData = findSeriesIdAndThumbnails(seriesData, v_id)
+            seriesData = findSeriesVideoData(seriesData, v_id)
             response["seriesData"]=seriesData
             return JsonResponse(response)
         except Series.DoesNotExist:
@@ -319,9 +329,9 @@ def getCorrectAnswer(choices):
             return i
     return -1
 
-
 class LoadQuizData(APIView):
-    def get(self, request, v_id):
+    def get(self, request, s_id, v_id):
+        data = {}
         s = Series.objects.get(uuid=s_id)
         ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=s)
 
@@ -329,47 +339,36 @@ class LoadQuizData(APIView):
         ssvd, _ = StudentSeriesVideoData.objects.get_or_create(ss_data=ssd, video=v)
 
         quizQuestions = v.quiz_questions.all()
+        data["questions"] = map(Serializer.serialize_quiz_question, quizQuestions)
+        data["numQuestions"] = quizQuestions.count()
+
         seriesQuizQuestionData = ssvd.quizzes_data.all()
 
         result = []
-        numCorrect=0
+        numCorrect = 0
         if(len(quizQuestions) != len(seriesQuizQuestionData)):
-            completedQuizInfo={
+            completedQuizInfo = {
                 'result':result, 
                 'numCorrect':numCorrect
             }
-            return JsonResponse({
-                'completedQuizInfo': completedQuizInfo,
-                'quizTaken':False
-            })
+            data['completedQuizInfo'] = completedQuizInfo
+            data['quizTaken'] = False
         else: 
             for i in range(len(quizQuestions)):
-                question = quizQuestions[i]
-                takenQuizData = seriesQuizQuestionData[i]
-                correct=False
-                choices=question.mc_responses.all()
-
-                studentAnswer = int(takenQuizData.answer)
-                correctAnswer = getCorrectAnswer(choices)
-
-                if(correctAnswer==studentAnswer):
-                    correct=True
-                    numCorrect+=1
-
+                if seriesQuizQuestionData[i].is_correct: numCorrect += 1
                 result.append({
-                    "studentAnswer":studentAnswer,
-                    "correctAnswer":correctAnswer,
-                    "isCorrect":correct
+                    "studentAnswer": int(seriesQuizQuestionData[i].answer),
+                    "correctAnswer": getCorrectAnswer(quizQuestions[i].mc_responses.all()),
+                    "isCorrect": seriesQuizQuestionData[i].is_correct
                 })
 
-            completedQuizInfo={
+            completedQuizInfo= {
                 'result':result, 
                 'numCorrect':numCorrect
             }
-            return JsonResponse({
-                'completedQuizInfo': completedQuizInfo,
-                'quizTaken': True
-            })
+            data['completedQuizInfo'] = completedQuizInfo
+            data['quizTaken'] = True
+        return Response(data)
 
 
 class DatedModelMixin(object):

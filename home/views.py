@@ -7,11 +7,7 @@ from backend.models import *
 
 class HomePage(View):
     def get(self, request):
-        return render(request, 'home/splashpage.html')
-
-class EducatorPage(View):
-    def get(self, request):
-        return render(request, 'home/educator.html')
+        return render(request, 'index.html')
 
 class InterestedUserRegistration(View):
     def post(self, request):

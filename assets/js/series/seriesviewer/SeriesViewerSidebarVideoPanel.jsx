@@ -7,6 +7,7 @@ import { pluralize, truncate } from 'js/globals/utility'
 class SeriesViewerSidebarVideoPanel extends React.Component {
     constructor() {
         super()
+        
         this.onClick = this.onClick.bind(this)
     }
 

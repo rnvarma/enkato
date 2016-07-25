@@ -1,164 +1,134 @@
 require('bootstrap-loader');
-var React = require('react');
-import getCookie from 'js/globals/GetCookie';
 require("css/globals/QuizView/QuizForm");
-var QuestionNode = require('js/globals/QuizView/QuestionNode');
-var ReviewingQuizNav = require("js/globals/QuizView/ReviewingQuizView/ReviewingQuizNav")
-var CompletedQuizPage = require("js/globals/QuizView/ReviewingQuizView/CompletedQuizPage")
 
-import QuizNav from 'js/globals/QuizView/QuizNav';
-import QuizNavFooter from 'js/globals/QuizView/QuizNavFooter';
+import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';
 
-module.exports = React.createClass({
-    loadDataFromServer: function(vuuid){
-        $.ajax({
-          url: "/api/quizdata/" + vuuid,
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            console.log(data)
-            this.setState(data)
-            this.setState({
-                currentQuestion: 0,
-                selectedAnswers: new Array(data.numQuestions),
-                reviewMode: this.props.goToReviewMode || data.quizTaken,
-                showGradingPage: !(this.props.goToReviewMode || data.quizTaken)
-            })
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    componentDidMount: function(){
-        this.setState({currentQuestion:0})
-        this.setState({uuid: this.props.videoUUID});
-        this.loadDataFromServer(this.props.videoUUID);
-    },
-    componentWillReceiveProps: function(nextProps){
-        if (nextProps.videoUUID != this.props.videoUUID)
-            this.loadDataFromServer(nextProps.videoUUID)
-        if(nextProps.completedQuizInfo.result != []){
-            this.setState({completedQuizInfo:nextProps.completedQuizInfo})
-        }
-    },
-    getInitialState:function(){
-        return {
-            questions:[],
-            numQuestions: 0,
-            uuid: '',
+import QuestionNode from 'js/globals/QuizView/QuestionNode';
+import ReviewingQuizNav from "js/globals/QuizView/ReviewingQuizView/ReviewingQuizNav";
+import CompletedQuizPage from "js/globals/QuizView/ReviewingQuizView/CompletedQuizPage";
+import QuizNav from 'js/globals/QuizView/QuizNav';
+import QuizNavFooter from 'js/globals/QuizView/QuizNavFooter';
+
+
+export default class QuizForm extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
             currentQuestion: 0,
-            selectedAnswers:[],
-            numQsAnswered:0,
-            reviewMode:false,
-            showGradingPage:false,
-            completedQuizInfo:{
-                result:[],
-                numCorrect:0
-            },
+            selectedAnswers: [],
+            numQsAnswered: 0,
         }
-    },
-    closeModal: function() {
+
+        this.closeModal = this.closeModal.bind(this)
+        this.nextQuestion = this.nextQuestion.bind(this)
+        this.prevQuestion = this.prevQuestion.bind(this)
+        this.setCurrentQuestion = this.setCurrentQuestion.bind(this)
+        this.selectChoice = this.selectChoice.bind(this)
+        this.setNumQsAnswered = this.setNumQsAnswered.bind(this)
+        this.setQuestion = this.setQuestion.bind(this)
+        this.submitInfo = this.submitInfo.bind(this)
+    }
+
+    closeModal() {
         this.props.closeModal()
-    },
-    nextQuestion: function() {
-        this.setState({
-            currentQuestion: this.state.currentQuestion + 1
-        })
-    },
-    prevQuestion: function() {
-        this.setState({
-            currentQuestion: this.state.currentQuestion - 1
-        })
-    },
-    setCurrentQuestion: function(num){
+    }
+
+    nextQuestion() {
+        if (this.state.currentQuestion < this.props.questions.length - 1) {
+            this.setState({
+                currentQuestion: this.state.currentQuestion + 1
+            })
+        }
+    }
+
+    prevQuestion() {
+        if (this.state.currentQuestion > 0) {
+            this.setState({
+                currentQuestion: this.state.currentQuestion - 1
+            })
+        } else if (this.props.reviewMode) {
+            this.props.showResultsPage()
+        }
+    }
+
+    setCurrentQuestion(num){
         this.setState({
             currentQuestion: num
         })
-    },
-    selectChoice: function(choiceIndex){
+    }
+
+    selectChoice(choiceIndex){
         var tempChoiceList = this.state.selectedAnswers
-        if(choiceIndex==tempChoiceList[this.state.currentQuestion]){
+        if(choiceIndex == tempChoiceList[this.state.currentQuestion]){
             tempChoiceList[this.state.currentQuestion] = null
         } else {
             tempChoiceList[this.state.currentQuestion] = choiceIndex
         }
-        this.setState({selectedAnswers:tempChoiceList}, this.setNumQsAnswered)
+        this.setState({selectedAnswers: tempChoiceList}, this.setNumQsAnswered)
+    }
 
-    },
-    setNumQsAnswered:function(){
+    setNumQsAnswered(){
         var count = 0
         for (var i = this.state.selectedAnswers.length - 1; i >= 0; i--) {
             if(this.state.selectedAnswers[i] != null){
                 count++;
             }
         }
-        this.setState({numQsAnswered:count})
-    },
-    setQuestion: function(qNum){
-        this.setState({currentQuestion:qNum})
-    },
-    submitInfo: function(){
+        this.setState({numQsAnswered: count})
+    }
+
+    setQuestion(qNum){
+        this.setState({currentQuestion: qNum})
+    }
+
+    submitInfo(){
         const payload = {
             selectedAnswers: this.state.selectedAnswers,
         }
-        const s_id = $("#s_id").attr("data-sid");
-        $.ajax({
-          url: "/logquiz/s/"+s_id+"/v/"+this.props.videoUUID,
-          dataType: 'json',
-          type: 'POST',
-          data: payload,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            this.setState({
-              showGradingPage: true,
-              reviewMode: true,
-              completedQuizInfo: data,
-            });
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    setReviewMode: function(mode){
-        this.setState({reviewMode:mode})
-        this.setState({currentQuestion:0})
-    },
-    setShowGradingPage: function(mode){
-        this.setState({showGradingPage:mode})
-    },
-    render:function(){
-        var currentQuestionData = this.state.questions[this.state.currentQuestion]
+        this.props.submitQuizAnswers(payload)
+        this.setState({
+            currentQuestion: 0,
+            selectedAnswers: [],
+            numQsAnswered: 0,
+        })
+        this.props.showResultsPage()
+    }
+
+    render() {
+        var currentQuestionData = this.props.questions[this.state.currentQuestion]
         var currentQuestionResults=[]
-        var isLast = (this.state.currentQuestion==this.state.numQuestions-1)
+        var isLast = (this.state.currentQuestion == this.props.questions.length - 1)
         var modalBody = <div></div>
         var navigation = <div></div>
 
-        if(this.state.reviewMode){
-            navigation = <ReviewingQuizNav />
-            currentQuestionResults=this.state.completedQuizInfo.result[this.state.currentQuestion]
-        } else {
+        if(this.props.reviewMode){
+            navigation = (
+                <ReviewingQuizNav
+                    questions={this.props.questions}
+                    currentQuestion={this.state.currentQuestion}
+                    setQuestion={this.setQuestion}
+                    quizResults={this.props.completedQuizInfo.result}/>
+            )
+            currentQuestionResults = this.props.completedQuizInfo.result[this.state.currentQuestion]
+        } else if (!this.props.resultsPage){
             navigation = (
                 <QuizNav 
-                    questions={this.state.questions}
+                    questions={this.props.questions}
                     currentQuestion={this.state.currentQuestion}
                     setQuestion={this.setQuestion}/>
             )
         }
 
-        if(this.state.showGradingPage){
+        if(this.props.resultsPage){
             modalBody = (
                 <CompletedQuizPage 
-                    numCorrect={this.state.completedQuizInfo.numCorrect}
-                    numQuestions={this.state.numQuestions}
-                    setReviewMode={this.setReviewMode}
-                    setShowGradingPage={this.setShowGradingPage}/>
+                    numCorrect={this.props.completedQuizInfo.numCorrect}
+                    numQuestions={this.props.questions.length}
+                    showReviewMode={this.props.showReviewMode}
+                    onRetakeQuiz={this.props.onRetakeQuiz}/>
             )
         } else {
             modalBody = (
@@ -167,10 +137,10 @@ module.exports = React.createClass({
                   selectChoice={this.selectChoice}
                   isLast={isLast}
                   numQsAnswered={this.state.numQsAnswered}
-                  numQuestions={this.state.numQuestions}
+                  numQuestions={this.props.questions.length}
                   selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}
                   submitInfo={this.submitInfo}
-                  reviewMode={this.state.reviewMode}
+                  reviewMode={this.props.reviewMode}
                   currentQuestionResults={currentQuestionResults}
                   setCurrentQuestion={this.setCurrentQuestion}/>
             )
@@ -184,18 +154,18 @@ module.exports = React.createClass({
           {navigation}
           {modalBody}
           <QuizNavFooter
-            quizExists={Boolean(this.state.questions[this.state.currentQuestion])}
+            quizExists={Boolean(this.props.questions[this.state.currentQuestion])}
             currentQuestion={this.state.currentQuestion}
-            numQuestions={this.state.numQuestions}
+            numQuestions={this.props.questions.length}
             numQsAnswered={this.state.numQsAnswered}
             nextQuestion={this.nextQuestion}
             prevQuestion={this.prevQuestion}
             closeModal={this.closeModal}
-            showGradingPage={this.state.showGradingPage}
-            reviewMode={this.state.reviewMode}
+            resultsPage={this.props.resultsPage}
+            reviewMode={this.props.reviewMode}
             onFinishButton={this.props.onFinishButton}
-          />
+            isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion] ? this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect : false}/>
         </div>
       );
     }
-})
+}

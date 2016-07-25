@@ -1,12 +1,11 @@
-require('bootstrap-loader'); 
 require("css/globals/VideoPlayer/TakeQuizButton")
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
+
 import FontAwesome from 'react-fontawesome';
 
-module.exports = React.createClass({
-    render: function(){
+export default class TakeQuizButton extends Component {
+    render() {
         return (
             <div
                 className="takeQuizButton"
@@ -23,4 +22,4 @@ module.exports = React.createClass({
             </div>
         );
     }
-});
+}

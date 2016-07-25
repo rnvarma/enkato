@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 
 import ChoiceNode from 'js/globals/QuizView/ChoiceNode';
 
-class ChoiceList extends Component {
+export default class ChoiceList extends Component {
   render() {
     var index = -1;
     var isSelected=false;
@@ -49,5 +49,3 @@ class ChoiceList extends Component {
 ChoiceList.propTypes = {
   reviewing: PropTypes.bool.isRequired,
 };
-
-export default ChoiceList;

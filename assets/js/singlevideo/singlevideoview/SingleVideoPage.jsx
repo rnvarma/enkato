@@ -15,10 +15,13 @@ class SingleVideoPage extends React.Component {
   constructor() {
     super();
     this.state = {
+      //videoUUID: this.props.videoUUID,
       topicList: [],
       getCurrentTime: null,
+      timeStamp: null,
     };
 
+    //this.loadPageData = this.loadPageData.bind(this);
     this.setTopicList = this.setTopicList.bind(this);
     this.setGetCurrentTime = this.setGetCurrentTime.bind(this);
   }
@@ -30,6 +33,24 @@ class SingleVideoPage extends React.Component {
   setGetCurrentTime(getCurrentTime) {
     this.setState({ getCurrentTime });
   }
+
+  /*componentDidMount() {
+    this.loadPageData();
+  }*/
+
+  /*loadPageData(videoUUID) {
+    request.get(`/1/v/${videoUUID || this.state.videoUUID}`, {
+      cache: true,
+      success: (data) => {
+        var stateData = this.state;
+        /* update state.data *//*
+        $.extend(true, stateData, data);
+        this.setState(stateData);
+      },
+    })*/
+  }
+
+
 
   render() {
     return (

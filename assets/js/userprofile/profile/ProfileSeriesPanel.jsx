@@ -1,19 +1,22 @@
 
 require("css/userprofile/profile/ProfileSeriesPanel.scss");
 
-var React = require('react')
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
-var DjangoImageLinkHandler = require("js/globals/DjangoImageLinkHandler")
+import React, { Component } from 'react'
+import { Link } from 'react-router';
 
-module.exports = React.createClass({
-    onClick: function() {
-        window.location.href = "/s/" + this.props.series.uuid
-    },
-    render: function() {
+import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
+
+import DjangoImageLinkHandler from "js/globals/DjangoImageLinkHandler";
+
+class ProfileSeriesPanel extends Component {
+    render() {
         var thumbnails = this.props.series.thumbnails.map(function(s) {
             return (
-                <img src={s} className="image"/>
+                <img
+                    key={s}
+                    src={s}
+                    className="image"/>
             )
         })
         if (this.props.series.thumbnails.length == 0) {
@@ -24,7 +27,7 @@ module.exports = React.createClass({
         var numVideos = this.props.series.thumbnails.length;
         return (
             <Col md={4} lg={3} sm={6} xs={12} className="profileSeriesPanelCol">
-                <a href={"/s/" + this.props.series.uuid}>
+                <Link to={`/s/${this.props.series.uuid}`}>
                     <div className="profileSeriesPanel">
                         <div className={"thumbnailArea" + (numVideos <= 1 ? " one" : "")}>
                             {thumbnails}
@@ -38,8 +41,10 @@ module.exports = React.createClass({
                             </div>
                         </div>
                     </div>
-                </a>
+                </Link>
             </Col>
         )
     }
-})
+}
+
+module.exports = ProfileSeriesPanel;

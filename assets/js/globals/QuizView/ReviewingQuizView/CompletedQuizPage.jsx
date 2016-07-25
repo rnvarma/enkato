@@ -1,15 +1,12 @@
 require('bootstrap-loader');
-var React = require('react');
 require("css/globals/QuizView/ReviewingQuizView/CompletedQuizPage");
+
+import React, { Component } from 'react';
+
 import Button from 'react-bootstrap/lib/Button';
 
-
-module.exports = React.createClass({
-    reviewAnswers: function(){
-        this.props.setReviewMode(true)
-        this.props.setShowGradingPage(false)
-    },
-    render:function(){
+export default class CompletedQuizPage extends Component {
+    render() {
         return(
             <div className="CompletedQuizPage">
                 <div className="numCorrectReview">
@@ -20,10 +17,15 @@ module.exports = React.createClass({
                 </div>
                 <Button
                     className="reviewQuizButton"
-                    onClick={this.reviewAnswers}>
+                    onClick={this.props.showReviewMode}>
                     Review Answers
+                </Button>
+                <Button
+                    className="retakeQuizButton"
+                    onClick={this.props.onRetakeQuiz}>
+                    Retake Quiz
                 </Button>
             </div>
         )
     }
-})
+}

@@ -7,6 +7,14 @@
     border-right: 1px solid $structabl-bg-blue;
     text-align: center;
 
+    &.review {
+        border-left: 4px solid red;
+
+        &.correct {
+            border-left: 4px solid green;
+        }
+    }
+
     &:hover {
         background-color: $structabl-blue;
         color: white;

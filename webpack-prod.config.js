@@ -8,13 +8,13 @@ var entrypoints = require('./entrypoints')
 module.exports = {
   context: __dirname,
 
-  devtool: 'cheap-module-source-map',
-
-  entry: entrypoints,
+  entry: './assets/app.js',
 
   output: {
       path: path.resolve(pathtoassets + '/assets/prod-assets/prod-bundles/'),
       filename: "[name]-[hash].js",
+      chunkFilename: '[id].chunk.js',
+      publicPath: 'https://s3-us-west-2.amazonaws.com/enkato-static-files/static/prod-bundles/'
   },
 
     plugins: [
@@ -28,14 +28,21 @@ module.exports = {
         new CleanWebpackPlugin(['assets/prod-assets/prod-bundles']),
         new webpack.optimize.UglifyJsPlugin({
           compress: {
-            warnings: false 
-          } 
+            warnings: false,
+          },
+          comments: false,
+          sourceMap: false,
+          mangle: true,
+          minimize: true
         }),
         new webpack.DefinePlugin({
           'process.env': {
             'NODE_ENV': JSON.stringify('production')
           }
-        })
+        }),
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
+        new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(en|ko|ja|zh-cn)$/)
 
   ],
 

@@ -1,9 +1,10 @@
 require('css/globals/QuizView/QuizNav.scss');
 
 import React from 'react';
+
 import QuizNavNode from 'js/globals/QuizView/QuizNavNode';
 
-class QuizNav extends React.Component {
+export default class QuizNav extends React.Component {
     render() {
         var quizNavNodes = this.props.questions.map(function(q, i) {
             return (
@@ -23,5 +24,3 @@ class QuizNav extends React.Component {
         );
     }
 }
-
-export default QuizNav;

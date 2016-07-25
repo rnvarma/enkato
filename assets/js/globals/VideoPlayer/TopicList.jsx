@@ -5,7 +5,7 @@ import React from 'react';
 
 import ScrollArea from 'react-scrollbar';
 import TakeQuizButton from 'js/globals/videoPlayer/TakeQuizButton';
-
+import ScrollingOverflow from 'js/globals/ScrollingOverflow';
 
 class TopicNode extends React.Component {
     constructor(props) {
@@ -27,10 +27,10 @@ class TopicNode extends React.Component {
                 <div className="time">
                     {this.props.topic.time_clean}
                 </div>
-                <div className="nameContainer">
-                    <div className="name">
-                        {this.props.topic.name}
-                    </div>
+                <div className="name">
+                    <ScrollingOverflow
+                        text={this.props.topic.name}
+                        elementSize={"80%"}/>
                 </div>
             </div>
         );

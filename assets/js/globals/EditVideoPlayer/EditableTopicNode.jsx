@@ -1,41 +1,62 @@
 require('css/globals/EditVideoPlayer/EditableTopicNode.scss')
 
-var React = require('react')
-var FontAwesome = require('react-fontawesome');
+import React, { Component } from 'react';
 
-module.exports = React.createClass({
-    getInitialState: function() {
-        return {
+import FontAwesome from 'react-fontawesome';
+
+export default class EditableTopicNode extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
             editing: false,
-            hovering: false,
+            hovering: false
         }
-    },
-    handleTopicClick:function() {
+
+        this.handleTopicClick = this.handleTopicClick.bind(this)
+        this.deleteTopic = this.deleteTopic.bind(this)
+        this.onNameChange = this.onNameChange.bind(this)
+        this.onInputFocus = this.onInputFocus.bind(this)
+        this.onInputBlur = this.onInputBlur.bind(this)
+        this.handleHoverOn = this.handleHoverOn.bind(this)
+        this.handleHoverOff = this.handleHoverOff.bind(this)
+        this.submitForm = this.submitForm.bind(this)
+    }
+
+    handleTopicClick() {
         this.props.handleTopicClick(this.props.topic.id, this.props.topic.time)
-    },
-    deleteTopic: function() {
+    }
+
+    deleteTopic() {
         this.props.handleTopicDelete(this.props.topic.id);
-    },
-    onNameChange: function(e) {
+    }
+
+    onNameChange(e) {
         this.props.updateName(this.props.topic.id, e.target.value);
-    },
-    onInputFocus: function(e) {
+    }
+
+    onInputFocus(e) {
         this.setState({editing: true})
-    },
-    onInputBlur: function(e) {
+    }
+
+    onInputBlur(e) {
         this.setState({editing: false})
-    },
-    handleHoverOn: function(e) {
+    }
+
+    handleHoverOn(e) {
         this.setState({hovering: true})
-    },
-    handleHoverOff: function(e) {
+    }
+
+    handleHoverOff(e) {
         this.setState({hovering: false})
-    },
-    submitForm: function(e){
+    }
+
+    submitForm(e){
         e.preventDefault()
         this.props.playVideo()
-    },
-    render: function() {
+    }
+
+    render() {
         return (
             <form className="editableTopicNodeContainer" onSubmit={this.submitForm}>
                 <div
@@ -62,4 +83,4 @@ module.exports = React.createClass({
             </form>
         )
     }
-})
+}
