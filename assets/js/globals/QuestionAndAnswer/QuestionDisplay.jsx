@@ -9,9 +9,8 @@ import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
-import getCookie from 'js/globals/GetCookie';
-
-import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
+import request from 'js/globals/HttpRequest';
+import ConfirmModal from 'js/globals/DeleteConfirmModal';
 import QuestionDisplayResponse from 'js/globals/QuestionAndAnswer/QuestionDisplayResponse';
 import QuestionResponseForm from 'js/globals/QuestionAndAnswer/QuestionResponseForm';
 import QuestionEditForm from 'js/globals/QuestionAndAnswer/QuestionEditForm';
