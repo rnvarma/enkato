@@ -14,7 +14,7 @@ module.exports = {
       path: path.resolve(pathtoassets + '/assets/prod-assets/prod-bundles/'),
       filename: "[name]-[hash].js",
       chunkFilename: '[id].chunk.js',
-      publicPath: '/static/bundles/'
+      publicPath: 'https://s3-us-west-2.amazonaws.com/enkato-static-files/static/prod-bundles/'
   },
 
     plugins: [
