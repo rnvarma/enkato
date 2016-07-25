@@ -3,10 +3,27 @@ require('css/series/seriespage/SeriesVideoPanel.scss');
 import React, { Component } from 'react';
 import { Link } from 'react-router'
 import FontAwesome from 'react-fontawesome';
+import Button from 'react-bootstrap/lib/Button';
+
 
 import { pluralize } from 'js/globals/utility';
 
 export default class SeriesVideoPanel extends Component {
+    constructor(props) {
+        super(props);
+
+        this.makePublic = this.makePublic.bind(this)
+        this.makePrivate = this.makePrivate.bind(this)
+    }
+
+    makePublic(){
+        this.props.makeVideoPublic(this.props.video.uuid)
+    }
+
+    makePrivate(){
+        this.props.makeVideoPrivate(this.props.video.uuid)
+    }
+
     render() {
         var video = this.props.video;
         if (video.order == 0) {
@@ -14,6 +31,31 @@ export default class SeriesVideoPanel extends Component {
         } else {
             var rightClass = "right";
         }
+
+        var privacyButton = "";
+        if(this.props.is_creator){
+            if (this.props.is_private) {
+                    privacyButton = (
+                        <div className="annotate-box">
+                            <Button 
+                                onClick={this.makePublic}>
+                                Private
+                            </Button>
+                        </div>
+                    )
+                } else {
+                    privacyButton = (
+                        <div className="annotate-box">
+                            <Button  
+                                onClick={this.makePrivate}>
+                                Public
+                            </Button>
+                        </div>
+                    )
+                }
+            }
+
+
         return (
             <div className="seriesVideoPanel">
                 <div className="left">
@@ -45,7 +87,11 @@ export default class SeriesVideoPanel extends Component {
                         </div>
                     </div>
                 </div>
+
                 <div className={rightClass}>
+                    <div className="privacyButton">
+                        {privacyButton}
+                    </div>
                     <div className="numViews">
                         {video.num_views} {pluralize("view", video.num_views)}
                     </div>

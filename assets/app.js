@@ -23,7 +23,7 @@ class App extends Component {
             loggedIn:auth.loggedIn(),
         }
 
-        this.openModal = this.openRegisterModal.bind(this)
+        this.openRegisterModal = this.openRegisterModal.bind(this)
         this.closeRegisterModal = this.closeRegisterModal.bind(this)
         this.setLoggedIn = this.setLoggedIn.bind(this)
     }

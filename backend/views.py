@@ -61,15 +61,21 @@ class Serializer(object):
     @staticmethod
     def serialize_series(series, request=None):
         data = {}
+        is_creator = False if not request else series.creator == request.user.customuser
+
         data["uuid"] = series.uuid
         data["name"] = series.name
         data["description"] = series.description
+        data["is_private"] = series.is_private
         data["image"] = series.image
         data["creator"] = Serializer.serialize_user(series.creator)
         data["num_videos"] = len(series.videos.all())
         data["thumbnails"] = getSeriesThumbnails(series)
         series_videos = series.videos.all().order_by("order")
+        if(not is_creator):
+            series_videos = series_videos.filter(video__is_private = False)
         total_time = 0
+        s_videos = []
         for series_video in series_videos:
             series_video.video.order = series_video.order
             total_time += series_video.video.duration
@@ -99,10 +105,12 @@ class Serializer(object):
 
     @staticmethod
     def serialize_video(video):
+
         data = {}
         data["uuid"] = video.uuid
         data["timestamp"] = video.timestamp
         data["source"] = video.source
+        data["is_private"] = video.is_private
         data["vid_id"] = video.vid_id
         data["name"] = video.name
         data["description"] = video.description
