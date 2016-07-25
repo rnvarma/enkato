@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from backend.utility import getPlaylistVideos, getYTPlaylistIdFromURL, getYTIdFromURL, getYTMetaData, \
     getStringsFromStringList
 from backend.models import Tag, Video, VideoTag, Series, SeriesVideo
+from rest_framework.views import APIView
 
 
 def loadYTVideoToDB(metadata, creator, series):
@@ -75,9 +76,7 @@ def uploadYTVideo(url, creator, series):
     return loadYTVideoToDB(metadata, creator, series)
 
 
-class UploadVideo(View):
-    def get(self, request):
-        return render(request, 'upload/upload.html')
+class UploadVideo(APIView):
 
     def post(self, request):
         creator = request.user.customuser
@@ -88,7 +87,7 @@ class UploadVideo(View):
         return JsonResponse({'v_uuid': video.uuid})
 
 
-class UploadVideoToSeries(View):
+class UploadVideoToSeries(APIView):
     """ Takes video url list 'urls' and adds it to the series """
 
     def post(self, request, s_id):

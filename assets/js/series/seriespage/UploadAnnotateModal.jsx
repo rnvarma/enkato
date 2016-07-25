@@ -37,6 +37,7 @@ export default class UploadAnnotateModal extends Component {
         } else {
             if (this.props.urls) {
                 request.post(`/upload/s/${this.props.seriesUUID}`, {
+                    data: { urls: this.props.urls },
                     success: (data) => {
                         if (data.status) {
                             this.props.reloadPageData();
