@@ -47,7 +47,7 @@ class QuestionModal extends React.Component {
         time: this.props.getCurrentTime(),
         topic_pk: this.state.topic,
       };
-      request.post('api/questions', {
+      request.post('/1/questions', {
         data: payload,
         success: (newQuestion) => {
           this.props.pushQuestion(newQuestion);

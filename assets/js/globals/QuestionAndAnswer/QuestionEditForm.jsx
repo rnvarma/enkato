@@ -44,7 +44,7 @@ class QuestionEditForm extends React.Component {
       topic_pk: (this.props.question.input.topic === 'General') ? null : this.props.question.input.topic,
     };
     $.ajax({
-      url: `/api/questions/${this.props.question.id}`,
+      url: `/1/questions/${this.props.question.id}`,
       type: 'PATCH',
       data: payload,
       beforeSend(xhr) {

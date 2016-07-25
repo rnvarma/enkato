@@ -1,6 +1,7 @@
 require('css/globals/QuestionAndAnswer/QuestionDisplay.scss');
 
-import React from 'react';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 import moment from 'moment';
 
@@ -17,7 +18,7 @@ import QuestionEditForm from 'js/globals/QuestionAndAnswer/QuestionEditForm';
 
 import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 
-class QuestionDisplay extends React.Component {
+class QuestionDisplay extends Component {
   constructor() {
     super();
     this.state = {
@@ -46,7 +47,7 @@ class QuestionDisplay extends React.Component {
       resolved: !this.props.question.resolved,
     };
     $.ajax({
-      url: `/api/questions/${this.props.question.id}`,
+      url: `/1/questions/${this.props.question.id}`,
       type: 'PATCH',
       data: payload,
       beforeSend(xhr) {
@@ -62,7 +63,7 @@ class QuestionDisplay extends React.Component {
   delete() {
     /* TODO: verify before deleting, error handling on failing to delete */
     $.ajax({
-      url: `/api/questions/${this.props.question.id}`,
+      url: `/1/questions/${this.props.question.id}`,
       type: 'DELETE',
       beforeSend(xhr) {
         xhr.withCredentials = true;
@@ -91,7 +92,7 @@ class QuestionDisplay extends React.Component {
       };
 
       $.ajax({
-        url: '/api/responses',
+        url: '/1/responses',
         dataType: 'json',
         type: 'POST',
         data,
@@ -184,7 +185,8 @@ class QuestionDisplay extends React.Component {
                 {this.props.question.text}
               </div>
               <div className="questionFooter">
-                <img src={DjangoImageLinkHandler("blank_avatar.jpg")}></img><span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span> asked {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
+                <Link to={`/userprofile/${this.props.question.student.id}`}><img src={DjangoImageLinkHandler(this.props.question.student.image || 'blank_avatar.jpg')}></img>
+                <span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span></Link> asked {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
                 {isOwner || isInstructor ? <div className="plainBtn" onClick={this.toggleDelete}>Delete</div> : ''}
                 {isOwner && this.props.videoUUID ? <div className="plainBtn" onClick={this.toggleEdit}>Edit Question</div> : ''}
               </div>

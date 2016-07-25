@@ -152,8 +152,8 @@ class Serializer(object):
 class UserViewset(viewsets.ReadOnlyModelViewSet):
     """
     User API
-    List users: api/users
-    Current user: api/users/current
+    List users: 1/users
+    Current user: 1/users/current
     """
 
     queryset = CustomUser.objects.all()

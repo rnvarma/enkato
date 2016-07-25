@@ -82,7 +82,7 @@ class QuestionView extends React.Component {
       this.props.loadQuestionData(onSuccess);
       return;
     }
-    request.get(`/api/questions?video_uuid=${videoUUID}`, {
+    request.get(`/1/questions?video_uuid=${videoUUID}`, {
       success: onSuccess
     })
   }
@@ -325,7 +325,7 @@ class QuestionView extends React.Component {
   /* query user data for validation purposes */
   
   loadUserData() {
-    request.get('/api/users/current', {
+    request.get('/1/users/current', {
         success: (data) => {
             this.currentUser = data;
         },
