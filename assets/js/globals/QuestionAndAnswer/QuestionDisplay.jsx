@@ -37,7 +37,13 @@ class QuestionDisplay extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    this.postResponse();
+    if (auth.loggedIn()) {
+        this.postResponse();
+    } else {
+        this.props.openRegisterModal(() => {
+            this.postResponse();
+        });
+    }
   }
 
   patchAsResolved() {

@@ -8,6 +8,7 @@ from backend.notification import *
 from backend.serializers import SeriesSerializer
 from backend.permissions import make_owner_permission
 
+from rest_framework.views import APIView
 from rest_framework import viewsets, permissions
 
 
@@ -51,7 +52,7 @@ class SeriesPage(View):
     def get(self, request, s_id):
         return render(request, 'series/series.html', {'s_id': s_id})
 
-class SubscribeSeriesPage(View):
+class SubscribeSeriesPage(APIView):
     def post(self, request, s_id):
         series = Series.objects.get(uuid=s_id)
         cu = request.user.customuser
@@ -63,7 +64,7 @@ class SubscribeSeriesPage(View):
         request.user.groups.add(get_series_notification_group(series))
         return JsonResponse({'status': True})
 
-class UnsubscribeSeriesPage(View):
+class UnsubscribeSeriesPage(APIView):
     def post(self, request, s_id):
         series = Series.objects.get(uuid=s_id)
         cu = request.user.customuser

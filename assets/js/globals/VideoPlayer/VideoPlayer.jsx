@@ -244,19 +244,30 @@ export default class VideoPlayer extends Component {
     }
 
     showOverlay(){
+        this.state.Player.pause();
         this.setState({
             showingOverlay: true,
             takingQuiz: false
         });
-        this.state.Player.pause();
     }
 
     showQuiz(){
-        this.setState({
-            showingOverlay: false,
-            takingQuiz: true
-        })
         this.state.Player.pause()
+        if (auth.loggedIn()) {
+            this.setState({
+                showingOverlay: false,
+                takingQuiz: true
+            })
+        } else {
+            this.props.openRegisterModal(() => {
+                this.setState({
+                    showingOverlay: false,
+                    takingQuiz: true
+                })
+                this.loadQuizData(this.state.uuid)
+            });
+        }
+        
     }
 
     closeModal() {

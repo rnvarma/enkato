@@ -175,8 +175,6 @@ class QuestionView extends React.Component {
 
   /* prompts user to add question, via modal in QuestionForm */
   addQuestion() {
-    console.log("addQuestion")
-    console.log(auth.loggedIn())
     if (auth.loggedIn()) {
         this.setState({ addingQuestion: true });
     } else {
@@ -421,6 +419,7 @@ class QuestionView extends React.Component {
               currentQuestion={this.state.currentQuestion}
               setCurrentQuestion={this.setCurrentQuestion}/>
             <QuestionDisplay
+              openRegisterModal={this.props.openRegisterModal}
               showingSeries={!this.props.videoUUID}
               topicList={this.props.topicList}
               getCurrentTime={this.props.getCurrentTime}
