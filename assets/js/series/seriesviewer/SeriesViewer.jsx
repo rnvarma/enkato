@@ -3,13 +3,11 @@ require("css/globals/base.scss")
 require("css/series/seriesviewer/SeriesViewer.scss");
 
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
 
+import request from 'js/globals/HttpRequest';
 import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
 import SeriesViewerSideBar from 'js/series/seriesviewer/SeriesViewerSideBar';
 import SeriesViewerVideoArea from 'js/series/seriesviewer/SeriesViewerVideoArea';
-
-import request from 'js/globals/HttpRequest';
 
 class SeriesViewer extends Component {
     constructor(props) {
@@ -37,7 +35,6 @@ class SeriesViewer extends Component {
         getCurrentTime: null,
       }
 
-      this.componentDidMount = this.componentDidMount.bind(this);
       this.loadDataFromServer = this.loadDataFromServer.bind(this);
       this.calculateVidScrollTop = this.calculateVidScrollTop.bind(this);
       this.scrollToVideo = this.scrollToVideo.bind(this);

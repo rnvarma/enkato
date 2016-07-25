@@ -1,23 +1,23 @@
 require('bootstrap-loader');
 require("css/globals/base.scss")
-require("css/globals/NavBar.scss")
 require("css/series/seriespage/SeriesPage.scss");
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
 
-import NavBar from 'js/globals/NavBar';
-import { Col, Row } from 'react-bootstrap';
-import getCookie from 'js/globals/GetCookie';
+import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Col';
 
 import SeriesSideBar from 'js/series/seriespage/SeriesSideBar';
 import SeriesMainArea from 'js/series/seriespage/SeriesMainArea';
 import UploadAnnotateModal from 'js/series/seriespage/UploadAnnotateModal';
+import request from 'js/globals/HttpRequest';
 
-var SeriesPage = React.createClass({
-    getInitialState: function() {
-        return {
-            s_id: $("#s_id").attr("data-sid"),
+class SeriesPage extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            seriesUUID: this.props.params.seriesUUID,
             name: '',
             description: '',
             image: '',
@@ -32,99 +32,122 @@ var SeriesPage = React.createClass({
             is_creator: false,
             is_subscribed: false,
         }
-    },
-    openModal: function(annotating) {
-        this.setState({ show: true, annotateMode: annotating });
-    },
-    closeModal: function() {
+
+        this.loadPageData = this.loadPageData.bind(this)
+        this.onSubscribe = this.onSubscribe.bind(this)
+        this.onUnsubscribe = this.onUnsubscribe.bind(this)
+        this.openModal = this.openModal.bind(this)
+        this.closeModal = this.closeModal.bind(this)
+        this.onURLImport = this.onURLImport.bind(this)
+        this.setUploadMode = this.setUploadMode.bind(this)
+        this.setAnnotateMode = this.setAnnotateMode.bind(this)
+        this.setTopicMode = this.setTopicMode.bind(this)
+        this.setQuizMode = this.setQuizMode.bind(this)
+        this.setUrls = this.setUrls.bind(this)
+    }
+
+    componentDidMount() {
+        this.loadPageData();
+    }
+
+    loadPageData(seriesUUID) {
+        request.get(`/1/s/${seriesUUID || this.state.seriesUUID}`, {
+            cache: true,
+            success: (data) => {
+                var stateData = this.state;
+                /* update state.data */
+                $.extend(true, stateData, data);
+                this.setState(stateData);
+            },
+        })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.params.seriesUUID != this.state.seriesUUID) {
+            this.loadPageData(nextProps.params.seriesUUID);
+            this.setState({
+                seriesUUID: nextProps.params.seriesUUID
+            })
+        }
+    }
+
+    onSubscribe() {
+        request.post(`/s/${this.state.seriesUUID}/subscribe`, {
+            success: (data) => {
+                if (data.status) {
+                    this.setState({is_subscribed: true})
+                } else {
+                    console.log("sad face");
+                }
+            },
+        })
+    }
+
+    onUnsubscribe() {
+        request.post(`/s/${this.state.seriesUUID}/subscribe`, {
+            success: (data) => {
+                if (data.status) {
+                    this.setState({is_subscribed: false})
+                } else {
+                    console.log("sad face");
+                }
+            },
+        })
+    }
+
+    openModal(annotating) {
+        this.setState({
+            show: true,
+            annotateMode: annotating
+        });
+    }
+
+    closeModal() {
         this.setState({
             show: false,
             annotateMode: false,
             quizMode: false
         });
-    },
-    onURLImport: function(event) {
-        this.setState({ urls: event.target.value });
-    },
-    setUploadMode: function() {
-        this.setState({ annotateMode: false });
-    },
-    setAnnotateMode: function() {
-        this.setState({ annotateMode: true });
-    },
-    setTopicMode: function() {
-        this.setState({ quizMode: false });
-    },
-    setQuizMode: function() {
-        this.setState({ quizMode: true });
-    },
-    setUrls: function(newUrls) {
-        this.setState({ urls: newUrls });
-    },
-    loadPageData: function(callback = function() {}) {
-        $.ajax({
-          url: "/1/s/" + this.state.s_id,
-          dataType: 'json',
-          cache: false,
-            success: function(data) {
-                var stateData = this.state;
-                /* update state.data */
-                $.extend(true, stateData, data);
-                this.setState(stateData, callback());
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    componentDidMount: function() {
         this.loadPageData();
-    },
-    onSubscribe: function() {
-        $.ajax({
-          url: "/s/" + this.state.s_id + "/subscribe",
-          dataType: 'json',
-          type: 'POST',
-          data: {},
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            if (data.status) {
-                this.setState({is_subscribed: true})
-            } else {
-                console.log("sad face");
-            }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
+    }
+
+    onURLImport(event) {
+        this.setState({
+            urls: event.target.value
         });
-    },
-    onUnsubscribe: function() {
-        $.ajax({
-          url: "/s/" + this.state.s_id + "/unsubscribe",
-          dataType: 'json',
-          type: 'POST',
-          data: {},
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            if (data.status) {
-                this.setState({is_subscribed: false})
-            } else {
-                console.log("sad face");
-            }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
+    }
+
+    setUploadMode() {
+        this.setState({
+            annotateMode: false
         });
-    },
-    render: function() {
+    }
+
+    setAnnotateMode() {
+        this.setState({
+            annotateMode: true
+        });
+    }
+
+    setTopicMode() {
+        this.setState({
+            quizMode: false
+        });
+    }
+
+    setQuizMode() {
+        this.setState({
+            quizMode: true
+        });
+    }
+
+    setUrls(newUrls) {
+        this.setState({
+            urls: newUrls
+        });
+    }
+
+    render() {
         if (this.state.is_creator) {
             var uploadModal = (
                 <UploadAnnotateModal
@@ -142,26 +165,25 @@ var SeriesPage = React.createClass({
             var uploadModal = ""
         }
         return (
-            <div>
-                <NavBar />
-                <div className="seriesPage">
-                    <Row>
-                        <Col style={{display:"none"}}>
-                            <SeriesSideBar />
-                        </Col>
-                        <Col md={12}>
-                            <SeriesMainArea
-                                openModal={this.openModal}
-                                onSubscribe={this.onSubscribe}
-                                onUnsubscribe={this.onUnsubscribe}
-                                {...this.state}/>
-                        </Col>
-                    </Row>
-                    {uploadModal}
-                </div>
+            <div className="seriesPage">
+                <Row>
+                    <Col style={{display:"none"}}>
+                        <SeriesSideBar />
+                    </Col>
+                    <Col md={12}>
+                        <SeriesMainArea
+                            openModal={this.openModal}
+                            onSubscribe={this.onSubscribe}
+                            onUnsubscribe={this.onUnsubscribe}
+                            {...this.state}/>
+                    </Col>
+                </Row>
+                {uploadModal}
             </div>
         );
     }
-})
+}
 
-ReactDOM.render(<SeriesPage />, document.getElementById('page-anchor'))
+console.log("ran the series page")
+
+module.exports = SeriesPage;
