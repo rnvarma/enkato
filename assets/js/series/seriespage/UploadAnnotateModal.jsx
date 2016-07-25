@@ -1,31 +1,92 @@
-
-require("css/series/seriespage/UploadAnnotateModal.scss");
+require('css/series/seriespage/UploadAnnotateModal.scss');
 
 import React, { Component } from 'react';
 
-import getCookie from 'js/globals/GetCookie';
+import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
 
-import { Button, Modal } from 'react-bootstrap';
-
+import request from 'js/globals/HttpRequest';
 import AddVideoToSeriesForm from 'js/series/seriespage/AddVideoToSeriesForm';
 import AnnotateVideosForSeries from 'js/series/seriespage/AnnotateVideosForSeries';
-import request from 'js/globals/HttpRequest';
 
 export default class UploadAnnotateModal extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            error: ""
+            error: '',
+            publishAnnotations: false,
+            annotationsToSave: false,
+            showingAnnotationSave: false,
+            onConfirmQuit: null,
         };
 
+        this.setAnnotationsToSave = this.setAnnotationsToSave.bind(this);
+        this.setKeepAnnotations = this.setKeepAnnotations.bind(this);
+        this.setLaunchKeeper = this.setLaunchKeeper.bind(this);
+        this.clearAnnotationMemory = this.clearAnnotationMemory.bind(this);
+        this.closeModal = this.closeModal.bind(this);
         this.onBack = this.onBack.bind(this);
         this.onNext = this.onNext.bind(this);
+        this.onQuizMode = this.onQuizMode.bind(this);
+    }
+
+    /* reopening the annotating modal after closing it resets annotationsToSave to false */
+    componentWillReceiveProps(newProps) {
+        if (!this.props.annotateMode && newProps.annotateMode) {
+            this.clearAnnotationMemory();
+        }
+    }
+
+    setAnnotationsToSave() {
+        if (!this.state.annotationsToSave) {
+            this.setState({
+                annotationsToSave: true,
+            });
+        }
+    }
+
+    /* close annotations to save modal, continue editing */
+    setKeepAnnotations() {
+        this.setState({
+            showingAnnotationSave: false,
+        });
+    }
+
+    setLaunchKeeper(callbackOnConfirm) {
+        this.setState({
+            showingAnnotationSave: true,
+            onConfirmQuit: () => {
+                callbackOnConfirm();
+                this.clearAnnotationMemory();
+            },
+        });
+    }
+
+    clearAnnotationMemory() {
+        this.setState({
+            publishAnnotations: false,
+            annotationsToSave: false,
+            showingAnnotationSave: false,
+        });
+    }
+
+    /* modal closes if there are no annotations to save */
+    closeModal() {
+        if (this.state.annotationsToSave) {
+            this.setLaunchKeeper(this.props.close);
+        } else {
+            this.props.close();
+        }
     }
 
     onBack() {
         if (this.props.annotateMode) {
-            this.props.setUploadMode();
+            if (this.state.annotationsToSave) {
+                this.setLaunchKeeper(this.props.setUploadMode);
+            } else {
+                this.props.setUploadMode();
+            }
         } else {
             this.props.close();
         }
@@ -33,7 +94,9 @@ export default class UploadAnnotateModal extends Component {
 
     onNext() {
         if (this.props.annotateMode) {
-            this.props.close();
+            this.setState({
+                publishAnnotations: true,
+            });
         } else {
             if (this.props.urls) {
                 request.post(`/upload/s/${this.props.seriesUUID}`, {
@@ -89,24 +152,44 @@ export default class UploadAnnotateModal extends Component {
         }
     }
 
+    onQuizMode() {
+        console.log('lol');
+        if (this.state.annotationsToSave) {
+            this.setLaunchKeeper(this.props.setQuizMode);
+        } else {
+            this.props.setQuizMode();
+        }
+    }
+
     render() {
-        var modalInfo = {}
-        var nextText = "";
+        let modalInfo = {}
+        let nextText = "";
         let toggleBtns = "";
         if (this.props.annotateMode) {
           modalInfo = {
             title: "Annotating",
             class: "annotating",
-            body: <AnnotateVideosForSeries
-                      videos={this.props.videos}
-                      quizMode={this.props.quizMode} />
+            body: (
+                <AnnotateVideosForSeries
+                    videos={this.props.videos}
+                    quizMode={this.props.quizMode}
+                    setAnnotationsToSave={this.setAnnotationsToSave}
+                    setKeepAnnotations={this.setKeepAnnotations}
+                    setLaunchKeeper={this.setLaunchKeeper}
+                    annotationsToSave={this.state.annotationsToSave}
+                    publishAnnotations={this.state.publishAnnotations}
+                    showingAnnotationSave={this.state.showingAnnotationSave}
+                    onConfirmQuit={this.state.onConfirmQuit}
+                    closeAnnotationsModal={this.props.close}
+                />
+            ),
           }
           nextText = "Save and Publish";
           toggleBtns = (<div className="toggleMode"><Button
                             className={"toggleAnnotating topics" + (this.props.quizMode ? "" : " active")}
                             onClick={this.props.setTopicMode}>Topics</Button>
           <Button className={"toggleAnnotating quizzes" + (this.props.quizMode ? " active" : "")}
-                  onClick={this.props.setQuizMode}>Quizzing</Button></div>);
+                  onClick={this.onQuizMode}>Quizzing</Button></div>);
         } else {
           modalInfo = {
             title: "Import Video(s)",
@@ -120,7 +203,7 @@ export default class UploadAnnotateModal extends Component {
 
         return (
             <div className="uploadAnnotateModal">
-                <Modal className={modalInfo.class} show={this.props.show} onHide={this.props.close}>
+                <Modal className={modalInfo.class} show={this.props.show} onHide={this.closeModal}>
                     <Modal.Header closeButton>
                         <Modal.Title>{modalInfo.title}</Modal.Title>
                     </Modal.Header>
@@ -130,7 +213,7 @@ export default class UploadAnnotateModal extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         {toggleBtns}
-                        <Button className="structabl-blue" onClick={this.props.close}>Cancel</Button>
+                        <Button className="structabl-blue" onClick={this.closeModal}>Cancel</Button>
                         <Button className="structabl-red" onClick={this.onBack}>Back</Button>
                         <Button className="structabl-red" onClick={this.onNext}>{nextText}</Button>
                     </Modal.Footer>

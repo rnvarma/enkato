@@ -18,7 +18,15 @@ export default class AnnotateSeriesVideoArea extends Component {
             editingBody = (
                 <div className="video">
                     <EditVideoPlayer 
-                        videoUUID={this.props.currentVideo.uuid}/>
+                        videoUUID={this.props.currentVideo.uuid}
+                        setAnnotationsToSave={this.props.setAnnotationsToSave}
+                        setKeepAnnotations={this.props.setKeepAnnotations}
+                        annotationsToSave={this.props.annotationsToSave}
+                        showingAnnotationSave={this.props.showingAnnotationSave}
+                        onConfirmQuit={this.props.onConfirmQuit}
+                        publishAnnotations={this.props.publishAnnotations}
+                        closeAnnotationsModal={this.props.closeAnnotationsModal}
+                    />
                 </div>
             )
         }

@@ -92,11 +92,13 @@ class QuestionDisplayResponse extends Component {
 
     return (
       <Row>
-        <DeleteConfirmModal
-          deleting={this.state.deleting}
+        <ConfirmModal
+          showing={this.state.deleting}
           description="You're deleting this response. Are you sure you want to continue? This is irreversible."
-          deleteCallback={this.delete}
-          cancelCallback={this.toggleDelete}
+          acceptText="Delete"
+          acceptBsStyle="danger"
+          acceptCallback={this.delete}
+          deleteCallback={this.toggleDelete}
         />
         <div className={(this.props.response.is_instructor ? 'instructor ' : this.props.response.endorsed ? 'endorsed ' : '') + 'questionDisplayResponse'}>
           <div className="responseText">
