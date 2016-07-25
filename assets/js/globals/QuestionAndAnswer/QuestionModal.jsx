@@ -4,14 +4,13 @@ import React from 'react';
 
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
-import FormControl from 'react-bootstrap/lib/FormControl';
 
 import QuestionForm from 'js/globals/QuestionAndAnswer/QuestionForm';
 import request from 'js/globals/HttpRequest';
 
 class QuestionModal extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       topic: null,
       title: '',
@@ -102,11 +101,10 @@ class QuestionModal extends React.Component {
               onTextChange={this.onTextChange}
               titleValue={this.state.title}
               textValue={this.state.text}
-              topicValue={this.state.topic}
-            />
+              topicValue={this.state.topic}/>
           </Modal.Body>
           <Modal.Footer>
-            <FormControl className="pull-left" type="file" onChange={this.attachFile} />
+            {/*<FormControl className="pull-left" type="file" onChange={this.attachFile} />*/}
             <Button onClick={this.close}>Cancel</Button>
             <Button onClick={this.postQuestion}>Publish</Button>
           </Modal.Footer>
