@@ -41,25 +41,23 @@ module.exports = React.createClass({
           }.bind(this)
         });
     },
-    markAsRead: function() {
-        if (this.state.num_notifications > 0) {
-            var timestamp = this.state.notifications[0].timestamp;
-            $.ajax({
-              url: "/1/markasread",
-              type: 'POST',
-              data: {timestamp: timestamp},
-              beforeSend(xhr) {
-                  xhr.withCredentials = true;
-                  xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-              },
-              success: function() {
+    markAsRead: function(notification) {
+        var ids = notification.ids
+        $.ajax({
+          url: "/1/markasread",
+          type: 'POST',
+          data: {ids: ids},
+          beforeSend(xhr) {
+            xhr.withCredentials = true;
+              xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+          },
+          success: function() {
 
-              }.bind(this),
-              error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-              }.bind(this)
-            });
-        }
+          }.bind(this),
+          error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+          }.bind(this)
+        });
     },
     componentWillMount: function() {
         this.getNotifications();
@@ -78,11 +76,6 @@ module.exports = React.createClass({
             console.error(this.props.url, status, err.toString());
           }.bind(this)
         });
-    },
-    dropdownToggle: function(isOpen) {
-        if (isOpen) {
-          this.markAsRead();
-        }
     },
     render: function() {
         var active = this.props.active;
@@ -103,7 +96,7 @@ module.exports = React.createClass({
                     <CreateSeriesModal />
                     <NavItem eventKey={2} href="/logout">Logout</NavItem>
                     <NavItem eventKey={1} href="/userprofile">{this.state.username}</NavItem>
-                    <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown" onToggle = {this.dropdownToggle}>
+                    <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown">
                         {this.state.notifications.map(function(notification) {
                             if (notification.timestamp != "") {
                                 var timestring = moment(notification.timestamp).fromNow();
@@ -111,7 +104,12 @@ module.exports = React.createClass({
                             else {
                                 var timestring = ""
                             }
-                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description} {timestring}</div></MenuItem>);
+                            return (<MenuItem onClick =
+                              {() => {
+                                        this.markAsRead(notification);
+                                        window.location.href = notification.link;
+                                     }
+                              }><div className = "notification">{notification.description} {timestring}</div></MenuItem>);
                         })}
                     </NavDropdown>
                 </Nav>

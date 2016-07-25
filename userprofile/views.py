@@ -44,6 +44,7 @@ class Serializers(object):
 		countint = len(notifications)
 		count = str(countint)
 		data = {}
+		data["ids"] = map(lambda x : x.id, notifications)
 		data["timestamp"] = first.timestamp
 
 		if verb == 'new series video':
@@ -138,6 +139,12 @@ class GetNotifications(View):
 class MarkAsRead(View):
 	def post(self, request):
 		if not request.user.is_anonymous():
-			request.user.notifications.unread().filter(timestamp__lte=request.POST.get('timestamp')).mark_all_as_read()
+			ids = request.POST.get('id')
+
+			for n_id in ids:
+				notification = Notifcation.objects.get(id=n_id)
+				if notification is not None:
+					if notification.recipient == request.user:
+						notification.mark_as_read()
 
 		return JsonResponse({})
