@@ -12,6 +12,16 @@ import SeriesMainArea from 'js/series/seriespage/SeriesMainArea';
 import UploadAnnotateModal from 'js/series/seriespage/UploadAnnotateModal';
 import request from 'js/globals/HttpRequest';
 
+
+function changeVideoListPrivacy(videos, videoUUID, is_private) {
+    for (var i = videos.length - 1; i >= 0; i--) {
+        if(videos[i].uuid == videoUUID){
+            videos[i].is_private = is_private;
+        }
+    }
+    return videos;
+}
+
 class SeriesPage extends Component {
     constructor(props) {
         super(props)
@@ -44,6 +54,9 @@ class SeriesPage extends Component {
         this.setTopicMode = this.setTopicMode.bind(this)
         this.setQuizMode = this.setQuizMode.bind(this)
         this.setUrls = this.setUrls.bind(this)
+        this.makeVideoPrivate = this.makeVideoPrivate.bind(this)
+        this.makeVideoPublic = this.makeVideoPublic.bind(this)
+
     }
 
     componentDidMount() {
@@ -147,6 +160,48 @@ class SeriesPage extends Component {
         });
     }
 
+    makeVideoPublic(videoUUID) {
+        var data = {
+            videoUUID: videoUUID,
+            is_private:false,
+        }
+
+        request.post('/changePrivacy', {
+            data:data,
+            success: (data) => {
+                if (data.status) {
+                    var tempVideos = this.state.videos;
+                    this.setState({
+                        videos: changeVideoListPrivacy(tempVideos, videoUUID, false)
+                    })
+                } else {
+                    console.log("sad face");
+                }
+            },
+        })
+    }
+
+    makeVideoPrivate(videoUUID) {
+        var data = {
+            videoUUID: videoUUID,
+            is_private:true,
+        }
+
+        request.post('/changePrivacy', {
+            data:data,
+            success: (data) => {
+                if (data.status) {
+                    var tempVideos = this.state.videos;
+                    this.setState({
+                        videos: changeVideoListPrivacy(tempVideos, videoUUID, true)
+                    })
+                } else {
+                    console.log("sad face");
+                }
+            },
+        })
+    }
+
     render() {
         if (this.state.is_creator) {
             var uploadModal = (
@@ -175,6 +230,8 @@ class SeriesPage extends Component {
                             openModal={this.openModal}
                             onSubscribe={this.onSubscribe}
                             onUnsubscribe={this.onUnsubscribe}
+                            makeVideoPublic={this.makeVideoPublic}
+                            makeVideoPrivate={this.makeVideoPrivate}
                             {...this.state}/>
                     </Col>
                 </Row>

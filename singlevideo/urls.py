@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'editvideo$', EditVideoTesting.as_view()),
     url(r'1/videos$', VideoViewset.as_view({'get': 'list', 'post': 'create'})),
     url(r'1/videos/(?P<pk>[0-9]+)$', VideoViewset.as_view({'delete': 'destroy'})),
+    url(r'changePrivacy$', ChangePrivacy.as_view()),
 ]

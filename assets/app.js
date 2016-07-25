@@ -1,23 +1,66 @@
-import React, { Component } from 'react'
+import React, { Component, cloneElement } from 'react'
 import { render } from 'react-dom'
 import { Router, browserHistory } from 'react-router'
 
 import NavBar from 'js/globals/NavBar'
 import HomePage from 'js/home/homepage/HomePage'
+import RegisterModal from "js/globals/RegisterModal"
 
 import auth from 'auth'
+
+function helloWorld(){
+    console.log("hello worlddddddddddddddddddddd")
+}
+
 
 class App extends Component {
     constructor(props) {
         super(props)
+
+        this.state = {
+            registerModalCallBackFn:helloWorld,
+            registerModalOpen:false,
+            loggedIn:auth.loggedIn(),
+        }
+
+        this.openRegisterModal = this.openRegisterModal.bind(this)
+        this.closeRegisterModal = this.closeRegisterModal.bind(this)
+        this.setLoggedIn = this.setLoggedIn.bind(this)
+    }
+
+    openRegisterModal(callBackFn) {
+        this.setState({
+            registerModalCallBackFn:callBackFn,
+            registerModalOpen:true,
+        })
+    }
+
+    closeRegisterModal() {
+        this.setState({
+            registerModalOpen:false
+        })
+    }
+
+    setLoggedIn(loggedIn) {
+        this.setState({
+            loggedIn:loggedIn
+        })
     }
 
     render() {
         return (
             <div>
-                <NavBar />
+                <NavBar loggedIn={this.state.loggedIn}/>
+                <RegisterModal 
+                    closeRegisterModal={this.closeRegisterModal} 
+                    setLoggedIn={this.setLoggedIn}
+                    registerModalOpen={this.state.registerModalOpen}
+                    callbackFn={this.state.registerModalCallBackFn}/>
                 <div className="contentArea">
-                    {this.props.children || <HomePage />}
+                    {(this.props.children && cloneElement(this.props.children, {
+                        openRegisterModal: this.openRegisterModal,
+                        loggedIn: this.state.loggedIn,
+                    })) || <HomePage loggedIn={this.state.loggedIn}/>}
                 </div>
             </div>
         )

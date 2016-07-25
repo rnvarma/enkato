@@ -11,12 +11,16 @@ export default class SeriesVideoList extends Component {
 
     render() {
         var videoPanels = this.props.videos.map(function(v) {
+            console.log(v)
             return (
                 <SeriesVideoPanel
                     key={v.order}
                     video={v}
                     seriesUUID={this.props.seriesUUID}
-                    is_creator={this.props.is_creator}/>
+                    is_creator={this.props.is_creator}
+                    is_private={v.is_private}
+                    makeVideoPrivate={this.props.makeVideoPrivate}
+                    makeVideoPublic={this.props.makeVideoPublic}/>
             );
         }.bind(this))
         return (
