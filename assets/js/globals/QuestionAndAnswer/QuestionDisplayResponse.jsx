@@ -1,6 +1,7 @@
 require('css/globals/QuestionAndAnswer/QuestionDisplayResponse.scss');
 
-import React from 'react';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 import moment from 'moment';
 
@@ -15,7 +16,7 @@ import QuestionResponseEditForm from 'js/globals/QuestionAndAnswer/QuestionRespo
 
 import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 
-class QuestionDisplayResponse extends React.Component {
+class QuestionDisplayResponse extends Component {
   constructor() {
     super();
     this.state = {
@@ -119,7 +120,8 @@ class QuestionDisplayResponse extends React.Component {
           </div>
           {badges}
           <div className="responseFooter">
-            <img src={DjangoImageLinkHandler("blank_avatar.jpg")}></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> answered {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
+            <Link to={`/userprofile/${this.props.response.user.id}`}><img src={DjangoImageLinkHandler(this.props.response.user.image || 'blank_avatar.jpg')}></img>
+            <span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span></Link> answered {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
             {isOwner || isInstructor ? <div onClick={this.toggleDelete} className="plainBtn">Delete</div> : '' }
             {isOwner ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
             {!isOwner && isInstructor ? <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div> : ''}
