@@ -6,6 +6,7 @@ from backend.models import *
 from backend.views import Serializer
 
 from backend.serializers import VideoSerializer
+from rest_framework.views import APIView
 from rest_framework import viewsets
 
 import json
@@ -149,4 +150,26 @@ class DeleteQuizOption(View):
             'status': True,
             'cid': c_id,
             'qid': q_id
+        })
+
+
+class ChangePrivacy(APIView):
+    def post(self, request):
+        print("========================================")
+        videoUUID = request.POST.get('videoUUID')
+        is_private = request.POST.get('is_private')
+
+        if (is_private == 'true'):
+            is_private = True
+        elif (is_private == 'false'):
+            is_private = False
+
+        video = Video.objects.get(uuid=videoUUID)
+        print(is_private)
+        video.is_private = is_private
+
+        video.save()
+
+        return JsonResponse({
+            'status': True,
         })

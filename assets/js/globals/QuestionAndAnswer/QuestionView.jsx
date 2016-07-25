@@ -172,7 +172,15 @@ class QuestionView extends React.Component {
 
   /* prompts user to add question, via modal in QuestionForm */
   addQuestion() {
-    this.setState({ addingQuestion: true });
+    console.log("addQuestion")
+    console.log(auth.loggedIn())
+    if (auth.loggedIn()) {
+        this.setState({ addingQuestion: true });
+    } else {
+        this.props.openRegisterModal(() => {
+            this.setState({ addingQuestion: true });
+        });
+    }
   }
 
   /* adds question to state */

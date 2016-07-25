@@ -32,6 +32,7 @@ class NavBar extends Component {
         this.markAsRead = this.markAsRead.bind(this)
         this.dropdownToggle = this.dropdownToggle.bind(this)
         this.logout = this.logout.bind(this)
+        this.loadDataFromServer = this.loadDataFromServer.bind(this)
     }
 
     logout() {
@@ -41,6 +42,10 @@ class NavBar extends Component {
     }
 
     componentWillMount() {
+        this.loadDataFromServer()
+    }
+
+    loadDataFromServer() {
         this.getNotifications();
         if (!auth.loggedIn()) return;
         request.get('/1/userdata', {
@@ -52,6 +57,10 @@ class NavBar extends Component {
                 });
             }.bind(this)
         })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.loadDataFromServer()
     }
 
     getNotifications() {
