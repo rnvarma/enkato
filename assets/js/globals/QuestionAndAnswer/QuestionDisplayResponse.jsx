@@ -38,7 +38,7 @@ class QuestionDisplayResponse extends React.Component {
   delete() {
     /* TODO: verify before deleting, error handling on failing to delete */
     $.ajax({
-      url: `/api/responses/${this.props.response.id}`,
+      url: `/1/responses/${this.props.response.id}`,
       type: 'DELETE',
       beforeSend(xhr) {
         xhr.withCredentials = true;
@@ -57,7 +57,7 @@ class QuestionDisplayResponse extends React.Component {
       endorsed: !this.props.response.endorsed,
     }
     $.ajax({
-      url: `/api/responses/${this.props.response.id}`,
+      url: `/1/responses/${this.props.response.id}`,
       type: 'PATCH',
       data: payload,
       beforeSend(xhr) {

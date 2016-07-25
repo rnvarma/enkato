@@ -33,7 +33,7 @@ class QuestionResponseEditForm extends React.Component {
                 text: this.props.response.input,
             };
             $.ajax({
-                url: `/api/responses/${this.props.response.id}`,
+                url: `/1/responses/${this.props.response.id}`,
                 type: 'PATCH',
                 data,
                 beforeSend(xhr) {
