@@ -135,8 +135,7 @@ class QuestionDisplay extends Component {
             toggleEndorsedResponse={this.props.toggleEndorsedResponse}
             toggleEditResponse={this.props.toggleEditResponse}
             currentUser={this.props.currentUser}
-            replaceResponse={this.props.replaceResponse}
-          />
+            replaceResponse={this.props.replaceResponse}/>
         );
       });
     }
