@@ -56,6 +56,9 @@ class QuestionView extends React.Component {
     this.loadUserData = this.loadUserData.bind(this);
     this.replaceQuestion = this.replaceQuestion.bind(this);
     this.replaceResponse = this.replaceResponse.bind(this);
+    this.onQuestionFilterSelect = this.onQuestionFilterSelect.bind(this)
+    this.filterQuestionByTitle = this.filterQuestionByTitle.bind(this)
+    this.scrollToQuestionArea = this.scrollToQuestionArea.bind(this)
   }
 
   componentDidMount() {
@@ -109,9 +112,9 @@ class QuestionView extends React.Component {
     });
   }
 
-  setCurrentQuestion(questionId) {
+  setCurrentQuestion(question) {
     this.setState({
-      currentQuestion: questionId,
+      currentQuestion: question,
     });
   }
 
@@ -344,6 +347,25 @@ class QuestionView extends React.Component {
     }
   }
 
+  filterQuestionByTitle(title) {
+    var results = this.state.questions.filter(function(q) {
+      return q.title == title;
+    })
+    if (!results) return null;
+    return results[0]
+  }
+
+  scrollToQuestionArea() {
+    var top = $(".questionArea").offset().top
+    $("html, body").animate({ scrollTop: top}, 500)
+  }
+
+  onQuestionFilterSelect(questionTitle) {
+    var question = this.filterQuestionByTitle(questionTitle)
+    this.setCurrentQuestion(question);
+    this.scrollToQuestionArea();
+  }
+
   render() {
     var askModal, askQuestionBar;
     if (this.props.videoUUID) {
@@ -358,13 +380,19 @@ class QuestionView extends React.Component {
         />
       );
       var questionOptions = this.state.questions.map(function(q) {
-        return q.title;
+        // return {
+        //   filterOption: q.title,
+        //   displayOption: q.title,
+        //   id: q.id,
+        // }
+        return q.title
       })
       askQuestionBar = (
         <div className="askQuestionBar">
           <Typeahead
-            placeholder="Don't undestand something? Ask aquestion here."
-            options={questionOptions}/>
+            placeholder="Don't undestand something? Ask a question here."
+            options={questionOptions}
+            onOptionSelected={this.onQuestionFilterSelect}/>
           <Button className="addQuestionBtn" onClick={this.addQuestion}>
             <FontAwesome name="plus-circle" />
             Ask A Question
