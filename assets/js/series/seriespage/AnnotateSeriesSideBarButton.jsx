@@ -23,8 +23,6 @@ export default class AnnotateSeriesSideBarButton extends Component {
                     <div className="name">
                         {this.props.video.name}
                     </div>
-                    <div className="shadow">
-                    </div>
                 </div>
             </div>
         )

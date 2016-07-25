@@ -88,8 +88,8 @@ class CreateSeriesModal extends Component {
                         onDescriptionChange={this.onDescriptionChange}/>
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button onClick={this.close}>Close</Button>
-                    <Button disabled = {!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Create</Button>
+                    <Button onClick={this.close}>Cancel</Button>
+                    <Button className="structabl-red" disabled = {!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Create</Button>
                   </Modal.Footer>
                 </Modal>
             </li>
