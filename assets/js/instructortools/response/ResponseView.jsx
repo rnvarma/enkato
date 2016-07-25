@@ -19,7 +19,7 @@ class ResponseView extends React.Component {
 
   loadQuestionData(onSuccess) {
     $.ajax({
-      url: `/api/series?creator=${this.props.userId}&order_by=responses`,
+      url: `/1/series?creator=${this.props.userId}&order_by=responses`,
       dataType: 'json',
       cache: false,
       success: (data) => {
