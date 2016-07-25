@@ -4,17 +4,13 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 
 import moment from 'moment';
-
 import FontAwesome from 'react-fontawesome';
-
 import Row from 'react-bootstrap/lib/Row';
 
-import getCookie from 'js/globals/GetCookie';
-
+import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
+import request from 'js/globals/HttpRequest'
 import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
 import QuestionResponseEditForm from 'js/globals/QuestionAndAnswer/QuestionResponseEditForm';
-
-import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 
 class QuestionDisplayResponse extends Component {
   constructor() {
@@ -38,18 +34,12 @@ class QuestionDisplayResponse extends Component {
 
   delete() {
     /* TODO: verify before deleting, error handling on failing to delete */
-    $.ajax({
-      url: `/1/responses/${this.props.response.id}`,
-      type: 'DELETE',
-      beforeSend(xhr) {
-        xhr.withCredentials = true;
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-      },
+    request.delete(`/1/responses/${this.props.response.id}`, {
       success: () => {
         this.props.removeResponse(this.props.question.id, this.props.response.id);
         this.toggleDelete();
-      },
-    });
+      }
+    })
   }
 
   toggleEndorse() {
@@ -57,18 +47,12 @@ class QuestionDisplayResponse extends Component {
     const payload = {
       endorsed: !this.props.response.endorsed,
     }
-    $.ajax({
-      url: `/1/responses/${this.props.response.id}`,
-      type: 'PATCH',
+    request.patch(`/1/responses/${this.props.response.id}`, {
       data: payload,
-      beforeSend(xhr) {
-        xhr.withCredentials = true;
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-      },
       success: (data) => {
         this.props.replaceResponse(this.props.question.id, data.id, data);
-      },
-    });
+      }
+    })
   }
 
   render() {

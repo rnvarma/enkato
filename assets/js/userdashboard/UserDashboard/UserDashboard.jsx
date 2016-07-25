@@ -4,10 +4,10 @@ require('css/userdashboard/UserDashboard/UserDashboard.scss')
 
 import React, { Component } from 'react'
 
+import auth from 'auth'
+import request from 'js/globals/HttpRequest'
 import ProfileSeriesList from "js/userprofile/profile/ProfileSeriesList.jsx";
 import CreateSeriesArea from "js/userdashboard/UserDashboard/CreateSeriesArea.jsx";
-
-import auth from 'auth'
 
 class UserDashboard extends Component {
     constructor(props) {
@@ -21,20 +21,11 @@ class UserDashboard extends Component {
     }
 
     componentWillMount() {
-        $.ajax({
-          url: "/1/userdashboard",
-          dataType: 'json',
-          cache: false,
-          headers: {
-            'Authorization': 'Token ' + localStorage.token
-          },
-          success: function(data) {
-            this.setState(data);
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
+        request.get('/1/userdashboard', {
+            success: (data) => {
+                this.setState(data)
+            }
+        })
     }
 
     render() {

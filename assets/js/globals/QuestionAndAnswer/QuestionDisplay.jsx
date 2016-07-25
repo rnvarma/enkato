@@ -9,17 +9,12 @@ import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
-import getCookie from 'js/globals/GetCookie';
-
-import auth from 'auth';
-import request from 'js/globals/HttpRequest'
+import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
+import request from 'js/globals/HttpRequest';
 import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
 import QuestionDisplayResponse from 'js/globals/QuestionAndAnswer/QuestionDisplayResponse';
 import QuestionResponseForm from 'js/globals/QuestionAndAnswer/QuestionResponseForm';
 import QuestionEditForm from 'js/globals/QuestionAndAnswer/QuestionEditForm';
-
-
-import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 
 class QuestionDisplay extends Component {
   constructor() {
@@ -55,34 +50,22 @@ class QuestionDisplay extends Component {
     const payload = {
       resolved: !this.props.question.resolved,
     };
-    $.ajax({
-      url: `/1/questions/${this.props.question.id}`,
-      type: 'PATCH',
+    request.patch(`/1/questions/${this.props.question.id}`, {
       data: payload,
-      beforeSend(xhr) {
-        xhr.withCredentials = true;
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-      },
       success: (data) => {
         this.props.replaceQuestion(data.id, data);
-      },
-    });
+      }
+    })
   }
 
   delete() {
     /* TODO: verify before deleting, error handling on failing to delete */
-    $.ajax({
-      url: `/1/questions/${this.props.question.id}`,
-      type: 'DELETE',
-      beforeSend(xhr) {
-        xhr.withCredentials = true;
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-      },
+    request.delete(`/1/questions/${this.props.question.id}`, {
       success: () => {
         this.props.removeQuestion(this.props.question.id);
         this.toggleDelete();
       },
-    });
+    })
   }
 
   toggleEdit() {
@@ -101,11 +84,11 @@ class QuestionDisplay extends Component {
       };
 
       request.post('/1/responses', {
-          data: data,
-          success: (data) => {
-              this.props.pushResponse(this.props.question.id, data);
-              this.props.pushResponseText(this.props.question.id, '');
-          },
+        data: data,
+        success: (data) => {
+          this.props.pushResponse(this.props.question.id, data);
+          this.props.pushResponseText(this.props.question.id, '');
+        }
       })
     }
   }
