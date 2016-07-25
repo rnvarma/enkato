@@ -34,11 +34,11 @@ class SingleVideoPage extends React.Component {
     this.setState({ getCurrentTime });
   }
 
-  /*componentDidMount() {
+  componentDidMount() {
     this.loadPageData();
-  }*/
+  }
 
-  /*loadPageData(videoUUID) {
+  loadPageData(videoUUID) {
     request.get(`/1/v/${videoUUID || this.state.videoUUID}`, {
       cache: true,
       success: (data) => {
@@ -47,7 +47,7 @@ class SingleVideoPage extends React.Component {
         $.extend(true, stateData, data);
         this.setState(stateData);
       },
-    })*/
+    })
   }
 
 
