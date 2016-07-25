@@ -17,7 +17,7 @@ import ScrollButtonList from 'js/globals/QuizAddingForm/ScrollButtonList';
 module.exports = React.createClass({
     loadDataFromServer: function(vuuid){
         $.ajax({
-          url: "/api/quizdata/" + vuuid,
+          url: `/1/quizdata/${vuuid}`,
           dataType: 'json',
           cache: false,
           success: function(data) {

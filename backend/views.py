@@ -76,8 +76,12 @@ class Serializer(object):
         data["total_len"] = sanetizeTime(total_time)
         videos = map(lambda sv: sv.video, series_videos)
         data["videos"] = map(Serializer.serialize_video, videos)
-        data["is_creator"] = False if not request else series.creator == request.user.customuser
-        data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
+        data["is_anonymous"], data["is_creator"], data["is_subscribed"] = False, False, False
+        data["is_anonymous"] = request.user.is_anonymous()
+        print data["is_anonymous"]
+        if not data["is_anonymous"]:
+            data["is_creator"] = False if not request else series.creator == request.user.customuser
+            data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
         return data    
 
     @staticmethod
@@ -148,8 +152,8 @@ class Serializer(object):
 class UserViewset(viewsets.ReadOnlyModelViewSet):
     """
     User API
-    List users: api/users
-    Current user: api/users/current
+    List users: 1/users
+    Current user: 1/users/current
     """
 
     queryset = CustomUser.objects.all()

@@ -10,15 +10,17 @@ import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
+import request from 'js/globals/HttpRequest';
+import auth from 'auth';
 import QuestionModal from 'js/globals/QuestionAndAnswer/QuestionModal';
 import QuestionFilterBar from 'js/globals/QuestionAndAnswer/QuestionFilterBar';
 import QuestionList from 'js/globals/QuestionAndAnswer/QuestionList';
 import QuestionDisplay from 'js/globals/QuestionAndAnswer/QuestionDisplay';
-import request from 'js/globals/HttpRequest';
 
 class QuestionView extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       questions: [],
       filteredQuestions: [],
@@ -28,6 +30,7 @@ class QuestionView extends React.Component {
       filterUnanswered: false,
       addingQuestion: false,
     };
+
     this.setCurrentQuestion = this.setCurrentQuestion.bind(this);
     this.setFilter = this.setFilter.bind(this);
     this.filterQuestions = this.filterQuestions.bind(this);
@@ -82,7 +85,7 @@ class QuestionView extends React.Component {
       this.props.loadQuestionData(onSuccess);
       return;
     }
-    request.get(`/api/questions?video_uuid=${videoUUID}`, {
+    request.get(`/1/questions?video_uuid=${videoUUID}`, {
       success: onSuccess
     })
   }
@@ -331,11 +334,13 @@ class QuestionView extends React.Component {
   /* query user data for validation purposes */
   
   loadUserData() {
-    request.get('/api/users/current', {
-        success: (data) => {
-            this.currentUser = data;
-        },
-    })
+    if (auth.loggedIn()) {
+      request.get('/1/users/current', {
+          success: (data) => {
+              this.currentUser = data;
+          },
+      })
+    }
   }
 
   render() {
@@ -384,8 +389,7 @@ class QuestionView extends React.Component {
               showingSeries={!this.props.videoUUID}
               questions={this.state.filteredQuestions}
               currentQuestion={this.state.currentQuestion}
-              setCurrentQuestion={this.setCurrentQuestion}
-            />
+              setCurrentQuestion={this.setCurrentQuestion}/>
             <QuestionDisplay
               showingSeries={!this.props.videoUUID}
               topicList={this.props.topicList}
@@ -405,8 +409,7 @@ class QuestionView extends React.Component {
               replaceQuestion={this.replaceQuestion}
               replaceResponse={this.replaceResponse}
               videoUUID={this.props.videoUUID}
-              currentUser={this.currentUser}
-            />
+              currentUser={this.currentUser}/>
           </Row>
         </Row>
       </div>
