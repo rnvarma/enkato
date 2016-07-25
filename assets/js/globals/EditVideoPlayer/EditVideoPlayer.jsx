@@ -1,19 +1,16 @@
 require('bootstrap-loader');
-require("css/globals/base.scss");
-require("css/globals/EditVideoPlayer/EditVideoPlayer.scss")
+require('css/globals/base.scss');
+require('css/globals/EditVideoPlayer/EditVideoPlayer.scss');
 
 import React, { Component } from 'react';
 
-import Row from 'react-bootstrap/lib/Row'
-import Col from 'react-bootstrap/lib/Col'
-import Button from 'react-bootstrap/lib/Button'
-
+import request from 'js/globals/HttpRequest';
+import { styleDuration } from 'js/globals/utility';
+import ConfirmModal from 'js/globals/ConfirmModal';
 import Video from 'js/globals/videoPlayer/Video';
-import ControlBar from 'js/globals/videoPlayer/ControlBar';
 import Player from 'js/globals/videoPlayer/Player';
 import EditableTopicList from 'js/globals/EditVideoPlayer/EditableTopicList';
 import EditControlBar from 'js/globals/EditVideoPlayer/EditControlBar';
-import request from 'js/globals/HttpRequest';
 
 const pollInterval = 100;
 
@@ -84,8 +81,8 @@ function styleTime(time){
 }
 
 export default class EditVideoPlayer extends Component {
-    constructor(props) {
-        super(props)
+    constructor() {
+        super()
 
         this.state = {
             topicObjList: [], 
@@ -96,9 +93,10 @@ export default class EditVideoPlayer extends Component {
             Player: null,
             videoDivHeight: 0,
             videoDivWidth: 0,
-            uuid: "",
+            videoUUID: "",
             pollingInterval:null
-        }
+        };
+        this.removedTopics = [];
 
         this.loadDataFromServer = this.loadDataFromServer.bind(this)
         this.updateTopicName = this.updateTopicName.bind(this)
@@ -133,34 +131,39 @@ export default class EditVideoPlayer extends Component {
 
     componentWillMount() {
         this.loadDataFromServer(this.props.videoUUID);
-        this.setState({uuid: this.props.videoUUID})
+        this.setState({videoUUID: this.props.videoUUID});
     }
 
     componentWillUnmount() {
-        clearInterval(this.state.pollInterval)
-        this.syncTopics();
+        clearInterval(this.state.pollInterval);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.state.uuid != nextProps.videoUUID) {
-            this.setState({uuid: nextProps.videoUUID})
-            this.loadDataFromServer(nextProps.videoUUID)
+        if (this.state.videoUUID != nextProps.videoUUID) {
+            this.setState({videoUUID: nextProps.videoUUID});
+            this.loadDataFromServer(nextProps.videoUUID);
         }
-        if (!this.state.Player)
-            this.loadDataFromServer(nextProps.videoUUID)
+
+        /* save and publish button was hit */
+        if (nextProps.publishAnnotations) {
+            this.syncTopics();
+            this.props.closeAnnotationsModal();
+        }
     }
 
+    /* destroys any old video player, creates a new one */
     loadDataFromServer(v_id) {
         request.get(`/1/v/${v_id}`, {
             success: (data) => {
-                if (this.state.Player){
-                    this.syncTopics();
-                    if (this.state.Player){
-                        this.state.Player.destroy();
-                    }
+                if (this.state.Player) {
+                    this.state.Player.destroy();
                 }
-                this.setState({Player: new Player(data.videoID)});
-                this.setState({topicObjList:data.topicList})
+
+                this.setState({
+                    Player: new Player(data.videoID),
+                    topicObjList: data.topicList,
+                });
+
                 this.forceUpdate();
                 this.totalTime = data.videoData.duration_clean;
             }
@@ -176,17 +179,20 @@ export default class EditVideoPlayer extends Component {
             }
         }
         this.setState({topicObjList: topicList});
+        this.props.setAnnotationsToSave();
     }
 
+    /* When user publishes */
     syncTopics() {
-        var data = {
-            'topics': JSON.stringify(this.state.topicObjList)
+        const payload = {
+            topics: JSON.stringify(this.state.topicObjList),
+            removed_topics: JSON.stringify(this.removedTopics),
         }
-        request.post(`/v/${this.state.uuid}/updatetopics`, {
-            data: data,
+        request.post(`/v/${this.state.videoUUID}/updatetopics`, {
+            data: payload,
             success: (data) => {
                 if (!data.status) {
-                    console.log("error")
+                    console.log('error');
                 }
             }
         })
@@ -194,47 +200,46 @@ export default class EditVideoPlayer extends Component {
 
     sortTopicListByTime(topicList) {
         topicList.sort(function(a, b) {
-            return a.time - b.time
-        })
+            return a.time - b.time;
+        });
     }
 
+    /* adds a new topic to topicObjList, sorts topic list, focuses on new topic */
     addNewTopic() {
         this.state.Player.pause();
-        var currentTime = Math.round(this.state.Player.getCurrentTime())
-        var data = {
-            currentTime: currentTime,
-        }
-        request.post(`/v/${this.state.uuid}/addtopic`, {
-            data: data,
-            success: (data) => {
-                if (data.status) {
-                    var topicList = this.state.topicObjList;
-                    topicList.push(data.newTopic);
-                    this.sortTopicListByTime(topicList)
-                    this.setState({topicObjList: topicList});
-                    //focus on new topic
-                    $('#' + data.newTopic.id).focus()
-                } else {
-                    console.log("Error in request");
-                }
-            }
-        })
+
+        const time = Math.round(this.state.Player.getCurrentTime());
+        const newTopic = {
+            id: `fake_${Date.now()}`, /* fake id, not in DB yet */
+            committed: false,
+            name: '',
+            time: time,
+            time_clean: styleDuration(time),
+            isCurrentTopic: true,
+        };
+        const newTopicList = [...this.state.topicObjList, newTopic];
+        this.sortTopicListByTime(newTopicList);
+        this.setState({
+            topicObjList: newTopicList,
+        }, function() { $(`#${newTopic.id}`).focus(); });
+        this.props.setAnnotationsToSave();
     }
 
-    handleTopicDelete(targetKey) {
-        var data = {
-            uuid: targetKey,
-        }
-        request.post('/deletetopic', {
-            data: data,
-            success: (data) => {
-                if (data.status) {
-                    this.setState({topicObjList: removeTopic(targetKey, this.state.topicObjList)});
-                } else {
-                    console.log("sad face");
-                }
+    /* splices topic out of list by id, adds to removedTopics, sets topic list */
+    handleTopicDelete(id) {
+        const newTopicList = this.state.topicObjList.filter((topic) => {
+            if (topic.real_id !== id && topic.id !== id) {
+                return true;
             }
-        })
+            if (!topic.hasOwnProperty('committed')) { /* only add real topic to delete list */
+                this.removedTopics.push(topic);
+            }
+            return false;
+        });
+        this.setState({
+            topicObjList: newTopicList,
+        });
+        this.props.setAnnotationsToSave();
     }
 
     updateCurrentState(){
@@ -251,9 +256,9 @@ export default class EditVideoPlayer extends Component {
         //set isplaying
         var playing = !this.state.Player.paused();
         this.setState({
-            isPlaying: playing
-        })
-        this.setWindowSize()
+            isPlaying: playing,
+        });
+        this.setWindowSize();
     }
 
     setWindowSize() {
@@ -273,10 +278,10 @@ export default class EditVideoPlayer extends Component {
     handleTopicClick(targetKey, time) {
         //First, set the new currentTopic
         this.setState({
-            topicObjList:updateCurrentTopicOnKey(targetKey, this.state.topicObjList)
+            //topicObjList:updateCurrentTopicOnKey(targetKey, this.state.topicObjList)
         })
         //Second, Make API call to update video state
-        this.state.Player.seekTo(time)
+        this.state.Player.seekTo(time);
     }
 
     handlePlayPauseClick() {
@@ -289,11 +294,11 @@ export default class EditVideoPlayer extends Component {
     }
     
     playInContext(context) {
-        this.state.Player.play()
+        this.state.Player.play();
     }
 
     playerSeekTo(seconds) {
-        this.state.Player.seekTo(seconds)
+        this.state.Player.seekTo(seconds);
     }
 
     render() {
@@ -301,9 +306,15 @@ export default class EditVideoPlayer extends Component {
 
         return (
                 <div className="ynVideoPlayer">
+                    <ConfirmModal
+                        showing={this.props.showingAnnotationSave}
+                        description="Are you sure you want to navigate away? Your changes are not saved and will be gone forever."
+                        acceptCallback={this.props.onConfirmQuit}
+                        cancelCallback={this.props.setKeepAnnotations}
+                    />
                     <div className="topicButtonColumn">
-                        <EditableTopicList 
-                            topicObjList={this.state.topicObjList} 
+                        <EditableTopicList
+                            topicObjList={this.state.topicObjList}
                             handleTopicClick={this.handleTopicClick}
                             updateName={this.updateTopicName}
                             addNewTopic={this.addNewTopic}
