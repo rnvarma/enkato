@@ -21,24 +21,19 @@ class HomePage extends Component {
         super(props);
 
         this.state = {
-            logged_in: false
+            logged_in: auth.loggedIn()
         }
     }
 
-    componentWillMount() {
-        if (!auth.loggedIn()) return;
-        request.get('/1/userdata', {
-            success: function(data) {
-                this.setState({
-                    logged_in: data.logged_in
-                });
-            }.bind(this),
-        })
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            logged_in: nextProps.loggedIn
+        });
     }
 
     render() {
         var HomepageBody = "";
-
+        console.log(this.state.logged_in)
         if(this.state.logged_in){
             HomepageBody=<UserDashboard />
         } else {
