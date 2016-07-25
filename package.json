@@ -37,6 +37,7 @@
     "react-fontawesome": "^1.1.0",
     "react-router": "^2.6.0",
     "react-scrollbar": "^0.4.1",
+    "react-select": "^1.0.0-beta14",
     "resolve-url": "^0.2.1",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.0",
