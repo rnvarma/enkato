@@ -30,7 +30,6 @@ class NavBar extends Component {
 
         this.getNotifications = this.getNotifications.bind(this)
         this.markAsRead = this.markAsRead.bind(this)
-        this.dropdownToggle = this.dropdownToggle.bind(this)
         this.logout = this.logout.bind(this)
         this.loadDataFromServer = this.loadDataFromServer.bind(this)
     }
@@ -74,21 +73,13 @@ class NavBar extends Component {
         })
     }
 
-    markAsRead() {
-        if (this.state.num_notifications > 0) {
-            var timestamp = this.state.notifications[0].timestamp;
-            request.post('/1/markasread', {
-                data: {
-                    timestamp: timestamp
-                }
-            })
-        }
-    }
-
-    dropdownToggle(isOpen) {
-        if (isOpen) {
-          this.markAsRead();
-        }
+    markAsRead(notification) {
+        var ids = notification.ids;
+        request.post('/1/markasread', {
+            data: {
+                ids: ids,
+            }
+        })
     }
 
     render() {
@@ -112,7 +103,7 @@ class NavBar extends Component {
                     <li role="presentation">
                         <Link to="/userprofile" activeClassName="active">{this.state.username}</Link>
                     </li>
-                    <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown" onToggle = {this.dropdownToggle}>
+                    <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown">
                         {this.state.notifications.map(function(notification) {
                             if (notification.timestamp != "") {
                                 var timestring = moment(notification.timestamp).fromNow();
@@ -120,7 +111,11 @@ class NavBar extends Component {
                             else {
                                 var timestring = ""
                             }
-                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description} {timestring}</div></MenuItem>);
+                            onClick = () => {
+                                this.markAsRead(notification);
+                                window.location.href = notification.link
+                            }
+                            return (<MenuItem onClick = {onClick}><div className = "notification">{notification.description} {timestring}</div></MenuItem>);
                         })}
                     </NavDropdown>
                 </Nav>
