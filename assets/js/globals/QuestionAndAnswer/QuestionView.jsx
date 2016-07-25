@@ -380,11 +380,6 @@ class QuestionView extends React.Component {
         />
       );
       var questionOptions = this.state.questions.map(function(q) {
-        // return {
-        //   filterOption: q.title,
-        //   displayOption: q.title,
-        //   id: q.id,
-        // }
         return q.title
       })
       askQuestionBar = (
