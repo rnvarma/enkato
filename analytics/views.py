@@ -25,31 +25,31 @@ class RecordSeriesVideoView(APIView):
         v_id = request.POST.get('v_id')
         video = Video.objects.get(uuid=v_id)
 
-        cu = request.user.customuser
-        ssData = getStudentSeriesData(series, cu)
-        ssvData = getStudentSeriesVideoData(ssData, video)
-
         video_duration = video.duration
         view_duration = int(request.POST.get('duration')) / 1000 # in milliseconds 
         end = int(float(request.POST.get('end')))
 
-        ssvData.num_views += 1
-        ssvData.total_time_watched += view_duration
-        ssvData.seconds_into_video = end
-        if ssvData.seconds_into_video > 0.9 * video_duration:
-            ssvData.watched = True
-
         if view_duration > (0.1 * video_duration) or view_duration > 30:
             video.num_views += 1
 
-        ssvData.save()
-        video.save()
+            video.save()
+
+        if not request.user.is_anonymous():
+            cu = request.user.customuser
+            ssData = getStudentSeriesData(series, cu)
+            ssvData = getStudentSeriesVideoData(ssData, video)
+
+            ssvData.num_views += 1
+            ssvData.total_time_watched += view_duration
+            ssvData.seconds_into_video = end
+            if ssvData.seconds_into_video > 0.9 * video_duration:
+                ssvData.watched = True
+
+            ssvData.save()
 
         return JsonResponse({
             'status': True,
-            'watched': ssvData.watched,
             'numViews': video.num_views,
-            'total_time_watched': ssvData.total_time_watched,
             'name': video.name
         }) 
 
