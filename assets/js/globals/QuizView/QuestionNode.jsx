@@ -1,18 +1,26 @@
 require('bootstrap-loader');
-var React = require('react');
 require("css/globals/QuizView/QuestionNode");
-import ChoiceList from 'js/globals/QuizView/ChoiceList';
-var FontAwesome = require('react-fontawesome');
-var BottomReviewText = require('js/globals/QuizView/ReviewingQuizView/BottomReviewText')
 
+import React, { Component } from 'react';
+
+import FontAwesome from 'react-fontawesome';
 import Button from 'react-bootstrap/lib/Button';
 
+import ChoiceList from 'js/globals/QuizView/ChoiceList';
+import BottomReviewText from 'js/globals/QuizView/ReviewingQuizView/BottomReviewText';
 
-module.exports = React.createClass({
-    submitInfo:function(){
+export default class QuestionNode extends Component {
+    constructor(props) {
+        super(props)
+
+        this.submitInfo = this.submitInfo.bind(this)
+    }
+
+    submitInfo() {
         this.props.submitInfo()
-    },
-    render:function(){
+    }
+
+    render() {
         if (!this.props.question) {
             return (
                 <div className="questionNode noQuiz">
@@ -53,4 +61,4 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}

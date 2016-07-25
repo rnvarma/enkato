@@ -1,12 +1,13 @@
 
 require("css/series/seriespage/AnnotateSeriesVideoArea.scss");
 
-var React = require('react')
-var EditVideoPlayer = require('js/globals/EditVideoPlayer/EditVideoPlayer');
-var QuizAddingForm = require('js/globals/QuizAddingForm/QuizAddingForm');
+import React, { Component } from 'react';
 
-module.exports = React.createClass({
-    render: function() {
+import EditVideoPlayer from 'js/globals/EditVideoPlayer/EditVideoPlayer';
+import QuizAddingForm from 'js/globals/QuizAddingForm/QuizAddingForm';
+
+export default class AnnotateSeriesVideoArea extends Component {
+    render() {
         var editingBody;
         if(this.props.quizMode){
             editingBody = (
@@ -30,4 +31,4 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}

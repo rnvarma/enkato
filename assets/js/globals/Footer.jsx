@@ -1,10 +1,10 @@
 require("css/globals/Footer")
 
-var React = require('react')
-var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
+import React, { Component } from 'react'
+import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 
-module.exports = React.createClass({
-    render: function() {
+class Footer extends Component {
+    render() {
         return (
             <div className="footer">
                 <div className="name">
@@ -52,4 +52,6 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}
+
+export default Footer;

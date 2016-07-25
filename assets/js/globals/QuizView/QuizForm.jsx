@@ -1,35 +1,50 @@
 require('bootstrap-loader');
-var React = require('react');
-import getCookie from 'js/globals/GetCookie';
 require("css/globals/QuizView/QuizForm");
-var QuestionNode = require('js/globals/QuizView/QuestionNode');
-var ReviewingQuizNav = require("js/globals/QuizView/ReviewingQuizView/ReviewingQuizNav")
-var CompletedQuizPage = require("js/globals/QuizView/ReviewingQuizView/CompletedQuizPage")
 
-import QuizNav from 'js/globals/QuizView/QuizNav';
-import QuizNavFooter from 'js/globals/QuizView/QuizNavFooter';
+import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';
 
-module.exports = React.createClass({
-    getInitialState:function(){
-        return {
+import QuestionNode from 'js/globals/QuizView/QuestionNode';
+import ReviewingQuizNav from "js/globals/QuizView/ReviewingQuizView/ReviewingQuizNav";
+import CompletedQuizPage from "js/globals/QuizView/ReviewingQuizView/CompletedQuizPage";
+import QuizNav from 'js/globals/QuizView/QuizNav';
+import QuizNavFooter from 'js/globals/QuizView/QuizNavFooter';
+
+
+export default class QuizForm extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
             currentQuestion: 0,
             selectedAnswers: [],
             numQsAnswered: 0,
         }
-    },
-    closeModal: function() {
+
+        this.closeModal = this.closeModal.bind(this)
+        this.nextQuestion = this.nextQuestion.bind(this)
+        this.prevQuestion = this.prevQuestion.bind(this)
+        this.setCurrentQuestion = this.setCurrentQuestion.bind(this)
+        this.selectChoice = this.selectChoice.bind(this)
+        this.setNumQsAnswered = this.setNumQsAnswered.bind(this)
+        this.setQuestion = this.setQuestion.bind(this)
+        this.submitInfo = this.submitInfo.bind(this)
+    }
+
+    closeModal() {
         this.props.closeModal()
-    },
-    nextQuestion: function() {
+    }
+
+    nextQuestion() {
         if (this.state.currentQuestion < this.props.questions.length - 1) {
             this.setState({
                 currentQuestion: this.state.currentQuestion + 1
             })
         }
-    },
-    prevQuestion: function() {
+    }
+
+    prevQuestion() {
         if (this.state.currentQuestion > 0) {
             this.setState({
                 currentQuestion: this.state.currentQuestion - 1
@@ -37,13 +52,15 @@ module.exports = React.createClass({
         } else if (this.props.reviewMode) {
             this.props.showResultsPage()
         }
-    },
-    setCurrentQuestion: function(num){
+    }
+
+    setCurrentQuestion(num){
         this.setState({
             currentQuestion: num
         })
-    },
-    selectChoice: function(choiceIndex){
+    }
+
+    selectChoice(choiceIndex){
         var tempChoiceList = this.state.selectedAnswers
         if(choiceIndex == tempChoiceList[this.state.currentQuestion]){
             tempChoiceList[this.state.currentQuestion] = null
@@ -51,9 +68,9 @@ module.exports = React.createClass({
             tempChoiceList[this.state.currentQuestion] = choiceIndex
         }
         this.setState({selectedAnswers: tempChoiceList}, this.setNumQsAnswered)
+    }
 
-    },
-    setNumQsAnswered:function(){
+    setNumQsAnswered(){
         var count = 0
         for (var i = this.state.selectedAnswers.length - 1; i >= 0; i--) {
             if(this.state.selectedAnswers[i] != null){
@@ -61,19 +78,26 @@ module.exports = React.createClass({
             }
         }
         this.setState({numQsAnswered: count})
-    },
-    setQuestion: function(qNum){
+    }
+
+    setQuestion(qNum){
         this.setState({currentQuestion: qNum})
-    },
-    submitInfo: function(){
+    }
+
+    submitInfo(){
         const payload = {
             selectedAnswers: this.state.selectedAnswers,
         }
         this.props.submitQuizAnswers(payload)
-        this.setState(this.getInitialState())
+        this.setState({
+            currentQuestion: 0,
+            selectedAnswers: [],
+            numQsAnswered: 0,
+        })
         this.props.showResultsPage()
-    },
-    render:function(){
+    }
+
+    render() {
         var currentQuestionData = this.props.questions[this.state.currentQuestion]
         var currentQuestionResults=[]
         var isLast = (this.state.currentQuestion == this.props.questions.length - 1)
@@ -140,9 +164,8 @@ module.exports = React.createClass({
             resultsPage={this.props.resultsPage}
             reviewMode={this.props.reviewMode}
             onFinishButton={this.props.onFinishButton}
-            isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion] ? this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect : false}
-          />
+            isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion] ? this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect : false}/>
         </div>
       );
     }
-})
+}

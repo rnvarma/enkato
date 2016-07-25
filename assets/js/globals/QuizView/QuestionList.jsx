@@ -1,10 +1,12 @@
 require('bootstrap-loader');
-var React = require('react');
 require("css/globals/QuizView/QuestionList");
-var QuestionNode = require('js/globals/QuizView/QuestionNode');
 
-module.exports = React.createClass({
-    render:function(){
+import React, { Component } from 'react';
+
+import QuestionNode from 'js/globals/QuizView/QuestionNode';
+
+export default class QuestionList extends Component {
+    render() {
         var QuestionNodes = this.props.questions.map(function(question, index){
             
             return (
@@ -19,4 +21,4 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}

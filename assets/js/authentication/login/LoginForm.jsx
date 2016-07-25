@@ -1,33 +1,43 @@
-var React = require('react')
+import React, { Component } from 'react'
 
-var FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome'
 
-var Form = require('react-bootstrap').Form;
-var FormGroup = require('react-bootstrap').FormGroup;
-var Col = require('react-bootstrap').Col;
-var FormControl = require('react-bootstrap').FormControl;
-var Button = require('react-bootstrap').Button;
-var ControlLabel = require('react-bootstrap').ControlLabel;
-var InputGroup = require('react-bootstrap').InputGroup;
+import Form from 'react-bootstrap/lib/Form';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import Col from 'react-bootstrap/lib/Col';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import Button from 'react-bootstrap/lib/Button';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import InputGroup from 'react-bootstrap/lib/InputGroup';
 
-module.exports = React.createClass({
-    getInitialState: function () {
-        return {
-            user_name: '',
+class LoginForm extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            username: '',
             password: ''
         }
-    },
-    onUserNameChange: function(e) {
-        this.setState({user_name: e.target.value})
-    },
-    onPasswordChange: function (e) {
+
+        this.onUserNameChange = this.onUserNameChange.bind(this)
+        this.onPasswordChange = this.onPasswordChange.bind(this)
+        this.onSubmit = this.onSubmit.bind(this)
+    }
+
+    onUserNameChange(e) {
+        this.setState({username: e.target.value})
+    }
+
+    onPasswordChange(e) {
         this.setState({password: e.target.value})
-    },
-    onSubmit: function (e) {
-        e.preventDefault()
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
         this.props.onFormSubmit(this.state);
-    },
-    render: function() {
+    }
+
+    render() {
         return (
             <Form horizontal onSubmit={this.onSubmit}>
                 <FormGroup controlId="user-name">
@@ -67,4 +77,6 @@ module.exports = React.createClass({
             </Form>
         )
     }
-})
+}
+
+export default LoginForm;

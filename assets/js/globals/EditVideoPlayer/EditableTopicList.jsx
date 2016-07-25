@@ -1,13 +1,14 @@
 require("css/globals/EditVideoPlayer/EditableTopicList")
 
-var React = require('react')
-var ScrollArea = require('react-scrollbar')
+import React, { Component } from 'react';
 
-var EditableTopicNode = require('js/globals/EditVideoPlayer/EditableTopicNode');
-var AddTopicButton = require('js/globals/EditVideoPlayer/AddTopicButton')
+import ScrollArea from 'react-scrollbar';
 
-module.exports = React.createClass({
-    render: function() {
+import EditableTopicNode from 'js/globals/EditVideoPlayer/EditableTopicNode';
+import AddTopicButton from 'js/globals/EditVideoPlayer/AddTopicButton';
+
+export default class EditableTopicList extends Component {
+    render() {
         var topicNodes = this.props.topicObjList.map(function(topic) {
             return (
                 <EditableTopicNode
@@ -30,4 +31,4 @@ module.exports = React.createClass({
             </div>
         )        
     }
-})
+}

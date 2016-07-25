@@ -1,11 +1,12 @@
 require('css/globals/QuizView/QuizNavFooter.scss');
-import Button from 'react-bootstrap/lib/Button';
-var BottomReviewText = require('js/globals/QuizView/ReviewingQuizView/BottomReviewText')
-
 
 import React from 'react';
 
-class QuizNavFooter extends React.Component {
+import Button from 'react-bootstrap/lib/Button';
+
+import BottomReviewText from 'js/globals/QuizView/ReviewingQuizView/BottomReviewText';
+
+export default class QuizNavFooter extends React.Component {
     render() {
         var disableAll = this.props.resultsPage;
 
@@ -70,5 +71,3 @@ class QuizNavFooter extends React.Component {
       );
     }
 }
-
-export default QuizNavFooter;

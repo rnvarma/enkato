@@ -3,29 +3,41 @@ require("css/globals/base.scss")
 require("css/globals/NavBar.scss")
 require('css/home/homepage/HomePage')
 
-var React = require('react')
-var getCookie = require('js/globals/GetCookie.js')
-var ReactDOM = require('react-dom')
+import React, { Component } from 'react'
+import getCookie from 'js/globals/GetCookie';
 
-var NavBar = require('js/globals/NavBar');
-var Footer = require('js/globals/Footer');
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 
-var FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome'
 
-var Form = require('react-bootstrap').Form;
-var FormGroup = require('react-bootstrap').FormGroup;
-var Col = require('react-bootstrap').Col;
-var FormControl = require('react-bootstrap').FormControl;
-var Button = require('react-bootstrap').Button;
-var ControlLabel = require('react-bootstrap').ControlLabel;
-var InputGroup = require('react-bootstrap').InputGroup;
+import Form from 'react-bootstrap/lib/Form';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import Button from 'react-bootstrap/lib/Button';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import InputGroup from 'react-bootstrap/lib/InputGroup';
 
-var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
+import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 
-module.exports = React.createClass({
-    onFormSubmit: function(data) {
+class LandingPageBody extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            name: '',
+            email: ''
+        }
+
+        this.onFormSubmit = this.onFormSubmit.bind(this);
+        this.onEmailChange = this.onEmailChange.bind(this);
+        this.onNameChange = this.onNameChange.bind(this)
+    }
+
+    onFormSubmit(e) {
+        e.preventDefault()
+        var data = this.state;
+
         $.ajax({
           url: "/interesteduser",
           dataType: 'json',
@@ -48,24 +60,17 @@ module.exports = React.createClass({
             console.error(this.props.url, status, err.toString());
           }.bind(this)
         });
-    },
-    getInitialState: function() {
-        return {
-            name: '',
-            email: '',
-        }
-    },
-    onNameChange: function(e) {
+    }
+
+    onNameChange(e) {
         this.setState({name: e.target.value})
-    },
-    onEmailChange: function(e) {
+    }
+
+    onEmailChange(e) {
         this.setState({email: e.target.value})
-    },
-    onSubmit: function(e) {
-        e.preventDefault();
-        this.onFormSubmit(this.state);
-    },
-    render: function() {
+    }
+
+    render() {
         var headerStyle = {
             backgroundImage: "url(" + DjangoImageLinkHandler("splash_page.png") + ")"
         }
@@ -88,7 +93,7 @@ module.exports = React.createClass({
                             <div className="signUpTitle">
                                 <span className="bold">Sign up</span> for our free beta!
                             </div>
-                            <Form onSubmit={this.onSubmit}>
+                            <Form onSubmit={this.onFormSubmit}>
                                 <FormGroup controlId="name">
                                     <FormControl onChange={this.onNameChange} type="text" placeholder="Your Name" />
                                 </FormGroup>
@@ -195,5 +200,6 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}
 
+export default LandingPageBody;

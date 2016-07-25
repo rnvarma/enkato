@@ -1,64 +1,80 @@
 require("css/globals/CreateSeriesModal.scss")
 
-var React = require('react')
+import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Modal from 'react-bootstrap/lib/Modal';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Button from 'react-bootstrap/lib/Button';
 
-var CreateSeriesForm = require('js/globals/CreateSeriesForm')
-var getCookie = require('js/globals/GetCookie')
+import CreateSeriesForm from 'js/globals/CreateSeriesForm';
+import request from 'js/globals/HttpRequest';
 
-module.exports = React.createClass({
-    getInitialState() {
-        return {
+class CreateSeriesModal extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
             showModal: false,
             name: "",
             description: "",
         }
-    },
-    onNameChange: function(e) {
+
+        this.onNameChange = this.onNameChange.bind(this)
+        this.onDescriptionChange = this.onDescriptionChange.bind(this)
+        this.onFormSubmit = this.onFormSubmit.bind(this)
+        this.close = this.close.bind(this);
+        this.open = this.open.bind(this)
+        this.clearModal = this.clearModal.bind(this)
+    }
+
+    onNameChange(e) {
         this.setState({name: e.target.value})
-    },
-    onDescriptionChange: function(e) {
+    }
+
+    onDescriptionChange(e) {
         this.setState({description: e.target.value})
-    },
-    onFormSubmit: function() {
+    }
+
+    onFormSubmit() {
         if (!this.state.name || !this.state.description) return;
-        var data = {
-            name: this.state.name,
-            description: this.state.description
-        }
-        $.ajax({
-          url: "/createseries",
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            console.log(data);
-            if (data.status) {
-                window.location.href = "/s/" + data.s_uuid;
-            } else {
-                console.log("sad face");
-            }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    close: function() {
-        this.setState({showModal: false})
-    },
-    open: function() {
-        this.setState({showModal: true})
-    },
-    render: function() {
+        request.post('/createseries', {
+            data: {
+                name: this.state.name,
+                description: this.state.description
+            },
+            success: (data) => {
+                if (data.status) {
+                    browserHistory.push(`/s/${data.s_uuid}`);
+                    this.close();
+                    this.clearModal();
+                } else {
+                    console.log("sad face");
+                }
+            },
+        })
+    }
+
+    clearModal() {
+        this.setState({
+            name: "",
+            description: ""
+        })
+    }
+
+    close() {
+        this.setState({
+            showModal: false
+        })
+    }
+    open() {
+        this.setState({
+            showModal: true
+        })
+    }
+
+    render() {
         return (
             <li className="createSeriesModal">
                 <Button className="createBtn structabl-red" eventKey={3} onClick={this.open}>Create</Button>
@@ -79,4 +95,6 @@ module.exports = React.createClass({
             </li>
         )
     }
-})
+}
+
+export default CreateSeriesModal;

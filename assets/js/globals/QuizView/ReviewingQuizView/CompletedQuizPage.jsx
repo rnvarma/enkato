@@ -1,11 +1,12 @@
 require('bootstrap-loader');
-var React = require('react');
 require("css/globals/QuizView/ReviewingQuizView/CompletedQuizPage");
+
+import React, { Component } from 'react';
+
 import Button from 'react-bootstrap/lib/Button';
 
-
-module.exports = React.createClass({
-    render:function(){
+export default class CompletedQuizPage extends Component {
+    render() {
         return(
             <div className="CompletedQuizPage">
                 <div className="numCorrectReview">
@@ -27,4 +28,4 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}

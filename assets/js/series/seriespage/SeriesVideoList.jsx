@@ -1,10 +1,10 @@
 require('css/series/seriespage/SeriesVideoList.scss');
 
-import React from 'react';
+import React, { Component } from 'react';
 
 import SeriesVideoPanel from 'js/series/seriespage/SeriesVideoPanel';
 
-export default class SeriesVideoList extends React.Component {
+export default class SeriesVideoList extends Component {
     constructor(props) {
         super(props);
     }
@@ -15,7 +15,7 @@ export default class SeriesVideoList extends React.Component {
                 <SeriesVideoPanel
                     key={v.order}
                     video={v}
-                    s_id={this.props.s_id}
+                    seriesUUID={this.props.seriesUUID}
                     is_creator={this.props.is_creator}/>
             );
         }.bind(this))

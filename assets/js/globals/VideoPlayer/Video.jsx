@@ -1,12 +1,15 @@
 require('bootstrap-loader');
 require("css/globals/VideoPlayer/Video")
-var React = require('react')
-var QuizModal = require('js/globals/VideoPlayer/QuizModal')
-import { Button, Modal } from 'react-bootstrap';
+
+import React, { Component } from 'react';
+
+import QuizModal from 'js/globals/VideoPlayer/QuizModal';
+import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
 
 
-module.exports = React.createClass({ 
-    render:function(){
+export default class Video extends Component { 
+    render(){
         var height = this.props.videoDivHeight - this.props.controlBarHeight;
         var quizModal;
         if (this.props.quizDataLoaded) {
@@ -35,4 +38,4 @@ module.exports = React.createClass({
             </div>
         )
     }
-});
+}

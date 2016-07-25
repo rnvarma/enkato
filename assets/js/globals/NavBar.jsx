@@ -1,7 +1,8 @@
 require("css/globals/NavBar.scss")
 
-var React = require('react')
-var moment = require('moment')
+import React, { Component } from 'react';
+import { Link } from 'react-router';
+import moment from 'moment';
 
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
@@ -9,100 +10,99 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 
-var CreateSeriesModal = require('js/globals/CreateSeriesModal')
-var DjangoImageLinkHandler = require('js/globals/DjangoImageLinkHandler')
-var FontAwesome = require('react-fontawesome');
+import CreateSeriesModal from 'js/globals/CreateSeriesModal';
+import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
+import FontAwesome from 'react-fontawesome';
+import request from 'js/globals/HttpRequest';
+import auth from 'auth'
 
-import getCookie from 'js/globals/GetCookie';
+class NavBar extends Component {
+    constructor(props) {
+        super(props)
 
-module.exports = React.createClass({
-    getInitialState: function() {
-        return {
+        this.state = {
             logged_in: false,
             username: '',
             user_id: 0,
             num_notifications: 0,
             notifications: []
         }
-    },
-    getNotifications: function() {
-        $.ajax({
-          url: "/1/getnotifications",
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            this.setState({
-              notifications: data.notifications,
-              num_notifications: data.num
-            });
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    markAsRead: function() {
+
+        this.getNotifications = this.getNotifications.bind(this)
+        this.markAsRead = this.markAsRead.bind(this)
+        this.dropdownToggle = this.dropdownToggle.bind(this)
+        this.logout = this.logout.bind(this)
+    }
+
+    logout() {
+        auth.logout(() => {
+            window.location.href = "/"
+        })
+    }
+
+    componentWillMount() {
+        this.getNotifications();
+        if (!auth.loggedIn()) return;
+        request.get('/1/userdata', {
+            success: function(data) {
+                this.setState({
+                    logged_in: data.logged_in,
+                    username: data.username,
+                    user_id: data.user_id
+                });
+            }.bind(this)
+        })
+    }
+
+    getNotifications() {
+        request.get('/1/getnotifications', {
+            success: function(data) {
+                this.setState({
+                    notifications: data.notifications,
+                    num_notifications: data.num
+                });
+            }.bind(this),
+        })
+    }
+
+    markAsRead() {
         if (this.state.num_notifications > 0) {
             var timestamp = this.state.notifications[0].timestamp;
-            $.ajax({
-              url: "/1/markasread",
-              type: 'POST',
-              data: {timestamp: timestamp},
-              beforeSend(xhr) {
-                  xhr.withCredentials = true;
-                  xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-              },
-              success: function() {
-
-              }.bind(this),
-              error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-              }.bind(this)
-            });
+            request.post('/1/markasread', {
+                data: {
+                    timestamp: timestamp
+                }
+            })
         }
-    },
-    componentWillMount: function() {
-        this.getNotifications();
-        $.ajax({
-          url: "/1/userdata",
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            this.setState({
-                logged_in: data.logged_in,
-                username: data.username,
-                user_id: data.user_id
-            });
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    dropdownToggle: function(isOpen) {
+    }
+
+    dropdownToggle(isOpen) {
         if (isOpen) {
           this.markAsRead();
         }
-    },
-    render: function() {
+    }
+
+    render() {
         var active = this.props.active;
-        var LoginButton = active == "login" ? (
-          <NavItem eventKey={1} className="active" href="/login">Sign In</NavItem>
-        ) : (
-          <NavItem eventKey={1} href="/login">Sign In</NavItem>
+        var LoginButton = (
+            <li role="presentation">
+                <Link to="/login" activeClassName="active">Sign In</Link>
+            </li>
         )
-        var RegisterButton = active == "register" ? (
-          <NavItem eventKey={2} className="active" href="/register">Sign Up</NavItem>
-        ) : (
-          <NavItem eventKey={2} href="/register">Sign Up</NavItem>
+        var RegisterButton = (
+            <li role="presentation">
+                <Link to="/register" activeClassName="active">Sign Up</Link>
+            </li>
         )
         if (this.state.logged_in) {
             var numstring = this.state.num_notifications
             var RightBar = (
                 <Nav pullRight>
                     <CreateSeriesModal />
-                    <NavItem eventKey={2} href="/logout">Logout</NavItem>
-                    <NavItem eventKey={1} href="/userprofile">{this.state.username}</NavItem>
+                    <NavItem eventKey={2} onClick={this.logout}>Logout</NavItem>
+                    <li role="presentation">
+                        <Link to="/userprofile" activeClassName="active">{this.state.username}</Link>
+                    </li>
                     <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown" onToggle = {this.dropdownToggle}>
                         {this.state.notifications.map(function(notification) {
                             if (notification.timestamp != "") {
@@ -128,9 +128,9 @@ module.exports = React.createClass({
             <Navbar fixedTop>
                 <Navbar.Header>
                   <Navbar.Brand>
-                    <a href="/">
+                    <Link to="/">
                         <span className="logo"><img className="headerLogo" src={DjangoImageLinkHandler("enkato_logo.png")} /></span>
-                    </a>
+                    </Link>
                   </Navbar.Brand>
                   <Navbar.Toggle />
                 </Navbar.Header>
@@ -141,4 +141,6 @@ module.exports = React.createClass({
             </Navbar>
         )
     }
-})
+}
+
+export default NavBar;

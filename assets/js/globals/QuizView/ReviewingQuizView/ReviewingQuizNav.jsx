@@ -1,11 +1,12 @@
 require('bootstrap-loader');
-var React = require('react');
 require('css/globals/QuizView/QuizNav.scss');
+
+import React, { Component } from 'react';
 
 import QuizNavNode from 'js/globals/QuizView/QuizNavNode';
 
-module.exports = React.createClass({
-    render:function(){
+export default class ReviewingQuizNav extends Component {
+    render() {
         var quizNavNodes = this.props.questions.map(function(q, i) {
             var correct = this.props.quizResults[i].isCorrect
             return (
@@ -26,4 +27,4 @@ module.exports = React.createClass({
             </div>
         );
     }
-})
+}

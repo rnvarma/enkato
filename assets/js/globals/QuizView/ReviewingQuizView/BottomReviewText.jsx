@@ -1,10 +1,12 @@
 require('bootstrap-loader');
-var React = require('react');
 require("css/globals/QuizView/ReviewingQuizView/BottomReviewText");
-var FontAwesome = require('react-fontawesome');
 
-module.exports = React.createClass({
-    render:function(){
+import React, { Component } from 'react';
+
+import FontAwesome from 'react-fontawesome';
+
+export default class BottomReviewText extends Component {
+    render() {
         var text = ""
         if(this.props.correct){
             text = "You answered this correctly!"
@@ -23,4 +25,4 @@ module.exports = React.createClass({
             </div>
         ) 
     }
-})
+}

@@ -1,7 +1,7 @@
 
 require("css/series/seriespage/UploadAnnotateModal.scss");
 
-import React from 'react';
+import React, { Component } from 'react';
 
 import getCookie from 'js/globals/GetCookie';
 
@@ -9,13 +9,16 @@ import { Button, Modal } from 'react-bootstrap';
 
 import AddVideoToSeriesForm from 'js/series/seriespage/AddVideoToSeriesForm';
 import AnnotateVideosForSeries from 'js/series/seriespage/AnnotateVideosForSeries';
+import request from 'js/globals/HttpRequest';
 
-export default class UploadAnnotateModal extends React.Component {
+export default class UploadAnnotateModal extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             error: ""
         };
+
         this.onBack = this.onBack.bind(this);
         this.onNext = this.onNext.bind(this);
     }
@@ -33,16 +36,8 @@ export default class UploadAnnotateModal extends React.Component {
             this.props.close();
         } else {
             if (this.props.urls) {
-                $.ajax({
-                    url: "/upload/s/" + this.props.s_id,
-                    dataType: "json",
-                    type: "POST",
-                    data: { urls: this.props.urls },
-                    beforeSend: function(xhr) {
-                        xhr.withCredentials = true;
-                        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
-                    },
-                    success: function(data) {
+                request.post(`/upload/s/${this.props.s_id}`, {
+                    success: (data) => {
                         if (data.status) {
                             this.props.reloadPageData();
                             this.props.setUrls(""); /* reset url entry to avoid resubmission */
@@ -80,11 +75,8 @@ export default class UploadAnnotateModal extends React.Component {
                             this.props.reloadPageData(); /* some videos may have still been uploaded */
                             this.setState({ error: errorOutput });
                         }
-                    }.bind(this),
-                    error: function(xhr, status, err) {
-                        console.error(this.props.urls, status, err.toString());
-                    }.bind(this)
-                });
+                    }
+                })
             } else {
               if (this.props.videos.length > 0) {
                 this.props.setAnnotateMode();

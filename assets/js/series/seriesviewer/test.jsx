@@ -16,6 +16,8 @@ class SeriesPage extends Component {
     constructor(props) {
         super(props)
 
+        console.log(this.props)
+
         this.state = {
             seriesUUID: this.props.params.seriesUUID,
             name: '',
@@ -183,7 +185,5 @@ class SeriesPage extends Component {
         );
     }
 }
-
-console.log("ran the series page")
 
 module.exports = SeriesPage;

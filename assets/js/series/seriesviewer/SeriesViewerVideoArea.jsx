@@ -13,7 +13,7 @@ class SeriesViewerVideoArea extends React.Component {
             setTopicList={this.props.setTopicList}
             setGetCurrentTime={this.props.setGetCurrentTime}
             videoUUID={this.props.currUUID}
-            s_id={this.props.s_id}
+            seriesUUID={this.props.seriesUUID}
             nextVideo={this.props.nextVideo}
           />
         </div>

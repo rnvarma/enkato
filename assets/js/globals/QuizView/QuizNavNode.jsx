@@ -2,7 +2,7 @@ require('css/globals/QuizView/QuizNavNode.scss');
 
 import React from 'react';
 
-class QuizNavNode extends React.Component {
+export default class QuizNavNode extends React.Component {
     constructor() {
         super();
         this.onClick = this.onClick.bind(this);
@@ -27,5 +27,3 @@ class QuizNavNode extends React.Component {
         );
     }
 }
-
-export default QuizNavNode;

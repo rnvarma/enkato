@@ -1,12 +1,13 @@
 require('css/series/seriespage/SeriesVideoPanel.scss');
 
-import React from 'react';
+import React, { Component } from 'react';
+import { Link } from 'react-router'
 import FontAwesome from 'react-fontawesome';
 
 import { pluralize } from 'js/globals/utility';
 
-module.exports = React.createClass({
-    render: function() {
+export default class SeriesVideoPanel extends Component {
+    render() {
         var video = this.props.video;
         if (video.order == 0) {
             var rightClass = "right first";
@@ -20,13 +21,13 @@ module.exports = React.createClass({
                         {video.order+1}
                     </div>
                     <div className="thumbnailArea">
-                        <a href={"/s/" + this.props.s_id + "/watch#" + video.uuid}>
+                        <Link to={`/s/${this.props.seriesUUID}/watch#${video.uuid}`}>
                             <img src={video.thumbnail} className="thumbnailImg"/>
-                        </a>
+                        </Link>
                     </div>
                     <div className="info">
                         <div className="name">
-                            <a href={"/s/" + this.props.s_id + "/watch#" + video.uuid}>{video.name}</a>
+                            <Link to={`/s/${this.props.seriesUUID}/watch#${video.uuid}`}>{video.name}</Link>
                         </div>
                         <div className="creator">
                             <span className={"seperator" + (this.props.is_creator && !video.num_topics ? " alertAnnotate" : "")}>
@@ -55,4 +56,4 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}

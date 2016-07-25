@@ -14,6 +14,7 @@ import QuestionModal from 'js/globals/QuestionAndAnswer/QuestionModal';
 import QuestionFilterBar from 'js/globals/QuestionAndAnswer/QuestionFilterBar';
 import QuestionList from 'js/globals/QuestionAndAnswer/QuestionList';
 import QuestionDisplay from 'js/globals/QuestionAndAnswer/QuestionDisplay';
+import request from 'js/globals/HttpRequest';
 
 class QuestionView extends React.Component {
   constructor(props) {
@@ -81,15 +82,9 @@ class QuestionView extends React.Component {
       this.props.loadQuestionData(onSuccess);
       return;
     }
-    $.ajax({
-      url: `/api/questions?video_uuid=${videoUUID}`,
-      dataType: 'json',
-      cache: false,
-      success: onSuccess,
-      error: (xhr, status, err) => {
-        console.error(status, err.toString());
-      },
-    });
+    request.get(`/api/questions?video_uuid=${videoUUID}`, {
+      success: onSuccess
+    })
   }
 
   processQuestionData(data) {
@@ -328,18 +323,13 @@ class QuestionView extends React.Component {
   }
 
   /* query user data for validation purposes */
+  
   loadUserData() {
-    $.ajax({
-      url: '/api/users/current',
-      dataType: 'json',
-      cache: false,
-      success: (data) => {
-        this.currentUser = data;
-      },
-      error: (xhr, status, err) => {
-        console.error(status, err.toString());
-      },
-    });
+    request.get('/api/users/current', {
+        success: (data) => {
+            this.currentUser = data;
+        },
+    })
   }
 
   render() {

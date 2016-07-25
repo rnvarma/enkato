@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load render_bundle from webpack_loader %}
 
 <html>
     <head>
@@ -10,15 +11,18 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,500,600" rel="stylesheet" type="text/css">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
         <link rel="shortcut icon" href="{% static 'favico.ico' %}" type="image/x-icon" />
-
-        {% block css %}{% endblock %}
+        <script src="//fast.eager.io/1PsF2QU8Ib.js"></script>
     </head>
 
     <body>
         
-        {% block content %}{% endblock %}
+        <div id="page-anchor"> </div>
 
-        {% block js %}{% endblock %}
+        {% render_bundle 'vendor' %}
+        {% render_bundle 'main' %}
+
+
+
 
         {% if not debug %}
             <script>

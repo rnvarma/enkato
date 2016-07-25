@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^1/s/(?P<s_id>[a-zA-Z0-9_.-]+)$', SeriesData.as_view()),
     url(r'^2/s/(?P<v_id>[a-zA-Z0-9_.-]+)$', SeriesVideoData.as_view()),
     url(r'^1/v/(?P<v_uuid>[a-zA-Z0-9_.-]+)$', VideoData.as_view()),
+    url(r'^1/userprofile$', UserProfileData.as_view()),
     url(r'^1/userprofile/(?P<u_id>[a-zA-Z0-9_.-]+)$', UserProfileData.as_view()),
     url(r'^api/quizdata/(?P<v_uuid>[a-zA-Z0-9_.-]+)$', QuizData.as_view()),
     url(r'^2/v/(?P<v_id>[a-zA-Z0-9_.-]+)$', VideoIdData.as_view()),

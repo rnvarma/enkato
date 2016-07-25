@@ -1,6 +1,6 @@
-var React = require('react')
+import React, { Component } from 'react'
 
-var FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome'
 
 import Form from 'react-bootstrap/lib/Form';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
@@ -9,12 +9,19 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
 
-module.exports = React.createClass({
-    onSubmit: function (e) {
+class CreateSeriesForm extends Component {
+    constructor(props) {
+        super(props);
+
+        this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    onSubmit(e) {
         e.preventDefault()
         this.props.onFormSubmit(this.state);
-    },
-    render: function() {
+    }
+
+    render() {
         return (
             <Form horizontal onSubmit={this.onSubmit}>
                 <FormGroup controlId="user-name">
@@ -36,4 +43,6 @@ module.exports = React.createClass({
             </Form>
         )
     }
-})
+}
+
+export default CreateSeriesForm;

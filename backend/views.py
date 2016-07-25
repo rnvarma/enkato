@@ -173,8 +173,11 @@ class UserData(APIView):
         return Response(data)
 
 class UserProfileData(APIView):
-    def get(self, request, u_id):
-        cu = CustomUser.objects.get(id=u_id)
+    def get(self, request, u_id=None):
+        if not u_id:
+            cu = request.user.customuser
+        else:
+            cu = CustomUser.objects.get(id=u_id)
         data = {}
         data["userdata"] = Serializer.serialize_userprofiledata(cu)
         data["created_series"] = map(Serializer.serialize_series, cu.created_series.all())

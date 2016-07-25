@@ -111,7 +111,6 @@ class QuestionDisplay extends React.Component {
   }
 
   render() {
-    console.log(this.props.videoUUID);
     if (this.props.question == null) {
       return (
         <Col md={8} className="questionDisplay empty">

@@ -16,15 +16,16 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 import notifications.urls
+from rest_framework.authtoken.views import obtain_auth_token
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^obtain-auth-token/$', obtain_auth_token),
     url(r'^', include('analytics.urls')),
-    url(r'^', include('backend.urls')),
-    url(r'^', include('home.urls')),
     url(r'^', include('authentication.urls')),
+    url(r'^', include('backend.urls')),
     url(r'^', include('userprofile.urls')),
-    url(r'^', include('classroom.urls')),
     url(r'^', include('singlevideo.urls')),
     url(r'^', include('upload.urls')),
     url(r'^', include('series.urls')),
@@ -32,5 +33,6 @@ urlpatterns = [
     url(r'^', include('testinggrounds.urls')),
     url(r'^', include('instructortools.urls')),
     url(r'^', include('questionanswer.urls')),
+    url(r'^', include('home.urls')),
     url(r'^', include(notifications.urls, namespace='notifications')),
 ]

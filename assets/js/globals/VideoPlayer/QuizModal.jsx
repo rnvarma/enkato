@@ -1,59 +1,76 @@
 require('bootstrap-loader');
-var React = require('react');
 require("css/globals/VideoPlayer/QuizModal");
+
+import React, { Component } from 'react';
+
 import Button from 'react-bootstrap/lib/Button';
 
-var QuizForm = require('js/globals/QuizView/QuizForm');
+import QuizForm from 'js/globals/QuizView/QuizForm';
 import SeriesViewerSidebarVideoPanel from 'js/series/seriesviewer/SeriesViewerSidebarVideoPanel';
 import FontAwesome from 'react-fontawesome';
 
-module.exports= React.createClass({
-    getInitialState: function(){
-        return {
+export default class QuizModal extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
             reviewMode: false,
             resultsPage: false
         }
-    },
-    componentDidMount: function() {
+
+        this.onReviewQuizClicked = this.onReviewQuizClicked.bind(this)
+        this.showResultsPage = this.showResultsPage.bind(this)
+        this.showReviewMode = this.showReviewMode.bind(this)
+        this.onRetakeQuiz = this.onRetakeQuiz.bind(this)
+        this.closeModal = this.closeModal.bind(this)
+    }
+
+    componentDidMount() {
         this.setState({
             resultsPage: this.props.quizTaken
         })
-    },
-    onReviewQuizClicked: function(){
+    }
+
+    onReviewQuizClicked(){
         this.setState({
             reviewMode: true,
             resultsPage: false
         })
         this.props.showQuiz()
-    },
-    showResultsPage: function() {
+    }
+
+    showResultsPage() {
         this.setState({
             reviewMode: false,
             resultsPage: true
         })
-    },
-    showReviewMode: function() {
+    }
+
+    showReviewMode() {
         this.setState({
             reviewMode: true,
             resultsPage: false
         })
-    },
-    onRetakeQuiz: function() {
+    }
+
+    onRetakeQuiz() {
         this.setState({
             reviewMode: false,
             resultsPage: false
         })
         this.props.showQuiz()
         
-    },
-    closeModal: function() {
+    }
+
+    closeModal() {
         this.setState({
             reviewMode: false,
             resultsPage: this.props.quizTaken
         })
         this.props.closeModal()
-    },
-    render:function(){
+    }
+
+    render(){
         var bg_style = (this.props.showingOverlay ? {} : {display:"none"})
 
         var overlay_style = (this.props.takingQuiz || this.props.showingOverlay ? {} : {display:"none"})
@@ -146,4 +163,4 @@ module.exports= React.createClass({
             </div>
         )
     }
-})
+}

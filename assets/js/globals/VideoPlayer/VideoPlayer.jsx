@@ -1,8 +1,6 @@
-require('bootstrap-loader'); 
 require("css/globals/VideoPlayer/VideoPlayer")
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
 import getCookie from 'js/globals/GetCookie';
 
 import { styleDuration } from 'js/globals/utility';
@@ -12,6 +10,7 @@ import Video from 'js/globals/VideoPlayer/Video';
 import ControlBar from 'js/globals/VideoPlayer/ControlBar';
 import Player from 'js/globals/VideoPlayer/Player';
 
+import request from 'js/globals/HttpRequest';
 
 // How often the video player checks the video's state
 const pollInterval = 100;
@@ -56,9 +55,11 @@ function clearCurrentTopic(topicList){
     return tList;
 }
 
-module.exports  = React.createClass({
-    getInitialState: function() {
-        return {
+export default class VideoPlayer extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
             quizDataLoaded: false,
             topicObjList: [], 
             isPlaying: false, 
@@ -75,7 +76,7 @@ module.exports  = React.createClass({
                 duration: 0,
                 end: 0
             },
-            s_id: this.props.s_id,
+            seriesUUID: this.props.seriesUUID,
             videoTitle: "",
             quizTaken: false,
             completedQuizInfo:{
@@ -83,125 +84,145 @@ module.exports  = React.createClass({
                 numCorrect:0
             },
             numQuestions: 0
-        };
-    },
-    trackView: function(uuid, end) {
+        }
+
+        this.trackView = this.trackView.bind(this)
+        this.onVideoEnd = this.onVideoEnd.bind(this)
+        this.onPlayerStateChange = this.onPlayerStateChange.bind(this)
+        this.loadQuizData = this.loadQuizData.bind(this)
+        this.submitQuiz = this.submitQuiz.bind(this)
+        this.loadDataFromServer = this.loadDataFromServer.bind(this)
+        this.updateCurrentState = this.updateCurrentState.bind(this)
+        this.showOverlay = this.showOverlay.bind(this)
+        this.showQuiz = this.showQuiz.bind(this)
+        this.closeModal = this.closeModal.bind(this)
+        this.setWindowSize = this.setWindowSize.bind(this)
+        this.handleScrub = this.handleScrub.bind(this)
+        this.handleTopicClick = this.handleTopicClick.bind(this)
+        this.handlePlayPauseClick = this.handlePlayPauseClick.bind(this)
+        this.onFinishButton = this.onFinishButton.bind(this)
+        this.afterTopicListUpdate = this.afterTopicListUpdate.bind(this)
+        this.playVideo = this.playVideo.bind(this)
+    }
+
+    componentDidMount() {
+        this.loadDataFromServer(this.props.videoUUID);
+        this.setWindowSize();
+        this.setState({
+            isPlaying: false,
+            currentTime: "0:00",
+            percentDone: 0
+        })
+        window.onresize=this.setWindowSize;
+        //updates time and playing
+        setInterval(this.updateCurrentState, pollInterval)
+    }
+
+    loadDataFromServer(v_id){
+        request.get(`/1/v/${v_id}`, {
+            success: (data) => {
+                /* an optional prop */
+                if (this.props.setTopicList) {
+                  this.props.setTopicList(data.topicList);
+                }
+                if (this.state.Player) {
+                    this.state.Player.destroy();
+                }
+                this.setState({
+                    Player: new Player(data.videoID, this.onPlayerStateChange)
+                });
+                this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
+                this.forceUpdate();
+
+                this.videoPlayerClass = "";
+                if (data.topicList.length == 0) {
+                  this.videoPlayerClass = "full";
+                }
+                this.totalTime = data.videoData.duration_clean;
+
+                this.setState({
+                    videoTitle: data.videoData.name
+                });
+
+                /* optional prop */
+                if (this.props.setGetCurrentTime) {
+                      this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
+                }
+            }
+        })
+        this.loadQuizData(v_id)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.state.uuid != nextProps.videoUUID) {
+            this.trackView(this.state.uuid)
+            this.setState({
+                uuid: nextProps.videoUUID,
+                takingQuiz: false,
+                showingOverlay: false
+            })
+            this.loadDataFromServer(nextProps.videoUUID);
+        }
+    }
+
+    trackView(uuid, end) {
         var data = {
             v_id: this.state.uuid,
             duration: this.state.viewStats.duration,
             end: end ? end : this.state.Player.getCurrentTime()
         }
-        var s_id = this.state.s_id
-        $.ajax({
-          url: "/trackview" + (s_id ? "/s/" + s_id : ""),
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            if (data.status) {
-                this.state.viewStats.duration = 0;
-            } else {
-                console.log("sad face");
+        var seriesUUID = this.state.seriesUUID
+        if (seriesUUID)
+            var url = `/trackview/s/${seriesUUID}`;
+        else
+            var url = `trackview`;
+        request.post(url, {
+            data: data,
+            success: (data) => {
+                if (data.status) {
+                    this.state.viewStats.duration = 0;
+                } else {
+                    console.log("sad face");
+                }
             }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    onVideoEnd: function() {
+        })
+    }
+
+    onVideoEnd() {
         this.trackView(this.state.uuid)
         this.showOverlay();
-    },
-    onPlayerStateChange: function(event) {
+    }
+
+    onPlayerStateChange(event) {
         if (event.data == 0) {
             this.onVideoEnd()
         } else if (event.data == 1) {
         }
-    },
-    loadQuizData: function(v_id){
-        var s_id = $("#s_id").attr("data-sid")
-        $.ajax({
-            url: "/1/studentquizdata/s/" + s_id + "/v/" + v_id,
-            dataType: 'json',
-            cache: false,
-            success: function(data) {
+    }
+
+    loadQuizData(v_id){
+        var seriesUUID = this.state.seriesUUID
+        request.get(`/1/studentquizdata/s/${seriesUUID}/v/${v_id}`, {
+            success: (data) => {
                 this.setState(data)
                 this.setState({quizDataLoaded: true})
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });    
-    },
-    submitQuiz: function(answers) {
-        $.ajax({
-          url: "/logquiz/s/" + this.state.s_id + "/v/" + this.state.uuid,
-          dataType: 'json',
-          type: 'POST',
-          data: answers,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            this.setState({
-                quizTaken: true,
-                completedQuizInfo: data,
-            });
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    loadDataFromServer: function(v_id){
-        $.ajax({
-          url: "/1/v/" + v_id,
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-
-            /* an optional prop */
-            if (this.props.setTopicList) {
-              this.props.setTopicList(data.topicList);
             }
-            if (this.state.Player) {
-                this.state.Player.destroy();
+        })
+    }
+
+    submitQuiz(answers) {
+        request.post(`/logquiz/s/${this.state.seriesUUID}/v/${this.state.uuid}`, {
+            data: answers,
+            success: (data) => {
+                this.setState({
+                    quizTaken: true,
+                    completedQuizInfo: data,
+                });
             }
-            this.setState({
-                Player: new Player(data.videoID, this.onPlayerStateChange)
-            });
-            this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
-            this.forceUpdate();
+        })
+    }
 
-            this.videoPlayerClass = "";
-            if (data.topicList.length == 0) {
-              this.videoPlayerClass = "full";
-            }
-            this.totalTime = data.videoData.duration_clean;
-
-            this.setState({
-                videoTitle: data.videoData.name
-            });
-
-              /* optional prop */
-              if (this.props.setGetCurrentTime) {
-                  this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
-              }
-
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-        this.loadQuizData(v_id)
-    },
-    updateCurrentState: function(){
+    updateCurrentState(){
         //set time
         var seconds = Math.round(this.state.Player.getCurrentTime())
         var percentDone = (seconds / this.state.Player.getDuration())*100
@@ -218,53 +239,47 @@ module.exports  = React.createClass({
         
         this.setWindowSize()
 
-    },
-    showOverlay: function(){
+    }
+
+    showOverlay(){
         this.setState({
             showingOverlay: true,
             takingQuiz: false
         });
         this.state.Player.pause();
-    },
-    showQuiz: function(){
+    }
+
+    showQuiz(){
         this.setState({
             showingOverlay: false,
             takingQuiz: true
         })
         this.state.Player.pause()
-    },
-    closeModal: function() {
+    }
+
+    closeModal() {
         this.setState({
             takingQuiz: false,
             showingOverlay: false
         })
         this.state.Player.play()
-    },
-    setWindowSize: function(){
+    }
+
+    setWindowSize(){
         this.setState({
             videoDivHeight: $(".videoDiv").height()
         });
         this.setState({
             videoDivWidth: $(".videoDiv").width()
         });
-    },
-    componentDidMount: function() {
-        this.loadDataFromServer(this.props.videoUUID);
-        this.setWindowSize();
-        this.setState({
-            isPlaying: false,
-            currentTime: "0:00",
-            percentDone: 0
-        })
-        window.onresize=this.setWindowSize;
-        //updates time and playing
-        setInterval(this.updateCurrentState, pollInterval)
-    },
-    handleScrub: function(percentOfOne) {
+    }
+
+    handleScrub(percentOfOne) {
         var duration = this.state.Player.getDuration();
         this.state.Player.seekTo(duration*percentOfOne)
-    },
-    handleTopicClick:function(targetKey, time){
+    }
+
+    handleTopicClick(targetKey, time){
         // First, set the new currentTopic
         this.setState({
             topicObjList:updateCurrentTopicOnKey(targetKey, this.state.topicObjList)
@@ -278,8 +293,9 @@ module.exports  = React.createClass({
         })
         //make sure the video is playing
         this.state.Player.play()
-    },
-    handlePlayPauseClick: function(){
+    }
+
+    handlePlayPauseClick(){
         // Set the local state and make the API call
         if(this.state.isPlaying){
             this.state.Player.pause();
@@ -287,25 +303,16 @@ module.exports  = React.createClass({
             this.closeModal()
             this.state.Player.play();
         }
-    },
-    onFinishButton: function(){
+    }
+
+    onFinishButton(){
         this.setState({
             showingOverlay: true,
             takingQuiz: false
         })
         this.loadQuizData(this.props.videoUUID)
-    },
-    componentWillReceiveProps: function(nextProps) {
-        if (this.state.uuid != nextProps.videoUUID) {
-            this.trackView(this.state.uuid)
-            this.setState({
-                uuid: nextProps.videoUUID,
-                takingQuiz: false,
-                showingOverlay: false
-            })
-            this.loadDataFromServer(nextProps.videoUUID);
-        }
-    },
+    }
+
     afterTopicListUpdate() {
         //this function was setting this.topicList to an emptystring when 
         //this.state.topicObjList was empty. I'm Leaving the infrastructure
@@ -334,12 +341,14 @@ module.exports  = React.createClass({
                 <div></div>
             );
         }
-    },
-    playVideo: function() {
+    }
+
+    playVideo() {
         this.closeModal();
         this.state.Player.play();
-    },
-    render: function() {
+    }
+
+    render() {
         if (this.state.Player == null) {
             return (<div className="loading">Loading video player...</div>);
         }
@@ -387,4 +396,4 @@ module.exports  = React.createClass({
             </div>
         );
     }
-})
+}

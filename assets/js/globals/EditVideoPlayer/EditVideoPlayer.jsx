@@ -2,20 +2,18 @@ require('bootstrap-loader');
 require("css/globals/base.scss");
 require("css/globals/EditVideoPlayer/EditVideoPlayer.scss")
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component } from 'react';
 
-import getCookie from 'js/globals/GetCookie';
+import Row from 'react-bootstrap/lib/Row'
+import Col from 'react-bootstrap/lib/Col'
+import Button from 'react-bootstrap/lib/Button'
 
-import { Row, Col, Button } from 'react-bootstrap';
-
-import NavBar from 'js/globals/NavBar';
 import Video from 'js/globals/videoPlayer/Video';
 import ControlBar from 'js/globals/videoPlayer/ControlBar';
 import Player from 'js/globals/videoPlayer/Player';
 import EditableTopicList from 'js/globals/EditVideoPlayer/EditableTopicList';
 import EditControlBar from 'js/globals/EditVideoPlayer/EditControlBar';
-
+import request from 'js/globals/HttpRequest';
 
 const pollInterval = 100;
 
@@ -85,30 +83,91 @@ function styleTime(time){
     return Math.round((time-30)/60) + ":" + seconds;
 }
 
-module.exports = React.createClass({
-    loadDataFromServer: function(v_id){
-        $.ajax({
-          url: "/1/v/" + v_id,
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            if (this.state.Player){
-                this.syncTopics();
-                if (this.state.Player){
-                    this.state.Player.destroy();
-                }
-            }
-              this.setState({Player: new Player(data.videoID)});
-              this.setState({topicObjList:data.topicList})
-              this.forceUpdate();
-              this.totalTime = data.videoData.duration_clean;
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
+export default class EditVideoPlayer extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            topicObjList: [], 
+            isPlaying:false, 
+            currentTime:"0:00",
+            currentSecond:0,
+            percentDone:0,
+            Player: null,
+            videoDivHeight: 0,
+            videoDivWidth: 0,
+            uuid: "",
+            pollingInterval:null
+        }
+
+        this.loadDataFromServer = this.loadDataFromServer.bind(this)
+        this.updateTopicName = this.updateTopicName.bind(this)
+        this.syncTopics = this.syncTopics.bind(this)
+        this.sortTopicListByTime = this.sortTopicListByTime.bind(this)
+        this.addNewTopic = this.addNewTopic.bind(this)
+        this.handleTopicDelete = this.handleTopicDelete.bind(this)
+        this.updateCurrentState = this.updateCurrentState.bind(this)
+        this.setWindowSize = this.setWindowSize.bind(this)
+        this.handleScrub = this.handleScrub.bind(this)
+        this.handleTopicClick = this.handleTopicClick.bind(this)
+        this.handlePlayPauseClick = this.handlePlayPauseClick.bind(this)
+        this.playInContext = this.playInContext.bind(this)
+        this.playerSeekTo = this.playerSeekTo.bind(this)
+    }
+
+    componentDidMount() {
+        this.setWindowSize();
+        this.setState({
+            isPlaying: true,
+            currentTime: "0:00",
+            currentSecond: 0,
+            percentDone: 0
+        })
+        window.onresize=this.setWindowSize;
+        //updates time and playing
+        this.setState({
+            pollInterval: setInterval(this.updateCurrentState, pollInterval)
         });
-    },
-    updateTopicName: function(id, newName) {
+        $(window).on("unload", this.syncTopics);
+    }
+
+    componentWillMount() {
+        this.loadDataFromServer(this.props.videoUUID);
+        this.setState({uuid: this.props.videoUUID})
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.state.pollInterval)
+        this.syncTopics();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.state.uuid != nextProps.videoUUID) {
+            this.setState({uuid: nextProps.videoUUID})
+            this.loadDataFromServer(nextProps.videoUUID)
+        }
+        if (!this.state.Player)
+            this.loadDataFromServer(nextProps.videoUUID)
+    }
+
+    loadDataFromServer(v_id) {
+        request.get(`/1/v/${v_id}`, {
+            success: (data) => {
+                if (this.state.Player){
+                    this.syncTopics();
+                    if (this.state.Player){
+                        this.state.Player.destroy();
+                    }
+                }
+                this.setState({Player: new Player(data.videoID)});
+                this.setState({topicObjList:data.topicList})
+                this.forceUpdate();
+                this.totalTime = data.videoData.duration_clean;
+            }
+        })
+    }
+
+    updateTopicName(id, newName) {
         var topicList = this.state.topicObjList;
         for (var i = 0; i < topicList.length; i++) {
             if (topicList[i].id == id) {
@@ -117,94 +176,68 @@ module.exports = React.createClass({
             }
         }
         this.setState({topicObjList: topicList});
-    },
-    syncTopics: function() {
+    }
+
+    syncTopics() {
         var data = {
             'topics': JSON.stringify(this.state.topicObjList)
         }
-        $.ajax({
-          url: "/v/" + this.state.uuid + "/updatetopics",
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            if (data.status) {
-            } else {
-                console.log("sad face");
+        request.post(`/v/${this.state.uuid}/updatetopics`, {
+            data: data,
+            success: (data) => {
+                if (!data.status) {
+                    console.log("error")
+                }
             }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    sortTopicListByTime: function(topicList) {
+        })
+    }
+
+    sortTopicListByTime(topicList) {
         topicList.sort(function(a, b) {
             return a.time - b.time
         })
-    },
-    addNewTopic: function() {
+    }
+
+    addNewTopic() {
         this.state.Player.pause();
         var currentTime = Math.round(this.state.Player.getCurrentTime())
         var data = {
             currentTime: currentTime,
         }
-        $.ajax({
-          url: "/v/" + this.state.uuid + "/addtopic",
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            if (data.status) {
-                var topicList = this.state.topicObjList;
-                topicList.push(data.newTopic);
-                this.sortTopicListByTime(topicList)
-                this.setState({topicObjList: topicList});
-                //focus on new topic
-                $('#' + data.newTopic.id).focus()
-            } else {
-                console.log("sad face");
+        request.post(`/v/${this.state.uuid}/addtopic`, {
+            data: data,
+            success: (data) => {
+                if (data.status) {
+                    var topicList = this.state.topicObjList;
+                    topicList.push(data.newTopic);
+                    this.sortTopicListByTime(topicList)
+                    this.setState({topicObjList: topicList});
+                    //focus on new topic
+                    $('#' + data.newTopic.id).focus()
+                } else {
+                    console.log("Error in request");
+                }
             }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    handleTopicDelete: function(targetKey) {
+        })
+    }
+
+    handleTopicDelete(targetKey) {
         var data = {
             uuid: targetKey,
         }
-        $.ajax({
-          url: "/deletetopic",
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            if (data.status) {
-                this.setState({topicObjList: removeTopic(targetKey, this.state.topicObjList)});
-            } else {
-                console.log("sad face");
+        request.post('/deletetopic', {
+            data: data,
+            success: (data) => {
+                if (data.status) {
+                    this.setState({topicObjList: removeTopic(targetKey, this.state.topicObjList)});
+                } else {
+                    console.log("sad face");
+                }
             }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
-    },
-    updateCurrentState: function(){
+        })
+    }
+
+    updateCurrentState(){
         //set time
         var seconds = Math.round(this.state.Player.getCurrentTime())
         this.setState({currentTime:styleTime(seconds)})
@@ -221,88 +254,49 @@ module.exports = React.createClass({
             isPlaying: playing
         })
         this.setWindowSize()
+    }
 
-    },
-    getInitialState: function() {
-        return {
-            topicObjList: [], 
-            isPlaying:false, 
-            currentTime:"0:00",
-            currentSecond:0,
-            percentDone:0,
-            Player: null,
-            videoDivHeight: 0,
-            videoDivWidth: 0,
-            uuid: "",
-            pollingInterval:null
-        };
-    },
-    setWindowSize: function(){
+    setWindowSize() {
         this.setState({
             videoDivHeight: $(".videoDiv").height()
         });
         this.setState({
             videoDivWidth: $(".videoDiv").width()
         });
-    },
-    componentDidMount: function() {
-        this.setWindowSize();
-        this.setState({
-            isPlaying: true,
-            currentTime: "0:00",
-            currentSecond: 0,
-            percentDone: 0
-        })
-        window.onresize=this.setWindowSize;
-        //updates time and playing
-        this.setState({
-            pollInterval: setInterval(this.updateCurrentState, pollInterval)
-        });
-        $(window).on("unload", this.syncTopics);
-    },
-    componentWillMount:function(){
-        this.loadDataFromServer(this.props.videoUUID);
-        this.setState({uuid: this.props.videoUUID})
-    },
-    componentWillUnmount: function(){
-        clearInterval(this.state.pollInterval)
-        this.syncTopics();
-    },
-    handleScrub: function(percentOfOne) {
+    }
+
+    handleScrub(percentOfOne) {
         var duration = this.state.Player.getDuration();
         this.state.Player.seekTo(duration*percentOfOne)
-    },
-    handleTopicClick:function(targetKey, time){
+    }
+
+    handleTopicClick(targetKey, time) {
         //First, set the new currentTopic
         this.setState({
             topicObjList:updateCurrentTopicOnKey(targetKey, this.state.topicObjList)
         })
         //Second, Make API call to update video state
         this.state.Player.seekTo(time)
-    },
-    handlePlayPauseClick: function(){
+    }
+
+    handlePlayPauseClick() {
         //Set the local state and make the API call
         if(this.state.isPlaying){
             this.state.Player.pause();
         } else{
             this.state.Player.play();
         }
-    },
-    componentWillReceiveProps: function(nextProps) {
-        if (this.state.uuid != nextProps.videoUUID) {
-            this.setState({uuid: nextProps.videoUUID})
-            this.loadDataFromServer(nextProps.videoUUID)
-        }
-        if (!this.state.Player)
-            this.loadDataFromServer(nextProps.videoUUID)
-    },
-    playInContext: function(context){
+    }
+    
+    playInContext(context) {
         this.state.Player.play()
-    },
-    playerSeekTo: function(seconds){
+    }
+
+    playerSeekTo(seconds) {
         this.state.Player.seekTo(seconds)
-    },
-    render: function() {
+    }
+
+    render() {
         if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
 
         return (
@@ -340,4 +334,4 @@ module.exports = React.createClass({
                 </div>
         )
     }
-})
+}

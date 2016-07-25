@@ -1,13 +1,14 @@
 
 require("css/userdashboard/UserDashboard/CreateSeriesArea.scss");
 
-var React = require('react')
-var Row = require('react-bootstrap').Row;
+import React, { Component } from 'react';
 
-var CreateSeriesModal = require('js/globals/CreateSeriesModal')
+import Row from 'react-bootstrap/lib/Row';
 
-module.exports = React.createClass({
-    render: function() {
+import CreateSeriesModal from 'js/globals/CreateSeriesModal';
+
+class CreateSeriesArea extends Component{
+    render() {
         return (
             <div className="createSeriesArea">
                 <div className="title">
@@ -20,4 +21,6 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}
+
+module.exports = CreateSeriesArea;
