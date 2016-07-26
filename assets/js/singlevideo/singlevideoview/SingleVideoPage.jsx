@@ -12,16 +12,34 @@ import NavBar from 'js/globals/NavBar';
 import VideoPlayer from 'js/globals/VideoPlayer/VideoPlayer';
 import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
 
-class SingleVideoPage extends React.Component {
+class SingleVideoPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      videoUUID: this.props.params.videoUUID,
       topicList: [],
       getCurrentTime: null
     };
 
+    this.loadDataFromServer = this.loadDataFromServer.bind(this);
     this.setTopicList = this.setTopicList.bind(this);
     this.setGetCurrentTime = this.setGetCurrentTime.bind(this);
+  }
+
+  componentDidMount() {
+    this.loadDataFromServer(this.state.videoUUID);
+  }
+
+  loadDataFromServer(videoUUID) {
+    request.get(`/1/v/${videoUUID || this.state.videoUUID}`, {
+      cache: true,
+      success: (data) => {
+        var stateData = this.state;
+        /* update state.data */
+        $.extend(true, stateData, data);
+        this.setState(stateData);
+      },
+    })
   }
 
   setTopicList(topicList) {
@@ -39,19 +57,17 @@ class SingleVideoPage extends React.Component {
         <Row className="videoPlayerWrapper">
           <Col mdOffset={1} md={10}>
             <VideoPlayer
-              videoUUID={this.props.videoUUID}
+              videoUUID={this.state.videoUUID}
               setTopicList={this.setTopicList}
-              setGetCurrentTime={this.setGetCurrentTime}
-            />
+              setGetCurrentTime={this.setGetCurrentTime}/>
           </Col>
         </Row>
         <Row className="questionWrapper">
           <Col mdOffset={1} md={10}>
             <QuestionView
-              videoUUID={this.props.videoUUID}
+              videoUUID={this.state.videoUUID}
               topicList={this.state.topicList}
-              getCurrentTime={this.state.getCurrentTime}
-            />
+              getCurrentTime={this.state.getCurrentTime}/>
           </Col>
         </Row>
       </div>
