@@ -83,7 +83,8 @@ export default class VideoPlayer extends Component {
                 result:[],
                 numCorrect:0
             },
-            numQuestions: 0
+            numQuestions: 0,
+            pollInterval:null,
         }
 
         this.trackView = this.trackView.bind(this)
@@ -115,7 +116,9 @@ export default class VideoPlayer extends Component {
         })
         window.onresize=this.setWindowSize;
         //updates time and playing
-        setInterval(this.updateCurrentState, pollInterval)
+        this.setState({
+            pollInterval: setInterval(this.updateCurrentState, pollInterval)
+        })
     }
 
     loadDataFromServer(v_id){
@@ -163,6 +166,10 @@ export default class VideoPlayer extends Component {
             })
             this.loadDataFromServer(nextProps.videoUUID);
         }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.state.pollInterval);
     }
 
     trackView(uuid, end) {

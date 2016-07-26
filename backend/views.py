@@ -220,6 +220,13 @@ class SeriesData(APIView):
         series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
 
+class CuratesSeries(APIView):
+    def get(self, request):
+        data = {}
+        series = Series.objects.filter(curated=True)
+        data["curated_series"] = map(Serializer.serialize_series_light, series)
+        return Response(data)
+
 class SeriesVideoData(View):
     def get(self, request, v_id):
         try:
