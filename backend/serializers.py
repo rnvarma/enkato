@@ -94,13 +94,24 @@ class StudentSeriesDataSerializer(serializers.ModelSerializer):
 
         return data
 
-class StudentAnalyticsSerializer(serializers.ModelSerializer):
-    user_data = StudentSeriesDataSerializer(many=True, source='students_data')
-    video_count = serializers.IntegerField(source='videos.count', read_only=True)
-    series_thumbnail = serializers.SerializerMethodField()
+
+class DashboardSeriesSerializer(serializers.ModelSerializer):
+    thumbnails = serializers.SerializerMethodField()
 
     class Meta:
         model = Series
 
-    def get_series_thumbnail(self, obj):
+    def get_thumbnails(self, obj):
+        return getSeriesThumbnails(obj)
+
+
+class StudentAnalyticsSerializer(serializers.ModelSerializer):
+    user_data = StudentSeriesDataSerializer(many=True, source='students_data')
+    video_count = serializers.IntegerField(source='videos.count', read_only=True)
+    thumbnails = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Series
+
+    def get_thumbnails(self, obj):
         return getSeriesThumbnails(obj)
