@@ -23,6 +23,7 @@
             }
 
             .thumbnailArea {
+                height: 150px;
                 .image {
                     width: 50%;
                     display: inline-block;
@@ -38,8 +39,8 @@
 
             .seriesInfo {
                 padding: 20px;
-                height: 150px;
                 overflow: hidden;
+                height: 160px;
 
                 .name {
                     font-weight: bold;

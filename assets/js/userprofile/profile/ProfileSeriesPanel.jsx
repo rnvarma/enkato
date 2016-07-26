@@ -3,6 +3,7 @@ require("css/userprofile/profile/ProfileSeriesPanel.scss");
 import React, { Component } from 'react'
 import { Link } from 'react-router';
 
+import Dotdotdot from 'react-dotdotdot';
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 
@@ -32,12 +33,12 @@ class ProfileSeriesPanel extends Component {
                             {thumbnails}
                         </div>
                         <div className="seriesInfo">
-                            <div className="name">
+                            <Dotdotdot className="name" clamp={1}>
                                 {this.props.series.name}
-                            </div>
-                            <div className="description">
+                            </Dotdotdot>
+                            <Dotdotdot className="description" clamp={5}>
                                 {this.props.series.description}
-                            </div>
+                            </Dotdotdot>
                         </div>
                     </div>
                 </Link>
