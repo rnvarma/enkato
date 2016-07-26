@@ -11,7 +11,7 @@ import SeriesViewerVideoArea from 'js/series/seriesviewer/SeriesViewerVideoArea'
 
 class SeriesViewer extends Component {
     constructor(props) {
-      super(props)
+      super(props);
 
       this.state = {
         seriesUUID: this.props.params.seriesUUID,
@@ -40,7 +40,7 @@ class SeriesViewer extends Component {
       this.scrollToVideo = this.scrollToVideo.bind(this);
       this.setTopicList = this.setTopicList.bind(this);
       this.setGetCurrentTime = this.setGetCurrentTime.bind(this);
-      this.changeCurrVideo = this.changeCurrVideo.bind(this)
+      this.changeCurrVideo = this.changeCurrVideo.bind(this);
     }
 
     componentDidMount() {
