@@ -56,6 +56,8 @@ class SeriesSerializer(serializers.ModelSerializer):
 
 
 class StudentSeriesVideoDataSerializer(serializers.ModelSerializer):
+    video_uuid = serializers.CharField(read_only=True, source='video.uuid')
+
     class Meta:
         model = StudentSeriesVideoData
         exclude = ('id', 'ss_data',)
@@ -73,21 +75,28 @@ class StudentSeriesDataSerializer(serializers.ModelSerializer):
         data = {
             'watched': 0,
             'completed': 0,
+            'continue_video': None,  # video where person should 'continue learning'
         }
 
         # prefetch not working: video_data = obj.videos_data
         video_data = [v for v in obj.videos_data.all() if v.ss_data == obj]
 
-        for video_in_series in video_data:
+        for index, video_in_series in enumerate(video_data):
             if video_in_series.watched:
                 data['watched'] += 1
+            elif not data['continue_video']:
+                data['continue_video'] = index
             if video_in_series.completed:
                 data['completed'] += 1
+
+        if not data['continue_video']:  # set to first video if not set
+            data['continue_video'] = 0
 
         return data
 
 class StudentAnalyticsSerializer(serializers.ModelSerializer):
     user_data = StudentSeriesDataSerializer(many=True, source='students_data')
+    video_count = serializers.IntegerField(source='videos.count', read_only=True)
 
     class Meta:
         model = Series

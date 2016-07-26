@@ -14,4 +14,4 @@ class StudentAnalyticsViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user.customuser
         student_series_data = Prefetch('students_data', StudentSeriesData.objects.filter(user=user))
-        return Series.objects.filter(students_data__user=user).prefetch_related(student_series_data)
+        return user.student_series.prefetch_related(student_series_data)
