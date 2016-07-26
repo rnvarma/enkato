@@ -7,6 +7,7 @@ import React, { Component } from 'react'
 import auth from 'auth'
 import request from 'js/globals/HttpRequest'
 import ProfileSeriesList from "js/userprofile/profile/ProfileSeriesList.jsx";
+import SubscribedSeriesList from "js/userprofile/profile/SubscribedSeriesList.jsx";
 import CreateSeriesArea from "js/userdashboard/UserDashboard/CreateSeriesArea.jsx";
 
 class UserDashboard extends Component {
@@ -18,9 +19,18 @@ class UserDashboard extends Component {
             created_series: [],
             all_unsubscribed_series: [],
         }
+
+        this.loadDataFromServer = this.loadDataFromServer.bind(this)
+        this.loadSubscribedSeriesData = this.loadSubscribedSeriesData.bind(this)
+
     }
 
     componentWillMount() {
+        this.loadDataFromServer()
+        //loadSubscribedSeriesData()
+    }
+
+    loadDataFromServer() {
         request.get('/1/userdashboard', {
             success: (data) => {
                 this.setState(data)
@@ -28,9 +38,17 @@ class UserDashboard extends Component {
         })
     }
 
+    loadSubscribedSeriesData() {
+        request.get('/1/studentanalytics', {
+            success: (data) => {
+                console.log(data)
+            }
+        })
+    }
+
     render() {
         var topList = (
-            <ProfileSeriesList
+            <SubscribedSeriesList
                 name="Subscribed Series"
                 series={this.state.subscribed_series} />
         )
