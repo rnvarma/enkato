@@ -16,7 +16,7 @@ def get_series_notification_group(series):
 	return group
 
 def new_series_video_handler(sender, instance, created, **kwargs):
-	if created:
+	if created and not instance.series.is_private:
 		notify.send(instance.series.creator, recipient=get_series_notification_group(instance.series), verb='new series video', action_object=instance)
 
 post_save.connect(new_series_video_handler, sender=SeriesVideo)
