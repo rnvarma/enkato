@@ -43,6 +43,8 @@ else:
     DEBUG = True
     GLOBAL = False
 
+DEBUG=True
+
 ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = '/login'
@@ -157,7 +159,8 @@ PROD_DB = {
 }
 
 DATABASES = {
-    'default': DEV_GLOBAL_DB if DEBUG and GLOBAL else DEV_LOCAL_DB if DEBUG and not GLOBAL else PROD_DB
+    'default': PROD_DB
+    # 'default': DEV_GLOBAL_DB if DEBUG and GLOBAL else DEV_LOCAL_DB if DEBUG and not GLOBAL else PROD_DB
 }
 
 # Password validation
@@ -201,36 +204,36 @@ MEDIAFILES_LOCATION = 'media'
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'reactapp.storage.MediaStorage'
 
-if DEBUG:
-    STATIC_URL = '/static/'
+# if DEBUG:
+#     STATIC_URL = '/static/'
 
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'assets/'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
-        os.path.join(BASE_DIR, 'images/')
-    )
+#     STATICFILES_DIRS = (
+#         os.path.join(BASE_DIR, 'assets/'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
+#         os.path.join(BASE_DIR, 'images/')
+#     )
 
-    WEBPACK_LOADER = {
-        'DEFAULT': {
-            'BUNDLE_DIR_NAME': 'bundles/',
-            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
-        }
+#     WEBPACK_LOADER = {
+#         'DEFAULT': {
+#             'BUNDLE_DIR_NAME': 'bundles/',
+#             'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+#         }
+#     }
+# else:
+STATICFILES_LOCATION = 'static'
+STATICFILES_STORAGE = 'reactapp.storage.StaticStorage'
+STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'assets/prod-assets/'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
+    os.path.join(BASE_DIR, 'images/')
+)
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'prod-bundles/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-prod-stats.json'),
     }
-else:
-    STATICFILES_LOCATION = 'static'
-    STATICFILES_STORAGE = 'reactapp.storage.StaticStorage'
-    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
-
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'assets/prod-assets/'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
-        os.path.join(BASE_DIR, 'images/')
-    )
-
-    WEBPACK_LOADER = {
-        'DEFAULT': {
-            'BUNDLE_DIR_NAME': 'prod-bundles/',
-            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-prod-stats.json'),
-        }
-    }
+}
 
 
 EMAIL_HOST = 'smtp.gmail.com'
