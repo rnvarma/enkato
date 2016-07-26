@@ -1,21 +1,18 @@
 require('css/globals/QuestionAndAnswer/QuestionDisplayResponse.scss');
 
-import React from 'react';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 import moment from 'moment';
-
 import FontAwesome from 'react-fontawesome';
-
 import Row from 'react-bootstrap/lib/Row';
 
-import getCookie from 'js/globals/GetCookie';
-
-import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
+import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
+import request from 'js/globals/HttpRequest'
+import ConfirmModal from 'js/globals/ConfirmModal';
 import QuestionResponseEditForm from 'js/globals/QuestionAndAnswer/QuestionResponseEditForm';
 
-import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
-
-class QuestionDisplayResponse extends React.Component {
+class QuestionDisplayResponse extends Component {
   constructor() {
     super();
     this.state = {
@@ -37,18 +34,12 @@ class QuestionDisplayResponse extends React.Component {
 
   delete() {
     /* TODO: verify before deleting, error handling on failing to delete */
-    $.ajax({
-      url: `/api/responses/${this.props.response.id}`,
-      type: 'DELETE',
-      beforeSend(xhr) {
-        xhr.withCredentials = true;
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-      },
+    request.delete(`/1/responses/${this.props.response.id}`, {
       success: () => {
         this.props.removeResponse(this.props.question.id, this.props.response.id);
         this.toggleDelete();
-      },
-    });
+      }
+    })
   }
 
   toggleEndorse() {
@@ -56,18 +47,12 @@ class QuestionDisplayResponse extends React.Component {
     const payload = {
       endorsed: !this.props.response.endorsed,
     }
-    $.ajax({
-      url: `/api/responses/${this.props.response.id}`,
-      type: 'PATCH',
+    request.patch(`/1/responses/${this.props.response.id}`, {
       data: payload,
-      beforeSend(xhr) {
-        xhr.withCredentials = true;
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-      },
       success: (data) => {
         this.props.replaceResponse(this.props.question.id, data.id, data);
-      },
-    });
+      }
+    })
   }
 
   render() {
@@ -107,11 +92,13 @@ class QuestionDisplayResponse extends React.Component {
 
     return (
       <Row>
-        <DeleteConfirmModal
-          deleting={this.state.deleting}
+        <ConfirmModal
+          showing={this.state.deleting}
           description="You're deleting this response. Are you sure you want to continue? This is irreversible."
-          deleteCallback={this.delete}
-          cancelCallback={this.toggleDelete}
+          acceptText="Delete"
+          acceptBsStyle="danger"
+          acceptCallback={this.delete}
+          deleteCallback={this.toggleDelete}
         />
         <div className={(this.props.response.is_instructor ? 'instructor ' : this.props.response.endorsed ? 'endorsed ' : '') + 'questionDisplayResponse'}>
           <div className="responseText">
@@ -119,7 +106,8 @@ class QuestionDisplayResponse extends React.Component {
           </div>
           {badges}
           <div className="responseFooter">
-            <img src={DjangoImageLinkHandler("blank_avatar.jpg")}></img><span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span> answered {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
+            <Link to={`/userprofile/${this.props.response.user.id}`}><img src={DjangoImageLinkHandler(this.props.response.user.image || 'blank_avatar.jpg')}></img>
+            <span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span></Link> answered {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
             {isOwner || isInstructor ? <div onClick={this.toggleDelete} className="plainBtn">Delete</div> : '' }
             {isOwner ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
             {!isOwner && isInstructor ? <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div> : ''}

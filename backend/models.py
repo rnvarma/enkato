@@ -125,6 +125,7 @@ class Series(models.Model):
     avg_length_videos = models.IntegerField(default=0)  # number of seconds
     avg_topics_videos = models.IntegerField(default=0)
     image = models.CharField(max_length=300, default="")
+    curated = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -188,6 +189,7 @@ class Video(models.Model):
     num_views = models.IntegerField(default=0)
     creator = models.ForeignKey(CustomUser, related_name="video_uploads")
     question_counter = models.IntegerField(default=0)
+    is_private = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

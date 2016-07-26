@@ -10,7 +10,18 @@ import Row from 'react-bootstrap/lib/Col';
 import SeriesSideBar from 'js/series/seriespage/SeriesSideBar';
 import SeriesMainArea from 'js/series/seriespage/SeriesMainArea';
 import UploadAnnotateModal from 'js/series/seriespage/UploadAnnotateModal';
+import auth from 'auth';
 import request from 'js/globals/HttpRequest';
+
+
+function changeVideoListPrivacy(videos, videoUUID, is_private) {
+    for (var i = videos.length - 1; i >= 0; i--) {
+        if(videos[i].uuid == videoUUID){
+            videos[i].is_private = is_private;
+        }
+    }
+    return videos;
+}
 
 class SeriesPage extends Component {
     constructor(props) {
@@ -44,6 +55,9 @@ class SeriesPage extends Component {
         this.setTopicMode = this.setTopicMode.bind(this)
         this.setQuizMode = this.setQuizMode.bind(this)
         this.setUrls = this.setUrls.bind(this)
+        this.makeVideoPrivate = this.makeVideoPrivate.bind(this)
+        this.makeVideoPublic = this.makeVideoPublic.bind(this)
+
     }
 
     componentDidMount() {
@@ -71,11 +85,11 @@ class SeriesPage extends Component {
         }
     }
 
-    onSubscribe() {
-        request.post(`/s/${this.state.seriesUUID}/subscribe`, {
+    subscribeOrUnsubscribe(is_subscribed, prefix) {
+        request.post(`/s/${this.state.seriesUUID}/${prefix}subscribe`, {
             success: (data) => {
                 if (data.status) {
-                    this.setState({is_subscribed: true})
+                    this.setState({is_subscribed: is_subscribed})
                 } else {
                     console.log("sad face");
                 }
@@ -83,16 +97,24 @@ class SeriesPage extends Component {
         })
     }
 
+    onSubscribe() {
+        if (auth.loggedIn()) {
+            this.subscribeOrUnsubscribe(true,'')
+        } else {
+            this.props.openRegisterModal(() => {
+                this.subscribeOrUnsubscribe(true,'')
+            });
+        }
+    }
+
     onUnsubscribe() {
-        request.post(`/s/${this.state.seriesUUID}/subscribe`, {
-            success: (data) => {
-                if (data.status) {
-                    this.setState({is_subscribed: false})
-                } else {
-                    console.log("sad face");
-                }
-            },
-        })
+        if (auth.loggedIn()) {
+            this.subscribeOrUnsubscribe(false,'un')
+        } else {
+            this.props.openRegisterModal(() => {
+                this.subscribeOrUnsubscribe(false,'un')
+            });
+        }
     }
 
     openModal(annotating) {
@@ -147,6 +169,48 @@ class SeriesPage extends Component {
         });
     }
 
+    makeVideoPublic(videoUUID) {
+        var data = {
+            videoUUID: videoUUID,
+            is_private:false,
+        }
+
+        request.post('/changePrivacy', {
+            data:data,
+            success: (data) => {
+                if (data.status) {
+                    var tempVideos = this.state.videos;
+                    this.setState({
+                        videos: changeVideoListPrivacy(tempVideos, videoUUID, false)
+                    })
+                } else {
+                    console.log("sad face");
+                }
+            },
+        })
+    }
+
+    makeVideoPrivate(videoUUID) {
+        var data = {
+            videoUUID: videoUUID,
+            is_private:true,
+        }
+
+        request.post('/changePrivacy', {
+            data:data,
+            success: (data) => {
+                if (data.status) {
+                    var tempVideos = this.state.videos;
+                    this.setState({
+                        videos: changeVideoListPrivacy(tempVideos, videoUUID, true)
+                    })
+                } else {
+                    console.log("sad face");
+                }
+            },
+        })
+    }
+
     render() {
         if (this.state.is_creator) {
             var uploadModal = (
@@ -175,6 +239,8 @@ class SeriesPage extends Component {
                             openModal={this.openModal}
                             onSubscribe={this.onSubscribe}
                             onUnsubscribe={this.onUnsubscribe}
+                            makeVideoPublic={this.makeVideoPublic}
+                            makeVideoPrivate={this.makeVideoPrivate}
                             {...this.state}/>
                     </Col>
                 </Row>

@@ -4,8 +4,7 @@ import React from 'react';
 
 import Button from 'react-bootstrap/lib/Button';
 
-import getCookie from 'js/globals/GetCookie';
-
+import request from 'js/globals/HttpRequest';
 import QuestionForm from 'js/globals/QuestionAndAnswer/QuestionForm';
 
 class QuestionEditForm extends React.Component {
@@ -43,19 +42,13 @@ class QuestionEditForm extends React.Component {
       text: this.props.question.input.text,
       topic_pk: (this.props.question.input.topic === 'General') ? null : this.props.question.input.topic,
     };
-    $.ajax({
-      url: `/api/questions/${this.props.question.id}`,
-      type: 'PATCH',
+    request.patch(`/1/questions/${this.props.question.id}`, {
       data: payload,
-      beforeSend(xhr) {
-        xhr.withCredentials = true;
-        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-      },
       success: (data) => {
         this.props.toggleEdit();
         this.props.replaceQuestion(data.id, data);
-      },
-    });
+      }
+    })
   }
 
   render() {
@@ -69,8 +62,7 @@ class QuestionEditForm extends React.Component {
           onTextChange={this.onTextChange}
           titleValue={this.props.question.input.title}
           textValue={this.props.question.input.text}
-          topicValue={this.props.question.input.topic}
-        />
+          topicValue={this.props.question.input.topic}/>
         <Button onClick={this.onSubmit}>Publish</Button>
         <Button onClick={this.props.toggleEdit}>Cancel</Button>
         <Button onClick={this.props.delete}>Delete</Button>

@@ -4,13 +4,10 @@ require("css/globals/NavBar.scss")
 require('css/home/homepage/HomePage')
 
 import React, { Component } from 'react'
-import getCookie from 'js/globals/GetCookie';
-
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
 
 import FontAwesome from 'react-fontawesome'
-
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 import Form from 'react-bootstrap/lib/Form';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
@@ -18,7 +15,9 @@ import Button from 'react-bootstrap/lib/Button';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
 
+import request from 'js/globals/HttpRequest';
 import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
+import ProfileSeriesList from 'js/userprofile/profile/ProfileSeriesList';
 
 class LandingPageBody extends Component {
     constructor(props) {
@@ -26,7 +25,8 @@ class LandingPageBody extends Component {
 
         this.state = {
             name: '',
-            email: ''
+            email: '',
+            curated_series: [],
         }
 
         this.onFormSubmit = this.onFormSubmit.bind(this);
@@ -34,32 +34,28 @@ class LandingPageBody extends Component {
         this.onNameChange = this.onNameChange.bind(this)
     }
 
+    componentDidMount() {
+        request.get('/1/curatedseries', {
+            success: (data) => {
+                this.setState(data)
+            }
+        })
+    }
+
     onFormSubmit(e) {
         e.preventDefault()
         var data = this.state;
 
-        $.ajax({
-          url: "/interesteduser",
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            console.log(data);
-            if (data.status) {
-                window.location.href = "/";
-            } else {
-                alert(data.issue)
+        request.post('/interesteduser', {
+            data: data,
+            success: (data) => {
+                if (data.status) {
+                    window.location.href = "/";
+                } else {
+                    alert(data.issue)
+                }
             }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            alert(err.toString())
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
+        })
     }
 
     onNameChange(e) {
@@ -109,6 +105,13 @@ class LandingPageBody extends Component {
                             </Form>
                         </Col>
                     </Row>
+                </div>
+                <div className="curatedContent">
+                    <div className="title">
+                    </div>
+                    <ProfileSeriesList
+                        name="Explore these curated series"
+                        series={this.state.curated_series} />
                 </div>
                 <div className="studentBenefits">
                     <Row>

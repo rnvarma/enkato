@@ -28,7 +28,7 @@ export default class EditableTopicNode extends Component {
     }
 
     deleteTopic() {
-        this.props.handleTopicDelete(this.props.topic.id);
+        this.props.handleTopicDelete(this.props.topic.real_id || this.props.topic.id);
     }
 
     onNameChange(e) {
@@ -51,9 +51,9 @@ export default class EditableTopicNode extends Component {
         this.setState({hovering: false})
     }
 
-    submitForm(e){
-        e.preventDefault()
-        this.props.playVideo()
+    submitForm(e) {
+        e.preventDefault();
+        this.props.playVideo();
     }
 
     render() {

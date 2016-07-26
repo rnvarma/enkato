@@ -5,12 +5,12 @@ import getCookie from 'js/globals/GetCookie';
 
 import { styleDuration } from 'js/globals/utility';
 
+import request from 'js/globals/HttpRequest';
+import auth from 'auth';
 import TopicList from 'js/globals/VideoPlayer/TopicList';
 import Video from 'js/globals/VideoPlayer/Video';
 import ControlBar from 'js/globals/VideoPlayer/ControlBar';
 import Player from 'js/globals/VideoPlayer/Player';
-
-import request from 'js/globals/HttpRequest';
 
 // How often the video player checks the video's state
 const pollInterval = 100;
@@ -83,7 +83,8 @@ export default class VideoPlayer extends Component {
                 result:[],
                 numCorrect:0
             },
-            numQuestions: 0
+            numQuestions: 0,
+            pollInterval:null,
         }
 
         this.trackView = this.trackView.bind(this)
@@ -115,7 +116,9 @@ export default class VideoPlayer extends Component {
         })
         window.onresize=this.setWindowSize;
         //updates time and playing
-        setInterval(this.updateCurrentState, pollInterval)
+        this.setState({
+            pollInterval: setInterval(this.updateCurrentState, pollInterval)
+        })
     }
 
     loadDataFromServer(v_id){
@@ -165,6 +168,10 @@ export default class VideoPlayer extends Component {
         }
     }
 
+    componentWillUnmount() {
+        clearInterval(this.state.pollInterval);
+    }
+
     trackView(uuid, end) {
         var data = {
             v_id: this.state.uuid,
@@ -202,12 +209,14 @@ export default class VideoPlayer extends Component {
 
     loadQuizData(v_id){
         var seriesUUID = this.state.seriesUUID
-        request.get(`/1/studentquizdata/s/${seriesUUID}/v/${v_id}`, {
-            success: (data) => {
-                this.setState(data)
-                this.setState({quizDataLoaded: true})
-            }
-        })
+        if (auth.loggedIn()) {
+            request.get(`/1/studentquizdata/s/${seriesUUID}/v/${v_id}`, {
+                success: (data) => {
+                    this.setState(data)
+                    this.setState({quizDataLoaded: true})
+                }
+            })
+        }
     }
 
     submitQuiz(answers) {
@@ -242,19 +251,30 @@ export default class VideoPlayer extends Component {
     }
 
     showOverlay(){
+        this.state.Player.pause();
         this.setState({
             showingOverlay: true,
             takingQuiz: false
         });
-        this.state.Player.pause();
     }
 
     showQuiz(){
-        this.setState({
-            showingOverlay: false,
-            takingQuiz: true
-        })
         this.state.Player.pause()
+        if (auth.loggedIn()) {
+            this.setState({
+                showingOverlay: false,
+                takingQuiz: true
+            })
+        } else {
+            this.props.openRegisterModal(() => {
+                this.setState({
+                    showingOverlay: false,
+                    takingQuiz: true
+                })
+                this.loadQuizData(this.state.uuid)
+            });
+        }
+        
     }
 
     closeModal() {

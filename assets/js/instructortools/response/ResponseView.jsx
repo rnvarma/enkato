@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
+import request from 'js/globals/HttpRequest';
 import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
 
 class ResponseView extends React.Component {
@@ -18,10 +19,7 @@ class ResponseView extends React.Component {
   }
 
   loadQuestionData(onSuccess) {
-    $.ajax({
-      url: `/api/series?creator=${this.props.userId}&order_by=responses`,
-      dataType: 'json',
-      cache: false,
+    request.get(`/1/series?creator=${this.props.userId}&order_by=responses`, {
       success: (data) => {
         let questionData = [];
         data.forEach((series) => {
@@ -33,10 +31,7 @@ class ResponseView extends React.Component {
         });
         onSuccess(questionData);
       },
-      error(xhr, status, error) {
-        console.error(status, error.toString());
-      },
-    });
+    })
   }
 
   render() {

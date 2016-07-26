@@ -34,7 +34,9 @@ export default class SeriesMainArea extends Component {
                     <SeriesVideoList
                         videos={this.props.videos}
                         seriesUUID={this.props.seriesUUID}
-                        is_creator={this.props.is_creator}/>
+                        is_creator={this.props.is_creator}
+                        makeVideoPublic={this.props.makeVideoPublic}
+                        makeVideoPrivate={this.props.makeVideoPrivate}/>
                     <NoVideosArea
                         videos={this.props.videos}
                         openModal={this.props.openModal}/>
@@ -56,7 +58,7 @@ export default class SeriesMainArea extends Component {
                         is_creator={this.props.is_creator}/>
                 </div>
             )
-            
+             
             if (this.props.is_subscribed) {
                 var annotateVideosButton = (
                     <div className="annotate-box">

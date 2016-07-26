@@ -2,10 +2,9 @@ require('css/globals/QuestionAndAnswer/QuestionResponseEditForm.scss');
 
 import React from 'react';
 
-import getCookie from 'js/globals/GetCookie';
-
 import Button from 'react-bootstrap/lib/Button';
 
+import request from 'js/globals/HttpRequest';
 import QuestionResponseForm from 'js/globals/QuestionAndAnswer/QuestionResponseForm';
 
 class QuestionResponseEditForm extends React.Component {
@@ -32,19 +31,13 @@ class QuestionResponseEditForm extends React.Component {
             const data = {
                 text: this.props.response.input,
             };
-            $.ajax({
-                url: `/api/responses/${this.props.response.id}`,
-                type: 'PATCH',
-                data,
-                beforeSend(xhr) {
-                    xhr.withCredentials = true;
-                    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-                },
+            request.patch(`/1/responses/${this.props.response.id}`, {
+                data: data,
                 success: (data) => {
                     this.props.toggleEdit();
                     this.props.replaceResponse(this.props.question.id, data.id, data);
-                },
-            });
+                }
+            })
         }
     }
 

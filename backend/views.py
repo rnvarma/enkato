@@ -61,23 +61,34 @@ class Serializer(object):
     @staticmethod
     def serialize_series(series, request=None):
         data = {}
+        is_creator = False
+        data["is_anonymous"], data["is_creator"], data["is_subscribed"] = False, False, False
+        data["is_anonymous"] = False if not request else request.user.is_anonymous()
+        if not data["is_anonymous"]:
+            is_creator = False if not request else series.creator == request.user.customuser
+            data["is_creator"] = is_creator
+            data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
+
         data["uuid"] = series.uuid
         data["name"] = series.name
         data["description"] = series.description
+        data["is_private"] = series.is_private
         data["image"] = series.image
         data["creator"] = Serializer.serialize_user(series.creator)
         data["num_videos"] = len(series.videos.all())
         data["thumbnails"] = getSeriesThumbnails(series)
         series_videos = series.videos.all().order_by("order")
+        if(not is_creator):
+            series_videos = series_videos.filter(video__is_private = False)
         total_time = 0
+        s_videos = []
         for series_video in series_videos:
             series_video.video.order = series_video.order
             total_time += series_video.video.duration
         data["total_len"] = sanetizeTime(total_time)
         videos = map(lambda sv: sv.video, series_videos)
         data["videos"] = map(Serializer.serialize_video, videos)
-        data["is_creator"] = False if not request else series.creator == request.user.customuser
-        data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
+        
         return data    
 
     @staticmethod
@@ -95,10 +106,12 @@ class Serializer(object):
 
     @staticmethod
     def serialize_video(video):
+
         data = {}
         data["uuid"] = video.uuid
         data["timestamp"] = video.timestamp
         data["source"] = video.source
+        data["is_private"] = video.is_private
         data["vid_id"] = video.vid_id
         data["name"] = video.name
         data["description"] = video.description
@@ -148,8 +161,8 @@ class Serializer(object):
 class UserViewset(viewsets.ReadOnlyModelViewSet):
     """
     User API
-    List users: api/users
-    Current user: api/users/current
+    List users: 1/users
+    Current user: 1/users/current
     """
 
     queryset = CustomUser.objects.all()
@@ -206,6 +219,13 @@ class SeriesData(APIView):
         series = Series.objects.get(uuid=s_id)
         series_data = Serializer.serialize_series(series, request)
         return Response(series_data)
+
+class CuratesSeries(APIView):
+    def get(self, request):
+        data = {}
+        series = Series.objects.filter(curated=True)
+        data["curated_series"] = map(Serializer.serialize_series_light, series)
+        return Response(data)
 
 class SeriesVideoData(View):
     def get(self, request, v_id):

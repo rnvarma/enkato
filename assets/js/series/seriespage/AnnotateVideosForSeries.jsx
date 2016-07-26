@@ -6,13 +6,23 @@ import AnnotateSeriesSideBar from 'js/series/seriespage/AnnotateSeriesSideBar';
 import AnnotateSeriesVideoArea from 'js/series/seriespage/AnnotateSeriesVideoArea';
 
 export default class AnnotateVideosForSeries extends Component {
-    constructor(props) {
-        super(props)
+    constructor() {
+        super();
 
         this.state = {
             currentVideo: null,
         };
+        this.updateCurrentVideo = this.updateCurrentVideo.bind(this);
         this.updateCurrVideo = this.updateCurrVideo.bind(this);
+    }
+
+    /* wrapper to stop change if edits need to be saved still */
+    updateCurrentVideo(id) {
+        if (this.props.annotationsToSave) {
+            this.props.setLaunchKeeper(this.updateCurrVideo.bind(null, id));
+        } else {
+            this.updateCurrVideo(id);
+        }
     }
 
     updateCurrVideo(id) {
@@ -29,11 +39,19 @@ export default class AnnotateVideosForSeries extends Component {
             <div className="annotateVideosForSeries">
             <AnnotateSeriesSideBar
                 videos={this.props.videos}
-                updateCurrVideo={this.updateCurrVideo}
+                updateCurrVideo={this.updateCurrentVideo}
                 currentVideo={video}/>
             <AnnotateSeriesVideoArea
                 currentVideo={video}
-                quizMode={this.props.quizMode}/>
+                quizMode={this.props.quizMode}
+                setAnnotationsToSave={this.props.setAnnotationsToSave}
+                setKeepAnnotations={this.props.setKeepAnnotations}
+                annotationsToSave={this.props.annotationsToSave}
+                showingAnnotationSave={this.props.showingAnnotationSave}
+                onConfirmQuit={this.props.onConfirmQuit}
+                publishAnnotations={this.props.publishAnnotations}
+                closeAnnotationsModal={this.props.closeAnnotationsModal}
+            />
         </div>
         );
     }

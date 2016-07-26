@@ -3,22 +3,23 @@ require('css/globals/QuestionAndAnswer/QuestionView.scss');
 import React from 'react';
 
 import Fuse from 'fuse.js';
-
 import FontAwesome from 'react-fontawesome';
-
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
+import { Typeahead } from 'react-typeahead'
 
+import request from 'js/globals/HttpRequest';
+import auth from 'auth';
 import QuestionModal from 'js/globals/QuestionAndAnswer/QuestionModal';
 import QuestionFilterBar from 'js/globals/QuestionAndAnswer/QuestionFilterBar';
 import QuestionList from 'js/globals/QuestionAndAnswer/QuestionList';
 import QuestionDisplay from 'js/globals/QuestionAndAnswer/QuestionDisplay';
-import request from 'js/globals/HttpRequest';
 
 class QuestionView extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       questions: [],
       filteredQuestions: [],
@@ -27,7 +28,9 @@ class QuestionView extends React.Component {
       filterAnswered: false,
       filterUnanswered: false,
       addingQuestion: false,
+      askQuestionText: '',
     };
+
     this.setCurrentQuestion = this.setCurrentQuestion.bind(this);
     this.setFilter = this.setFilter.bind(this);
     this.filterQuestions = this.filterQuestions.bind(this);
@@ -54,6 +57,10 @@ class QuestionView extends React.Component {
     this.loadUserData = this.loadUserData.bind(this);
     this.replaceQuestion = this.replaceQuestion.bind(this);
     this.replaceResponse = this.replaceResponse.bind(this);
+    this.onQuestionFilterSelect = this.onQuestionFilterSelect.bind(this)
+    this.filterQuestionByTitle = this.filterQuestionByTitle.bind(this)
+    this.scrollToQuestionArea = this.scrollToQuestionArea.bind(this)
+    this.onAskQuestionChange = this.onAskQuestionChange.bind(this)
   }
 
   componentDidMount() {
@@ -82,7 +89,7 @@ class QuestionView extends React.Component {
       this.props.loadQuestionData(onSuccess);
       return;
     }
-    request.get(`/api/questions?video_uuid=${videoUUID}`, {
+    request.get(`/1/questions?video_uuid=${videoUUID}`, {
       success: onSuccess
     })
   }
@@ -107,9 +114,9 @@ class QuestionView extends React.Component {
     });
   }
 
-  setCurrentQuestion(questionId) {
+  setCurrentQuestion(question) {
     this.setState({
-      currentQuestion: questionId,
+      currentQuestion: question,
     });
   }
 
@@ -170,7 +177,13 @@ class QuestionView extends React.Component {
 
   /* prompts user to add question, via modal in QuestionForm */
   addQuestion() {
-    this.setState({ addingQuestion: true });
+    if (auth.loggedIn()) {
+        this.setState({ addingQuestion: true });
+    } else {
+        this.props.openRegisterModal(() => {
+            this.setState({ addingQuestion: true });
+        });
+    }
   }
 
   /* adds question to state */
@@ -325,15 +338,43 @@ class QuestionView extends React.Component {
   /* query user data for validation purposes */
   
   loadUserData() {
-    request.get('/api/users/current', {
-        success: (data) => {
-            this.currentUser = data;
-        },
+    if (auth.loggedIn()) {
+      request.get('/1/users/current', {
+          success: (data) => {
+              this.currentUser = data;
+          },
+      })
+    }
+  }
+
+  filterQuestionByTitle(title) {
+    var results = this.state.questions.filter(function(q) {
+      return q.title == title;
     })
+    if (!results) return null;
+    return results[0]
+  }
+
+  scrollToQuestionArea() {
+    var top = $(".questionArea").offset().top
+    $("html, body").animate({ scrollTop: top}, 500)
+  }
+
+  onQuestionFilterSelect(questionTitle) {
+    var question = this.filterQuestionByTitle(questionTitle)
+    this.setCurrentQuestion(question);
+    this.scrollToQuestionArea();
+  }
+
+  onAskQuestionChange(e) {
+    this.setState({
+      askQuestionText: e.target.value
+    })
+    console.log(e.target.value);
   }
 
   render() {
-    var askModal, askButton;
+    var askModal, askQuestionBar;
     if (this.props.videoUUID) {
       askModal = (
         <QuestionModal
@@ -343,26 +384,35 @@ class QuestionView extends React.Component {
           showing={this.state.addingQuestion}
           close={this.closeModal}
           pushQuestion={this.pushQuestion}
+          askQuestionText={this.state.askQuestionText}
         />
       );
-      askButton = (
-        <Button className="addQuestionBtn" onClick={this.addQuestion}>
-          <FontAwesome name="plus-circle" />
-          Ask A Question
-        </Button>
+      var questionOptions = this.state.questions.map(function(q) {
+        return q.title
+      })
+      askQuestionBar = (
+        <div className="askQuestionBar">
+          <Typeahead
+            placeholder="Don't undestand something? Ask a question here."
+            options={questionOptions}
+            onOptionSelected={this.onQuestionFilterSelect}
+            onKeyUp={this.onAskQuestionChange}/>
+          <Button className="addQuestionBtn" onClick={this.addQuestion}>
+            <FontAwesome name="plus-circle" />
+            Ask A Question
+          </Button>
+        </div>
       );
     }
 
     return (
       <div className="questionView">
+        {askQuestionBar}
         <Row>
           {askModal}
           <Row>
             <Col md={5}>
               <div className="qaTitle">Question & Answer</div>
-            </Col>
-            <Col mdOffset={10}>
-              {askButton}
             </Col>
           </Row>
           <QuestionFilterBar
@@ -378,9 +428,9 @@ class QuestionView extends React.Component {
               showingSeries={!this.props.videoUUID}
               questions={this.state.filteredQuestions}
               currentQuestion={this.state.currentQuestion}
-              setCurrentQuestion={this.setCurrentQuestion}
-            />
+              setCurrentQuestion={this.setCurrentQuestion}/>
             <QuestionDisplay
+              openRegisterModal={this.props.openRegisterModal}
               showingSeries={!this.props.videoUUID}
               topicList={this.props.topicList}
               getCurrentTime={this.props.getCurrentTime}
@@ -399,8 +449,7 @@ class QuestionView extends React.Component {
               replaceQuestion={this.replaceQuestion}
               replaceResponse={this.replaceResponse}
               videoUUID={this.props.videoUUID}
-              currentUser={this.currentUser}
-            />
+              currentUser={this.currentUser}/>
           </Row>
         </Row>
       </div>

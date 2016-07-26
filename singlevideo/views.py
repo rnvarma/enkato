@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import View
 from django.http import JsonResponse
 from backend.models import *
@@ -6,6 +6,7 @@ from backend.models import *
 from backend.views import Serializer
 
 from backend.serializers import VideoSerializer
+from rest_framework.views import APIView
 from rest_framework import viewsets
 
 import json
@@ -49,11 +50,29 @@ class UpdateTopics(View):
     def post(self, request, v_uuid):
         topics_json = request.POST.get('topics')
         topics = json.loads(topics_json)
+        removed_topics_json = request.POST.get('removed_topics')
+        removed_topics = json.loads(removed_topics_json)
+
+        for removed_topic in removed_topics:
+            topic_id = removed_topic.get('real_id', removed_topic['id'])
+            topic_obj = get_object_or_404(Topic, pk=topic_id)
+            topic_obj.delete()
+
         for topic in topics:
-            topic_obj = Topic.objects.get(uuid=topic["id"])
-            topic_obj.time = topic["time"]
-            topic_obj.name = topic["name"]
-            topic_obj.save()
+            if topic.get('committed', True):
+                topic_id = topic.get('real_id', topic['id'])
+                topic_obj = get_object_or_404(Topic, pk=topic_id)
+                topic_obj.time = topic['time']
+                topic_obj.name = topic['name']
+                topic_obj.save()
+            else:
+                new_topic = Topic(
+                    video=get_object_or_404(Video, uuid=v_uuid),
+                    name=topic['name'],
+                    time=int(topic['time']),
+                )
+                new_topic.save()
+
         return JsonResponse({'status': True})
 
 
@@ -149,4 +168,26 @@ class DeleteQuizOption(View):
             'status': True,
             'cid': c_id,
             'qid': q_id
+        })
+
+
+class ChangePrivacy(APIView):
+    def post(self, request):
+        print("========================================")
+        videoUUID = request.POST.get('videoUUID')
+        is_private = request.POST.get('is_private')
+
+        if (is_private == 'true'):
+            is_private = True
+        elif (is_private == 'false'):
+            is_private = False
+
+        video = Video.objects.get(uuid=videoUUID)
+        print(is_private)
+        video.is_private = is_private
+
+        video.save()
+
+        return JsonResponse({
+            'status': True,
         })

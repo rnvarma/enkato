@@ -9,11 +9,12 @@ import QuestionForm from 'js/globals/QuestionAndAnswer/QuestionForm';
 import request from 'js/globals/HttpRequest';
 
 class QuestionModal extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
     this.state = {
       topic: null,
-      title: '',
+      title: this.props.askQuestionText,
       text: '',
       generalError: '',
       titleError: '',
@@ -27,6 +28,12 @@ class QuestionModal extends React.Component {
     this.onTitleChange = this.onTitleChange.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
     this.close = this.close.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      title: nextProps.askQuestionText
+    })
   }
 
   attachFile(event) {
@@ -47,7 +54,7 @@ class QuestionModal extends React.Component {
         time: this.props.getCurrentTime(),
         topic_pk: this.state.topic,
       };
-      request.post('api/questions', {
+      request.post('/1/questions', {
         data: payload,
         success: (newQuestion) => {
           this.props.pushQuestion(newQuestion);
