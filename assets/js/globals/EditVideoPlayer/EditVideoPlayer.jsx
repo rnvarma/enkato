@@ -280,6 +280,7 @@ export default class EditVideoPlayer extends Component {
         this.setState({
             //topicObjList:updateCurrentTopicOnKey(targetKey, this.state.topicObjList)
         })
+        console.log('the current on topic is supposed to update');
         //Second, Make API call to update video state
         this.state.Player.seekTo(time);
     }
