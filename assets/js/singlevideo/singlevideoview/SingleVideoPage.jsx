@@ -1,27 +1,25 @@
 require('bootstrap-loader');
 require('css/singlevideo/singlevideoview/SingleVideoPage.scss');
 
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
+import request from 'js/globals/HttpRequest';
 import NavBar from 'js/globals/NavBar';
 import VideoPlayer from 'js/globals/VideoPlayer/VideoPlayer';
 import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
 
 class SingleVideoPage extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      //videoUUID: this.props.videoUUID,
       topicList: [],
-      getCurrentTime: null,
-      timeStamp: null,
+      getCurrentTime: null
     };
 
-    //this.loadPageData = this.loadPageData.bind(this);
     this.setTopicList = this.setTopicList.bind(this);
     this.setGetCurrentTime = this.setGetCurrentTime.bind(this);
   }
@@ -33,24 +31,6 @@ class SingleVideoPage extends React.Component {
   setGetCurrentTime(getCurrentTime) {
     this.setState({ getCurrentTime });
   }
-
-  componentDidMount() {
-    this.loadPageData();
-  }
-
-  loadPageData(videoUUID) {
-    request.get(`/1/v/${videoUUID || this.state.videoUUID}`, {
-      cache: true,
-      success: (data) => {
-        var stateData = this.state;
-        /* update state.data *//*
-        $.extend(true, stateData, data);
-        this.setState(stateData);
-      },
-    })
-  }
-
-
 
   render() {
     return (
@@ -79,7 +59,6 @@ class SingleVideoPage extends React.Component {
   }
 }
 
-ReactDOM.render(<SingleVideoPage videoUUID={$("#v_uuid").attr("data-vuuid")} />,
-                document.getElementById('page-anchor'));
+module.exports = SingleVideoPage
 
 

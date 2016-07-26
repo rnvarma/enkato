@@ -34,7 +34,8 @@ const rootRoute = {
             require('js/authentication/register/routes'),
             require('js/series/seriesviewer/routes'),
             require('js/series/seriespage/routes'),
-            require('js/userprofile/profile/routes')
+            require('js/userprofile/profile/routes'),
+            require ('js/singlevideo/singlevideoview/routes'),
         ]
     } ]    
 }
