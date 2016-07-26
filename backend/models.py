@@ -4,9 +4,6 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from shortuuidfield import ShortUUIDField
-from django.contrib.auth.models import User
-
-from rest_framework import serializers
 
 
 class InterestedUser(models.Model):
@@ -15,6 +12,7 @@ class InterestedUser(models.Model):
 
     def __str__(self):
         return self.email
+
 
 class DatedModel(models.Model):
     """ Generic model with created, modified, and modified count fields """
@@ -33,7 +31,6 @@ class DatedModel(models.Model):
         # modified is updated upon relevant PATCH requests
 
         return super(DatedModel, self).save(*args, **kwargs)
-
 
 
 class CustomUser(models.Model):
@@ -130,6 +127,7 @@ class Series(models.Model):
     def __str__(self):
         return self.name
 
+
 # class rating systems
 # - basic star-rating feedback
 # - number of students enrolled
@@ -212,6 +210,7 @@ class SeriesVideo(models.Model):
     series = models.ForeignKey(Series, related_name="videos")
     order = models.IntegerField(default=0)  # order within the series
 
+
 class PlaylistVideo(models.Model):
     video = models.ForeignKey(Video, related_name="playlists")
     playlist = models.ForeignKey(Playlist, related_name="videos")
@@ -248,7 +247,7 @@ class Topic(models.Model):
 
 class Question(DatedModel):
     student = models.ForeignKey(CustomUser, related_name="questions")
-    video = models.ForeignKey(Video) # default related_name is question_set
+    video = models.ForeignKey(Video)  # default related_name is question_set
     topic = models.ForeignKey(Topic, related_name="questions", blank=True, null=True)
     time = models.IntegerField(default=0)
     title = models.TextField(max_length=200)
@@ -327,10 +326,12 @@ class StudentClassData(models.Model):
     classroom = models.ForeignKey(Classroom, related_name="students_data")
 
 
+# UNUSED
 class StudentUnitData(models.Model):
     sc_data = models.ForeignKey(StudentClassData, related_name="units_data")
     unit = models.ForeignKey(Unit, related_name="students_data")
     completed = models.BooleanField(default=False)
+
 
 class StudentClassVideoData(models.Model):
     sc_data = models.ForeignKey(StudentClassData, related_name="videos_data")
@@ -339,6 +340,7 @@ class StudentClassVideoData(models.Model):
     avg_duration_watched = models.IntegerField(default=0)  # number seconds
     seconds_into_video = models.IntegerField(default=0)
     completed = models.BooleanField(default=False)
+
 
 # class StudentClassVideoQuizQuestionData(models.Model):
 #     scv_data = models.ForeignKey(StudentClassVideoData, related_name="quizzes_data")
@@ -352,6 +354,7 @@ class StudentSeriesData(models.Model):
     user = models.ForeignKey(CustomUser, related_name="series_data")
     series = models.ForeignKey(Series, related_name="students_data")
 
+
 class StudentSeriesVideoData(models.Model):
     ss_data = models.ForeignKey(StudentSeriesData, related_name="videos_data")
     video = models.ForeignKey(Video, related_name="series_students_data")
@@ -361,6 +364,7 @@ class StudentSeriesVideoData(models.Model):
     watched = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
+
 class StudentSeriesVideoQuizQuestionData(models.Model):
     ssv_data = models.ForeignKey(StudentSeriesVideoData, related_name="quizzes_data")
     quiz_question = models.ForeignKey(QuizQuestion, related_name="responses")
@@ -369,9 +373,11 @@ class StudentSeriesVideoQuizQuestionData(models.Model):
     context = models.CharField(max_length=20, default="")  # either diagnostic, post-video, unit, class, etc
     timestamp = models.DateTimeField(default=timezone.now)
 
+
 class StudentPlaylistData(models.Model):
     user = models.ForeignKey(CustomUser, related_name="playlists_data")
     playlist = models.ForeignKey(Playlist, related_name="students_data")
+
 
 class StudentPlaylistVideoData(models.Model):
     sp_data = models.ForeignKey(StudentPlaylistData, related_name="videos_data")
