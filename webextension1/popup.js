@@ -5,7 +5,7 @@ function getYTID(url){
 }
 
 
-function showVideo(vidId, timestamp, vidTitle, vidUUID){
+function showVideo(vidId, timestamp, vidTitle, vidUUID, seriesUUID){
 	var thumbnail = document.createElement("img");
 	var thumbnailUrl = "http://img.youtube.com/vi/" + vidId + "/mqdefault.jpg";
 	document.getElementById("main-video-wrapper").querySelector(".thumbnail").appendChild(thumbnail);
@@ -22,18 +22,18 @@ function showVideo(vidId, timestamp, vidTitle, vidUUID){
 	var imgurl = chrome.extension.getURL("main.gif");
 	
 	watchButton.setAttribute("src", imgurl);
-  watchButton.setAttribute("height", "20px");
-  watchButton.style.margin="10px"; 
-  watchButton.style.padding = "3px";
-  watchButton.style.backgroundColor = "white";
-  watchButton.style.border = "1px solid #0E133E";
-  watchButton.style.borderRadius = "20px";
-  watchButton.style.cursor = "pointer";  
+	watchButton.setAttribute("height", "20px");
+	watchButton.style.margin="10px"; 
+	watchButton.style.padding = "3px";
+	watchButton.style.backgroundColor = "white";
+	watchButton.style.border = "1px solid #0E133E";
+	watchButton.style.borderRadius = "20px";
+	watchButton.style.cursor = "pointer";  
 
-  var mainWrapper = document.getElementById("main-video-wrapper");
-  mainWrapper.style.border = "1px solid #0E133E";
+	var mainWrapper = document.getElementById("main-video-wrapper");
+	mainWrapper.style.border = "1px solid #0E133E";
 	$(watchButton).click(function(){
-		window.open("http://127.0.0.1:8000/v/" + vidUUID);//add time stamp
+		window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID);//add time stamp
 	})
 }
 
@@ -126,7 +126,7 @@ function findInDatabase(vid_id, callback) {
 	});
 }
 
-function getThumbnails(videoId, callback){
+function getSeriesInfo(videoId, callback){
 	$.ajax({
 		url: "http://127.0.0.1:8000/2/s/" + videoId,
 		dataType: 'json',
@@ -156,19 +156,17 @@ $(document).ready( function(){
 		chrome.tabs.sendMessage(tabs[0].id, {from: "popup", subject:"url"}, function(info){
 			var vidId = info.videoId;
 			if(vidId != false){
-				findInDatabase(vidId, function(inDB, vidUUID){
-
-					showVideo(vidId, info.timestampText, info.videoTitle, vidUUID);
-					findTopicList(vidUUID, function(topics){
-						if (topics != null){
-							showTopics(topics);
-						}
-					});
-					showSeriesTitle();
-					getThumbnails(vidId, function(inSeries, seriesId, thumbnails, vidUUIDs, vidTitles){
-						console.log("got the thumbnails");
-						showSlideshowImages(thumbnails, vidUUIDs, seriesId, vidId, vidTitles);
-
+				getSeriesInfo(vidId, function(inSeries, seriesUUID, thumbnails, vidUUIDs, vidTitles){
+					console.log("got the thumbnails")
+					findInDatabase(vidId, function(inDB, vidUUID){
+						showVideo(vidId, info.timestampText, info.videoTitle, vidUUID, seriesUUID);
+						findTopicList(vidUUID, function(topics){
+							if (topics != null){
+								showTopics(topics);
+							}
+						});
+						showSeriesTitle();
+						showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, vidId, vidTitles);
 					});
 				});
 			}

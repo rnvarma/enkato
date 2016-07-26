@@ -1,8 +1,7 @@
 from django.conf.urls import url
-from django.contrib import admin
 
-from userdashboard.views import *
+from .views import *
 
 urlpatterns = [
-    url(r'^user_dashboard$', UserDashboard.as_view()),
-] 
+    url(r'^1/studentanalytics', StudentAnalyticsViewset.as_view({'get': 'list'})),
+]

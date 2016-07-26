@@ -28,6 +28,7 @@ class QuestionView extends React.Component {
       filterAnswered: false,
       filterUnanswered: false,
       addingQuestion: false,
+      askQuestionText: '',
     };
 
     this.setCurrentQuestion = this.setCurrentQuestion.bind(this);
@@ -59,6 +60,7 @@ class QuestionView extends React.Component {
     this.onQuestionFilterSelect = this.onQuestionFilterSelect.bind(this)
     this.filterQuestionByTitle = this.filterQuestionByTitle.bind(this)
     this.scrollToQuestionArea = this.scrollToQuestionArea.bind(this)
+    this.onAskQuestionChange = this.onAskQuestionChange.bind(this)
   }
 
   componentDidMount() {
@@ -364,6 +366,13 @@ class QuestionView extends React.Component {
     this.scrollToQuestionArea();
   }
 
+  onAskQuestionChange(e) {
+    this.setState({
+      askQuestionText: e.target.value
+    })
+    console.log(e.target.value);
+  }
+
   render() {
     var askModal, askQuestionBar;
     if (this.props.videoUUID) {
@@ -375,6 +384,7 @@ class QuestionView extends React.Component {
           showing={this.state.addingQuestion}
           close={this.closeModal}
           pushQuestion={this.pushQuestion}
+          askQuestionText={this.state.askQuestionText}
         />
       );
       var questionOptions = this.state.questions.map(function(q) {
@@ -385,7 +395,8 @@ class QuestionView extends React.Component {
           <Typeahead
             placeholder="Don't undestand something? Ask a question here."
             options={questionOptions}
-            onOptionSelected={this.onQuestionFilterSelect}/>
+            onOptionSelected={this.onQuestionFilterSelect}
+            onKeyUp={this.onAskQuestionChange}/>
           <Button className="addQuestionBtn" onClick={this.addQuestion}>
             <FontAwesome name="plus-circle" />
             Ask A Question

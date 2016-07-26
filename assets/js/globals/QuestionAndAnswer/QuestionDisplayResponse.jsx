@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/lib/Row';
 
 import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 import request from 'js/globals/HttpRequest'
-import DeleteConfirmModal from 'js/globals/DeleteConfirmModal';
+import ConfirmModal from 'js/globals/ConfirmModal';
 import QuestionResponseEditForm from 'js/globals/QuestionAndAnswer/QuestionResponseEditForm';
 
 class QuestionDisplayResponse extends Component {
@@ -92,11 +92,13 @@ class QuestionDisplayResponse extends Component {
 
     return (
       <Row>
-        <DeleteConfirmModal
-          deleting={this.state.deleting}
+        <ConfirmModal
+          showing={this.state.deleting}
           description="You're deleting this response. Are you sure you want to continue? This is irreversible."
-          deleteCallback={this.delete}
-          cancelCallback={this.toggleDelete}
+          acceptText="Delete"
+          acceptBsStyle="danger"
+          acceptCallback={this.delete}
+          deleteCallback={this.toggleDelete}
         />
         <div className={(this.props.response.is_instructor ? 'instructor ' : this.props.response.endorsed ? 'endorsed ' : '') + 'questionDisplayResponse'}>
           <div className="responseText">

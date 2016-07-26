@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^1/userdata$', UserData.as_view()),
     url(r'^1/userdashboard$', UserDashboardData.as_view()),
     url(r'^1/c/(?P<c_id>[a-zA-Z0-9_.-]+)$', ClassroomData.as_view()),
+    url(r'^1/curatedseries$', CuratesSeries.as_view()),
     url(r'^1/s/(?P<s_id>[a-zA-Z0-9_.-]+)$', SeriesData.as_view()),
     url(r'^2/s/(?P<v_id>[a-zA-Z0-9_.-]+)$', SeriesVideoData.as_view()),
     url(r'^1/v/(?P<v_uuid>[a-zA-Z0-9_.-]+)$', VideoData.as_view()),

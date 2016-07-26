@@ -75,3 +75,43 @@ class UnsubscribeSeriesPage(APIView):
         series.students.remove(cu)
         request.user.groups.remove(get_series_notification_group(series))
         return JsonResponse({'status': True})
+
+
+class SetSeriesPrivacy(APIView):
+    def post(self, request):
+        seriesUUID = request.POST.get('seriesUUID')
+        is_private = request.POST.get('is_private')
+        print("---------------------------------------------")
+        print(type(is_private))
+        print(is_private)
+
+        if(is_private=="true"):
+            is_private=True
+        elif(is_private=="false"):
+            is_private=False
+        
+
+        series = Series.objects.get(uuid=seriesUUID)
+        series.is_private=is_private
+        series.save()
+
+
+        return JsonResponse({
+            'status': True,
+            'is_private': is_private,
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

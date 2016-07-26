@@ -1,9 +1,17 @@
-from django.shortcuts import render
-from django.views.generic.base import View
-from django.http import HttpResponseRedirect
-from django.http import JsonResponse
-from backend.models import *
+from django.db.models.query import Prefetch
 
-class UserDashboard(View):
-    def get(self, request):
-        return render(request, 'userdashboard/userdashboard.html')
+from backend.models import *
+from backend.serializers import StudentAnalyticsSerializer
+from backend.permissions import make_owner_permission
+
+from rest_framework import viewsets, filters, permissions
+
+
+class StudentAnalyticsViewset(viewsets.ModelViewSet):
+    serializer_class = StudentAnalyticsSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        user = self.request.user.customuser
+        student_series_data = Prefetch('students_data', StudentSeriesData.objects.filter(user=user))
+        return Series.objects.filter(students_data__user=user).prefetch_related(student_series_data)

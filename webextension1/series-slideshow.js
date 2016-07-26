@@ -1,4 +1,4 @@
-function showSlideshowImages(thumbnails, vidUUIDs, seriesId, mainVidId, vidTitles){
+function showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, mainVidId, vidTitles){
     console.log("showing slideshow");
     var sliderunner = document.getElementById("series-wrapper").querySelector(".slide-runner");
     var mainUrl = "https://i.ytimg.com/vi/" + mainVidId + "/mqdefault.jpg";
@@ -10,10 +10,10 @@ function showSlideshowImages(thumbnails, vidUUIDs, seriesId, mainVidId, vidTitle
             slide.setAttribute("src", thumbnails[i]);
             slide.setAttribute("title", vidTitles[i]);
             vidId = vidUUIDs[i];
-            url = "http://127.0.0.1:8000/s/" + seriesId + "/watch#" + vidId;
+            url = "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidId;
             $(slide).click(function(){
                 vidId = vidUUIDs[i];
-                url = "http://127.0.0.1:8000/s/" + seriesId + "/watch#" + vidId
+                url = "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidId;
                 window.open(url);
             })
             //addTitle(vidTitles[i]);

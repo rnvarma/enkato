@@ -53,3 +53,41 @@ class SeriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Series
         fields = '__all__'
+
+
+class StudentSeriesVideoDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentSeriesVideoData
+        exclude = ('id', 'ss_data',)
+
+
+class StudentSeriesDataSerializer(serializers.ModelSerializer):
+    videos_data = StudentSeriesVideoDataSerializer(many=True)
+    analysis = serializers.SerializerMethodField()
+
+    class Meta:
+        model = StudentSeriesData
+        fields = ('videos_data', 'analysis')
+
+    def get_analysis(self, obj):
+        data = {
+            'watched': 0,
+            'completed': 0,
+        }
+
+        # prefetch not working: video_data = obj.videos_data
+        video_data = [v for v in obj.videos_data.all() if v.ss_data == obj]
+
+        for video_in_series in video_data:
+            if video_in_series.watched:
+                data['watched'] += 1
+            if video_in_series.completed:
+                data['completed'] += 1
+
+        return data
+
+class StudentAnalyticsSerializer(serializers.ModelSerializer):
+    user_data = StudentSeriesDataSerializer(many=True, source='students_data')
+
+    class Meta:
+        model = Series

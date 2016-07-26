@@ -42,21 +42,24 @@ class SeriesPage extends Component {
             quizMode: false,
             is_creator: false,
             is_subscribed: false,
-        }
+            is_private: true,
+            hide_series: false,
+        };
 
-        this.loadPageData = this.loadPageData.bind(this)
-        this.onSubscribe = this.onSubscribe.bind(this)
-        this.onUnsubscribe = this.onUnsubscribe.bind(this)
-        this.openModal = this.openModal.bind(this)
-        this.closeModal = this.closeModal.bind(this)
-        this.onURLImport = this.onURLImport.bind(this)
-        this.setUploadMode = this.setUploadMode.bind(this)
-        this.setAnnotateMode = this.setAnnotateMode.bind(this)
-        this.setTopicMode = this.setTopicMode.bind(this)
-        this.setQuizMode = this.setQuizMode.bind(this)
-        this.setUrls = this.setUrls.bind(this)
-        this.makeVideoPrivate = this.makeVideoPrivate.bind(this)
-        this.makeVideoPublic = this.makeVideoPublic.bind(this)
+        this.loadPageData = this.loadPageData.bind(this);
+        this.onSubscribe = this.onSubscribe.bind(this);
+        this.onUnsubscribe = this.onUnsubscribe.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.onURLImport = this.onURLImport.bind(this);
+        this.setUploadMode = this.setUploadMode.bind(this);
+        this.setAnnotateMode = this.setAnnotateMode.bind(this);
+        this.setTopicMode = this.setTopicMode.bind(this);
+        this.setQuizMode = this.setQuizMode.bind(this);
+        this.setUrls = this.setUrls.bind(this);
+        this.makeVideoPrivate = this.makeVideoPrivate.bind(this);
+        this.makeVideoPublic = this.makeVideoPublic.bind(this);
+        this.setIsPrivate = this.setIsPrivate.bind(this);
 
     }
 
@@ -94,7 +97,25 @@ class SeriesPage extends Component {
                     console.log("sad face");
                 }
             },
-        })
+        });
+    }
+
+    setIsPrivate(is_private) {
+        let data = {
+            is_private: is_private,
+            seriesUUID: this.state.seriesUUID,
+        }
+
+        request.post('/setseriesprivacy', {
+            data: data,
+            success: (data) => {
+                if (data.status) {
+                    this.setState({is_private: data.is_private})
+                } else {
+                    console.log("sad face");
+                }
+            },
+        });
     }
 
     onSubscribe() {
@@ -212,6 +233,18 @@ class SeriesPage extends Component {
     }
 
     render() {
+        if(this.state.hide_series) {
+            return (
+                <div className="seriesPage">
+                    <Col md={12}>
+                        <div className="unavailable">
+                            This Page is Unavailable!
+                        </div>
+                    </Col>
+                </div>
+            );
+        }
+
         if (this.state.is_creator) {
             var uploadModal = (
                 <UploadAnnotateModal
@@ -241,6 +274,7 @@ class SeriesPage extends Component {
                             onUnsubscribe={this.onUnsubscribe}
                             makeVideoPublic={this.makeVideoPublic}
                             makeVideoPrivate={this.makeVideoPrivate}
+                            setIsPrivate={this.setIsPrivate}
                             {...this.state}/>
                     </Col>
                 </Row>
