@@ -28,6 +28,7 @@ class NavBar extends Component {
             notifications: []
         }
 
+        this.getOnClick = this.getOnClick.bind(this)
         this.getNotifications = this.getNotifications.bind(this)
         this.markAsRead = this.markAsRead.bind(this)
         this.logout = this.logout.bind(this)
@@ -75,11 +76,19 @@ class NavBar extends Component {
 
     markAsRead(notification) {
         var ids = notification.ids;
+        console.log(ids);
         request.post('/1/markasread', {
             data: {
-                ids: ids,
+                ids: notification.ids,
             }
         })
+    }
+
+    getOnClick(notification) {
+        return () => {
+            this.markAsRead(notification);
+            window.location.href = notification.link;
+        }
     }
 
     render() {
@@ -104,18 +113,14 @@ class NavBar extends Component {
                         <Link to="/userprofile" activeClassName="active">{this.state.username}</Link>
                     </li>
                     <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown">
-                        {this.state.notifications.map(function(notification) {
+                        {this.state.notifications.map((notification) => {
                             if (notification.timestamp != "") {
                                 var timestring = moment(notification.timestamp).fromNow();
                             }
                             else {
                                 var timestring = ""
                             }
-                            onClick = () => {
-                                this.markAsRead(notification);
-                                window.location.href = notification.link
-                            }
-                            return (<MenuItem onClick = {onClick}><div className = "notification">{notification.description} {timestring}</div></MenuItem>);
+                            return (<MenuItem onClick = {this.getOnClick(notification)}><div className = "notification">{notification.description} {timestring}</div></MenuItem>);
                         })}
                     </NavDropdown>
                 </Nav>
