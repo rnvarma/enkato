@@ -11,6 +11,7 @@ class SeriesViewerVideoList extends React.Component {
             if (video.uuid == this.props.currUUID) active=true;
             return (
                 <SeriesViewerSidebarVideoPanel
+                    clamp="2"
                     video={video}
                     key={video.uuid}
                     active={active} />
