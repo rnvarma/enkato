@@ -14,11 +14,26 @@ import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 export default class SeriesMainArea extends Component {
     constructor(props) {
         super(props);
+
+        this.setPublic = this.setPublic.bind(this);
+        this.setPrivate = this.setPrivate.bind(this);
+    }
+
+    setPublic() {
+        this.props.setIsPrivate(false);
+    }
+
+    setPrivate() {
+        this.props.setIsPrivate(true);
     }
 
     render() {
+        console.log(this.props.is_private, "yes")
         const img_src = this.props.image || DjangoImageLinkHandler('blank_thumbnail.png')
         var noVideos=false; 
+
+        var privacyButton = <div></div>
+
         //noVideos^^ is used to get rid of the border on the right side
         //of the totalSeconds if there's no Videos
         if (this.props.videos.length == 0) {
@@ -28,6 +43,25 @@ export default class SeriesMainArea extends Component {
                                  openModal={this.props.openModal}/>
             var annotateVideosButton = null;
             noVideos=true;
+            if(this.props.is_creator) {
+                if(this.props.is_private){
+                    privacyButton = (
+                        <div className="privacyButton">
+                            <Button onClick={this.setPublic}>
+                                Private
+                            </Button>
+                        </div>
+                    );
+                } else {
+                    privacyButton = (
+                        <div className="privacyButton">
+                            <Button onClick={this.setPrivate}>
+                                Public
+                            </Button>
+                        </div>
+                    );
+                }
+            }
         } else if (this.props.is_creator) {
             var video_area = (
                 <div>
@@ -49,6 +83,24 @@ export default class SeriesMainArea extends Component {
                     </Button>
                 </div>
             );
+            if(this.props.is_private){
+                privacyButton = (
+                    <div className="privacyButton">
+                        <Button onClick={this.setPublic}>
+                            Private
+                        </Button>
+                    </div>
+                );
+            } else {
+                privacyButton = (
+                    <div className="privacyButton">
+                        <Button onClick={this.setPrivate}>
+                            Public
+                        </Button>
+                    </div>
+                );
+            }
+            
         } else {
             var video_area = (
                 <div>
@@ -107,6 +159,7 @@ export default class SeriesMainArea extends Component {
                                 {this.props.total_len}
                             </div>
                             {annotateVideosButton}
+                            {privacyButton}
                         </div>
                     </div>
                 </div>

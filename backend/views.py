@@ -201,11 +201,12 @@ class UserDashboardData(APIView):
     def get(self, request):
         cu = request.user.customuser
         data = {}
-        data["subscribed_series"] = map(Serializer.serialize_series_light, cu.student_series.all())
+        seriesList = cu.student_series.all().filter(is_private=False)  
+        data["subscribed_series"] = map(Serializer.serialize_series_light, seriesList)
         subscribed_ids = map(lambda s: s["uuid"], data["subscribed_series"])
         data["created_series"] = map(Serializer.serialize_series_light, cu.created_series.all())
         map(lambda s: subscribed_ids.append(s["uuid"]), data["created_series"])
-        data["all_unsubscribed_series"] = map(Serializer.serialize_series_light, Series.objects.exclude(uuid__in=subscribed_ids))
+        data["all_unsubscribed_series"] = map(Serializer.serialize_series_light, Series.objects.exclude(uuid__in=subscribed_ids).filter(is_private=False))
         return Response(data)
 
 class ClassroomData(APIView):
@@ -216,8 +217,15 @@ class ClassroomData(APIView):
 
 class SeriesData(APIView):
     def get(self, request, s_id):
-        series = Series.objects.get(uuid=s_id)
+        series = Series.objects.get(uuid=s_id) 
         series_data = Serializer.serialize_series(series, request)
+        series_data['hide_series'] = False
+        series_data['status'] = True
+        if((request.user.is_anonymous() or series.creator != request.user.customuser) and series_data['is_private']):
+            series_data = {
+                'hide_series':True,
+                'status': True,
+            }
         return Response(series_data)
 
 class CuratesSeries(APIView):

@@ -33,6 +33,8 @@ class SeriesViewer extends Component {
         nextVideo: null,
         topicList: [],
         getCurrentTime: null,
+        is_private: true,
+        hide_series: false,
       }
 
       this.loadDataFromServer = this.loadDataFromServer.bind(this);
@@ -58,6 +60,14 @@ class SeriesViewer extends Component {
       request.get(`/1/s/${this.state.seriesUUID}`, {
         success: (data) => {
           var stateData = this.state;
+
+          if(data.hide_series) {
+            this.setState({
+                hide_series:true,
+            });
+            return;
+          }
+
           /* update state.data */
           $.extend(true, stateData, data);
           for (var i = 0; i < data.videos.length; i++) {
@@ -119,6 +129,14 @@ class SeriesViewer extends Component {
     }
 
     render() {
+      if(this.state.hide_series) {
+            return (
+                <div className="unavailable">
+                    This Page is Unavailable!
+                </div>
+            );
+      }
+
       return (
         <div>
           <SeriesViewerSideBar

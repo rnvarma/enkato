@@ -72,8 +72,9 @@
                 }
 
                 .annotate-box {
-                    display:inline-block;
+                    display: inline-block;
                     padding-left: 10px;
+                    padding-right: 10px;
                     .subscribeButton{
                         background-color: $kato-green;
                         color:white;
@@ -81,6 +82,12 @@
                     .unsubscribeButton{
                         //nothing
                     }
+                }
+
+                .privacyButton {
+                    border-left: 1px solid black;
+                    display: inline-block;
+                    padding-left: 10px;
                 }
             }
         }
