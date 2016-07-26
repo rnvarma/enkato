@@ -5,10 +5,11 @@ from django.views.generic.base import View
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from rest_framework.authtoken.models import Token
+from rest_framework.views import APIView
 
 from backend.models import *
 
-class Register(View):
+class Register(APIView):
     def post(self, request):
         user = User.objects.filter(username=request.POST.get('username'))
         if user.exists():
