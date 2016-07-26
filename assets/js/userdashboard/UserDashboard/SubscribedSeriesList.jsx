@@ -1,14 +1,14 @@
-require("css/userprofile/profile/SubscribedSeriesList.scss");
+require("css/userdashboard/UserDashboard/SubscribedSeriesList.scss");
 
 import React, { Component } from 'react'
-import ProfileSeriesPanel from 'js/userprofile/profile/ProfileSeriesPanel';
+import SubscribedSeriesPanel from 'js/userdashboard/UserDashboard/SubscribedSeriesPanel';
 import Row from 'react-bootstrap/lib/Row';
 
-export default class ProfileSeriesList extends Component {
+export default class SubscribedSeriesList extends Component {
     render() {
         var seriesPanels = this.props.series.map(function(series) {
             return (
-                <ProfileSeriesPanel
+                <SubscribedSeriesPanel
                     key={series.uuid}
                     series={series}/>
             )

@@ -4,8 +4,8 @@
   "description": "fucking lit",
   "main": "index.js",
   "scripts": {
-    "test": "python manage.py test",
     "django": "python manage.py runserver",
+    "test": "python manage.py test",
     "webpack-dev": "webpack --watch --progress --colors",
     "webpack-prod": "webpack --config webpack-prod.config.js --progress --colors",
     "webpack-prod-analyze": "webpack --config webpack-prod.config.js --progress --colors --json | webpack-bundle-size-analyzer"
@@ -30,6 +30,7 @@
     "jquery": "^3.1.0",
     "node-sass": "^3.7.0",
     "postcss-loader": "^0.9.1",
+    "rc-progress": "^1.0.4",
     "react": "^15.2.1",
     "react-bootstrap": "^0.29.4",
     "react-custom-scrollbars": "^4.0.0-beta.2",
