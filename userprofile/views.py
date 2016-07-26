@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from django.views.generic.base import View
+from rest_framework.views import APIView
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 
 from collections import defaultdict
+
+from backend.notification import *
 
 class Serializers(object):
 	@staticmethod
@@ -39,6 +41,7 @@ class Serializers(object):
 		countint = len(notifications)
 		count = str(countint)
 		data = {}
+		data["ids"] = map(lambda x : x.id, notifications)
 		data["timestamp"] = first.timestamp
 
 		if verb == 'new series video':
@@ -63,7 +66,7 @@ class Serializers(object):
 			videoid = first.action_object.video.uuid
 
 			if countint > 1:
-				data["description"] = count + ' new questions in the video ' + videoname
+				data["description"] = count + ' new questions in the video '  + videoname
 				data["link"] = '/s/' + seriesid + '/watch#' + videoid
 				return data
 
@@ -114,7 +117,7 @@ class Serializers(object):
 		return data
 	'''
 
-class GetNotifications(View):
+class GetNotifications(APIView):
 	def get(self, request):
 		if request.user.is_anonymous():
 			return JsonResponse({'notifications': [], 'num': "0"})
@@ -130,9 +133,15 @@ class GetNotifications(View):
 			return JsonResponse({'notifications': sorted(aggregated_unread, key = lambda x : x["timestamp"], reverse = True),
 							 'num': num})
 
-class MarkAsRead(View):
+class MarkAsRead(APIView):
 	def post(self, request):
 		if not request.user.is_anonymous():
-			request.user.notifications.unread().filter(timestamp__lte=request.POST.get('timestamp')).mark_all_as_read()
+			ids = request.POST.getlist('ids[]')
+
+			for n_id in ids:
+				notification = Notification.objects.get(id=n_id)
+				if notification is not None:
+					if notification.recipient.id == request.user.id:
+						notification.mark_as_read()
 
 		return JsonResponse({})

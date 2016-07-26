@@ -1,18 +1,17 @@
 require('bootstrap-loader');
-require("css/globals/base.scss")
-require('css/userdashboard/UserDashboard/UserDashboard.scss')
+require('css/globals/base.scss');
+require('css/userdashboard/UserDashboard/UserDashboard.scss');
 
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import auth from 'auth'
-import request from 'js/globals/HttpRequest'
-import ProfileSeriesList from "js/userprofile/profile/ProfileSeriesList.jsx";
-import SubscribedSeriesList from "js/userprofile/profile/SubscribedSeriesList.jsx";
-import CreateSeriesArea from "js/userdashboard/UserDashboard/CreateSeriesArea.jsx";
+import request from 'js/globals/HttpRequest';
+import ProfileSeriesList from 'js/userprofile/profile/ProfileSeriesList';
+import CreateSeriesArea from 'js/userdashboard/UserDashboard/CreateSeriesArea';
+import SeriesAnalyticsDisplay from 'js/userdashboard/UserDashboard/SeriesAnalyticsDisplay';
 
 class UserDashboard extends Component {
-    constructor(props) {
-        super(props)
+    constructor() {
+        super();
 
         this.state = {
             subscribed_series: [],
@@ -20,9 +19,10 @@ class UserDashboard extends Component {
             all_unsubscribed_series: [],
         }
 
-        this.loadDataFromServer = this.loadDataFromServer.bind(this)
-        this.loadSubscribedSeriesData = this.loadSubscribedSeriesData.bind(this)
+        this.loadDataFromServer = this.loadDataFromServer.bind(this);
+        this.loadSubscribedSeriesData = this.loadSubscribedSeriesData.bind(this);
 
+        };
     }
 
     componentWillMount() {
@@ -33,9 +33,9 @@ class UserDashboard extends Component {
     loadDataFromServer() {
         request.get('/1/userdashboard', {
             success: (data) => {
-                this.setState(data)
-            }
-        })
+                this.setState(data);
+            },
+        });
     }
 
     loadSubscribedSeriesData() {
@@ -51,41 +51,44 @@ class UserDashboard extends Component {
             <SubscribedSeriesList
                 name="Subscribed Series"
                 series={this.state.subscribed_series} />
-        )
-        var middleList = (
+        let middleList = (
             <ProfileSeriesList
                 name="Manage Your Series"
                 series={this.state.created_series} />
-        )
-        var bottomList = (
+        );
+        let bottomList = (
             <ProfileSeriesList
                 name="Browse All Series"
                 series={this.state.all_unsubscribed_series} />
-        )
+        );
         if (!this.state.subscribed_series.length) {
             topList = (
                 <ProfileSeriesList
                     name="Explore These Topics"
                     series={this.state.all_unsubscribed_series} />
-            )
+            );
             bottomList = (
                 <div></div>
-            )
+            );
         }
         if (!this.state.created_series.length) {
             middleList = (
                 <CreateSeriesArea
-                    name="Manage Your Series"/>
-            )
+                    name="Manage Your Series" />
+            );
         }
+        const analyticsList = this.state.subscribed_series.map((series) => {
+            return <SeriesAnalyticsDisplay series={series} />;
+        });
         return (
             <div className="userDashboard">
                 {topList}
+                {analyticsList}
                 {middleList}
                 {bottomList}
             </div>
-        )
+        );
     }
 }
 
-module.exports = UserDashboard;
+export default UserDashboard;

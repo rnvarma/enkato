@@ -15,6 +15,8 @@ import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 import FontAwesome from 'react-fontawesome';
 import request from 'js/globals/HttpRequest';
 import auth from 'auth'
+import {truncate} from 'js/globals/utility'
+
 
 class NavBar extends Component {
     constructor(props) {
@@ -28,9 +30,9 @@ class NavBar extends Component {
             notifications: []
         }
 
+        this.getOnClick = this.getOnClick.bind(this)
         this.getNotifications = this.getNotifications.bind(this)
         this.markAsRead = this.markAsRead.bind(this)
-        this.dropdownToggle = this.dropdownToggle.bind(this)
         this.logout = this.logout.bind(this)
         this.loadDataFromServer = this.loadDataFromServer.bind(this)
     }
@@ -74,20 +76,20 @@ class NavBar extends Component {
         })
     }
 
-    markAsRead() {
-        if (this.state.num_notifications > 0) {
-            var timestamp = this.state.notifications[0].timestamp;
-            request.post('/1/markasread', {
-                data: {
-                    timestamp: timestamp
-                }
-            })
-        }
+    markAsRead(notification) {
+        var ids = notification.ids;
+        console.log(ids);
+        request.post('/1/markasread', {
+            data: {
+                ids: notification.ids,
+            }
+        })
     }
 
-    dropdownToggle(isOpen) {
-        if (isOpen) {
-          this.markAsRead();
+    getOnClick(notification) {
+        return () => {
+            this.markAsRead(notification);
+            window.location.href = notification.link;
         }
     }
 
@@ -112,15 +114,15 @@ class NavBar extends Component {
                     <li role="presentation">
                         <Link to="/userprofile" activeClassName="active">{this.state.username}</Link>
                     </li>
-                    <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown" onToggle = {this.dropdownToggle}>
-                        {this.state.notifications.map(function(notification) {
+                    <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown">
+                        {this.state.notifications.map((notification) => {
                             if (notification.timestamp != "") {
                                 var timestring = moment(notification.timestamp).fromNow();
                             }
                             else {
                                 var timestring = ""
                             }
-                            return (<MenuItem href={notification.link}><div className = "notification">{notification.description} {timestring}</div></MenuItem>);
+                            return (<MenuItem onClick = {this.getOnClick(notification)}><div className = "notification">{truncate(notification.description, 60, true)} {timestring}</div></MenuItem>);
                         })}
                     </NavDropdown>
                 </Nav>

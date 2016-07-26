@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
+from backend.utility import getSeriesThumbnails
 from .models import *
-
 
 class CustomUserSerializer(serializers.ModelSerializer):
 
@@ -94,9 +94,24 @@ class StudentSeriesDataSerializer(serializers.ModelSerializer):
 
         return data
 
-class StudentAnalyticsSerializer(serializers.ModelSerializer):
-    user_data = StudentSeriesDataSerializer(many=True, source='students_data')
-    video_count = serializers.IntegerField(source='videos.count', read_only=True)
+
+class DashboardSeriesSerializer(serializers.ModelSerializer):
+    thumbnails = serializers.SerializerMethodField()
 
     class Meta:
         model = Series
+
+    def get_thumbnails(self, obj):
+        return getSeriesThumbnails(obj)
+
+
+class StudentAnalyticsSerializer(serializers.ModelSerializer):
+    user_data = StudentSeriesDataSerializer(many=True, source='students_data')
+    video_count = serializers.IntegerField(source='videos.count', read_only=True)
+    thumbnails = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Series
+
+    def get_thumbnails(self, obj):
+        return getSeriesThumbnails(obj)
