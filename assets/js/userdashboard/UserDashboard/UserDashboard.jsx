@@ -23,17 +23,7 @@ class UserDashboard extends Component {
     componentWillMount() {
         request.get('/1/userdashboard', {
             success: (data) => {
-                this.setState({
-                    created_series: data.created_series,
-                    all_unsubscribed_series: data.all_unsubscribed_series,
-                });
-            },
-        });
-        request.get('/1/studentanalytics', {
-            success: (data) => {
-                this.setState({
-                    subscribed_series: data,
-                });
+                this.setState(data);
             },
         });
     }
