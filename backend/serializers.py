@@ -56,11 +56,11 @@ class SeriesSerializer(serializers.ModelSerializer):
 
 
 class StudentSeriesVideoDataSerializer(serializers.ModelSerializer):
-    video_uuid = serializers.CharField(read_only=True, source='video.uuid')
 
     class Meta:
         model = StudentSeriesVideoData
         exclude = ('id', 'ss_data',)
+        depth = 1
 
 
 class StudentSeriesDataSerializer(serializers.ModelSerializer):

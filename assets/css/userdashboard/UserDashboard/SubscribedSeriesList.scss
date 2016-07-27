@@ -1,0 +1,22 @@
+
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.profileSeriesList {
+    margin: 0px;
+
+    .title {
+        padding: 15px;
+        font-weight: bold;
+        color: $structabl-blue;
+        font-size: 18px;
+    }
+
+    .panels {
+        border-top: 15px solid $structabl-blue;
+        background-color: white;
+        padding: 15px;
+
+        margin: 0px !important;
+    }
+}

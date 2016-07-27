@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 
 import request from 'js/globals/HttpRequest';
 import ProfileSeriesList from 'js/userprofile/profile/ProfileSeriesList';
+import SubscribedSeriesList from 'js/userdashboard/UserDashboard/SubscribedSeriesList';
 import CreateSeriesArea from 'js/userdashboard/UserDashboard/CreateSeriesArea';
 import SeriesAnalyticsDisplay from 'js/userdashboard/UserDashboard/SeriesAnalyticsDisplay';
 
@@ -18,9 +19,16 @@ class UserDashboard extends Component {
             created_series: [],
             all_unsubscribed_series: [],
         };
+
+        this.loadDataFromServer = this.loadDataFromServer.bind(this);
+
     }
 
     componentWillMount() {
+        this.loadDataFromServer()
+    }
+
+    loadDataFromServer() {
         request.get('/1/userdashboard', {
             success: (data) => {
                 this.setState(data);
@@ -28,11 +36,13 @@ class UserDashboard extends Component {
         });
     }
 
+
     render() {
-        let topList;
-            /*<ProfileSeriesList
+        var topList = (
+            <SubscribedSeriesList
                 name="Subscribed Series"
-                series={this.state.subscribed_series} />*/
+                series={this.state.subscribed_series} />
+        );
         let middleList = (
             <ProfileSeriesList
                 name="Manage Your Series"
@@ -59,13 +69,10 @@ class UserDashboard extends Component {
                     name="Manage Your Series" />
             );
         }
-        const analyticsList = this.state.subscribed_series.map((series) => {
-            return <SeriesAnalyticsDisplay series={series} />;
-        });
+        
         return (
             <div className="userDashboard">
                 {topList}
-                {analyticsList}
                 {middleList}
                 {bottomList}
             </div>
