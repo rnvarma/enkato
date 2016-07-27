@@ -6,14 +6,24 @@ import FontAwesome from 'react-fontawesome';
 import Button from 'react-bootstrap/lib/Button';
 
 
+import ConfirmModal from 'js/globals/ConfirmModal';
 import { pluralize } from 'js/globals/utility';
 
 export default class SeriesVideoPanel extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            deleting: false,
+        };
 
+        this.delete = this.delete.bind(this)
         this.makePublic = this.makePublic.bind(this)
         this.makePrivate = this.makePrivate.bind(this)
+        this.toggleDelete = this.toggleDelete.bind(this)
+    }
+
+    delete() {
+
     }
 
     makePublic(){
@@ -24,6 +34,13 @@ export default class SeriesVideoPanel extends Component {
         this.props.makeVideoPrivate(this.props.video.uuid)
     }
 
+    toggleDelete() {
+        this.setState({
+            deleting: !this.state.deleting,
+        });
+    }
+
+
     render() {
         var video = this.props.video;
         if (video.order == 0) {
@@ -32,6 +49,7 @@ export default class SeriesVideoPanel extends Component {
             var rightClass = "right";
         }
 
+        var deleteButton = "";
         var privacyButton = "";
         if(this.props.is_creator){
             if (this.props.is_private) {
@@ -53,11 +71,26 @@ export default class SeriesVideoPanel extends Component {
                         </div>
                     )
                 }
+            deleteButton = (
+                <div className = "annotate-box">
+                    <Button onClick = {this.toggleDelete}>
+                        Delete
+                    </Button>
+                </div>
+            )
             }
 
 
         return (
             <div className="seriesVideoPanel">
+                <ConfirmModal
+                    showing = {this.state.deleting}
+                    description = "You're deleting this video. Are you sure you want to continue? This is irreversible."
+                    acceptText = "Delete"
+                    acceptBsStyle = "danger"
+                    acceptCallback = {this.delete}
+                    cancelCallback = {this.toggleDelete}
+                />
                 <div className="left">
                     <div className="order">
                         {video.order+1}
@@ -97,6 +130,9 @@ export default class SeriesVideoPanel extends Component {
                     </div>
                     <div className="time">
                         {video.duration_san}
+                    </div>
+                    <div className="deleteButton">
+                        {deleteButton}
                     </div>
                 </div>
             </div>
