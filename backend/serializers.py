@@ -84,7 +84,7 @@ class StudentSeriesDataSerializer(serializers.ModelSerializer):
         for index, video_in_series in enumerate(video_data):
             if video_in_series.watched:
                 data['watched'] += 1
-            elif not data['continue_video']:
+            elif data['continue_video'] == None:
                 data['continue_video'] = index
             if video_in_series.watched and video_in_series.completed:
                 data['completed'] += 1

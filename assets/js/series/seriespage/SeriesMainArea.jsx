@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/lib/Button';
 import ConfirmModal from 'js/globals/ConfirmModal';
 import { pluralize } from 'js/globals/utility';
 
+import auth from 'auth';
 import request from 'js/globals/HttpRequest';
 import NoVideosArea from 'js/series/seriespage/NoVideosArea';
 import SeriesVideoList from 'js/series/seriespage/SeriesVideoList';
@@ -148,7 +149,7 @@ export default class SeriesMainArea extends Component {
                 </div>
             )
              
-            if (this.props.is_subscribed) {
+            if (auth.loggedIn() && this.props.is_subscribed) {
                 var annotateVideosButton = (
                     <div className="annotate-box">
                         <Button 
