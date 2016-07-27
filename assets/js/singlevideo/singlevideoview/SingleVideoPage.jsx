@@ -12,22 +12,27 @@ import NavBar from 'js/globals/NavBar';
 import VideoPlayer from 'js/globals/VideoPlayer/VideoPlayer';
 import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
 
+console.log("hello world");
+console.log("is this working")
 class SingleVideoPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       videoUUID: this.props.params.videoUUID,
       topicList: [],
-      getCurrentTime: null
+      getCurrentTime: null,
     };
 
     this.loadDataFromServer = this.loadDataFromServer.bind(this);
     this.setTopicList = this.setTopicList.bind(this);
     this.setGetCurrentTime = this.setGetCurrentTime.bind(this);
+    this.setStartTime= this.setStartTime.bind(this);
   }
 
   componentDidMount() {
     this.loadDataFromServer(this.state.videoUUID);
+    console.log("singleVideoPage componentDidMount");
+    console.log(this.state);
   }
 
   loadDataFromServer(videoUUID) {
@@ -39,7 +44,19 @@ class SingleVideoPage extends Component {
         $.extend(true, stateData, data);
         this.setState(stateData);
       },
-    })
+    });
+  }
+
+  setStartTime(){
+    var params = [];
+    var hashes = window.location.search.slice(1).split('&');
+    for(var i = 0; i < hashes.length; i++){
+        var param = hashes[i].split('=');
+        params.push(param[0]);
+        params[param[0]] = param[1];
+    }
+    var startTime= params["t"];
+    return startTime;
   }
 
   setTopicList(topicList) {
@@ -59,6 +76,7 @@ class SingleVideoPage extends Component {
             <VideoPlayer
               videoUUID={this.state.videoUUID}
               setTopicList={this.setTopicList}
+              setStartTime={this.setStartTime}
               setGetCurrentTime={this.setGetCurrentTime}/>
           </Col>
         </Row>

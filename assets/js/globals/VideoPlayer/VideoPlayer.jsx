@@ -14,7 +14,8 @@ import Player from 'js/globals/VideoPlayer/Player';
 
 // How often the video player checks the video's state
 const pollInterval = 100;
-
+console.log("videoplayer running");
+console.log('is it working...');
 function updateCurrentTopicOnKey(targetKey, topicList){
     for(var i=0; i<topicList.length; i++){
         if(topicList[i].id == targetKey){
@@ -55,10 +56,24 @@ function clearCurrentTopic(topicList){
     return tList;
 }
 
+/* Takes string "0:00" and gives back number of seconds*/
+
+function timeToSeconds(time){
+    var timeA = time.split(":");
+    var seconds = 0;
+    console.log(timeA);
+    if(timeA.length == 2){
+        seconds = Number(timeA[0])*60 + Number(timeA[1]);
+    }
+    else if(timeA.length==3){
+        seconds = Number(timeA[0])*3600 + Number(timeA[1])*60 + Number(timeA[2]);
+    }
+    return seconds;
+}
+
 export default class VideoPlayer extends Component {
     constructor(props) {
-        super(props)
-
+        super(props);
         this.state = {
             quizDataLoaded: false,
             topicObjList: [], 
@@ -87,27 +102,27 @@ export default class VideoPlayer extends Component {
             pollInterval:null,
         }
 
-        this.trackView = this.trackView.bind(this)
-        this.onVideoEnd = this.onVideoEnd.bind(this)
-        this.onPlayerStateChange = this.onPlayerStateChange.bind(this)
-        this.loadQuizData = this.loadQuizData.bind(this)
-        this.submitQuiz = this.submitQuiz.bind(this)
-        this.loadDataFromServer = this.loadDataFromServer.bind(this)
-        this.updateCurrentState = this.updateCurrentState.bind(this)
-        this.showOverlay = this.showOverlay.bind(this)
-        this.showQuiz = this.showQuiz.bind(this)
-        this.closeModal = this.closeModal.bind(this)
-        this.setWindowSize = this.setWindowSize.bind(this)
-        this.handleScrub = this.handleScrub.bind(this)
-        this.handleTopicClick = this.handleTopicClick.bind(this)
-        this.handlePlayPauseClick = this.handlePlayPauseClick.bind(this)
-        this.onFinishButton = this.onFinishButton.bind(this)
-        this.afterTopicListUpdate = this.afterTopicListUpdate.bind(this)
-        this.playVideo = this.playVideo.bind(this)
+        this.trackView = this.trackView.bind(this);
+        this.onVideoEnd = this.onVideoEnd.bind(this);
+        this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
+        this.onPlayerReady = this.onPlayerReady.bind(this);
+        this.loadQuizData = this.loadQuizData.bind(this);
+        this.submitQuiz = this.submitQuiz.bind(this);
+        this.loadDataFromServer = this.loadDataFromServer.bind(this);
+        this.updateCurrentState = this.updateCurrentState.bind(this);
+        this.showOverlay = this.showOverlay.bind(this);
+        this.showQuiz = this.showQuiz.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.setWindowSize = this.setWindowSize.bind(this);
+        this.handleScrub = this.handleScrub.bind(this);
+        this.handleTopicClick = this.handleTopicClick.bind(this);
+        this.handlePlayPauseClick = this.handlePlayPauseClick.bind(this);
+        this.onFinishButton = this.onFinishButton.bind(this);
+        this.afterTopicListUpdate = this.afterTopicListUpdate.bind(this);
+        this.playVideo = this.playVideo.bind(this);
     }
 
     componentDidMount() {
-        this.loadDataFromServer(this.props.videoUUID);
         this.setWindowSize();
         this.setState({
             isPlaying: false,
@@ -115,25 +130,31 @@ export default class VideoPlayer extends Component {
             percentDone: 0
         })
         window.onresize=this.setWindowSize;
+        this.loadDataFromServer(this.props.videoUUID);
+
+
         //updates time and playing
         this.setState({
             pollInterval: setInterval(this.updateCurrentState, pollInterval)
-        })
+        });
     }
 
     loadDataFromServer(v_id){
         request.get(`/1/v/${v_id}`, {
             success: (data) => {
-                /* an optional prop */
-                if (this.props.setTopicList) {
-                  this.props.setTopicList(data.topicList);
-                }
+                var vidPlayer= new Player(data.videoID, this.onPlayerStateChange, this.onPlayerReady);
                 if (this.state.Player) {
                     this.state.Player.destroy();
                 }
                 this.setState({
-                    Player: new Player(data.videoID, this.onPlayerStateChange)
+                    Player: vidPlayer
                 });
+                
+                /* an optional prop */
+                if (this.props.setTopicList) {
+                  this.props.setTopicList(data.topicList);
+                }
+
                 this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
                 this.forceUpdate();
 
@@ -146,7 +167,6 @@ export default class VideoPlayer extends Component {
                 this.setState({
                     videoTitle: data.videoData.name
                 });
-
                 /* optional prop */
                 if (this.props.setGetCurrentTime) {
                       this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
@@ -201,10 +221,27 @@ export default class VideoPlayer extends Component {
     }
 
     onPlayerStateChange(event) {
+        console.log("player changed");
         if (event.data == 0) {
             this.onVideoEnd()
         } else if (event.data == 1) {
         }
+    }
+
+    onPlayerReady(event){
+        if (this.props.setStartTime() != null){
+            this.state.currentTime = Number(this.props.setStartTime());
+        }
+        var startTime = this.state.currentTime;
+        var startSeconds;
+        if(typeof startTime == "string"){
+            startSeconds = timeToSeconds(startTime);
+        }
+        else{
+            startSeconds= startTime;
+        }
+        event.target.seekTo(startSeconds);
+        event.target.playVideo();
     }
 
     loadQuizData(v_id){

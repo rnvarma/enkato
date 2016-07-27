@@ -4,11 +4,11 @@ var React = require('react')
 var ReactDOM = require('react-dom')
 var YouTubeIframeLoader = require('youtube-iframe');
 
-module.exports = function (videoId, onPlayerStateChange) {
-
+module.exports = function (videoId, onPlayerStateChange, onPlayerReady) {
     this.player;
     this.videoId = videoId;
-    this.onPlayerStateChange = onPlayerStateChange
+    this.onPlayerStateChange = onPlayerStateChange;
+    this.onPlayerReady = onPlayerReady;
 
     this.init = function(videoId) {
         var this2 = this
@@ -27,13 +27,15 @@ module.exports = function (videoId, onPlayerStateChange) {
                     'showinfo': 0
                 },
                 events: {
-                    onStateChange: this2.onPlayerStateChange
+                    'onReady': this2.onPlayerReady,
+                    'onStateChange': this2.onPlayerStateChange
                 }
             });
         }
         YouTubeIframeLoader.load(loadPlayer)
     }
-    this.init(this.videoId) 
+    this.init(this.videoId)
+    console.log("player initialized"); 
 
     this.destroy = function() {
         if (!this.player) return;
@@ -45,7 +47,6 @@ module.exports = function (videoId, onPlayerStateChange) {
     */
     this.play = function(){
         console.log("im playing")
-        console.log(this)
         if (!this.player) return;
         console.log("im playing2")
         return this.player.playVideo();
@@ -81,7 +82,12 @@ module.exports = function (videoId, onPlayerStateChange) {
     * Param: int seconds
     */
     this.seekTo = function(seconds){
-        if (!this.player) return;
+        console.log(this.player);
+        console.log(seconds);
+        if (!this.player){
+            console.log("player is not seeking");
+            return;
+        } 
         if (seconds == Math.floor(this.player.getDuration())) {
             seconds -= 0.5; /* YouTube bug, seeking to getDuration() floor doesn't work */
         }

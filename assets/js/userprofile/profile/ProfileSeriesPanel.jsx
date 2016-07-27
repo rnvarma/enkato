@@ -1,4 +1,3 @@
-
 require("css/userprofile/profile/ProfileSeriesPanel.scss");
 
 import React, { Component } from 'react'

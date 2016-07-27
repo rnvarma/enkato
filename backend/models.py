@@ -362,6 +362,7 @@ class StudentSeriesVideoData(models.Model):
     total_time_watched = models.IntegerField(default=0)  # number seconds
     seconds_into_video = models.IntegerField(default=0)
     watched = models.BooleanField(default=False)
+    mastered = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
 

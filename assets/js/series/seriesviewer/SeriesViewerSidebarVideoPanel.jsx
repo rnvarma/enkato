@@ -1,21 +1,30 @@
 require('css/series/seriesviewer/SeriesViewerSidebarVideoPanel.scss');
 
 import React from 'react';
+import DotDotDot from 'react-dotdotdot';
 
-import { pluralize, truncate } from 'js/globals/utility'
+import { pluralize } from 'js/globals/utility'
 
 class SeriesViewerSidebarVideoPanel extends React.Component {
     constructor() {
-        super()
+        super();
         
-        this.onClick = this.onClick.bind(this)
+        this.onClick = this.onClick.bind(this);
     }
 
     onClick() {
-        window.location.hash = this.props.video.uuid
+        window.location.hash = this.props.video.uuid;
     }
 
     render() {
+        let quizQuestionCount;
+        if (this.props.video.num_quiz_questions) {
+            quizQuestionCount = (
+                <div className="numQuizQuestions">
+                    {this.props.video.num_quiz_questions} {pluralize("Q", this.props.video.num_quiz_questions)}
+                </div>
+            );
+        }
         return (
             <div
                 className={"seriesViewerSidebarVideoPanel" + (this.props.active ? " active" : "")}
@@ -25,21 +34,24 @@ class SeriesViewerSidebarVideoPanel extends React.Component {
                     <img src={this.props.video.thumbnail} className="image"/>
                 </div>
                 <div className="info">
-                    <div className="name">
-                        {truncate(this.props.video.name, 35, true)}
+                    <div>
+                        <DotDotDot className="name" clamp={this.props.clamp}>
+                            {this.props.video.name}
+                        </DotDotDot>
                     </div>
                     <div className="metadata">
                         <div className="numTopics">
                             {this.props.video.num_views} {pluralize("view", this.props.video.num_views)}
                         </div>
-                        <div className="numQuizQuestions">
-                            {this.props.video.num_quiz_questions} {pluralize("Q", this.props.video.num_quiz_questions)}
-                        </div>
+                        {quizQuestionCount}
                     </div>
                 </div>
             </div>
         );
     }
+}
+SeriesViewerSidebarVideoPanel.defaultProps = {
+    clamp: 1,
 }
 
 export default SeriesViewerSidebarVideoPanel;
