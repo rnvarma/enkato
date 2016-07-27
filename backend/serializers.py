@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from backend.utility import getSeriesThumbnails
+from backend.utility import getSeriesThumbnails, sanetizeTime
 from .models import *
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -86,7 +86,7 @@ class StudentSeriesDataSerializer(serializers.ModelSerializer):
                 data['watched'] += 1
             elif not data['continue_video']:
                 data['continue_video'] = index
-            if video_in_series.completed:
+            if video_in_series.watched and video_in_series.completed:
                 data['completed'] += 1
 
         if not data['continue_video']:  # set to first video if not set
@@ -109,9 +109,49 @@ class StudentAnalyticsSerializer(serializers.ModelSerializer):
     user_data = StudentSeriesDataSerializer(many=True, source='students_data')
     video_count = serializers.IntegerField(source='videos.count', read_only=True)
     thumbnails = serializers.SerializerMethodField()
+    total_time = serializers.SerializerMethodField()
 
     class Meta:
         model = Series
 
     def get_thumbnails(self, obj):
         return getSeriesThumbnails(obj)
+
+    def get_total_time(self, obj):
+        total_time = 0
+        for series_video in obj.videos.all():
+            total_time += series_video.video.duration  # inefficient
+
+        return sanetizeTime(total_time)
+
+
+class InstructorQuizQuestionDataSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = StudentSeriesVideoQuizQuestionData
+        fields = ('quiz_question', 'answer', 'is_correct')
+
+
+class InstructorQuizDataSerializer(serializers.ModelSerializer):
+    quizzes_data = InstructorQuizQuestionDataSerializer(many=True)
+
+    class Meta:
+        model = StudentSeriesVideoData
+        exclude = ('id', 'ss_data')
+
+
+class InstructorSeriesDataSerializer(serializers.ModelSerializer):
+    videos_data = InstructorQuizDataSerializer(many=True)
+    user = CustomUserSerializer()
+
+    class Meta:
+        model = StudentSeriesData
+        fields = ('videos_data', 'user')
+
+
+class InstructorSeriesSerializer(serializers.ModelSerializer):
+    students_data = InstructorSeriesDataSerializer(many=True)
+
+    class Meta:
+        model = Series
+        fields = ('name', 'image', 'uuid', 'students_data')

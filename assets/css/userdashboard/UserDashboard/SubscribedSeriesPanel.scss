@@ -48,6 +48,16 @@
             margin-top:25px;
             width: 75px;
             height: 75px;
+            position: relative;
+            .percentage{
+                position: absolute;
+                left:23;
+                bottom:23;
+
+                color: $structabl-blue;
+                font-weight:800;
+                font-size:20px;
+            }
         }
 
         .progressLabel {

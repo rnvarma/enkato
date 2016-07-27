@@ -8,7 +8,6 @@ import request from 'js/globals/HttpRequest';
 import ProfileSeriesList from 'js/userprofile/profile/ProfileSeriesList';
 import SubscribedSeriesList from 'js/userdashboard/UserDashboard/SubscribedSeriesList';
 import CreateSeriesArea from 'js/userdashboard/UserDashboard/CreateSeriesArea';
-import SeriesAnalyticsDisplay from 'js/userdashboard/UserDashboard/SeriesAnalyticsDisplay';
 
 class UserDashboard extends Component {
     constructor() {
