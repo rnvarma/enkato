@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from backend.utility import getSeriesThumbnails
+from backend.utility import getSeriesThumbnails, sanetizeTime
 from .models import *
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -109,9 +109,17 @@ class StudentAnalyticsSerializer(serializers.ModelSerializer):
     user_data = StudentSeriesDataSerializer(many=True, source='students_data')
     video_count = serializers.IntegerField(source='videos.count', read_only=True)
     thumbnails = serializers.SerializerMethodField()
+    total_time = serializers.SerializerMethodField()
 
     class Meta:
         model = Series
 
     def get_thumbnails(self, obj):
         return getSeriesThumbnails(obj)
+
+    def get_total_time(self, obj):
+        total_time = 0
+        for series_video in obj.videos.all():
+            total_time += series_video.video.duration  # inefficient
+
+        return sanetizeTime(total_time)
