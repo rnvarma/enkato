@@ -15,7 +15,8 @@ import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 import FontAwesome from 'react-fontawesome';
 import request from 'js/globals/HttpRequest';
 import auth from 'auth'
-import {truncate} from 'js/globals/utility'
+import Dotdotdot from 'react-dotdotdot';
+
 
 
 class NavBar extends Component {
@@ -122,7 +123,7 @@ class NavBar extends Component {
                             else {
                                 var timestring = ""
                             }
-                            return (<MenuItem onClick = {this.getOnClick(notification)}><div className = "notification">{truncate(notification.description, 60, true)} {timestring}</div></MenuItem>);
+                            return (<MenuItem onClick = {this.getOnClick(notification)}><div className = "notification"><Dotdotdot clamp = {1}>{notification.description}</Dotdotdot>{timestring}</div></MenuItem>);
                         })}
                     </NavDropdown>
                 </Nav>
