@@ -76,6 +76,8 @@ class LogQuiz(APIView):
         quizQuestions = v.quiz_questions.all()
 
         ssvd.quizzes_data.all().delete()
+        ssvd.completed = True
+        ssvd.save()
 
         result = []
         numCorrect=0

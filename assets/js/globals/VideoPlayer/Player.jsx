@@ -5,10 +5,10 @@ var ReactDOM = require('react-dom')
 var YouTubeIframeLoader = require('youtube-iframe');
 
 module.exports = function (videoId, onPlayerStateChange, onPlayerReady) {
-
     this.player;
     this.videoId = videoId;
-    this.onPlayerStateChange = onPlayerStateChange
+    this.onPlayerStateChange = onPlayerStateChange;
+    this.onPlayerReady = onPlayerReady;
 
     this.init = function(videoId) {
         var this2 = this

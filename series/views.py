@@ -31,6 +31,13 @@ class SeriesViewset(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user.customuser)
 
+    def perform_destroy(self, instance):
+        for series_video in instance.series_videos:
+            series_video.video.destroy()
+
+        instance.destroy()
+
+
 class CreateSeries(APIView):
     def post(self, request):
         if request.user.is_anonymous():
