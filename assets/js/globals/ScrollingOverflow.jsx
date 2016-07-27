@@ -1,5 +1,3 @@
-require("css/globals/ScrollingOverflow.scss")
-
 import React from 'react';
 
 export default class TopicNode extends React.Component {

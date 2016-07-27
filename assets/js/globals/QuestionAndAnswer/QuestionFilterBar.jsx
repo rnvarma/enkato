@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionFilterBar.scss');
-
 import React from 'react';
 
 import FontAwesome from 'react-fontawesome';

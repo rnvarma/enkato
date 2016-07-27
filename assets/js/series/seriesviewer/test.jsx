@@ -1,7 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/base.scss")
-require("css/series/seriespage/SeriesPage.scss");
-
 import React, { Component } from 'react';
 
 import Col from 'react-bootstrap/lib/Col';

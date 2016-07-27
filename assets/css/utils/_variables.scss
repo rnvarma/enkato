@@ -1,0 +1,34 @@
+/* Global Variables */
+
+// Font Families
+$base-font: 'Roboto', sans-serif;
+
+// Font Weights
+$base-weight: 400;
+$bold-weight: 500;
+$boldest-weight: 700;
+
+// Font Sizes
+$small-size: 12px;
+$base-size: 14px;
+$large-size: 18px;
+$largest-size: 24px;
+
+// Letter Spacing
+$base-spacing: 0.2px;
+
+// Borders
+$base-border-radius: 3px;
+$base-border-width: 5px;
+
+// Padding
+$page-padding: 30px;
+$content-padding: $page-padding / 2;
+
+// Breakpoints
+$breakpoints: (
+    xsmall: 640px,
+    small: 768px,
+    medium: 992px,
+    large: 1200px,
+) !default;

@@ -1,0 +1,68 @@
+.askQuestionBar {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 1000;
+    width: 80%;
+    background-color: #F5F5F5;
+    padding: 10px;
+    box-shadow: 0px -1px 5px rgba(1, 17, 62, 0.2);
+
+    .typeahead {
+      display: inline-flex;
+      width: calc(100% - 150px);
+
+      input {
+        width: 100%;
+        padding: 6px;
+      }
+
+      .typeahead-selector {
+        position: absolute;
+        left: 10px;
+        bottom: 44px;
+        margin-bottom: 0;
+        padding-left: 0;
+        width: calc(100% - 160px);
+        box-shadow: 0px -1px 5px rgba(1, 17, 62, 0.2);
+
+        li {
+          background-color: white;
+          padding: 6px;
+          border: 1px solid #F5F5F5;
+
+          &:hover {
+            cursor: pointer;
+            background-color: #F5F5F5;
+          }
+
+          a {
+            color: initial;
+
+            &:hover {
+              text-decoration: none;
+            }
+          }
+        }
+      }
+    }
+
+    .btn.addQuestionBtn {
+      background: $kato-green;
+      color: white;
+      text-align: left;
+      font-size: 15px;
+      letter-spacing: 0.3px;
+      font-weight: 500;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+      height: 35px;
+      margin-top: -1px;
+      width: 150px;
+
+      .fa {
+        float: left;
+        margin: 2px 10px 2px 0px;
+      }
+    }
+  }

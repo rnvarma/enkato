@@ -1,6 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/QuizView/QuestionNode");
-
 import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';

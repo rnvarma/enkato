@@ -1,5 +1,3 @@
-require('css/series/seriesviewer/SeriesViewerSidebarVideoPanel.scss');
-
 import React from 'react';
 import DotDotDot from 'react-dotdotdot';
 import { browserHistory } from 'react-router'

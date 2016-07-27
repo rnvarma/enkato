@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionDisplay.scss');
-
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 

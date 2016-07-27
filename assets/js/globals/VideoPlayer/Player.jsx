@@ -1,5 +1,3 @@
-require('bootstrap-loader'); 
-require("css/globals/VideoPlayer/Video")
 var React = require('react')
 var ReactDOM = require('react-dom')
 var YouTubeIframeLoader = require('youtube-iframe');

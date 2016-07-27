@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionList.scss');
-
 import React, { Component, PropTypes } from 'react';
 
 import Dotdotdot from 'react-dotdotdot';

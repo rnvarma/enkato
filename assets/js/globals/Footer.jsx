@@ -1,5 +1,3 @@
-require("css/globals/Footer")
-
 import React, { Component } from 'react'
 import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 

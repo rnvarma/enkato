@@ -1,6 +1,3 @@
-require('css/series/seriespage/SeriesVideoList.scss');
-require('css/series/seriespage/SeriesVideoPanelSortable.scss');
-
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 import Button from 'react-bootstrap/lib/Button';

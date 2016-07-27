@@ -1,0 +1,46 @@
+$questionIndent:50px; 
+
+.questionNode{
+    padding-top:40px;
+    padding-left:50px;
+    height:100%;
+    width:100%;
+    position:relative;
+    overflow-y: scroll;
+
+    .title{
+        font-size:20px;
+        color:$structabl-blue;
+        .arrowIcon{
+            font-weight:thin;
+            margin-right:25px;
+        }
+        .titleText{
+            font-weight:700;
+        }
+    }
+    .choiceList{
+        padding-left:$questionIndent;
+        padding-top:35px;
+    }
+
+    &.noQuiz {
+        font-weight: bold;
+        color: $structabl-blue;
+        font-size: 20px;
+        text-align: center;
+        padding-top: 50px;
+    }
+
+    // .quizSubmitAnswerButton{
+    //     background-color:$kato-green;
+    //     color:white;
+    //     font-weight:800;
+    //     margin-left:$questionIndent;
+    // }
+
+    // .quizSubmitButtonHR{
+    //     margin-left:$questionIndent;
+    //     width:calc(100% - #{$questionIndent}*2);
+    // }
+}

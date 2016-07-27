@@ -1,5 +1,3 @@
-require('css/globals/QuizView/QuizNavNode.scss');
-
 var React = require('react')
 
 export default class QuizNavNode extends React.Component {

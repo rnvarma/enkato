@@ -1,5 +1,3 @@
-require("css/globals/VideoPlayer/TakeQuizButton")
-
 import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';

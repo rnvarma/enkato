@@ -1,5 +1,3 @@
-require('css/globals/QuizAddingForm/quizaddingform.scss');
-
 import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';

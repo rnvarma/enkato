@@ -1,0 +1,22 @@
+.toggleMenu {
+    border-bottom: $base-border-width solid $base-dark;
+    color: $base-dark;
+
+    .series {
+        display: inline-block;
+        padding: 5px 15px;
+        font-weight: $bold-weight;
+        cursor: pointer;
+
+        &.active {
+            border-bottom: $base-border-width solid $secondary-accent;
+            margin-bottom: -5px;
+            color: $secondary-accent;
+        }
+
+        &:hover, &:focus {
+            color: $secondary-accent-hover;
+            border-bottom: $base-border-width solid $secondary-accent-hover;
+        }
+    }
+}

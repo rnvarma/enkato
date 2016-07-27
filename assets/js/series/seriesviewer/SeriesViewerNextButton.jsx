@@ -1,5 +1,3 @@
-require('css/series/seriesviewer/SeriesViewerNextButton.scss');
-
 import React from 'react';
 
 class SeriesViewerNextButton extends React.Component {

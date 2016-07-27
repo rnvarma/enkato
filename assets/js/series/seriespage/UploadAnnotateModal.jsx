@@ -1,5 +1,3 @@
-require('css/series/seriespage/UploadAnnotateModal.scss');
-
 import React, { Component } from 'react';
 
 import Button from 'react-bootstrap/lib/Button';

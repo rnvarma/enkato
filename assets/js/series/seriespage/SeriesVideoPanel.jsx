@@ -1,5 +1,3 @@
-require('css/series/seriespage/SeriesVideoPanel.scss');
-
 import React, { Component } from 'react';
 import { Link } from 'react-router'
 import FontAwesome from 'react-fontawesome';
@@ -113,18 +111,18 @@ export default class SeriesVideoPanel extends Component {
                             <img src={video.thumbnail} className="thumbnailImg"/>
                         </Link>
                     </div>
-                    <div className="info">
+                    <div className="imageInfo info">
                         <div className="name">
                             <Link to={`/s/${this.props.seriesUUID}/watch#${video.uuid}`}>{video.name}</Link>
                         </div>
                         <div className="creator">
-                            <span className={"seperator" + (this.props.is_creator && !video.num_topics ? " alertAnnotate" : "")}>
+                            <span className={"separator metaItem" + (this.props.is_creator && !video.num_topics ? " alertAnnotate" : "")}>
                                 <FontAwesome
                                     name="exclamation-circle"
                                     className="alertIcon"/>
                                 {video.num_topics} {pluralize("topic", video.num_topics)}
                             </span>
-                            <span className={"seperator" + (this.props.is_creator && !video.num_quiz_questions ? " alertAnnotate" : "")}>
+                            <span className={"separator metaItem" + (this.props.is_creator && !video.num_quiz_questions ? " alertAnnotate" : "")}>
                                 <FontAwesome 
                                     name="exclamation-circle" 
                                     className="alertIcon"/>
@@ -141,10 +139,10 @@ export default class SeriesVideoPanel extends Component {
                     <div className="privacyButton">
                         {privacyButton}
                     </div>
-                    <div className="numViews">
+                    <div className="numViews metaItem">
                         {video.num_views} {pluralize("view", video.num_views)}
                     </div>
-                    <div className="time">
+                    <div className="time metaItem">
                         {video.duration_san}
                     </div>
                 </div>

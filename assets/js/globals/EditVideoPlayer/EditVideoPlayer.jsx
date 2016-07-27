@@ -1,7 +1,3 @@
-require('bootstrap-loader');
-require('css/globals/base.scss');
-require('css/globals/EditVideoPlayer/EditVideoPlayer.scss');
-
 import React, { Component } from 'react';
 
 import request from 'js/globals/HttpRequest';

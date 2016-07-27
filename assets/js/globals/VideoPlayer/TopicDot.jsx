@@ -1,5 +1,3 @@
-require('css/globals/VideoPlayer/TopicDot');
-
 import React from 'react';
 
 export default class TopicDot extends React.Component {

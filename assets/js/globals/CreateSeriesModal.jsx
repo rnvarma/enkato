@@ -1,5 +1,3 @@
-require("css/globals/CreateSeriesModal.scss")
-
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 

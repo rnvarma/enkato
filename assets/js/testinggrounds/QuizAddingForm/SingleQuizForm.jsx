@@ -1,4 +1,3 @@
-require('css/testingGrounds/QuizAddingForm/singlequizaddingform.scss')
 var React = require('react')
 var ReactDOM = require('react-dom')
 var FontAwesome = require('react-fontawesome');

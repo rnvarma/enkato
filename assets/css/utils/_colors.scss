@@ -1,0 +1,47 @@
+$white:#FFFFFF;
+
+$yn-green: #0D8809;
+
+$bg-grey: #F3F3F3;
+$hover-grey: #FBFBFB;
+$yn-dark-grey: #3A3A3A;
+$grey-topic-button: #FBFBFB;
+$grey-topic-button-section-bg:#F7F7F7;
+$grey-topic-button-section-bg-hover:#F3F3F3;
+$grey-topic-button-text:#535353;
+$grey-progress-bar-not-watched:#777777;
+$grey-progress-bar-text:#999999;
+$grey-control-bar-bg-color:#333333;
+
+$form-control-border-color: #acacac;
+
+$structabl-blue: #01113e;
+$structabl-red: #CD000A;
+$structabl-bg-blue: #EEF1F7;
+$grey-hover: #eee;
+
+$black-active: #ccc;
+
+$kato-green: #79B546;
+$enkato-green: #00765A;
+$enkato-bright-green: #2EB73A;
+
+$main-bg-shadow: transparentize($structabl-blue, 0.8);
+
+// Highlight Colors
+$blank: #FFFFFF; // Previously "white" lol
+
+// Accent Colors
+$primary-accent: #79B546; // Previously kato-green
+$secondary-accent: #00765A; // Previously enkato-green
+$alert-accent: #FA1400; // Bright red!
+
+// Hover Colors
+$secondary-accent-hover: lighten($secondary-accent, 5%);
+
+// Base Colors
+$base-font-color: #535353; // Previously grey-topic-button-text
+$base-bg: #EEF1F7; // Previously structabl-bg-blue
+$base-dark: #01113E; // Previously structabl-blue
+
+// 50 Shades of Grey

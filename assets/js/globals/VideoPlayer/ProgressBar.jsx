@@ -1,6 +1,3 @@
-require('bootstrap-loader');
-require('css/globals/VideoPlayer/ProgressBar');
-
 import React from 'react';
 
 import TopicDot from 'js/globals/VideoPlayer/TopicDot'

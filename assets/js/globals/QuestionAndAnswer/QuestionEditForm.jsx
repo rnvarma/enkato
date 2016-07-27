@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionEditForm.scss');
-
 import React from 'react';
 
 import Button from 'react-bootstrap/lib/Button';

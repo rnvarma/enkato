@@ -1,6 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/VideoPlayer/TopicList")
-
 import React from 'react';
 
 import ScrollArea from 'react-scrollbar';

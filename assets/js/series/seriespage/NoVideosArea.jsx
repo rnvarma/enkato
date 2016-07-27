@@ -1,6 +1,3 @@
-
-require("css/series/seriespage/NoVideosArea.scss");
-
 import React, { Component } from 'react';
 
 import Button from 'react-bootstrap/lib/Button';

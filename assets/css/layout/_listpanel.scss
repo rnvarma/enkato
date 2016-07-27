@@ -1,0 +1,95 @@
+.listPanel {
+    position: relative;
+    padding: $content-padding 0;
+    border-bottom: 1px solid $base-bg;
+
+    &:first-of-type {
+        padding-top: 0;
+    }
+
+    &:last-of-type {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .left {
+        .listNumber {
+            display: inline-block;
+            vertical-align: top;
+            padding: 0 5px;
+            margin-top: 17px;
+            font-weight: $boldest-weight;
+            color: $base-dark;
+        }
+
+        .thumbnailArea {
+            display: inline-block;
+            vertical-align: top;
+
+            .thumbnailImg {
+                width: 100px;
+            }
+        }
+
+        .info {
+            display: inline-block;
+            vertical-align: top;
+            padding-left: 20px;
+            margin-top: 10px;
+
+            .name {
+                font-weight: $boldest-weight;
+                color: $base-dark;
+            }
+
+            .creator {
+                margin-top: 3px;
+
+                .separator {
+                    .alertIcon {
+                        display: none;
+                    }
+
+                    &.alertAnnotate {
+                        .alertIcon {
+                            display: inherit;
+                            color: $alert-accent;
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .right {
+        position: absolute;
+        right: $content-padding;
+        top: 25px;
+        color: $base-dark;
+
+        &.first {
+            top: 13px;
+        }
+
+        .privacyButton {
+            display: inline-block;
+            padding-right: 10px;
+            border-right: 1px solid $base-dark; 
+        }
+
+        // .numViews {
+        //     display: inline-block;
+        //     padding-right: 10px;
+        //     padding-left:10px;
+        //     border-right: 1px solid $base-dark; 
+        // }
+
+        // .time {
+        //     display: inline-block;
+        //     font-weight: $boldest-weight;
+        //     padding-left: 10px;
+        //     padding-right: 30px;
+        // }
+    }
+}

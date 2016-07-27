@@ -1,5 +1,3 @@
-require('css/globals/QuizAddingForm/MCChoiceList.scss');
-
 import React, { Component } from 'react';
 
 import MCChoiceNode from 'js/globals/QuizAddingForm/MCChoiceNode';

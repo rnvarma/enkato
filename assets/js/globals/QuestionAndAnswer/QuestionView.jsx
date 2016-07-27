@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionView.scss');
-
 import React from 'react';
 
 import Fuse from 'fuse.js';
@@ -419,7 +417,7 @@ class QuestionView extends React.Component {
           {askModal}
           <Row>
             <Col md={5}>
-              <div className="qaTitle">Question & Answer</div>
+              <div className="qaTitle headline">Question & Answer</div>
             </Col>
           </Row>
           <QuestionFilterBar

@@ -1,0 +1,43 @@
+.footer {
+    background-color: $blank;
+    padding: 70px;
+
+    .name {
+        display: inline-block;
+        vertical-align: top;
+        width: 30%;
+
+        @include respond-to(xsmall) {
+            width: 100%;
+        }
+
+        .logo {
+            width: 200px;
+        }
+    }
+
+    .footerPart {
+        display: inline-block;
+        vertical-align: top;
+        width: 17%;
+
+        @include respond-to(xsmall) {
+            width: 50%;
+            padding-top: 25px;
+        }
+
+        .title {
+            font-size: 20px;
+        }
+
+        .itemsList {
+            margin-top: 10px;
+
+            .item {
+                color: $base-font-color;
+                font-size: 16px;
+                line-height: 23px;
+            }
+        }
+    }
+}

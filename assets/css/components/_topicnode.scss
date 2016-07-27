@@ -1,0 +1,118 @@
+.topicList{ 
+    height:100%;
+    //overflow-y: scroll;
+    width:100%;
+    overflow-x:hidden;
+}
+
+.editableTopicList {
+    height: calc(100% - 50px);
+}
+
+.topicNode {
+    width:100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color:$structabl-blue;
+    padding: 10px 15px;
+    border-bottom: 1px solid $structabl-bg-blue;
+
+    &#selectedTopicNode {
+        background-color: $enkato-green;
+        color: white;
+
+        .name {
+            color: white;
+        }
+    }
+
+    &:hover {
+        background-color:$grey-topic-button-section-bg-hover;
+        cursor:pointer;
+    }
+
+    .time {
+        display: inline-block;
+        vertical-align: top;
+        width: 20%;
+
+    }
+
+    .name {
+        width: 80%;
+        display: inline-block;
+        vertical-align: top;
+        font-weight: 500;
+        overflow: hidden;
+        padding-left: 2px;
+    }
+}
+
+.editableTopicNodeContainer {
+    margin-bottom: 0px;
+}
+
+.editableTopicNode{
+    width:100%;
+    background-color: white;
+    border-bottom: 1px solid $structabl-bg-blue;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color:$structabl-blue;
+    padding: 10px 15px;
+    font-weight: bold;
+    //transition: border-bottom 0.1s;
+
+    &.active {
+        background-color: #FDFDFE;
+        margin-bottom:-4px; //so the bar doesnt move
+        border-bottom: 4px solid $structabl-blue;
+    }
+
+    &:hover {
+        background-color:$structabl-bg-blue;
+        cursor:pointer;
+    }
+
+    &.hover {
+        .delete {
+            display: inline-block;
+        }
+    }
+
+    input {
+        width: calc(100% - 50px - 20px);
+        background-color: transparent;
+        border: none;
+
+        &:active, &:focus {
+            border: none;
+            outline: none;
+        }
+
+
+    }
+
+    .time {
+        display: inline-block;
+        width: 50px;
+        font-weight: normal;
+    }
+
+    .delete {
+        display: none;
+        width: 24px;
+        font-size: 17px;
+        font-weight: 100;
+        padding: 3px;
+        border-radius: 20px;
+        text-align: center;
+
+
+        &:hover {
+            background-color: white;
+        }
+    }
+}

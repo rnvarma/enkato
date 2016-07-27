@@ -1,0 +1,29 @@
+form label {
+    color: $base-dark;
+}
+
+.form-control {
+    border-radius: $base-border-radius;
+    border: 1px solid $base-bg;
+}
+
+.addVideoToSeriesForm {
+    .addVideoTextArea {
+        margin-top: 10px;
+    }
+
+    textarea {
+        resize: none;
+    }
+}
+
+.questionResponseForm {
+  .control-label {
+    font-size: 20px;
+    color: $structabl-blue;
+    padding-bottom: 5px;
+  }
+
+  .form-control {
+  }
+}

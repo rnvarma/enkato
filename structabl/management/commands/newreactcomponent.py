@@ -2,9 +2,6 @@ from django.core.management.base import BaseCommand
 import os
 
 baseSCSS = """\
-@import '../../globals/colors.scss';
-@import '../../globals/mixins.scss';
-
 .{camelCaseName} {{
     
 }}

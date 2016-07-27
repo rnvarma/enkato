@@ -1,0 +1,49 @@
+.navbar.navbar-default {
+    border-radius: 0;
+    background-color: $base-dark;
+    box-shadow: 0 1px 3px $main-bg-shadow;
+    border: none;
+    margin-bottom: 0;
+
+    .container {
+        width: 100%;
+        padding-left: $page-padding;
+        padding-right: $page-padding;
+    }
+
+    .nav {
+        font-weight: $bold-weight;
+    }
+
+    .navbar-nav {
+        li {
+            a {
+                color: $blank;
+
+                &.active {
+                    color: $primary-accent;
+                }
+
+                &:hover {
+                    color: $primary-accent;
+                }
+
+                &:active {
+                    color: $primary-accent;
+                }
+            }
+        }
+    }
+}
+
+.notification {
+    color: $base-dark;
+}
+
+.navbar-toggle {
+    margin-right: $page-padding;
+}
+
+.headerLogo {
+    width: 100px;
+}

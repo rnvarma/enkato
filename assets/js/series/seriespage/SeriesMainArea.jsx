@@ -1,6 +1,3 @@
-
-require("css/series/seriespage/SeriesMainArea.scss");
-
 import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router'
 import Button from 'react-bootstrap/lib/Button';
@@ -198,8 +195,8 @@ export default class SeriesMainArea extends Component {
                     <div className="picture-area">
                         {img_src}
                     </div>
-                    <div className="metadata-area">
-                        <div className="name">
+                    <div className="imageInfo metadata-area">
+                        <div className="title">
                             {this.props.name}
                         </div>
                         <div className="description">
@@ -207,14 +204,14 @@ export default class SeriesMainArea extends Component {
                         </div>
                         {editButton}
                         <div className="stats">
-                            <div className="creator">
+                            <div className="creator metaItem">
                                 <Link to={`/userprofile/${this.props.creator.user_id}`}>{this.props.creator.name}</Link>
                             </div>
-                            <div className="num-videos">
+                            <div className="num-videos metaItem">
                                 {this.props.num_videos} {pluralize("video", this.props.num_videos)}
                             </div>
                             <div 
-                                className="num-mins"
+                                className="num-mins metaItem"
                                 id={noVideos?"noVideos":""}>
                                 {this.props.total_len}
                             </div>
