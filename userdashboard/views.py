@@ -17,6 +17,6 @@ class StudentAnalyticsView(views.APIView):
         return Response({
             'subscribed_series': StudentAnalyticsSerializer(user.student_series.prefetch_related(student_series_data), many=True).data,
             'created_series': DashboardSeriesSerializer(user.created_series.all(), many=True).data,
-            'all_unsubscribed_series': DashboardSeriesSerializer(Series.objects.filter(is_private=False).exclude(students=user), many=True).data,
+            'all_unsubscribed_series': DashboardSeriesSerializer(Series.objects.filter(is_private=False).exclude(students=user, creator=user), many=True).data,
         })
 
