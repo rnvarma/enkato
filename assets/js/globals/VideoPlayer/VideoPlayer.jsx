@@ -56,10 +56,24 @@ function clearCurrentTopic(topicList){
     return tList;
 }
 
+/* Takes string "0:00" and gives back number of seconds*/
+
+function timeToSeconds(time){
+    var timeA = time.split(":");
+    var seconds = 0;
+    console.log(timeA);
+    if(timeA.length == 2){
+        seconds = Number(timeA[0])*60 + Number(timeA[1]);
+    }
+    else if(timeA.length==3){
+        seconds = Number(timeA[0])*3600 + Number(timeA[1])*60 + Number(timeA[2]);
+    }
+    return seconds;
+}
+
 export default class VideoPlayer extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             quizDataLoaded: false,
             topicObjList: [], 
@@ -88,23 +102,24 @@ export default class VideoPlayer extends Component {
             pollInterval:null,
         }
 
-        this.trackView = this.trackView.bind(this)
-        this.onVideoEnd = this.onVideoEnd.bind(this)
-        this.onPlayerStateChange = this.onPlayerStateChange.bind(this)
-        this.loadQuizData = this.loadQuizData.bind(this)
-        this.submitQuiz = this.submitQuiz.bind(this)
-        this.loadDataFromServer = this.loadDataFromServer.bind(this)
-        this.updateCurrentState = this.updateCurrentState.bind(this)
-        this.showOverlay = this.showOverlay.bind(this)
-        this.showQuiz = this.showQuiz.bind(this)
-        this.closeModal = this.closeModal.bind(this)
-        this.setWindowSize = this.setWindowSize.bind(this)
-        this.handleScrub = this.handleScrub.bind(this)
-        this.handleTopicClick = this.handleTopicClick.bind(this)
-        this.handlePlayPauseClick = this.handlePlayPauseClick.bind(this)
-        this.onFinishButton = this.onFinishButton.bind(this)
-        this.afterTopicListUpdate = this.afterTopicListUpdate.bind(this)
-        this.playVideo = this.playVideo.bind(this)
+        this.trackView = this.trackView.bind(this);
+        this.onVideoEnd = this.onVideoEnd.bind(this);
+        this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
+        this.onPlayerReady = this.onPlayerReady.bind(this);
+        this.loadQuizData = this.loadQuizData.bind(this);
+        this.submitQuiz = this.submitQuiz.bind(this);
+        this.loadDataFromServer = this.loadDataFromServer.bind(this);
+        this.updateCurrentState = this.updateCurrentState.bind(this);
+        this.showOverlay = this.showOverlay.bind(this);
+        this.showQuiz = this.showQuiz.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.setWindowSize = this.setWindowSize.bind(this);
+        this.handleScrub = this.handleScrub.bind(this);
+        this.handleTopicClick = this.handleTopicClick.bind(this);
+        this.handlePlayPauseClick = this.handlePlayPauseClick.bind(this);
+        this.onFinishButton = this.onFinishButton.bind(this);
+        this.afterTopicListUpdate = this.afterTopicListUpdate.bind(this);
+        this.playVideo = this.playVideo.bind(this);
     }
 
     componentDidMount() {
@@ -117,28 +132,28 @@ export default class VideoPlayer extends Component {
         window.onresize=this.setWindowSize;
         this.loadDataFromServer(this.props.videoUUID);
 
+
         //updates time and playing
         this.setState({
             pollInterval: setInterval(this.updateCurrentState, pollInterval)
         });
-        console.log(this.state);
     }
 
     loadDataFromServer(v_id){
         request.get(`/1/v/${v_id}`, {
             success: (data) => {
                 var vidPlayer= new Player(data.videoID, this.onPlayerStateChange, this.onPlayerReady);
-                /* an optional prop */
-                if (this.props.setTopicList) {
-                  this.props.setTopicList(data.topicList);
-                }
-
                 if (this.state.Player) {
                     this.state.Player.destroy();
                 }
                 this.setState({
                     Player: vidPlayer
                 });
+                
+                /* an optional prop */
+                if (this.props.setTopicList) {
+                  this.props.setTopicList(data.topicList);
+                }
 
                 this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
                 this.forceUpdate();
@@ -156,7 +171,6 @@ export default class VideoPlayer extends Component {
                 if (this.props.setGetCurrentTime) {
                       this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
                 }
-                console.log(this.state);
             }
         })
         this.loadQuizData(v_id)
@@ -215,15 +229,19 @@ export default class VideoPlayer extends Component {
     }
 
     onPlayerReady(event){
-        console.log("video player is ready");
-        console.log(this.props.setStartTime);
-        if(this.props.setStartTime){
-            this.state.currentTime = styleDuration(this.props.setStartTime());
-            console.log("seeking in loading data");
-            event.target.seekTo(Number(this.props.setStartTime()));
-            event.target.play();
-            console.log("should be playing");
-        }        
+        if (this.props.setStartTime() != null){
+            this.state.currentTime = Number(this.props.setStartTime());
+        }
+        var startTime = this.state.currentTime;
+        var startSeconds;
+        if(typeof startTime == "string"){
+            startSeconds = timeToSeconds(startTime);
+        }
+        else{
+            startSeconds= startTime;
+        }
+        event.target.seekTo(startSeconds);
+        event.target.playVideo();
     }
 
     loadQuizData(v_id){

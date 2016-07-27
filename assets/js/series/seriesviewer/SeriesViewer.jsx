@@ -12,6 +12,7 @@ import SeriesViewerVideoArea from 'js/series/seriesviewer/SeriesViewerVideoArea'
 class SeriesViewer extends Component {
     constructor(props) {
       super(props);
+      console.log("series viewer is working");
 
       this.state = {
         seriesUUID: this.props.params.seriesUUID,
@@ -43,15 +44,16 @@ class SeriesViewer extends Component {
       this.setTopicList = this.setTopicList.bind(this);
       this.setGetCurrentTime = this.setGetCurrentTime.bind(this);
       this.changeCurrVideo = this.changeCurrVideo.bind(this);
+      this.setStartTime= this.setStartTime.bind(this);
     }
 
     componentDidMount() {
-        var currUUID = window.location.hash.slice(1, 100);
+        var currUUID = window.location.hash.slice(1, 23);
         this.setState({currUUID: this.props.currUUID})
         this.loadDataFromServer(currUUID)
 
         $(window).on('hashchange', () => {
-            var newUUID = window.location.hash.slice(1, 100);
+            var newUUID = window.location.hash.slice(1, 23);
             this.changeCurrVideo(newUUID)
         })
     }
@@ -128,6 +130,18 @@ class SeriesViewer extends Component {
       this.setState({ getCurrentTime });
     }
 
+    setStartTime(){
+      var params = [];
+      var hashes = window.location.hash.slice(24).split('&');
+      for(var i = 0; i < hashes.length; i++){
+        var param = hashes[i].split('=');
+        params.push(param[0]);
+        params[param[0]] = param[1];
+      }
+      var startTime= params["t"];
+      return startTime;
+    }
+
     render() {
       if(this.state.hide_series) {
             return (
@@ -145,6 +159,7 @@ class SeriesViewer extends Component {
             <SeriesViewerVideoArea
               openRegisterModal={this.props.openRegisterModal}
               setTopicList={this.setTopicList}
+              setStartTime={this.setStartTime}
               setGetCurrentTime={this.setGetCurrentTime}
               currUUID={this.state.currUUID}
               seriesUUID={this.state.seriesUUID}
