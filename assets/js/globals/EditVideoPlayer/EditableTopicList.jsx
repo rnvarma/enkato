@@ -27,7 +27,8 @@ export default class EditableTopicList extends Component {
                 <ScrollArea className="editableTopicList">
                     {topicNodes}
                     <BulkImportTopics
-                        addNewTopic={this.props.addNewTopic}/>
+                        addNewTopic={this.props.addNewTopic}
+                        videoDuration={this.props.videoDuration}/>
                 </ScrollArea>
                 <AddTopicButton 
                     addNewTopic={this.props.addNewTopic}/>

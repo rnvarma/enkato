@@ -6,6 +6,7 @@ import FontAwesome from 'react-fontawesome';
 import Button from 'react-bootstrap/lib/Button';
 
 
+import request from 'js/globals/HttpRequest';
 import ConfirmModal from 'js/globals/ConfirmModal';
 import { pluralize } from 'js/globals/utility';
 
@@ -23,7 +24,11 @@ export default class SeriesVideoPanel extends Component {
     }
 
     delete() {
-
+        request.delete(`/1/videos/${this.props.video.uuid}`, {
+            success: (data) => {
+                this.props.loadPageData()
+            }
+        })
     }
 
     makePublic(){
@@ -53,24 +58,25 @@ export default class SeriesVideoPanel extends Component {
         var privacyButton = "";
         if(this.props.is_creator){
             if (this.props.is_private) {
-                    privacyButton = (
-                        <div className="annotate-box">
-                            <Button 
-                                onClick={this.makePublic}>
-                                Private
-                            </Button>
-                        </div>
-                    )
-                } else {
-                    privacyButton = (
-                        <div className="annotate-box">
-                            <Button  
-                                onClick={this.makePrivate}>
-                                Public
-                            </Button>
-                        </div>
-                    )
-                }
+                privacyButton = (
+                    <div className="annotate-box">
+                        <Button 
+                            onClick={this.makePublic}>
+                            Private
+                        </Button>
+                    </div>
+                )
+            } else {
+                privacyButton = (
+                    <div className="annotate-box">
+                        <Button  
+                            className="structabl-red"
+                            onClick={this.makePrivate}>
+                            Public
+                        </Button>
+                    </div>
+                )
+            }
             deleteButton = (
                 <div className = "annotate-box">
                     <Button onClick = {this.toggleDelete}>
@@ -78,7 +84,7 @@ export default class SeriesVideoPanel extends Component {
                     </Button>
                 </div>
             )
-            }
+        }
 
 
         return (
@@ -122,6 +128,9 @@ export default class SeriesVideoPanel extends Component {
                 </div>
 
                 <div className={rightClass}>
+                    <div className="deleteButton">
+                        {deleteButton}
+                    </div>
                     <div className="privacyButton">
                         {privacyButton}
                     </div>
@@ -130,9 +139,6 @@ export default class SeriesVideoPanel extends Component {
                     </div>
                     <div className="time">
                         {video.duration_san}
-                    </div>
-                    <div className="deleteButton">
-                        {deleteButton}
                     </div>
                 </div>
             </div>

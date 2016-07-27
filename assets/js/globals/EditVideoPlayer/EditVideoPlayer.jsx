@@ -208,7 +208,12 @@ export default class EditVideoPlayer extends Component {
     addNewTopic(name, topicTime) {
         this.state.Player.pause();
 
-        const time = topicTime || Math.round(this.state.Player.getCurrentTime());
+        var time;
+
+        if (topicTime == null)
+            time = Math.round(this.state.Player.getCurrentTime());
+        else
+            time = topicTime
         const newTopic = {
             id: `fake_${Date.now()}`, /* fake id, not in DB yet */
             committed: false,
@@ -318,6 +323,7 @@ export default class EditVideoPlayer extends Component {
                             handleTopicClick={this.handleTopicClick}
                             updateName={this.updateTopicName}
                             addNewTopic={this.addNewTopic}
+                            videoDuration={this.state.Player.getDuration()}
                             handleTopicDelete={this.handleTopicDelete}
                             playVideo={this.playInContext}/>
                     </div>

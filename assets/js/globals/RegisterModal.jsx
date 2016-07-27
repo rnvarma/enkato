@@ -12,33 +12,6 @@ import auth from 'auth';
 import request from 'js/globals/HttpRequest';
 
 class RegisterModal extends Component {
-    constructor(props) {
-        super(props)
-
-        this.onFormSubmit = this.onFormSubmit.bind(this)
-    }
-
-    onFormSubmit(postData) {
-        request.post('/registeruser', {
-            data: postData,
-            success: function(data) {
-                if (data.status) {
-                    auth.login(postData.username, postData.password, function(success) {
-                        if (success) {
-                            this.props.setLoggedIn(true)
-                            this.props.callbackFn()
-                        } else {
-                            browserHistory.push('/login')
-                        }
-                        this.props.closeRegisterModal()
-                    }.bind(this))
-                } else {
-                    alert(data.issue)
-                }
-            }.bind(this)
-        })
-    }
-        
     render() {
         if(!auth.loggedIn()){
             return (
@@ -50,7 +23,7 @@ class RegisterModal extends Component {
                         <Modal.Title>Register to use this feature!</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                        <RegistrationForm onFormSubmit={this.onFormSubmit} />
+                        <RegistrationForm />
                       </Modal.Body>
                     </Modal>
                 </li>

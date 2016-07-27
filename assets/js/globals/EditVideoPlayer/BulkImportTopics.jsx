@@ -31,7 +31,8 @@ export default class BulkImportTopics extends Component {
             success: (data) => {
                 for (var i = 0; i < data.new_topics.length; i++) {
                     var new_topic = data.new_topics[i]
-                    this.props.addNewTopic(new_topic.name, new_topic.time)
+                    if (new_topic.time < this.props.videoDuration)
+                        this.props.addNewTopic(new_topic.name, new_topic.time)
                 }
                 this.setState({
                     uploadData: ''

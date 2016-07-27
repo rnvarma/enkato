@@ -13,6 +13,9 @@ import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
 import Alert from 'react-bootstrap/lib/Alert';
 
+import auth from 'auth';
+import request from 'js/globals/HttpRequest';
+
 class RegistrationForm extends Component {
     constructor(props) {
         super(props)
@@ -24,6 +27,8 @@ class RegistrationForm extends Component {
             username: '',
             password1: '',
             password2: '',
+            errorField: '',
+            errorMsg: '',
         }
 
         this.onFirstNameChange = this.onFirstNameChange.bind(this);
@@ -32,7 +37,7 @@ class RegistrationForm extends Component {
         this.onUserNameChange = this.onUserNameChange.bind(this);
         this.onPassword1Change = this.onPassword1Change.bind(this);
         this.onPassword2Change = this.onPassword2Change.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        this.onFormSubmit = this.onFormSubmit.bind(this);
     }
 
     onFirstNameChange(e) {
@@ -59,9 +64,35 @@ class RegistrationForm extends Component {
         this.setState({password2: e.target.value})
     }
 
-    onSubmit(e) {
+    onFormSubmit(e) {
         e.preventDefault();
-        this.props.onFormSubmit(this.state);
+        var postData = this.state
+        if (postData.password1 != postData.password2) {
+            this.setState({
+                errorField: 'password',
+                errorMsg: 'The passwords did not match.'
+            })
+            return;
+        }
+        request.post('/registeruser', {
+            data: postData,
+            success: function(data) {
+                if (data.status) {
+                    auth.login(postData.username, postData.password1, function(success) {
+                        if (success) {
+                            window.location.href = '/'
+                        } else {
+                            browserHistory.push('/login')
+                        }
+                    }.bind(this))
+                } else {
+                    this.setState({
+                        errorField: data.field,
+                        errorMsg: data.text
+                    })
+                }
+            }.bind(this)
+        })
     }
 
     render() {
@@ -72,19 +103,19 @@ class RegistrationForm extends Component {
                         || !this.state.password1
                         || !this.state.password2)
         var errorMsg;
-        if (this.props.errorMsg) {
+        if (this.state.errorMsg) {
             errorMsg = (
                 <Alert bsStyle="danger">
-                    {this.props.errorMsg}
+                    {this.state.errorMsg}
                 </Alert>
             )
         }
         return (
-            <Form horizontal onSubmit={this.onSubmit}>
+            <Form horizontal onSubmit={this.onFormSubmit}>
                 {errorMsg}
                 <FormGroup
                     controlId="first-name"
-                    validationState={(this.props.errorField == "firstname") ? "error" : (this.state.firstname ? "success" :"warning")}>
+                    validationState={(this.state.errorField == "firstname") ? "error" : (this.state.firstname ? "success" :"warning")}>
                     <Col componentClass={ControlLabel} sm={3}>
                         First Name
                     </Col>
@@ -102,7 +133,7 @@ class RegistrationForm extends Component {
                 </FormGroup>
                 <FormGroup
                     controlId="last-name"
-                    validationState={(this.props.errorField == "lastname") ? "error" : (this.state.lastname ? "success" :"warning")}>
+                    validationState={(this.state.errorField == "lastname") ? "error" : (this.state.lastname ? "success" :"warning")}>
                     <Col componentClass={ControlLabel} sm={3}>
                         Last Name
                     </Col>
@@ -120,7 +151,7 @@ class RegistrationForm extends Component {
                 </FormGroup>
                 <FormGroup
                     controlId="user-name"
-                    validationState={(this.props.errorField == "username") ? "error" : (this.state.username ? "success" :"warning")}>
+                    validationState={(this.state.errorField == "username") ? "error" : (this.state.username ? "success" :"warning")}>
                     <Col componentClass={ControlLabel} sm={3}>
                         User Name
                     </Col>
@@ -138,7 +169,7 @@ class RegistrationForm extends Component {
                 </FormGroup>
                 <FormGroup
                     controlId="email"
-                    validationState={(this.props.errorField == "email") ? "error" : (this.state.email ? "success" :"warning")}>
+                    validationState={(this.state.errorField == "email") ? "error" : (this.state.email ? "success" :"warning")}>
                     <Col componentClass={ControlLabel} sm={3}>
                         Email
                     </Col>
@@ -156,7 +187,7 @@ class RegistrationForm extends Component {
                 </FormGroup>
                 <FormGroup
                     controlId="password"
-                    validationState={(this.props.errorField == "password") ? "error" : (this.state.password1 ? "success" :"warning")}>
+                    validationState={(this.state.errorField == "password") ? "error" : (this.state.password1 ? "success" :"warning")}>
                     <Col componentClass={ControlLabel} sm={3}>
                         Password
                     </Col>
@@ -174,7 +205,7 @@ class RegistrationForm extends Component {
                 </FormGroup>
                 <FormGroup
                     controlId="password"
-                    validationState={(this.props.errorField == "password") ? "error" : (this.state.password2 ? "success" :"warning")}>
+                    validationState={(this.state.errorField == "password") ? "error" : (this.state.password2 ? "success" :"warning")}>
                     <Col componentClass={ControlLabel} sm={3}>
                         Re-enter Password
                     </Col>

@@ -261,6 +261,7 @@ def parseTopicUploadString(s):
 	regex = '(?P<time>([0-9]+:)?[0-9]+:[0-9]+)'
 	for line in s.splitlines():
 		match = re.search(regex, line)
+		if not match: continue
 		time = match.group(0)
 		if not time: continue
 		time = convert_time_to_seconds(time)
