@@ -67,7 +67,7 @@ export default class QuestionFilterBar extends React.Component {
               onChange={this.setFilterFromQuery}
               value={this.props.filter}
             />
-            <InputGroup.Button><Button><FontAwesome name="search" /></Button></InputGroup.Button>
+            <InputGroup.Button><Button><FontAwesome name="search searchIcon" /></Button></InputGroup.Button>
           </InputGroup>
         </div>
       </Row>

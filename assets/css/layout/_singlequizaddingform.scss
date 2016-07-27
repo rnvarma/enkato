@@ -5,19 +5,6 @@ $invalid-color: #ffe4e4;
     width: 100%;
 }
 
-.circle-icon {
-    color:#DCDCDC;
-    font-size: 20px;
-
-    &:hover {
-        cursor: pointer;
-    }
-
-    &.correct {
-        color: black;
-    }
-}
-
 .choice-input{
     font-size: 20px;
     border: none;
@@ -64,14 +51,6 @@ $invalid-color: #ffe4e4;
     }
 }
 
-.arrow-icon{
-
-}
-
-.timesIcon{
-    cursor:pointer;
-}
-
 .question-row{ 
     width:100%;
     height:30px;
@@ -80,7 +59,6 @@ $invalid-color: #ffe4e4;
     padding-top:50px;
 }
 
-
 .add-option-button{
     font-size:20px;
     border:none;
@@ -88,8 +66,6 @@ $invalid-color: #ffe4e4;
     width:90%;
     color:#BBBBBB;
 }
-
-
 
 .add-option-button:hover{
     cursor:pointer;

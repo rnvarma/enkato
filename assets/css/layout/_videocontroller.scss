@@ -1,3 +1,5 @@
+
+
 .progressBar {
     width: 100%; 
     height: 10px;
@@ -26,17 +28,7 @@
     height:50px;
     width:100%;
     background-color:$grey-control-bar-bg-color;
-    .playButton{
-        margin-left: 35px;
-        margin-top: 10px;
-        color: white;
-        font-size: 20px;
-        /* padding-top: 7px; */
-        float: left;
-    }
-    .playButton:hover{
-        cursor:pointer;
-    } 
+
     .videoTime{
         margin-top: 10px;
         color: $grey-progress-bar-text;
@@ -94,31 +86,10 @@
     margin-left:32%;
     margin-right:32%;
 
-    .backwardButton{
-        text-align:left;
-        margin-right:20px;
-        font-size: 20px;
-        margin-top: 10px;
-    }
-    .backwardButton:hover{
-        cursor:pointer;
-    }
-
     .vTime{
         text-align:center;
         margin-top: 10px;
         color: $grey-progress-bar-text;
         vertical-align: bottom;
     }   
-
-    .forwardButton{
-        text-align:right;
-        margin-left:20px;
-        font-size: 20px;
-        margin-top: 10px;
-    }
-
-    .forwardButton:hover{
-        cursor:pointer;
-    }
 }

@@ -403,7 +403,7 @@ class QuestionView extends React.Component {
             onKeyUp={this.onAskQuestionChange}
             customClasses={{input: 'typeahead-input'}}/>
           <Button className="addQuestionBtn" onClick={this.addQuestion}>
-            <FontAwesome name="plus-circle" />
+            <FontAwesome name="plus-circle addQuestionIcon" />
             Ask A Question
           </Button>
         </div>

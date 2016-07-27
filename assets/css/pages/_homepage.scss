@@ -127,7 +127,7 @@
                 .icon {
                     display: inline-block;
                     vertical-align: top;
-                    background-color: $kato-green;
+                    background-color: $primary-accent;
                     text-align: center;
                     font-size: 25px;
                     border-radius: 31px;
@@ -151,7 +151,7 @@
                     }
 
                     .text {
-                        color: $grey-topic-button-text;
+                        color: $base-font-color;
                         line-height: 25px;
                     }
                 }

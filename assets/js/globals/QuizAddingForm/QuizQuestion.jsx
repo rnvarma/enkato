@@ -32,7 +32,7 @@ class QuizQuestion extends Component {
         return (
             <Row className={'question-row' + (this.props.invalid ? ' invalid' : '')}>
                 <FontAwesome
-                    className='arrow-icon'
+                    className='arrow-icon arrowIcon' 
                     name='arrow-right'/>
                 <input
                     className={'question-input' + (this.props.invalid ? ' invalid' : '')}

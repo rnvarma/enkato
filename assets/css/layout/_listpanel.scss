@@ -44,20 +44,6 @@
 
             .creator {
                 margin-top: 3px;
-
-                .separator {
-                    .alertIcon {
-                        display: none;
-                    }
-
-                    &.alertAnnotate {
-                        .alertIcon {
-                            display: inherit;
-                            color: $alert-accent;
-                            margin-right: 5px;
-                        }
-                    }
-                }
             }
         }
     }
@@ -77,19 +63,5 @@
             padding-right: 10px;
             border-right: 1px solid $base-dark; 
         }
-
-        // .numViews {
-        //     display: inline-block;
-        //     padding-right: 10px;
-        //     padding-left:10px;
-        //     border-right: 1px solid $base-dark; 
-        // }
-
-        // .time {
-        //     display: inline-block;
-        //     font-weight: $boldest-weight;
-        //     padding-left: 10px;
-        //     padding-right: 30px;
-        // }
     }
 }
