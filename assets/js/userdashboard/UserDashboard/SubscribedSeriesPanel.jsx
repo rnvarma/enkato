@@ -21,31 +21,29 @@ class SubscribedSeriesPanel extends Component {
 
         const totalTime = series.total_time;
 
-        const percentMastery = Math.round(videoData.analysis.watched / series.video_count * 100);
-        const percentCompleted = Math.round(videoData.analysis.completed / series.video_count * 100);
+        const percentMastery = Math.round(videoData.analysis.completed / series.video_count * 100);
+        const percentCompleted = Math.round(videoData.analysis.watched / series.video_count * 100);
 
         const numVideos = series.video_count;
 
-        const numVideosString = numVideos + pluralize("video", numVideos);
+        const numVideosString = numVideos + pluralize(' video', numVideos);
 
-        let nextVideo = <div></div>
-
-        let nextVideoData = {
-            uuid: 'oSqJemnEEjRbWpuPGbBDP2',
-            num_quiz_questions: 2,
-            thumbnail: this.props.series.thumbnails[0],
-            name: "Video Panel",
-            numViews: 4,
-        }
-
+        const continueVideo = videoData.videos_data[videoData.analysis.continue_video].video;
+        const nextVideoData = {
+            uuid: continueVideo.uuid,
+            num_quiz_questions: continueVideo.question_counter,
+            thumbnail: continueVideo.thumbnail,
+            name: continueVideo.name,
+            num_views: continueVideo.num_views,
+        };
         //if (this.props.nextVideo) {
-        nextVideo = (
+        const nextVideo = (
             <div className="nextVideoBtn">
                 <div className="text">
                     Up Next
                 </div>
                 <SeriesViewerSidebarVideoPanel
-                    video={nextVideo}/>
+                    video={nextVideoData} />
             </div>
         )
         //}
