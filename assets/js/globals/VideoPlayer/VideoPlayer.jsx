@@ -14,7 +14,8 @@ import Player from 'js/globals/VideoPlayer/Player';
 
 // How often the video player checks the video's state
 const pollInterval = 100;
-
+console.log("videoplayer running");
+console.log('is it working...');
 function updateCurrentTopicOnKey(targetKey, topicList){
     for(var i=0; i<topicList.length; i++){
         if(topicList[i].id == targetKey){
@@ -57,7 +58,7 @@ function clearCurrentTopic(topicList){
 
 export default class VideoPlayer extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             quizDataLoaded: false,
@@ -107,7 +108,6 @@ export default class VideoPlayer extends Component {
     }
 
     componentDidMount() {
-        this.loadDataFromServer(this.props.videoUUID);
         this.setWindowSize();
         this.setState({
             isPlaying: false,
@@ -115,25 +115,31 @@ export default class VideoPlayer extends Component {
             percentDone: 0
         })
         window.onresize=this.setWindowSize;
+        this.loadDataFromServer(this.props.videoUUID);
+
         //updates time and playing
         this.setState({
             pollInterval: setInterval(this.updateCurrentState, pollInterval)
-        })
+        });
+        console.log(this.state);
     }
 
     loadDataFromServer(v_id){
         request.get(`/1/v/${v_id}`, {
             success: (data) => {
+                var vidPlayer= new Player(data.videoID, this.onPlayerStateChange, this.onPlayerReady);
                 /* an optional prop */
                 if (this.props.setTopicList) {
                   this.props.setTopicList(data.topicList);
                 }
+
                 if (this.state.Player) {
                     this.state.Player.destroy();
                 }
                 this.setState({
-                    Player: new Player(data.videoID, this.onPlayerStateChange)
+                    Player: vidPlayer
                 });
+
                 this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
                 this.forceUpdate();
 
@@ -146,11 +152,11 @@ export default class VideoPlayer extends Component {
                 this.setState({
                     videoTitle: data.videoData.name
                 });
-
                 /* optional prop */
                 if (this.props.setGetCurrentTime) {
                       this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
                 }
+                console.log(this.state);
             }
         })
         this.loadQuizData(v_id)
@@ -201,10 +207,23 @@ export default class VideoPlayer extends Component {
     }
 
     onPlayerStateChange(event) {
+        console.log("player changed");
         if (event.data == 0) {
             this.onVideoEnd()
         } else if (event.data == 1) {
         }
+    }
+
+    onPlayerReady(event){
+        console.log("video player is ready");
+        console.log(this.props.setStartTime);
+        if(this.props.setStartTime){
+            this.state.currentTime = styleDuration(this.props.setStartTime());
+            console.log("seeking in loading data");
+            event.target.seekTo(Number(this.props.setStartTime()));
+            event.target.play();
+            console.log("should be playing");
+        }        
     }
 
     loadQuizData(v_id){
