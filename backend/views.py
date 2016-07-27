@@ -407,3 +407,14 @@ class DatedModelMixin(object):
             serializer.save(modified=timezone.now())
         else:
             serializer.save()
+
+class ParseImportTopics(APIView):
+    def post(self, request):
+        s = request.POST.get('s')
+        data = {
+            'new_topics': parseTopicUploadString(s)
+        }
+        return Response(data)
+
+
+

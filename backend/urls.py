@@ -18,5 +18,6 @@ urlpatterns = [
     url(r'^1/studentquizdata/s/(?P<s_id>[a-zA-Z0-9_.-]+)/v/(?P<v_id>[a-zA-Z0-9_.-]+)$', LoadQuizData.as_view()),
     url(r'^1/users/current$', UserViewset.as_view({'get':'retrieve'})),
     url(r'^1/users$', UserViewset.as_view({'get':'list'})),
+    url(r'^parseimporttopics$', ParseImportTopics.as_view()),
 ]
 
