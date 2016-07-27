@@ -11,6 +11,7 @@ class SeriesViewerVideoArea extends React.Component {
         <div className="seriesViewerVideoArea">
           <VideoPlayer
             openRegisterModal={this.props.openRegisterModal}
+            setStartTime = {this.props.setStartTime}
             setTopicList={this.props.setTopicList}
             setGetCurrentTime={this.props.setGetCurrentTime}
             videoUUID={this.props.currUUID}

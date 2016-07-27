@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router'
 import Button from 'react-bootstrap/lib/Button';
 
+import ConfirmModal from 'js/globals/ConfirmModal';
 import { pluralize } from 'js/globals/utility';
 
 import NoVideosArea from 'js/series/seriespage/NoVideosArea';
@@ -14,9 +15,18 @@ import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 export default class SeriesMainArea extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            deleting: false,
+        };
 
+        this.delete = this.delete.bind(this);
         this.setPublic = this.setPublic.bind(this);
         this.setPrivate = this.setPrivate.bind(this);
+        this.toggleDelete = this.toggleDelete.bind(this);
+    }
+
+    delete() {
+
     }
 
     setPublic() {
@@ -27,12 +37,18 @@ export default class SeriesMainArea extends Component {
         this.props.setIsPrivate(true);
     }
 
+    toggleDelete() {
+        this.setState({
+            deleting: !this.state.deleting
+        })
+    }
     render() {
         console.log(this.props.is_private, "yes")
         const img_src = this.props.image || DjangoImageLinkHandler('blank_thumbnail.png')
         var noVideos=false; 
 
         var privacyButton = <div></div>
+        var deleteButton = <div></div>
 
         //noVideos^^ is used to get rid of the border on the right side
         //of the totalSeconds if there's no Videos
@@ -100,6 +116,13 @@ export default class SeriesMainArea extends Component {
                     </div>
                 );
             }
+            deleteButton = (
+                <div className="annotate-box">
+                    <Button onClick={this.toggleDelete}>
+                        Delete
+                    </Button>
+                </div>
+            );
             
         } else {
             var video_area = (
@@ -135,6 +158,14 @@ export default class SeriesMainArea extends Component {
         }
         return (
             <div className="seriesMainArea">
+                <ConfirmModal
+                    showing = {this.state.deleting}
+                    description = "You're deleting this series. Are you sure you want to continue? This is irreversible."
+                    acceptText = "Delete"
+                    acceptBsStyle = "danger"
+                    acceptCallback = {this.delete}
+                    cancelCallback = {this.toggleDelete}
+                />
                 <div className="header">
                     <div className="picture-area">
                         <img src={img_src} className="picture"/>
@@ -160,6 +191,7 @@ export default class SeriesMainArea extends Component {
                             </div>
                             {annotateVideosButton}
                             {privacyButton}
+                            {deleteButton}
                         </div>
                     </div>
                 </div>

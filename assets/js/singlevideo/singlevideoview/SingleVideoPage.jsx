@@ -21,7 +21,6 @@ class SingleVideoPage extends Component {
       videoUUID: this.props.params.videoUUID,
       topicList: [],
       getCurrentTime: null,
-      startTime: '0'
     };
 
     this.loadDataFromServer = this.loadDataFromServer.bind(this);

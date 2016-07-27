@@ -98,7 +98,7 @@ class QuestionDisplayResponse extends Component {
           acceptText="Delete"
           acceptBsStyle="danger"
           acceptCallback={this.delete}
-          deleteCallback={this.toggleDelete}
+          cancelCallback={this.toggleDelete}
         />
         <div className={(this.props.response.is_instructor ? 'instructor ' : this.props.response.endorsed ? 'endorsed ' : '') + 'questionDisplayResponse'}>
           <div className="responseText">
