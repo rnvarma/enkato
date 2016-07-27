@@ -68,6 +68,9 @@ class SubscribeSeriesPage(APIView):
         if series.students.filter(id=cu.id).count() > 0:
             return JsonResponse({'status': False, 'issue': 'User already subscribed to the series'})
         series.students.add(cu)
+        (ssData, _) = StudentSeriesData.objects.get_or_create(series=series, user=cu)
+        for series_video in series.videos.all():
+            StudentSeriesVideoData.objects.get_or_create(ss_data=ssData, video=series_video.video)
         request.user.groups.add(get_series_notification_group(series))
         return JsonResponse({'status': True})
 

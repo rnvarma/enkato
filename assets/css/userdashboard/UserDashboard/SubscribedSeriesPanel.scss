@@ -4,13 +4,30 @@
 
 .subscribedSeriesPanelRow {
     padding: 10px;
-    padding-top: 0px;
     padding-left: 0px;
+    border-bottom: 1px solid #eee;
+
+    &:first-of-type {
+        padding-top: 0px;
+    }
+
+    &:last-of-type {
+        padding-bottom: 0px;
+        border-bottom: none;
+    }
 
     .subscribedSeriesPanel {
         background-color: white;
 
         transition: 0.5s background-color;
+
+        .nextVideoBtn {
+            .text {
+                font-weight: bold;
+                color: $structabl-blue;
+                margin-bottom: 10px;
+            }
+        }
  
         .thumbnailArea {
             .image {
@@ -42,6 +59,24 @@
                 color: $structabl-blue;
                 padding-bottom:10px;
             }
+
+            .metadata {
+                margin-bottom: 10px;
+                .numVideos {
+                    color:$structabl-blue;
+                    font-weight:700;
+                    text-align:center;
+                    display: inline-block;
+                    margin-right: 10px;
+                }
+
+                .totalTime {
+                    color:$structabl-blue;
+                    font-weight:700;
+                    text-align:center;
+                    display: inline-block;
+                }
+            }
         }
 
         .progressCircleWrapper {
@@ -64,20 +99,6 @@
             color:$structabl-blue;
             font-weight:700;
             margin-top:5px;
-        }
-
-        .numVideos {
-            color:$structabl-blue;
-            font-weight:700;
-            margin-top:10px;
-            text-align:center;
-        }
-
-        .totalTime {
-            color:$structabl-blue;
-            font-weight:700;
-            margin-top:10px;
-            text-align:center;
         }
     }
 }

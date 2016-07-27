@@ -60,7 +60,8 @@ export default class SeriesMainArea extends Component {
             var video_area = <NoVideosArea
                                  videos={this.props.videos}
                                  reloadPageData={this.props.reloadPageData}
-                                 openModal={this.props.openModal}/>
+                                 openModal={this.props.openModal}
+                                 isCreator={this.props.is_creator}/>
             var annotateVideosButton = null;
             noVideos=true;
             if(this.props.is_creator) {
@@ -81,14 +82,14 @@ export default class SeriesMainArea extends Component {
                         </div>
                     );
                 }
+                deleteButton = (
+                    <div className="deleteButton">
+                        <Button onClick={this.toggleDelete}>
+                            Delete
+                        </Button>
+                    </div>
+                )
             }
-            deleteButton = (
-                <div className="deleteButton">
-                    <Button onClick={this.toggleDelete}>
-                        Delete
-                    </Button>
-                </div>
-            )
         } else if (this.props.is_creator) {
             var video_area = (
                 <div>
