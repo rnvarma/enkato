@@ -86,7 +86,7 @@ class StudentSeriesDataSerializer(serializers.ModelSerializer):
                 data['watched'] += 1
             elif not data['continue_video']:
                 data['continue_video'] = index
-            if video_in_series.completed:
+            if video_in_series.watched and video_in_series.completed:
                 data['completed'] += 1
 
         if not data['continue_video']:  # set to first video if not set
@@ -123,3 +123,35 @@ class StudentAnalyticsSerializer(serializers.ModelSerializer):
             total_time += series_video.video.duration  # inefficient
 
         return sanetizeTime(total_time)
+
+
+class InstructorQuizQuestionDataSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = StudentSeriesVideoQuizQuestionData
+        fields = ('quiz_question', 'answer', 'is_correct')
+
+
+class InstructorQuizDataSerializer(serializers.ModelSerializer):
+    quizzes_data = InstructorQuizQuestionDataSerializer(many=True)
+
+    class Meta:
+        model = StudentSeriesVideoData
+        exclude = ('id', 'ss_data')
+
+
+class InstructorSeriesDataSerializer(serializers.ModelSerializer):
+    videos_data = InstructorQuizDataSerializer(many=True)
+    user = CustomUserSerializer()
+
+    class Meta:
+        model = StudentSeriesData
+        fields = ('videos_data', 'user')
+
+
+class InstructorSeriesSerializer(serializers.ModelSerializer):
+    students_data = InstructorSeriesDataSerializer(many=True)
+
+    class Meta:
+        model = Series
+        fields = ('name', 'image', 'uuid', 'students_data')
