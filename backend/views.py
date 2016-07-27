@@ -235,7 +235,7 @@ class CuratesSeries(APIView):
         data["curated_series"] = map(Serializer.serialize_series_light, series)
         return Response(data)
 
-class SeriesVideoData(View):
+class SeriesVideoData(APIView):
     def get(self, request, v_id):
         try:
             video = Video.objects.filter(vid_id = v_id).first()
@@ -248,9 +248,9 @@ class SeriesVideoData(View):
                 seriesData[serie.uuid] = Serializer.serialize_series_videos(serie)
             seriesData = findSeriesVideoData(seriesData, v_id)
             response["seriesData"]=seriesData
-            return JsonResponse(response)
+            return Response(response)
         except Series.DoesNotExist:
-            return JsonResponse({
+            return Response({
                 'inSeries': False
             })
 
