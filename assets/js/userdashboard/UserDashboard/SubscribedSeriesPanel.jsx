@@ -9,6 +9,7 @@ import { Circle } from 'rc-progress';
 
 import DjangoImageLinkHandler from "js/globals/DjangoImageLinkHandler";
 
+import SeriesViewerSidebarVideoPanel from 'js/series/seriesviewer/SeriesViewerSidebarVideoPanel';
 import { pluralize } from 'js/globals/utility';
 
 class SubscribedSeriesPanel extends Component {
@@ -26,6 +27,29 @@ class SubscribedSeriesPanel extends Component {
         const numVideos = series.video_count;
 
         const numVideosString = numVideos + pluralize("video", numVideos);
+
+        let nextVideo = <div></div>
+
+        let nextVideoData = {
+            uuid: 'oSqJemnEEjRbWpuPGbBDP2',
+            num_quiz_questions: 2,
+            thumbnail: this.props.series.thumbnails[0],
+            name: "Video Panel",
+            numViews: 4,
+        }
+
+        //if (this.props.nextVideo) {
+        nextVideo = (
+            <div className="nextVideoBtn">
+                <div className="text">
+                    Up Next
+                </div>
+                <SeriesViewerSidebarVideoPanel
+                    video={nextVideo}/>
+            </div>
+        )
+        //}
+
 
         var thumbnails = series.thumbnails.map(function(s) {
             return (
@@ -53,20 +77,23 @@ class SubscribedSeriesPanel extends Component {
                     <Col md={3} lg={3} sm={6} xs={12}>
                         <div className="seriesInfo">
                             <div className="name">
-                                {series.name}
+                                {this.props.series.name}
                             </div>
                             <div className="description">
-                                {series.description}
+                                {this.props.series.description}
                             </div>
                         </div>
                     </Col>
                     <Col md={2} lg={2} sm={4} xs={12}>
                         <div className="progressCircleWrapper">
-                            <Circle
-                                percent={percentCompleted}
-                                strokeWidth='10'
+                            <Circle 
+                                percent={percentCompleted} 
+                                strokeWidth='10' 
                                 strokeColor={katoGreen}
-                            />
+                                />
+                            <div className="percentage">
+                                {percentCompleted}%
+                            </div>
                         </div>
                         <div className="progressLabel">
                             Completed
@@ -74,11 +101,14 @@ class SubscribedSeriesPanel extends Component {
                     </Col>
                     <Col md={2} lg={2} sm={4} xs={12}>
                         <div className="progressCircleWrapper" >
-                            <Circle
+                            <Circle 
                                 percent={percentMastery}
-                                strokeWidth='10'
+                                strokeWidth='10' 
                                 strokeColor={katoGreen}
-                            />
+                                />
+                            <div className="percentage">
+                                {percentMastery}%
+                            </div>
                         </div>
                         <div className="progressLabel">
                             Mastered
@@ -91,6 +121,7 @@ class SubscribedSeriesPanel extends Component {
                         <div className="totalTime">
                             {totalTime}
                         </div>
+                        {nextVideo}
                     </Col>
                 </div>
             </Row>
