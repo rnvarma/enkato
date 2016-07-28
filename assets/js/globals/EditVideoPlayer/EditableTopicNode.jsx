@@ -73,7 +73,7 @@ export default class EditableTopicNode extends Component {
                         onBlur={this.onInputBlur}
                         id={this.props.id}/>
                     <FontAwesome
-                        className="delete"
+                        className="deleteIcon"
                         name='close'
                         onClick={this.deleteTopic}/>
                 </div>

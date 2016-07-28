@@ -64,7 +64,6 @@
 // VIDEO BAR ICONS //
 
 .videoBarIcon {
-    margin-top: 10px;
     color: $blank;
     font-size: 20px;
 
@@ -77,6 +76,7 @@
     @extend .videoBarIcon;
     float: left;
     margin-left: 35px;
+    margin-right: 15px;
 }
 
 .backwardButton {
@@ -132,4 +132,9 @@
 
 .searchIcon {
     font-size: 1.2em;
+}
+
+.deleteIcon {
+    display: none;
+    padding-left: 3px;
 }

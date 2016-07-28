@@ -21,7 +21,6 @@ a {
     font-size: $large-size;
     color: $base-dark;
     font-weight: $boldest-weight;
-    line-height: $large-size * 1.75;
 }
 
 .headline {
@@ -44,6 +43,7 @@ a {
     padding-right: 10px;
     padding-left: 10px;
     border-right: 1px solid $base-dark;
+    font-size: $small-size;
 
     &:first-of-type {
         padding-left: 0;

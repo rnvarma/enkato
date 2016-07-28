@@ -54,7 +54,7 @@ export default class ControlBar extends Component {
                     handleTopicClick={this.props.handleTopicClick}
                     topicObjList={this.props.topicObjList}
                     percentDone={this.props.percentDone}/>
-                <Row>
+                <Row className="videoControls">
                     <FontAwesome 
                         className="playButton" 
                         name={this.props.isPlaying ? "pause" : "play"}

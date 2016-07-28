@@ -62,7 +62,7 @@ export default class EditControlBar extends Component {
                     topicObjList={this.props.topicObjList}
                     percentDone={this.props.percentDone}
                 />
-                <Row>
+                <Row className="videoControls">
                     <FontAwesome 
                         className="playButton" 
                         name={this.props.isPlaying ? "pause" : "play"}
@@ -74,7 +74,7 @@ export default class EditControlBar extends Component {
                             name="backward"
                             onClick={this.backward}
                         />
-                        <span className="vTime">{this.props.currentTime} / {this.props.totalTime}</span>
+                        <span className="videoTime">{this.props.currentTime} / {this.props.totalTime}</span>
                         <FontAwesome 
                             className="forwardButton" 
                             name="forward"

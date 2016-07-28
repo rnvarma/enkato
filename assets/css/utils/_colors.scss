@@ -1,6 +1,6 @@
 $white:#FFFFFF;
 
-$yn-green: #0D8809;
+// $yn-green: #0D8809;
 
 $bg-grey: #F3F3F3;
 $hover-grey: #FBFBFB;
@@ -40,9 +40,14 @@ $alert-accent: #FA1400; // Bright red!
 $secondary-accent-hover: lighten($secondary-accent, 5%);
 
 // Base Colors
-$base-font-color: #535353; // Previously grey-topic-button-text
+$base-font-color: #333333; // Previously grey-topic-button-text
 $base-bg: #EEF1F7; // Previously structabl-bg-blue
 $base-dark: #01113E; // Previously structabl-blue
 
 // 50 Shades of Grey
 $radio-unchecked: #DCDCDC;
+$progress-not-watched: #777777; // Previously grey-progress-bar-not-watched
+$control-bar-bg: #333333; // Previously grey-control-bar-bg-color
+$control-bar-font-color: #999999; // Previously grey-progress-bar-text
+$panel-hover-bg: #FBFBFB; // Previously hover-grey
+$panel-active-bg: darken($panel-hover-bg, 2%);

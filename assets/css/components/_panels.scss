@@ -1,0 +1,189 @@
+.basePanel {
+    border-bottom: 1px solid $base-bg;
+    background-color: $blank;
+
+    &:last-of-type {
+        border-bottom: none;
+    }
+
+    &.active {
+        background-color: $panel-active-bg !important;
+    }
+
+    &:hover, &:focus {
+        cursor: pointer;
+        background-color: $panel-hover-bg;
+    }
+
+    .thumbnailArea {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .info {
+        display: inline-block;
+        vertical-align: top;
+
+        .name {
+            font-weight: $bold-weight;
+            color: $base-dark;
+        }
+
+        .metadata {
+            padding-top: 3px;
+        }
+    }
+}
+
+// LISTING VIDEOS IN SERIES //
+
+.seriesVideoPanel {
+    @extend .basePanel;
+    position: relative;
+    padding: $content-padding 0;
+
+    .listNumber {
+        display: inline-block;
+        vertical-align: top;
+        padding: 0 5px;
+        margin-top: 17px;
+        font-weight: $boldest-weight;
+        color: $base-dark;
+    }
+
+    .right {
+        position: absolute;
+        right: $content-padding;
+        top: 25px;
+        color: $base-dark;
+
+        &.first {
+            top: 13px;
+        }
+
+        .privacyButton {
+            display: inline-block;
+            padding-right: 10px;
+        }
+    }
+}
+
+.seriesViewerSidebarVideoPanel {
+    @extend .basePanel;
+    padding: $content-padding $content-padding;
+
+    .thumbnailArea {
+        width: 40%;
+        padding-right: 10px;
+
+        .image {
+            width: 100%;
+        }
+    }
+
+    .info {
+        width: 60%;
+    }
+}
+
+// TOPIC NODES //
+
+.topicNode {
+    @extend .basePanel;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: $base-dark;
+    padding: 10px 15px;
+
+    &#selectedTopicNode {
+        background-color: $secondary-accent;
+        color: $blank;
+
+        .name {
+            color: $blank;
+        }
+    }
+
+    .time {
+        display: inline-block;
+        vertical-align: top;
+        padding-right: 10px;
+    }
+
+    .name {
+        display: inline-block;
+        vertical-align: top;
+        font-weight: $bold-weight;
+        overflow: hidden;
+    }
+}
+
+.editableTopicNode {
+    @extend .topicNode;
+    font-weight: $bold-weight;
+
+    &.hover {
+        font-size: 15px;
+
+        .deleteIcon {
+            display: inline-block;
+        }
+    }
+
+    input {
+        width: calc(100% - 50px - 20px);
+        padding: 0;
+        border: none;
+        background-color: transparent;           
+
+        &:active, &:focus {
+            font-weight: $base-weight;
+            border-bottom: 1px dotted darken($panel-active-bg, 10%);
+            outline: none;
+        }
+
+        &:hover {
+            border-bottom: 1px dotted darken($panel-active-bg, 5%);
+        }
+    }
+}
+
+// QUESTION-ANSWERING SYSTEM //
+
+.questionPreview {
+    @extend .basePanel;
+    padding: 15px 20px;
+    cursor: pointer;
+
+    &.selected {
+        background-color: $panel-active-bg;
+    }
+
+    .questionPreviewHeader {
+      color: $secondary-accent;
+      font-weight: $bold-weight;
+      font-size: $small-size;
+
+      .questionPreviewHeaderTopic {
+        width: 92%;
+      }
+    }
+
+    .questionPreviewTitle {
+      font-weight: $boldest-weight;
+      padding-top: 4px;
+      padding-bottom: 2px;
+    }
+
+    .questionPreviewText {
+      color: lighten($base-font-color, 5%);
+    }
+
+    .questionPreviewFooter {
+      padding-top: 8px;
+      font-weight: $bold-weight;
+      font-size: $small-size;
+    }
+}
+

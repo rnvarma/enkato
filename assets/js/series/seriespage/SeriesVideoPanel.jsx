@@ -115,7 +115,7 @@ export default class SeriesVideoPanel extends Component {
                         <div className="name">
                             <Link to={`/s/${this.props.seriesUUID}/watch#${video.uuid}`}>{video.name}</Link>
                         </div>
-                        <div className="creator">
+                        <div className="metadata">
                             <span className={"separator metaItem" + (this.props.is_creator && !video.num_topics ? " alertAnnotate" : "")}>
                                 <FontAwesome
                                     name="exclamation-circle"

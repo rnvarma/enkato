@@ -1,21 +1,22 @@
-
-
+/*
+ * progressBar: Displays the current position in the video.
+ */
 .progressBar {
     width: 100%; 
     height: 10px;
-
-    position: relative; /* for topic dots */
+    position: relative; // For topic dots
 
     .watched {
         height: 10px;
         width: 0%;
-        background-color: $kato-green;
+        background-color: $primary-accent;
         float: left;
     }
+
     .notWatched {
         height: 10px;
         width: 100%;
-        background-color: $grey-progress-bar-not-watched;
+        background-color: $progress-not-watched;
         float: right;
     }
 
@@ -24,51 +25,53 @@
     }
 }
 
-.controlBar { 
-    height:50px;
-    width:100%;
-    background-color:$grey-control-bar-bg-color;
+.controlBar {
+    width: 100%;
+    height: 50px;
+    background-color: $control-bar-bg;
+    color: $blank;
 
-    .videoTime{
+    .videoControls {
         margin-top: 10px;
-        color: $grey-progress-bar-text;
-        margin-left: 15px;
-        float: left;
     }
+
+    .videoTime {
+        color: $control-bar-font-color;
+        vertical-align: bottom;
+    }
+
+    .centerBarSpan { // Topic annotation scrubber
+        margin-left: 25%;
+        margin-right: 25%;
+    }
+
     .playbackRate{
-        color:white;
-        margin: 10px 40px 0 0;
-        font-weight:400;
+        margin-right: 40px;
         float: right;
-    }
-    .playbackRate:hover{
-        cursor:pointer;
+
+        &:hover {
+            font-weight: $bold-weight;
+            cursor: pointer;
+        }
     }
 
     .quizButton {
         float: right;
-        color: white;
-        margin-top: 10px;
         margin-right: 50px;
 
         &:hover {
-            font-weight: bold;
-            cursor: pointer
+            font-weight: $bold-weight;
+            cursor: pointer;
         }
 
         &:active {
-            color: $kato-green;
+            color: $primary-accent;
         }
     }
 }
 
-.speedButton {
-   text-align:center;
-   color:white;
-}
-
 .playbackPopover {
-    background-color: $structabl-blue;
+    background-color: $base-dark;
     height:120px;
     width:60px;
     position:absolute;
@@ -76,20 +79,5 @@
     right:50;
     top:initial;
     left:initial;
-}
-
-
-// EDIT CONTROL BAR //
-.centerBarSpan{
-    text-align:center;
-    color: white;
-    margin-left:32%;
-    margin-right:32%;
-
-    .vTime{
-        text-align:center;
-        margin-top: 10px;
-        color: $grey-progress-bar-text;
-        vertical-align: bottom;
-    }   
+    color: $blank;
 }

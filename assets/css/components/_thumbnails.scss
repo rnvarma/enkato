@@ -1,0 +1,29 @@
+.thumbnailImg {
+    width: 100px;
+}
+
+.thumbnailArea {
+    .image {
+        width: 50%;
+        display: inline-block;
+    }
+
+    &.one {
+        .image {
+            width: 100%;
+        }
+    }
+}
+
+.imageArea {
+    .image {
+        width: 100px;
+        padding: 10px;
+    }
+}
+
+.userInfo {
+    display: inline-block;
+    padding: 20px;
+    padding-left: 0px;
+}

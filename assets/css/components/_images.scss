@@ -1,25 +1,7 @@
-.thumbnailArea {
-    .image {
-        width: 50%;
-        display: inline-block;
-    }
-
-    &.one {
-        .image {
-            width: 100%;
-        }
-    }
+.logoSmall {
+    width: 100px;
 }
 
-.imageArea {
-    .image {
-        width: 100px;
-        padding: 10px;
-    }
-}
-
-.userInfo {
-    display: inline-block;
-    padding: 20px;
-    padding-left: 0px;
+.logoMedium {
+    width: 200px;
 }

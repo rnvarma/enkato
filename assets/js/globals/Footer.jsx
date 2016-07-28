@@ -6,7 +6,7 @@ class Footer extends Component {
         return (
             <div className="footer">
                 <div className="name">
-                    <img src={DjangoImageLinkHandler("blue_logo.png")} className="logo"/>
+                    <img src={DjangoImageLinkHandler("blue_logo.png")} className="logoMedium"/>
                 </div>
                 <div className="footerPart">
                     <div className="title">
