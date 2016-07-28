@@ -79,6 +79,7 @@ const rootRoute = {
             require('js/series/seriespage/routes'),
             require('js/userprofile/profile/routes'),
             require('js/singlevideo/singlevideoview/routes'),
+            require('js/home/creator/routes'),
         ]
     } ]    
 }
