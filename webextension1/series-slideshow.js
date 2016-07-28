@@ -17,7 +17,6 @@ function showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, mainVidId, vidTit
                 console.log(url);
                 window.open(url);
             })
-            //addTitle(vidTitles[i]);
 
         } 
     }
@@ -26,9 +25,10 @@ function showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, mainVidId, vidTit
     carousel();
 }
 
-function addTitle(vidTitle){
-    var titleDiv = document.createElement("div");
-    document.getElementById("series-wrapper").querySelector(".")
+function showSeriesTitle(){
+    var title = document.getElementById("series-wrapper").querySelector(".series-title");
+    title.innerHTML = "More in this series";
+    title.style.fontSize = "16px";
 }
 
 function createButtons(){

@@ -27,7 +27,7 @@ function showVideo(vidId, timestamp, vidTitle, vidUUID, seriesUUID){
 	titleBox.innerHTML = vidTitle;
 	titleBox.style.height = "30px";
 	titleBox.style.textOverflow= "ellipsis";
-	titleBox.style.fontSize="15px";
+	titleBox.style.fontSize="16px";
 	titleBox.style.margin ="3px 3px 5px 3px";
 
 	var watchButton = document.createElement("img");
@@ -35,7 +35,7 @@ function showVideo(vidId, timestamp, vidTitle, vidUUID, seriesUUID){
 	var imgurl = chrome.extension.getURL("main.gif");
 	
 	watchButton.setAttribute("src", imgurl);
-	watchButton.setAttribute("height", "25px");
+	watchButton.setAttribute("height", "23px");
 	watchButton.style.margin="15px"; 
 	watchButton.style.padding = "3px";
 	watchButton.style.backgroundColor = "white";
@@ -111,10 +111,13 @@ function showNoTopicsMessage(){
 
 }
 
-function showSeriesTitle(){
-	var title = document.getElementById("series-wrapper").querySelector(".series-title");
-	title.innerHTML = "More in this series";
-	title.style.fontSize = "16px";
+function showQuizDiv(){
+	var quizWrapper = document.getElementById("quiz-wrapper");
+	quizWrapper.style.border = "1px solid #0E133E";
+
+	var quizHeader = document.querySelector(".quiz-title");
+	quizHeader.innerHTML = "Finished?";
+
 }
 
 function findTopicList(vid_uuid, callback){
@@ -197,7 +200,8 @@ $(document).ready( function(){
 								}
 							});
 							showSeriesTitle();
-							showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, vidId, vidTitles);							
+							showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, vidId, vidTitles);
+							showQuizDiv();							
 						}
 						else{
 							showNoVideoMessage();
