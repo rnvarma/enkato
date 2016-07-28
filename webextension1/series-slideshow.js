@@ -6,18 +6,27 @@ function showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, mainVidId, vidTit
     var mainUrl = "https://i.ytimg.com/vi/" + mainVidId + "/mqdefault.jpg";
     for (var i =0; i<4; i++){
         if(thumbnails[i] != mainUrl){
+            var slideHolder = document.createElement("div");
+            sliderunner.appendChild(slideHolder);
+            slideHolder.className = "slide-holder";
+
             var slide = document.createElement("img");
-            sliderunner.appendChild(slide);
+            slideHolder.appendChild(slide);
             slide.setAttribute("class", "mySlides");
             slide.setAttribute("src", thumbnails[i]);
             slide.setAttribute("title", vidTitles[i]);
+
+            var name = document.createElement("div");
+            slideHolder.appendChild(name);
+            name.innerHTML = vidTitles[i];
+            name.setAttribute("class", "series-name");
+
             vidId = vidUUIDs[i];
             url = "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidId;
             $(slide).click(function(){
                 console.log(url);
                 window.open(url);
-            })
-
+            });
         } 
     }
     console.log("creating buttons");
@@ -58,20 +67,20 @@ function plusDivs(n) {
 function showDivs(n) {
     console.log("executing showDivs");
     var i;
-    var x = document.getElementsByClassName("mySlides");
-    if (n > x.length) {slideIndex = 1}
-    if (n < 1) {slideIndex = x.length}
-    for (i = 0; i < x.length; i++) {
-       x[i].style.display = "none";
+    var slides = document.getElementsByClassName("slide-holder");
+    if (n > slides.length) {slideIndex = 1}
+    if (n < 1) {slideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+       slides[i].style.display = "none";
     }
-    x[slideIndex-1].style.display = "block";
+    slides[slideIndex-1].style.display = "block";
     console.log("showDivs is done");
 }
 
 
 function carousel() {
     var i;
-    var x = document.getElementsByClassName("mySlides");
+    var x = document.getElementsByClassName("slide-holder");
     for (i = 0; i < x.length; i++) {
        x[i].style.display = "none";
     }

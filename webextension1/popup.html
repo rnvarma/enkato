@@ -64,11 +64,24 @@
         text-align: center;
         padding: 3px;
       }
+      .slide-runner{
+        width: 230px;
+        height: 120px;
+      }
       .mySlides{
         cursor: pointer;
-        height: 120px;
+        height: 100px;
         width: 230px;
         padding: 2px;
+      }
+      .series-name{
+        width: 100%;
+        max-height: 100%;
+        text-align: center;
+        font-weight: 500;
+        padding: 5px;
+        top: 10px;
+        left: 0;
       }
       .nav-button:hover{
         box-shadow:0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)}
@@ -100,7 +113,11 @@
       .quiz-title{
         font-size: 15px;
         text-align: center;
-
+      }
+      .quiz-button{
+        margin: 6px 61px;
+        cursor: pointer;
+        align: center;
       }
 
     </style>
@@ -126,7 +143,7 @@
       </div>
       <div id = "series-wrapper">
         <div class= "series-title"></div>
-        <div class = "slide-holder">
+        <div class = "slide-wrapper">
           <div class = "slide-runner">
             <a  class = "button" style="left:52.5%"></a>
             <a class = "button" style="right:2%"></a>
@@ -137,8 +154,6 @@
       </div>
       <div id = "bottom-wrapper">
         <div id = "quiz-wrapper">
-          <div class = "quiz-title"></div>
-          <div class = "quiz-button"></div>
         </div>
         <div id = "more-videos-wrapper">
           <div class = "more-videos-header"></div>
