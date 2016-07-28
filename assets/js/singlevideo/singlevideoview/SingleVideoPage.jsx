@@ -27,6 +27,7 @@ class SingleVideoPage extends Component {
     this.setTopicList = this.setTopicList.bind(this);
     this.setGetCurrentTime = this.setGetCurrentTime.bind(this);
     this.setStartTime= this.setStartTime.bind(this);
+    this.loadQuiz = this.loadQuiz.bind(this);
   }
 
   componentDidMount() {
@@ -59,6 +60,18 @@ class SingleVideoPage extends Component {
     return startTime;
   }
 
+  loadQuiz(){
+    var params = [];
+    var hashes = window.location.search.slice(1).split('&');
+    for(var i = 0; i < hashes.length; i++){
+        var param = hashes[i].split('=');
+        params.push(param[0]);
+        params[param[0]] = param[1];
+    }
+    var showQuiz= params["quiz"];
+    return showQuiz;
+  }
+
   setTopicList(topicList) {
     this.setState({ topicList });
   }
@@ -77,6 +90,7 @@ class SingleVideoPage extends Component {
               videoUUID={this.state.videoUUID}
               setTopicList={this.setTopicList}
               setStartTime={this.setStartTime}
+              loadQuiz = {this.loadQuiz}
               setGetCurrentTime={this.setGetCurrentTime}/>
           </Col>
         </Row>

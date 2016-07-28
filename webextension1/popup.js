@@ -58,7 +58,7 @@ function showNoVideoMessage(){
 	noVideoDiv.innerHTML = "Sorry, there are no videos from enkato on this page";
 }
 
-function showTopics(topics){
+function showTopics(topics, vidUUID, seriesUUID){
 	var topicWrapper = document.getElementById("topic-list-wrapper");
 	topicWrapper.style.border= "1px solid #0E133E";
        
@@ -74,7 +74,7 @@ function showTopics(topics){
 			topic.innerHTML = topics[i].name;
 			
 			$(topic).click(function(){
-				window.open("http://127.0.0.1:8000/v/" + vidUUID);//add time stamp
+				window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID);//add time stamp
 			});
 		}
 	}
@@ -85,7 +85,7 @@ function showTopics(topics){
 			topic.innerHTML = topics[i].name;
 			
 			$(topic).click(function(){
-				window.open("http://127.0.0.1:8000/v/" + vidUUID);//add time stamp
+				window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID);//add time stamp
 			});
 		}
 
@@ -115,9 +115,19 @@ function showQuizDiv(){
 	var quizWrapper = document.getElementById("quiz-wrapper");
 	quizWrapper.style.border = "1px solid #0E133E";
 
-	var quizHeader = document.querySelector(".quiz-title");
-	quizHeader.innerHTML = "Finished?";
+	var quizButton = document.createElement("img");
+	quizWrapper.appendChild(quizButton);
+	quizButton.setAttribute("src", "quizbutton.gif");
+	quizButton.className = "quiz-button";
+	quizButton.setAttribute("height", "60px");
+	$(quizButton).click(function(){
+		window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID)//add quiz info 
+	})
+}
 
+function showMoreAtEnkato(){
+	var moreDiv = document.getElementById("more-videos-wrapper");
+	moreDiv.style.border = "1px solid #0E133E";
 }
 
 function findTopicList(vid_uuid, callback){
@@ -192,7 +202,7 @@ $(document).ready( function(){
 							findTopicList(vidUUID, function(topics){
 								if (topics.length != 0){
 									console.log("showing topics yo");
-									showTopics(topics);
+									showTopics(topics, vidUUID, seriesUUID);
 								}
 								else{
 									console.log("there are no topics whattt");
