@@ -32,9 +32,6 @@ export default class AnnotateSeriesVideoArea extends Component {
         }
         return (
             <div className="annotateSeriesVideoArea">
-                <div className="name">
-                    {this.props.currentVideo.name}
-                </div>
                 {editingBody}
             </div>
         )

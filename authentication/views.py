@@ -11,25 +11,43 @@ from backend.models import *
 
 class Register(APIView):
     def post(self, request):
-        user = User.objects.filter(username=request.POST.get('username'))
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password1')
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
+
+        user = User.objects.filter(username__iexact=username)
         if user.exists():
-            return JsonResponse({'status': False, 'issue': 'Username already exists'})
+            return JsonResponse({
+                'status': False,
+                'text': 'Username already exists.',
+                'field': 'username',
+            })
         
+        user = User.objects.filter(email__iexact=email)
+        if user.exists():
+            return JsonResponse({
+                'status': False,
+                'text': 'Email already registered',
+                'field': 'email',
+            })
+
         new_user = User.objects.create_user(
-            request.POST.get('username'),
-            request.POST.get('email'),
-            request.POST.get('password')
+            username,
+            email,
+            password
         )
-        new_user.first_name = request.POST.get('firstname')
-        new_user.last_name = request.POST.get('lastname')
+        new_user.first_name = firstname
+        new_user.last_name = lastname
         new_user.save()
 
 
         cu = CustomUser(
-            email= request.POST.get('email'),
-            first_name= request.POST.get('firstname'),
-            last_name= request.POST.get('lastname'),
-            username= request.POST.get('username'),
+            email=request.POST.get('email'),
+            first_name=request.POST.get('firstname'),
+            last_name=request.POST.get('lastname'),
+            username=request.POST.get('username'),
             user=new_user
         )
         cu.save()

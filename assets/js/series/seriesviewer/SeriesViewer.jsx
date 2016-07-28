@@ -12,7 +12,6 @@ import SeriesViewerVideoArea from 'js/series/seriesviewer/SeriesViewerVideoArea'
 class SeriesViewer extends Component {
     constructor(props) {
       super(props);
-      console.log("series viewer is working");
 
       this.state = {
         seriesUUID: this.props.params.seriesUUID,

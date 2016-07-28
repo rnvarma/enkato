@@ -1,5 +1,7 @@
 function showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, mainVidId, vidTitles){
     console.log("showing slideshow");
+    var seriesWrapper = document.getElementById("series-wrapper");
+    seriesWrapper.style.border = "1px solid #0E133E";
     var sliderunner = document.getElementById("series-wrapper").querySelector(".slide-runner");
     var mainUrl = "https://i.ytimg.com/vi/" + mainVidId + "/mqdefault.jpg";
     for (var i =0; i<4; i++){
@@ -12,11 +14,9 @@ function showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, mainVidId, vidTit
             vidId = vidUUIDs[i];
             url = "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidId;
             $(slide).click(function(){
-                vidId = vidUUIDs[i];
-                url = "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidId;
+                console.log(url);
                 window.open(url);
             })
-            //addTitle(vidTitles[i]);
 
         } 
     }
@@ -25,9 +25,10 @@ function showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, mainVidId, vidTit
     carousel();
 }
 
-function addTitle(vidTitle){
-    var titleDiv = document.createElement("div");
-    document.getElementById("series-wrapper").querySelector(".")
+function showSeriesTitle(){
+    var title = document.getElementById("series-wrapper").querySelector(".series-title");
+    title.innerHTML = "More in this series";
+    title.style.fontSize = "16px";
 }
 
 function createButtons(){

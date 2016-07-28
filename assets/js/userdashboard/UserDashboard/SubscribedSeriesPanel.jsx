@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 import { Circle } from 'rc-progress';
+import Dotdotdot from 'react-dotdotdot';
 
 import DjangoImageLinkHandler from "js/globals/DjangoImageLinkHandler";
 
@@ -17,39 +18,38 @@ class SubscribedSeriesPanel extends Component {
         let katoGreen = '#79B546';
 
         const { series } = this.props;
+        console.log(series)
         const videoData = series.user_data[0];
 
         const totalTime = series.total_time;
 
-        const percentMastery = Math.round(videoData.analysis.watched / series.video_count * 100);
-        const percentCompleted = Math.round(videoData.analysis.completed / series.video_count * 100);
+        const percentMastery = Math.round(videoData.analysis.completed / series.video_count * 100);
+        const percentCompleted = Math.round(videoData.analysis.watched / series.video_count * 100);
 
         const numVideos = series.video_count;
 
-        const numVideosString = numVideos + pluralize("video", numVideos);
+        const numVideosString = numVideos + pluralize(' video', numVideos);
 
-        let nextVideo = <div></div>
-
-        let nextVideoData = {
-            uuid: 'oSqJemnEEjRbWpuPGbBDP2',
-            num_quiz_questions: 2,
-            thumbnail: this.props.series.thumbnails[0],
-            name: "Video Panel",
-            numViews: 4,
-        }
-
-        //if (this.props.nextVideo) {
-        nextVideo = (
+        const continueVideo = videoData.videos_data[videoData.analysis.continue_video].video;
+        const nextVideoData = {
+            uuid: continueVideo.uuid,
+            num_quiz_questions: continueVideo.question_counter,
+            thumbnail: continueVideo.thumbnail,
+            name: continueVideo.name,
+            num_views: continueVideo.num_views,
+        };
+        const nextVideo = (
             <div className="nextVideoBtn">
                 <div className="text">
                     Up Next
                 </div>
-                <SeriesViewerSidebarVideoPanel
-                    video={nextVideo}/>
+                <div className="link">
+                    <Link to={`/s/${this.props.series.uuid}/watch#${continueVideo.uuid}`}>
+                        {continueVideo.name}
+                    </Link>
+                </div>
             </div>
         )
-        //}
-
 
         var thumbnails = series.thumbnails.map(function(s) {
             return (
@@ -69,7 +69,7 @@ class SubscribedSeriesPanel extends Component {
                 <div className="subscribedSeriesPanel">
                     <Link to={`/s/${series.uuid}`}>
                         <Col md={3} lg={3} sm={6} xs={12}>
-                            <div className={"thumbnailArea" + (numVideos <= 1 ? " one" : "")}>
+                            <div className={"thumbnailArea" + (series.thumbnails.length <= 1 ? " one" : "")}>
                                 {thumbnails}
                             </div>
                         </Col>
@@ -79,9 +79,17 @@ class SubscribedSeriesPanel extends Component {
                             <div className="name">
                                 {this.props.series.name}
                             </div>
-                            <div className="description">
-                                {this.props.series.description}
+                            <div className="metadata">
+                                <div className="numVideos">
+                                    {numVideosString}
+                                </div>
+                                <div className="totalTime">
+                                    {totalTime}
+                                </div>
                             </div>
+                            <Dotdotdot className="description" clamp={2}>
+                                {this.props.series.description}
+                            </Dotdotdot>
                         </div>
                     </Col>
                     <Col md={2} lg={2} sm={4} xs={12}>
@@ -89,8 +97,7 @@ class SubscribedSeriesPanel extends Component {
                             <Circle 
                                 percent={percentCompleted} 
                                 strokeWidth='10' 
-                                strokeColor={katoGreen}
-                                />
+                                strokeColor={katoGreen}/>
                             <div className="percentage">
                                 {percentCompleted}%
                             </div>
@@ -104,8 +111,7 @@ class SubscribedSeriesPanel extends Component {
                             <Circle 
                                 percent={percentMastery}
                                 strokeWidth='10' 
-                                strokeColor={katoGreen}
-                                />
+                                strokeColor={katoGreen}/>
                             <div className="percentage">
                                 {percentMastery}%
                             </div>
@@ -115,12 +121,6 @@ class SubscribedSeriesPanel extends Component {
                         </div>
                     </Col>
                     <Col md={2} lg={2} sm={4} xs={12}>
-                        <div className="numVideos">
-                            {numVideosString}
-                        </div>
-                        <div className="totalTime">
-                            {totalTime}
-                        </div>
                         {nextVideo}
                     </Col>
                 </div>
