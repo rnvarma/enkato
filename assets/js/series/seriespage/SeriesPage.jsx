@@ -275,6 +275,7 @@ class SeriesPage extends Component {
                             makeVideoPublic={this.makeVideoPublic}
                             makeVideoPrivate={this.makeVideoPrivate}
                             setIsPrivate={this.setIsPrivate}
+                            loadPageData={this.loadPageData}
                             {...this.state}/>
                     </Col>
                 </Row>
@@ -283,7 +284,5 @@ class SeriesPage extends Component {
         );
     }
 }
-
-console.log("ran the series page")
 
 module.exports = SeriesPage;

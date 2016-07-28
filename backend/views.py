@@ -317,38 +317,6 @@ def secondify(time):
         seconds = int(timeL[0])*3600 + int(timeL[1])*60 + int(timeL[2])
     return seconds
 
-class YTIndexScript(APIView):
-    def get(self, request, v_uuid):
-        video = Video.objects.get(uuid=v_uuid)
-        topics = '''02:25 : Primitives
-06:32 : Output
-08:51 : Math
-11:18 : Conditionals
-14:38 : Looping
-17:14 : Strings
-22:05 : Input
-26:08 : Arrays
-27:32 : Vectors
-28:58 : Tuples
-30:02 : Functions
-32:14 : Closures
-33:48 : Pointers
-37:41 : Structs
-41:12 : Traits
-43:37 : Enums
-'''
-        topicObjsList = []
-        for topic in topics.splitlines():
-            topicL = topic.split(" : ")
-            topicName = topicL[1]
-            topicTime = secondify(topicL[0])
-            topicObj = Topic(video = video, time = topicTime, name = topicName)
-            topicObjsList.append(topicObj)
-            print(topicName)
-        for topicObj in topicObjsList:
-            topicObj.save()
-        return JsonResponse({'hey':True})
-
 def getCorrectAnswer(choices):
     #returns index of correct answer
     #returns -1 if no answer was said to be correct by instructor
@@ -407,3 +375,14 @@ class DatedModelMixin(object):
             serializer.save(modified=timezone.now())
         else:
             serializer.save()
+
+class ParseImportTopics(APIView):
+    def post(self, request):
+        s = request.POST.get('s')
+        data = {
+            'new_topics': parseTopicUploadString(s)
+        }
+        return Response(data)
+
+
+

@@ -1,7 +1,7 @@
 import getCookie from 'js/globals/GetCookie'
 
 module.exports = {
-    login: function(username, pass, cb) {
+    login: function(username, pass, cb, failCB) {
         if (localStorage.token) {
             if (cb) cb(true)
             return
@@ -13,7 +13,7 @@ module.exports = {
             } else {
                 if (cb) cb(false)
             }
-        })
+        }, failCB)
     },
 
     logout: function(cb) {
@@ -25,7 +25,7 @@ module.exports = {
         return !!localStorage.token
     },
 
-    getToken: function(username, pass, cb) {
+    getToken: function(username, pass, cb, failCB) {
         $.ajax({
             type: 'POST',
             url: '/obtain-auth-token/',
@@ -42,6 +42,9 @@ module.exports = {
                     authenticated: true,
                     token: res.token
                 })
+            },
+            error: function(res) {
+                failCB(res.responseJSON.non_field_errors)
             }
         })
     }, 

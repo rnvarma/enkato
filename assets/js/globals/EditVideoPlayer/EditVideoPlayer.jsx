@@ -205,14 +205,19 @@ export default class EditVideoPlayer extends Component {
     }
 
     /* adds a new topic to topicObjList, sorts topic list, focuses on new topic */
-    addNewTopic() {
+    addNewTopic(name, topicTime) {
         this.state.Player.pause();
 
-        const time = Math.round(this.state.Player.getCurrentTime());
+        var time;
+
+        if (topicTime == null)
+            time = Math.round(this.state.Player.getCurrentTime());
+        else
+            time = topicTime
         const newTopic = {
             id: `fake_${Date.now()}`, /* fake id, not in DB yet */
             committed: false,
-            name: '',
+            name: name || '',
             time: time,
             time_clean: styleDuration(time),
             isCurrentTopic: true,
@@ -311,14 +316,14 @@ export default class EditVideoPlayer extends Component {
                         showing={this.props.showingAnnotationSave}
                         description="Are you sure you want to navigate away? Your changes are not saved and will be gone forever."
                         acceptCallback={this.props.onConfirmQuit}
-                        cancelCallback={this.props.setKeepAnnotations}
-                    />
+                        cancelCallback={this.props.setKeepAnnotations}/>
                     <div className="topicButtonColumn">
                         <EditableTopicList
                             topicObjList={this.state.topicObjList}
                             handleTopicClick={this.handleTopicClick}
                             updateName={this.updateTopicName}
                             addNewTopic={this.addNewTopic}
+                            videoDuration={this.state.Player.getDuration()}
                             handleTopicDelete={this.handleTopicDelete}
                             playVideo={this.playInContext}/>
                     </div>

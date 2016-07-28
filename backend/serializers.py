@@ -84,7 +84,7 @@ class StudentSeriesDataSerializer(serializers.ModelSerializer):
         for index, video_in_series in enumerate(video_data):
             if video_in_series.watched:
                 data['watched'] += 1
-            elif not data['continue_video']:
+            elif data['continue_video'] == None:
                 data['continue_video'] = index
             if video_in_series.watched and video_in_series.completed:
                 data['completed'] += 1
@@ -154,4 +154,25 @@ class InstructorSeriesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Series
-        fields = ('name', 'image', 'uuid', 'students_data')
+        fields = ('name', 'uuid', 'students_data')
+
+
+class InstructorGeneralSeriesSerializer(serializers.ModelSerializer):
+    analytics = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Series
+        fields = ('name', 'uuid', 'analytics')
+
+    def get_analytics(self, series):
+        students_data = series.students_data.all()
+
+        all_video_data = {}
+        for student_data in students_data:
+            for video_data in student_data.videos_data.all():  # TODO: PREFETCH
+                if video_data.video.id not in all_video_data:
+                    all_video_data[video_data.video.id] = {'num_views': 0, 'viewers': 0}
+                all_video_data[video_data.video.id]['num_views'] += video_data.num_views
+                all_video_data[video_data.video.id]['viewers'] += 1
+
+        return all_video_data
