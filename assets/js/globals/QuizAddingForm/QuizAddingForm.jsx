@@ -171,7 +171,7 @@ module.exports = React.createClass({
       }
       newFocus.focus = true;
       if (correctRemoved) {
-        newFocus.is_correct = ture;
+        newFocus.is_correct = true;
       }
     }
     this.setState({ questions: listify(questions,this.state.numQuestions) });
