@@ -35,10 +35,9 @@ class RegisterModal extends Component {
                         show={this.props.registerModalOpen} 
                         onHide={this.props.closeRegisterModal}>
                       <Modal.Header closeButton>
-                        <Modal.Title>You are forbidden from seeing this</Modal.Title>
+                        <Modal.Title>You are forbidden from seeing this content.</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                        ah
                       </Modal.Body>
                     </Modal>
                 </li>
