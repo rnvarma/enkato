@@ -14,6 +14,19 @@ import SingleQuizForm from 'js/globals/QuizAddingForm/SingleQuizForm';
 import QuizFormsList from 'js/globals/QuizAddingForm/QuizFormsList';
 import ScrollButtonList from 'js/globals/QuizAddingForm/ScrollButtonList';
 
+
+
+/*
+ * takes in a JSON object with questions
+ * returns a list of those questions
+ * param: {0: "one", 1: "two", 2: "three"}
+ * result: ["one, "two", "three"]
+*/
+function listify(dict){
+  var arr = $.map(dict, function(el) { return el });
+  return arr;
+}
+
 module.exports = React.createClass({
     loadDataFromServer: function(vuuid){
         $.ajax({
@@ -147,6 +160,7 @@ module.exports = React.createClass({
     const choices = questions[questionIndex].choiceList;
     const correctRemoved = choices[choiceIndex].is_correct;
 
+
     if (choiceIndex > 0) {
       choices.splice(choiceIndex, 1);
       let newFocus; /* new choice to focus on */
@@ -160,36 +174,35 @@ module.exports = React.createClass({
         newFocus.is_correct = ture;
       }
     }
-
-    this.setState({ questions });
+    this.setState({ questions: listify(questions,this.state.numQuestions) });
   },
   deleteChoice: function(qid, cid, qIndex, cIndex) {
-    if (this.validateDeleteChoice(cIndex)) {
-      const payload = {
-        qid: qid,
-        cid: cid,
-      };
-      $.ajax({
-        url: `/v/${this.state.uuid}/deletequizoption`,
-        dataType: 'json',
-        type: 'POST',
-        data: payload,
-        beforeSend: function (xhr) {
-          xhr.withCredentials = true;
-          xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-        },
-        success: function (data) {
-          if (data.status) {
-            this.displayDeleteChoice(qIndex, cIndex);
-          } else {
-            console.log("Internal Server Error: Adding Quiz Option Failed")
-          }
-        }.bind(this),
-        error: function (xhr, status, err) {
-          console.error(this.props.url, status, err.toString());
-          }.bind(this)
-      });
-    }
+    if (!this.validateDeleteChoice(cIndex)) return;
+
+    const payload = {
+      qid: qid,
+      cid: cid,
+    };
+    $.ajax({
+      url: `/v/${this.state.uuid}/deletequizoption`,
+      dataType: 'json',
+      type: 'POST',
+      data: payload,
+      beforeSend: function (xhr) {
+        xhr.withCredentials = true;
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+      },
+      success: function (data) {
+        if (data.status) {
+          this.displayDeleteChoice(qIndex, cIndex);
+        } else {
+          console.log("Internal Server Error: Adding Quiz Option Failed")
+        }
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+        }.bind(this)
+    });
   },
   addQuestion: function() {
         var data = this.state;
