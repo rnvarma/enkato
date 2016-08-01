@@ -69,20 +69,22 @@ class Profile extends Component {
 
     render() {
         var profile_img = this.state.userdata.image || DjangoImageLinkHandler("blank_avatar.jpg")
+        var subscribe_name = this.props.params.userId ? "Series They Subscribe To" : "Series You Subscribe To"
         var subscribed_series = (
             <ProfileSeriesList
                 series={this.state.subscribed_series}
-                name={"Series You Subscribe To"}/>
+                name={subscribe_name}/>
         )
+        var created_name = this.props.params.userId ? this.state.userdata.name + "'s series" : "Series by You"
         var created_series = (
             <ProfileSeriesList
                 series={this.state.created_series}
-                name={"Series by You"}/>
+                name={created_name}/>
         )
         if (!this.state.subscribed_series.length) {
             subscribed_series = <div></div>
         }
-        if (!this.state.created_series.length) {
+        if (!this.props.params.userId && !this.state.created_series.length) {
             created_series = (
                 <CreateSeriesArea />
             )

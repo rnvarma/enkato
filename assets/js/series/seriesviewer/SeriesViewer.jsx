@@ -12,7 +12,6 @@ import SeriesViewerVideoArea from 'js/series/seriesviewer/SeriesViewerVideoArea'
 class SeriesViewer extends Component {
     constructor(props) {
       super(props);
-      console.log("series viewer is working");
 
       this.state = {
         seriesUUID: this.props.params.seriesUUID,
@@ -45,12 +44,14 @@ class SeriesViewer extends Component {
       this.setGetCurrentTime = this.setGetCurrentTime.bind(this);
       this.changeCurrVideo = this.changeCurrVideo.bind(this);
       this.setStartTime= this.setStartTime.bind(this);
+      this.loadQuiz= this.loadQuiz.bind(this);
     }
 
     componentDidMount() {
         var currUUID = window.location.hash.slice(1, 23);
         this.setState({currUUID: this.props.currUUID})
         this.loadDataFromServer(currUUID)
+        console.log(this);
 
         $(window).on('hashchange', () => {
             var newUUID = window.location.hash.slice(1, 23);
@@ -142,6 +143,20 @@ class SeriesViewer extends Component {
       return startTime;
     }
 
+    loadQuiz(){
+      var params = [];
+      var hashes = window.location.hash.slice(24).split('&');
+      console.log(hashes);
+      for(var i = 0; i < hashes.length; i++){
+        var param = hashes[i].split('=');
+        params.push(param[0]);
+        params[param[0]] = param[1];
+      }
+      var showQuiz= params["quiz"];
+      console.log(showQuiz);
+      return showQuiz;
+    }
+
     render() {
       if(this.state.hide_series) {
             return (
@@ -159,6 +174,7 @@ class SeriesViewer extends Component {
             <SeriesViewerVideoArea
               openRegisterModal={this.props.openRegisterModal}
               setTopicList={this.setTopicList}
+              loadQuiz = {this.loadQuiz}
               setStartTime={this.setStartTime}
               setGetCurrentTime={this.setGetCurrentTime}
               currUUID={this.state.currUUID}

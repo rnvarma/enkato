@@ -2,6 +2,7 @@ require('css/series/seriesviewer/SeriesViewerSidebarVideoPanel.scss');
 
 import React from 'react';
 import DotDotDot from 'react-dotdotdot';
+import { browserHistory } from 'react-router'
 
 import { pluralize } from 'js/globals/utility'
 
@@ -13,6 +14,9 @@ class SeriesViewerSidebarVideoPanel extends React.Component {
     }
 
     onClick() {
+        if (this.props.directLink) {
+            browserHistory.push(`/s/${this.props.seriesUUID}/watch#${this.props.video.uuid}`)
+        }
         window.location.hash = this.props.video.uuid;
     }
 

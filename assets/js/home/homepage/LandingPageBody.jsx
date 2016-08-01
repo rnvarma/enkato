@@ -13,6 +13,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Button from 'react-bootstrap/lib/Button';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import { Link } from 'react-router';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
 
 import request from 'js/globals/HttpRequest';
@@ -193,9 +194,11 @@ class LandingPageBody extends Component {
                                 <div className="text">
                                     Organize and enhance your online content, and interact directly with your students to provide a better learning experience.
                                 </div>
-                                <Button className="button greenBtn">
-                                    Become an Educator
-                                </Button>
+                                <Link to="/educator">
+                                    <Button className="button greenBtn">
+                                        Become an Educator
+                                    </Button>
+                                </Link>
                             </div>
                         </Col>
                     </Row>

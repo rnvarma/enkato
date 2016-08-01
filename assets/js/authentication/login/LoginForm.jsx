@@ -9,6 +9,9 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import Button from 'react-bootstrap/lib/Button';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
+import Alert from 'react-bootstrap/lib/Alert';
+
+import auth from 'auth';
 
 class LoginForm extends Component {
     constructor(props) {
@@ -16,12 +19,14 @@ class LoginForm extends Component {
 
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            errorMsg: '',
+            errorField: '',
         }
 
         this.onUserNameChange = this.onUserNameChange.bind(this)
         this.onPasswordChange = this.onPasswordChange.bind(this)
-        this.onSubmit = this.onSubmit.bind(this)
+        this.onFormSubmit = this.onFormSubmit.bind(this)
     }
 
     onUserNameChange(e) {
@@ -32,15 +37,35 @@ class LoginForm extends Component {
         this.setState({password: e.target.value})
     }
 
-    onSubmit(e) {
+    onFormSubmit(e) {
         e.preventDefault();
-        this.props.onFormSubmit(this.state);
+        auth.login(this.state.username, this.state.password, (success) => {
+            if (success) {
+                window.location.href = "/"
+            }
+        }, (errorMsg) => {
+            this.setState({
+                errorMsg: errorMsg
+            })
+        })
     }
 
     render() {
+        var disabled = (!this.state.username
+                        || !this.state.password)
+        var errorMsg;
+        if (this.state.errorMsg) {
+            errorMsg = (
+                <Alert bsStyle="danger">
+                    {this.state.errorMsg}
+                </Alert>
+            )
+        }
         return (
-            <Form horizontal onSubmit={this.onSubmit}>
-                <FormGroup controlId="user-name">
+            <Form horizontal onSubmit={this.onFormSubmit}>
+                {errorMsg}
+                <FormGroup
+                    controlId="user-name">
                     <Col componentClass={ControlLabel} sm={2}>
                         User Name
                     </Col>
@@ -69,7 +94,7 @@ class LoginForm extends Component {
 
                 <FormGroup>
                     <Col sm={10} smOffset={2}>
-                        <Button type="submit">
+                        <Button className="structabl-red" type="submit" disabled={disabled}>
                             Submit
                         </Button>
                     </Col>

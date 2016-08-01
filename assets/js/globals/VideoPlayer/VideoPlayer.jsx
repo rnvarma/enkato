@@ -15,7 +15,6 @@ import Player from 'js/globals/VideoPlayer/Player';
 // How often the video player checks the video's state
 const pollInterval = 100;
 console.log("videoplayer running");
-console.log('is it working...');
 function updateCurrentTopicOnKey(targetKey, topicList){
     for(var i=0; i<topicList.length; i++){
         if(topicList[i].id == targetKey){
@@ -153,6 +152,15 @@ export default class VideoPlayer extends Component {
                 /* an optional prop */
                 if (this.props.setTopicList) {
                   this.props.setTopicList(data.topicList);
+                }
+
+                console.log(this.props);
+                if(this.props.loadQuiz){
+                    console.log(this.props.loadQuiz());
+                    if(this.props.loadQuiz() == "true"){
+                        console.log("loadQuiz is true");
+                        this.showQuiz();
+                    }
                 }
 
                 this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);

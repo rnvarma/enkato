@@ -13,6 +13,7 @@ class SeriesViewerVideoArea extends React.Component {
             openRegisterModal={this.props.openRegisterModal}
             setStartTime = {this.props.setStartTime}
             setTopicList={this.props.setTopicList}
+            loadQuiz = {this.props.loadQuiz}
             setGetCurrentTime={this.props.setGetCurrentTime}
             videoUUID={this.props.currUUID}
             seriesUUID={this.props.seriesUUID}

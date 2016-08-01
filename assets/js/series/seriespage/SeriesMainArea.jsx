@@ -2,12 +2,14 @@
 require("css/series/seriespage/SeriesMainArea.scss");
 
 import React, { Component } from 'react';
-import { Link } from 'react-router'
+import { Link, browserHistory } from 'react-router'
 import Button from 'react-bootstrap/lib/Button';
 
 import ConfirmModal from 'js/globals/ConfirmModal';
 import { pluralize } from 'js/globals/utility';
 
+import auth from 'auth';
+import request from 'js/globals/HttpRequest';
 import NoVideosArea from 'js/series/seriespage/NoVideosArea';
 import SeriesVideoList from 'js/series/seriespage/SeriesVideoList';
 import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
@@ -26,7 +28,11 @@ export default class SeriesMainArea extends Component {
     }
 
     delete() {
-
+        request.delete(`/1/series/${this.props.seriesUUID}`, {
+            success: (data) => {
+                browserHistory.push("/")
+            }
+        })
     }
 
     setPublic() {
@@ -43,7 +49,6 @@ export default class SeriesMainArea extends Component {
         })
     }
     render() {
-        console.log(this.props.is_private, "yes")
         const img_src = this.props.image || DjangoImageLinkHandler('blank_thumbnail.png')
         var noVideos=false; 
 
@@ -56,7 +61,8 @@ export default class SeriesMainArea extends Component {
             var video_area = <NoVideosArea
                                  videos={this.props.videos}
                                  reloadPageData={this.props.reloadPageData}
-                                 openModal={this.props.openModal}/>
+                                 openModal={this.props.openModal}
+                                 isCreator={this.props.is_creator}/>
             var annotateVideosButton = null;
             noVideos=true;
             if(this.props.is_creator) {
@@ -77,6 +83,13 @@ export default class SeriesMainArea extends Component {
                         </div>
                     );
                 }
+                deleteButton = (
+                    <div className="deleteButton">
+                        <Button onClick={this.toggleDelete}>
+                            Delete
+                        </Button>
+                    </div>
+                )
             }
         } else if (this.props.is_creator) {
             var video_area = (
@@ -86,10 +99,13 @@ export default class SeriesMainArea extends Component {
                         seriesUUID={this.props.seriesUUID}
                         is_creator={this.props.is_creator}
                         makeVideoPublic={this.props.makeVideoPublic}
-                        makeVideoPrivate={this.props.makeVideoPrivate}/>
+                        makeVideoPrivate={this.props.makeVideoPrivate}
+                        loadPageData={this.props.loadPageData}/>
                     <NoVideosArea
                         videos={this.props.videos}
-                        openModal={this.props.openModal}/>
+                        openModal={this.props.openModal}
+                        isCreator={this.props.is_creator}
+                        reloadPageData={this.props.reloadPageData}/>
                 </div>
             )
             var annotateVideosButton =  (
@@ -117,7 +133,7 @@ export default class SeriesMainArea extends Component {
                 );
             }
             deleteButton = (
-                <div className="annotate-box">
+                <div className="deleteButton">
                     <Button onClick={this.toggleDelete}>
                         Delete
                     </Button>
@@ -130,11 +146,12 @@ export default class SeriesMainArea extends Component {
                     <SeriesVideoList
                         videos={this.props.videos}
                         seriesUUID={this.props.seriesUUID}
-                        is_creator={this.props.is_creator}/>
+                        is_creator={this.props.is_creator}
+                        loadPageData={this.props.loadPageData}/>
                 </div>
             )
              
-            if (this.props.is_subscribed) {
+            if (auth.loggedIn() && this.props.is_subscribed) {
                 var annotateVideosButton = (
                     <div className="annotate-box">
                         <Button 
@@ -164,8 +181,7 @@ export default class SeriesMainArea extends Component {
                     acceptText = "Delete"
                     acceptBsStyle = "danger"
                     acceptCallback = {this.delete}
-                    cancelCallback = {this.toggleDelete}
-                />
+                    cancelCallback = {this.toggleDelete}/>
                 <div className="header">
                     <div className="picture-area">
                         <img src={img_src} className="picture"/>

@@ -393,7 +393,7 @@ class QuestionView extends React.Component {
       askQuestionBar = (
         <div className="askQuestionBar">
           <Typeahead
-            placeholder="Don't undestand something? Ask a question here."
+            placeholder="Don't understand something? Ask a question here."
             options={questionOptions}
             onOptionSelected={this.onQuestionFilterSelect}
             onKeyUp={this.onAskQuestionChange}/>

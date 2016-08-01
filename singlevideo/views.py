@@ -7,7 +7,10 @@ from backend.views import Serializer
 
 from backend.serializers import VideoSerializer
 from rest_framework.views import APIView
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
+
+from backend.serializers import SeriesSerializer
+from backend.permissions import make_owner_permission
 
 import json
 
@@ -15,13 +18,19 @@ import json
 class VideoViewset(viewsets.ModelViewSet):
     """ The video API """
 
+    lookup_field = 'uuid'
     serializer_class = VideoSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          make_owner_permission(user_field='creator', user_edit_fields=None))
 
     def get_queryset(self):
         return Video.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user.customuser)
+
+    def perform_destroy(self, instance):
+        instance.delete()
 
 
 class SingleVideoPage(View):

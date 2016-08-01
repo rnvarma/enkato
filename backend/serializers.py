@@ -84,7 +84,7 @@ class StudentSeriesDataSerializer(serializers.ModelSerializer):
         for index, video_in_series in enumerate(video_data):
             if video_in_series.watched:
                 data['watched'] += 1
-            elif not data['continue_video']:
+            elif data['continue_video'] == None:
                 data['continue_video'] = index
             if video_in_series.watched and video_in_series.completed:
                 data['completed'] += 1
@@ -168,11 +168,40 @@ class InstructorGeneralSeriesSerializer(serializers.ModelSerializer):
         students_data = series.students_data.all()
 
         all_video_data = {}
+
         for student_data in students_data:
             for video_data in student_data.videos_data.all():  # TODO: PREFETCH
-                if video_data.video.id not in all_video_data:
-                    all_video_data[video_data.video.id] = {'num_views': 0, 'viewers': 0}
-                all_video_data[video_data.video.id]['num_views'] += video_data.num_views
-                all_video_data[video_data.video.id]['viewers'] += 1
+                video_id = video_data.video.id
+                if video_id not in all_video_data:
+                    all_video_data[video_id] = {
+                        'num_views': 0,
+                        'viewers': 0,
+                        'quiz_data': {},
+                        'question_data': {
+                            'times_asked': [],
+                            'avg_time_asked': 0,
+                        },
+                    }
+                all_video_data[video_id]['num_views'] += video_data.num_views
+                all_video_data[video_id]['viewers'] += 1
+
+                for quiz_question in video_data.quizzes_data.all():
+                    question_id = quiz_question.quiz_question.id
+                    if question_id not in all_video_data[video_id]['quiz_data']:
+                        all_video_data[video_id]['quiz_data'][question_id] = {
+                            'correct_answers': 0,
+                            'attempts': 0,
+                            #  answer chosen
+                        }
+                    all_video_data[video_id]['quiz_data'][question_id]['correct_answers'] += 1 if quiz_question.is_correct else 0
+                    all_video_data[video_id]['quiz_data'][question_id]['attempts'] += 1
+
+                for question in video_data.video.question_set.all():
+                    all_video_data[video_id]['question_data']['times_asked'].append(question.time)
+
+                if all_video_data[video_id]['question_data']['times_asked']:
+                    all_video_data[video_id]['question_data']['avg_time_asked'] = sum(all_video_data[video_id]['question_data']['times_asked']) / len(all_video_data[video_id]['question_data']['times_asked'])
+                else:
+                    all_video_data[video_id]['question_data']['avg_time_asked'] = None
 
         return all_video_data

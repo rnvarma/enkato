@@ -2,6 +2,7 @@ from backend.models import *
 import urllib
 import json
 import string
+import re
 
 # API docs: https://developers.google.com/youtube/v3/docs/videos
 API_KEY = "AIzaSyCy8238lONTrmV2DdyDpBViFoqke3wuk7A"
@@ -64,6 +65,23 @@ def getYTIdFromURL(url):
 
 	return yt_id
 
+def convert_time_to_seconds(time):
+	result = time.split(":")
+	h, m, s = 0, 0, 0
+	if len(result) < 1:
+		return None
+	elif len(result) == 1:
+		s = int(result[0])
+	elif len(result) == 2:
+		m = int(result[0])
+		s = int(result[1])
+	elif len(result) == 3:
+		h = int(result[0])
+		m = int(result[1])
+		s = int(result[2])
+	elif len(result) > 3:
+		return None
+	return h * 60 * 60 + m * 60 + s
 
 def getYTPlaylistIdFromURL(url):
 	return url.split("list=")[1].split("&")[0]
@@ -237,3 +255,21 @@ def getSeriesThumbnails(series):
         thumbnails.append(series_videos[2].video.thumbnail)
         thumbnails.append(series_videos[3].video.thumbnail)
     return thumbnails
+
+def parseTopicUploadString(s):
+	topics = []
+	regex = '(?P<time>([0-9]+:)?[0-9]+:[0-9]+)'
+	for line in s.splitlines():
+		match = re.search(regex, line)
+		if not match: continue
+		time = match.group(0)
+		if not time: continue
+		time = convert_time_to_seconds(time)
+		name = line[:match.start()] + line[match.end():]
+		name = name.strip()
+		topics.append({'time': time, 'name': name})
+	return topics
+
+
+
+
