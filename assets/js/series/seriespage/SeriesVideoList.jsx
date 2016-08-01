@@ -10,10 +10,10 @@ export default class SeriesVideoList extends Component {
     }
 
     render() {
-        var videoPanels = this.props.videos.map(function(v) {
+        const videoPanels = this.props.videos.map((v, index) => {
             return (
                 <SeriesVideoPanel
-                    key={v.order}
+                    key={index}
                     video={v}
                     seriesUUID={this.props.seriesUUID}
                     is_creator={this.props.is_creator}
@@ -22,7 +22,7 @@ export default class SeriesVideoList extends Component {
                     makeVideoPublic={this.props.makeVideoPublic}
                     loadPageData={this.props.loadPageData}/>
             );
-        }.bind(this))
+        });
         return (
             <div className="seriesVideoList">
                 {videoPanels}
