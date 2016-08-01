@@ -7,7 +7,6 @@ import Button from 'react-bootstrap/lib/Button';
 
 
 import ConfirmModal from 'js/globals/ConfirmModal';
-import Draggable from 'react-draggable';
 import { pluralize } from 'js/globals/utility';
 
 export default class SeriesVideoPanel extends Component {
@@ -83,7 +82,6 @@ export default class SeriesVideoPanel extends Component {
 
 
         return (
-            <Draggable axis = "y" grid={[25, 25]}>
             <div className="seriesVideoPanel">
                 <ConfirmModal
                     showing = {this.state.deleting}
@@ -138,7 +136,6 @@ export default class SeriesVideoPanel extends Component {
                     </div>
                 </div>
             </div>
-            </Draggable>
         )
     }
 }
