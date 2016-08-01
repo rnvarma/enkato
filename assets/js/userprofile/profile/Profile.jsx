@@ -86,7 +86,7 @@ class Profile extends Component {
         }
         return (
             <div className="profile">
-                <div className="contentPanel header">
+                <div className="baseContainer header">
                     <div className="imageArea">
                         <img src={profile_img} className="image" />
                     </div>

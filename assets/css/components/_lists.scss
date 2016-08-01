@@ -19,3 +19,8 @@
 .editableTopicNodeContainer {
     margin-bottom: 0px;
 }
+
+.seriesViewerVideoList {
+    height: calc(100% - 200px);
+    overflow-y: scroll;
+}

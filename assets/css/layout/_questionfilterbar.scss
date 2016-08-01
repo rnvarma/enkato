@@ -8,18 +8,12 @@
   }
 
   .filterOption {
-    cursor: pointer;
     color: $structabl-blue;
     padding: 12px 20px;
-    background-color: white;
     display: inline-block;
-    text-align: center;
-
-    &:first-child {
-    }
 
     &.selected {
-      font-weight: bold;
+      font-weight: $boldest-weight;
     }
 
     &:hover {
@@ -34,14 +28,14 @@
     float: right;
     background-color: white;
 
-    .filterInput {
-      padding: 5px 20px;
-    }
+    // .filterInput {
+    //   padding: 5px 20px;
+    // }
 
-    .btn {
-      padding: 8px 40px;
-      background-color: #f1f1f1;
-      border: 1px solid #f1f1f1;
-    }
+    // .btn {
+    //   padding: 8px 40px;
+    //   background-color: #f1f1f1;
+    //   border: 1px solid #f1f1f1;
+    // }
   }
 }

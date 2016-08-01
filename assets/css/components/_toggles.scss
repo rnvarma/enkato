@@ -1,0 +1,13 @@
+.toggleAnnotating {
+    display: inherit;
+    float: left;
+    border-radius: 0 !important;
+    color: $base-dark;
+    background-color: $blank;
+    margin: 0 !important;
+
+    &.active {
+        background-color: $base-dark;
+        color: $blank;
+    }
+}

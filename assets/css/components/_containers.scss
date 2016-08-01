@@ -1,4 +1,4 @@
-.contentPanel {
+.baseContainer {
     background-color: $blank;
     padding: $content-padding;
     margin: 0 0 $content-padding 0;
@@ -18,7 +18,7 @@
 }
 
 .ynVideoPlayer {
-    @extend .contentPanel;
+    @extend .baseContainer;
     padding: 0;
     overflow: hidden;
 }
@@ -28,7 +28,7 @@
 }
 
 .titledPanel {
-    @extend .contentPanel;
+    @extend .baseContainer;
     border-top: $base-border-width solid $base-dark;
 
     .profileSeriesPanelCol {

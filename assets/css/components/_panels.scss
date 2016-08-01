@@ -45,7 +45,7 @@
     .listNumber {
         display: inline-block;
         vertical-align: top;
-        padding: 0 5px;
+        padding: 0 10px;
         margin-top: 17px;
         font-weight: $boldest-weight;
         color: $base-dark;
@@ -145,6 +145,36 @@
 
         &:hover {
             border-bottom: 1px dotted darken($panel-active-bg, 5%);
+        }
+    }
+}
+
+// ANNOTATIONS
+
+.annotateSeriesSideBarButton {
+    @extend .basePanel;
+    padding: 10px 20px;
+
+    &:first-of-type {
+        padding-top: 20px;
+    }
+
+    &:last-of-type {
+        padding-bottom: 20px;
+    }
+
+    .buttonContainer {
+        width: 100%;
+        position: relative;
+
+        .image {
+            width: 100%;
+        }
+
+        .name {
+            text-align: center;
+            font-weight: $bold-weight;
+            padding: 5px;
         }
     }
 }

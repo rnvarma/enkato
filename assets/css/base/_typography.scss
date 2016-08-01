@@ -54,3 +54,14 @@ a {
         padding-right: 0;
     }
 }
+
+/*
+ * defaultMessage: Handles the empty case for situations like no questions to
+ * show, no videos in a series, etc.
+ */
+.defaultMessage, .noVideosArea, .questionDisplay.empty {
+    text-align: center;
+    font-size: $large-size;
+    color: $base-dark;
+    font-weight: $boldest-weight;
+}

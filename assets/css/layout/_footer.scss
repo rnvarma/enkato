@@ -7,9 +7,9 @@
         vertical-align: top;
         width: 30%;
 
-        @include respond-to(xsmall) {
-            width: 100%;
-        }
+        // @include respond-to(xsmall) {
+        //     width: 100%;
+        // }
 
         // .logo {
         //     width: 200px;
@@ -21,10 +21,10 @@
         vertical-align: top;
         width: 17%;
 
-        @include respond-to(xsmall) {
-            width: 50%;
-            padding-top: 25px;
-        }
+        // @include respond-to(xsmall) {
+        //     width: 50%;
+        //     padding-top: 25px;
+        // }
 
         .title {
             font-size: 20px;
