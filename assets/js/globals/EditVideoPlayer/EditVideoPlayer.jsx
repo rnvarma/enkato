@@ -205,7 +205,7 @@ export default class EditVideoPlayer extends Component {
     }
 
     /* adds a new topic to topicObjList, sorts topic list, focuses on new topic */
-    addNewTopic(name = ''g, topicTime = null) {
+    addNewTopic(name = '', topicTime = null) {
         this.state.Player.pause();
 
         var time;
