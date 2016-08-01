@@ -17,26 +17,29 @@ export default class SeriesVideoPanel extends Component {
             deleting: false,
         };
 
-        this.delete = this.delete.bind(this)
-        this.makePublic = this.makePublic.bind(this)
-        this.makePrivate = this.makePrivate.bind(this)
-        this.toggleDelete = this.toggleDelete.bind(this)
+        this.delete = this.delete.bind(this);
+        this.makePublic = this.makePublic.bind(this);
+        this.makePrivate = this.makePrivate.bind(this);
+        this.toggleDelete = this.toggleDelete.bind(this);
     }
 
     delete() {
+        this.setState({
+            deleting: false,
+        });
         request.delete(`/1/videos/${this.props.video.uuid}`, {
             success: (data) => {
-                this.props.loadPageData()
+                this.props.loadPageData();
             }
         })
     }
 
-    makePublic(){
-        this.props.makeVideoPublic(this.props.video.uuid)
+    makePublic() {
+        this.props.makeVideoPublic(this.props.video.uuid);
     }
 
-    makePrivate(){
-        this.props.makeVideoPrivate(this.props.video.uuid)
+    makePrivate() {
+        this.props.makeVideoPrivate(this.props.video.uuid);
     }
 
     toggleDelete() {
@@ -47,16 +50,16 @@ export default class SeriesVideoPanel extends Component {
 
 
     render() {
-        var video = this.props.video;
+        const { video } = this.props;
+
+        let rightClass = 'right';
         if (video.order == 0) {
-            var rightClass = "right first";
-        } else {
-            var rightClass = "right";
+            rightClass += ' first';
         }
 
-        var deleteButton = "";
-        var privacyButton = "";
-        if(this.props.is_creator){
+        let deleteButton;
+        let privacyButton;
+        if (this.props.is_creator) {
             if (this.props.is_private) {
                 privacyButton = (
                     <div className="annotate-box">
@@ -78,8 +81,8 @@ export default class SeriesVideoPanel extends Component {
                 )
             }
             deleteButton = (
-                <div className = "annotate-box">
-                    <Button onClick = {this.toggleDelete}>
+                <div className="annotate-box">
+                    <Button onClick={this.toggleDelete}>
                         Delete
                     </Button>
                 </div>
@@ -90,12 +93,12 @@ export default class SeriesVideoPanel extends Component {
         return (
             <div className="seriesVideoPanel">
                 <ConfirmModal
-                    showing = {this.state.deleting}
-                    description = "You're deleting this video. Are you sure you want to continue? This is irreversible."
-                    acceptText = "Delete"
-                    acceptBsStyle = "danger"
-                    acceptCallback = {this.delete}
-                    cancelCallback = {this.toggleDelete}
+                    showing={this.state.deleting}
+                    description="You're deleting this video. Are you sure you want to continue? This is irreversible."
+                    acceptText="Delete"
+                    acceptBsStyle="danger"
+                    acceptCallback={this.delete}
+                    cancelCallback={this.toggleDelete}
                 />
                 <div className="left">
                     <div className="order">
