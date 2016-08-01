@@ -11,33 +11,35 @@ import DjangoImageLinkHandler from "js/globals/DjangoImageLinkHandler";
 
 class ProfileSeriesPanel extends Component {
     render() {
-        var thumbnails = this.props.series.thumbnails.map(function(s) {
+        const { series } = this.props;
+
+        let thumbnails = series.thumbnails.map(function(source, index) {
             return (
                 <img
-                    key={s}
-                    src={s}
+                    key={index}
+                    src={source}
                     className="image"/>
-            )
-        })
-        if (this.props.series.thumbnails.length == 0) {
+            );
+        });
+        if (series.thumbnails.length === 0) {
             thumbnails = (
                 <img src={DjangoImageLinkHandler("blank_thumbnail.png")} className="image" />
             )
         }
-        var numVideos = this.props.series.thumbnails.length;
+        const numVideos = series.thumbnails.length;
         return (
             <Col md={4} lg={3} sm={6} xs={12} className="profileSeriesPanelCol">
-                <Link to={`/s/${this.props.series.uuid}`}>
+                <Link to={`/s/${series.uuid}`}>
                     <div className="profileSeriesPanel">
                         <div className={"thumbnailArea" + (numVideos <= 1 ? " one" : "")}>
                             {thumbnails}
                         </div>
                         <div className="seriesInfo">
                             <Dotdotdot className="name" clamp={1}>
-                                {this.props.series.name}
+                                {series.name}
                             </Dotdotdot>
                             <Dotdotdot className="description" clamp={5}>
-                                {this.props.series.description}
+                                {series.description}
                             </Dotdotdot>
                         </div>
                     </div>
