@@ -13,11 +13,11 @@ class QuestionList extends Component {
   render() {
     const unresolvedMarker = (<div className="questionPreviewUnresolved"></div>);
 
-    const questions = this.props.questions.map((question) => {
+    const questions = this.props.questions.map((question, index) => {
       const responseCount = (question.responses ? question.responses.length : 0);
       question.modified = moment(question.modified);
 
-      var header;
+      let header;
       if (this.props.showingSeries) {
         header = question.video.name;
       } else {
@@ -25,6 +25,7 @@ class QuestionList extends Component {
       }
       return (
         <div
+            key={index}
           className={(question.id === this.props.currentQuestion.id ? 'selected ' : '') + 'questionPreview'}
           onClick={this.props.setCurrentQuestion.bind(null, question)}
         >
