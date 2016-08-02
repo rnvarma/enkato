@@ -154,15 +154,6 @@ export default class VideoPlayer extends Component {
                   this.props.setTopicList(data.topicList);
                 }
 
-                console.log(this.props);
-                if(this.props.loadQuiz){
-                    console.log(this.props.loadQuiz());
-                    if(this.props.loadQuiz() == "true"){
-                        console.log("loadQuiz is true");
-                        this.showQuiz();
-                    }
-                }
-
                 this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
                 this.forceUpdate();
 
@@ -239,17 +230,24 @@ export default class VideoPlayer extends Component {
     onPlayerReady(event){
         if (this.props.setStartTime() != null){
             this.state.currentTime = Number(this.props.setStartTime());
+            var startTime = this.state.currentTime;
+            var startSeconds;
+            if(typeof startTime == "string"){
+                startSeconds = timeToSeconds(startTime);
+            }
+            else{
+                startSeconds= startTime;
+            }
+            event.target.seekTo(startSeconds);
+            event.target.playVideo();
         }
-        var startTime = this.state.currentTime;
-        var startSeconds;
-        if(typeof startTime == "string"){
-            startSeconds = timeToSeconds(startTime);
+        if(this.props.loadQuiz){
+            console.log(this.props.loadQuiz());
+            if(this.props.loadQuiz() == "true"){
+                this.showQuiz();
+                event.target.pauseVideo();
+            }
         }
-        else{
-            startSeconds= startTime;
-        }
-        event.target.seekTo(startSeconds);
-        event.target.playVideo();
     }
 
     loadQuizData(v_id){
