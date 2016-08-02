@@ -247,8 +247,8 @@ class SeriesVideoData(APIView):
                 seriesData = {}
                 for serie in series:
                     seriesData[serie.uuid] = Serializer.serialize_series_videos(serie)
-                seriesData = findSeriesVideoData(seriesData, v_id)
-                response["seriesData"]=seriesData
+                seriesVideoData = findSeriesVideoData(seriesData, v_id)
+                response["seriesVideoData"]=seriesVideoData
                 return Response(response)
             else:
                 return Response({
