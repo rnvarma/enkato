@@ -16,9 +16,19 @@
         .picture-area {
             display: inline-block;
             vertical-align: top;
+            width: 20%;
+            min-width: 255px;
 
-            .picture {
-                padding-right: 20px;
+            .image {
+                width: 50%;
+                display: inline-block;
+            }
+
+            &.one {
+                .image {
+                    width: 100%;
+                    display: inline-block;
+                }
             }
         }
 

@@ -14,29 +14,6 @@ import EditControlBar from 'js/globals/EditVideoPlayer/EditControlBar';
 
 const pollInterval = 100;
 
-function updateCurrentTopicOnKey(targetKey, topicList){
-    for(var i=0; i<topicList.length; i++){
-        if(topicList[i].id == targetKey){
-            topicList[i].isCurrentTopic = true;
-        } else {
-            topicList[i].isCurrentTopic = false;
-        }
-    }
-    return topicList;
-}
-
-/*
-* ASSUMES LIST IS SORTED BY TIME
-* this should be dealt with when adding new topics
-*/
-function getTopicById(targetKey, topicList) {
-    for(var i = 0; i < topicList.length; i++){
-        if(topicList[i].id == targetKey){
-            return topicList[i];
-        }
-    }
-}
-
 function updateCurrentTopicOnTime(seconds, topicList){
     if(topicList.length==0) return []
     var setTrue = false;
@@ -49,26 +26,6 @@ function updateCurrentTopicOnTime(seconds, topicList){
         }
     }
     if(!setTrue) topicList[i-1].isCurrentTopic=true;
-    return topicList;
-}
-
-function updateTopicNameById(id, newName) {
-    for (var i = 0; i < topicList.length; i++) {
-        if (topicList[i].id == id) {
-            topicList[i].name = newName;
-            return topicList;
-        }
-    }
-    return topicList;
-}
-
-function removeTopic(targetKey, topicList) {
-    for(var i = 0; i < topicList.length; i++){
-        if(topicList[i].id == targetKey){
-            break
-        }
-    }
-    topicList.splice(i, 1)
     return topicList;
 }
 
@@ -191,7 +148,12 @@ export default class EditVideoPlayer extends Component {
         request.post(`/v/${this.state.videoUUID}/updatetopics`, {
             data: payload,
             success: (data) => {
-                if (!data.status) {
+                if (data.status) {
+                    var topicList = this.state.topicObjList
+                    for (var i = 0; i < topicList.length; i++) {
+                        topicList[i].committed = true;
+                    }
+                } else {
                     console.log('error');
                 }
             }
@@ -208,6 +170,16 @@ export default class EditVideoPlayer extends Component {
     addNewTopic(name, topicTime) {
         this.state.Player.pause();
 
+        var topicList = this.state.topicObjList.filter((topic) => {
+            if (topic.name.length == 0) {
+                if (topic.committed) {
+                    this.removedTopics.push(topic)
+                }
+                return false
+            }
+            return true;
+        })
+
         var time;
 
         if (topicTime == null)
@@ -222,7 +194,7 @@ export default class EditVideoPlayer extends Component {
             time_clean: styleDuration(time),
             isCurrentTopic: true,
         };
-        const newTopicList = [...this.state.topicObjList, newTopic];
+        const newTopicList = [...topicList, newTopic];
         this.sortTopicListByTime(newTopicList);
         this.setState({
             topicObjList: newTopicList,
@@ -236,7 +208,7 @@ export default class EditVideoPlayer extends Component {
             if (topic.real_id !== id && topic.id !== id) {
                 return true;
             }
-            if (!topic.hasOwnProperty('committed')) { /* only add real topic to delete list */
+            if (topic.committed) { /* only add real topic to delete list */
                 this.removedTopics.push(topic);
             }
             return false;
@@ -281,12 +253,6 @@ export default class EditVideoPlayer extends Component {
     }
 
     handleTopicClick(targetKey, time) {
-        //First, set the new currentTopic
-        this.setState({
-            //topicObjList:updateCurrentTopicOnKey(targetKey, this.state.topicObjList)
-        })
-        console.log('the current on topic is supposed to update');
-        //Second, Make API call to update video state
         this.state.Player.seekTo(time);
     }
 
