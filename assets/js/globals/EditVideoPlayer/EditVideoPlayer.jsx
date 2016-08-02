@@ -76,14 +76,11 @@ export default class EditVideoPlayer extends Component {
             isPlaying: true,
             currentTime: "0:00",
             currentSecond: 0,
-            percentDone: 0
-        })
-        window.onresize=this.setWindowSize;
-        //updates time and playing
-        this.setState({
-            pollInterval: setInterval(this.updateCurrentState, pollInterval)
+            percentDone: 0,
+            pollInterval: setInterval(this.updateCurrentState, pollInterval),
         });
-        $(window).on("unload", this.syncTopics);
+        $(window).on('unload', this.syncTopics);
+        $(window).on('resize', this.setWindowSize);
     }
 
     componentWillMount() {
@@ -93,6 +90,8 @@ export default class EditVideoPlayer extends Component {
 
     componentWillUnmount() {
         clearInterval(this.state.pollInterval);
+        $(window).off('unload');
+        $(window).off('resize');
     }
 
     componentWillReceiveProps(nextProps) {
@@ -135,7 +134,9 @@ export default class EditVideoPlayer extends Component {
                 break;
             }
         }
-        this.setState({topicObjList: topicList});
+        this.setState({
+            topicObjList: topicList
+        });
         this.props.setAnnotationsToSave();
     }
 
@@ -144,7 +145,7 @@ export default class EditVideoPlayer extends Component {
         const payload = {
             topics: JSON.stringify(this.state.topicObjList),
             removed_topics: JSON.stringify(this.removedTopics),
-        }
+        };
         request.post(`/v/${this.state.videoUUID}/updatetopics`, {
             data: payload,
             success: (data) => {
@@ -220,31 +221,23 @@ export default class EditVideoPlayer extends Component {
         this.props.setAnnotationsToSave();
     }
 
-    updateCurrentState(){
-        //set time
-        var seconds = Math.round(this.state.Player.getCurrentTime())
-        this.setState({currentTime:styleTime(seconds)})
-        this.setState({currentSecond:seconds})
-        var percentDone = (seconds / this.state.Player.getDuration())*100
-        this.setState({percentDone:percentDone})
-        
+    updateCurrentState() {
+        const seconds = Math.round(this.state.Player.getCurrentTime());
+        const percentDone = (seconds / this.state.Player.getDuration()) * 100;
         this.setState({
-            topicObjList:updateCurrentTopicOnTime(seconds, this.state.topicObjList)
-        })
-        //set isplaying
-        var playing = !this.state.Player.paused();
-        this.setState({
-            isPlaying: playing,
+            currentTime: styleTime(seconds),
+            currentSecond: seconds,
+            percentDone: percentDone,
+            topicObjList: updateCurrentTopicOnTime(seconds, this.state.topicObjList),
+            isPlaying: !this.state.Player.paused(),
         });
         this.setWindowSize();
     }
 
     setWindowSize() {
         this.setState({
-            videoDivHeight: $(".videoDiv").height()
-        });
-        this.setState({
-            videoDivWidth: $(".videoDiv").width()
+            videoDivHeight: $(".videoDiv").height(),
+            videoDivWidth: $(".videoDiv").width(),
         });
     }
 
