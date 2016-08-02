@@ -107,7 +107,7 @@ export default class SeriesVideoList extends Component {
                     <Button onClick = {this.saveReordering}>Save</Button>
                     <Button onClick = {this.toggleReordering}>Cancel</Button>
                 </div>
-            var videoList = <SortableList data = {{items: videoPanels}} parent = {this}/>
+            var videoList = <SortableList data = {{items: videoPanels}}/>
         }
         return (
             <div className="seriesVideoList">

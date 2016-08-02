@@ -6,6 +6,7 @@ import { Link, browserHistory } from 'react-router'
 import Button from 'react-bootstrap/lib/Button';
 
 import ConfirmModal from 'js/globals/ConfirmModal';
+import EditSeriesModal from 'js/globals/EditSeriesModal';
 import { pluralize } from 'js/globals/utility';
 
 import auth from 'auth';
@@ -202,6 +203,7 @@ export default class SeriesMainArea extends Component {
                         <div className="description">
                             {this.props.description}
                         </div>
+                        <EditSeriesModal seriesUUID = {this.props.seriesUUID} name = {this.props.name} description = {this.props.description}/>
                         <div className="stats">
                             <div className="creator">
                                 <Link to={`/userprofile/${this.props.creator.user_id}`}>{this.props.creator.name}</Link>
