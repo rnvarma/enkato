@@ -182,7 +182,6 @@ class DeleteQuizOption(View):
 
 class ChangePrivacy(APIView):
     def post(self, request):
-        print("========================================")
         videoUUID = request.POST.get('videoUUID')
         is_private = request.POST.get('is_private')
 
@@ -192,7 +191,6 @@ class ChangePrivacy(APIView):
             is_private = False
 
         video = Video.objects.get(uuid=videoUUID)
-        print(is_private)
         video.is_private = is_private
 
         video.save()

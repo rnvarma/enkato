@@ -10,11 +10,10 @@ import ScrollArea from 'react-scrollbar';
 
 import { Row, Form, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
 
+import request from 'js/globals/HttpRequest';
 import SingleQuizForm from 'js/globals/QuizAddingForm/SingleQuizForm';
 import QuizFormsList from 'js/globals/QuizAddingForm/QuizFormsList';
 import ScrollButtonList from 'js/globals/QuizAddingForm/ScrollButtonList';
-
-
 
 /*
  * takes in a JSON object with questions
@@ -29,37 +28,19 @@ function listify(dict){
 
 module.exports = React.createClass({
     loadDataFromServer: function(vuuid){
-        $.ajax({
-          url: `/1/quizdata/${vuuid}`,
-          dataType: 'json',
-          cache: false,
-          success: function(data) {
-            this.setState(data)
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
+        request.get(`/1/quizdata/${vuuid}`, {
+            success: (data) => {
+                this.setState(data)
+            }
+        })
     },
     saveDataToServer: function(){
         var data = {
             'questions': JSON.stringify(this.state.questions)
         };
-        $.ajax({
-          url: "/v/" + this.state.uuid + "/updatequiz",
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
+        request.post(`/v/${this.state.uuid}/updatequiz`, {
+            data: data,
+        })
     },
     setChoiceList: function(choiceList, questionNumber){
         var tempQuestionList = this.state.questions;
@@ -90,7 +71,7 @@ module.exports = React.createClass({
     componentDidMount: function(){
         this.setState({uuid: this.props.videoUUID});
         this.loadDataFromServer(this.props.videoUUID);
-        $(window).unload(this.saveDataToServer)
+        $(window).on('unload', this.saveDataToServer)
     },
     componentWillUnmount: function() {
         this.saveDataToServer();
@@ -120,37 +101,27 @@ module.exports = React.createClass({
         var data = {
             qid: qid
         };
-        $.ajax({
-          url: "/v/" + this.state.uuid + "/addquizoption",
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            if (data.status) {
-                var questions = this.state.questions;
-                for (var i = 0; i < questions.length; i++) {
-                    if (questions[i].id == qid) {
-                      if (questions[i].choiceList.length === 0) {
-                        data.new_choice.is_correct = true;
-                        data.new_choice.focus = false;
-                      }
-                        questions[i].choiceList.push(data.new_choice);
-                        break;
+        request.post(`/v/${this.state.uuid}/addquizoption`, {
+            data: data,
+            success: (data) => {
+                if (data.status) {
+                    var questions = this.state.questions;
+                    for (var i = 0; i < questions.length; i++) {
+                        if (questions[i].id == qid) {
+                          if (questions[i].choiceList.length === 0) {
+                            data.new_choice.is_correct = true;
+                            data.new_choice.focus = false;
+                          }
+                            questions[i].choiceList.push(data.new_choice);
+                            break;
+                        }
                     }
+                    this.setState({questions: questions})
+                } else {
+                    console.log("Internal Server Error: Adding Quiz Option Failed")
                 }
-                this.setState({questions: questions})
-            } else {
-                console.log("Internal Server Error: Adding Quiz Option Failed")
             }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
+        })
     },
   validateDeleteChoice(questionIndex, choiceIndex) {
     return (choiceIndex > 0)||(this.state.questions[questionIndex].choiceList.length>1);
@@ -183,54 +154,34 @@ module.exports = React.createClass({
       qid: qid,
       cid: cid,
     };
-    $.ajax({
-      url: `/v/${this.state.uuid}/deletequizoption`,
-      dataType: 'json',
-      type: 'POST',
-      data: payload,
-      beforeSend: function (xhr) {
-        xhr.withCredentials = true;
-        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-      },
-      success: function (data) {
-        if (data.status) {
-          this.displayDeleteChoice(qIndex, cIndex);
-        } else {
-          console.log("Internal Server Error: Adding Quiz Option Failed")
+    request.post(`/v/${this.state.uuid}/deletequizoption`, {
+        data: payload,
+        success: (data) => {
+            if (data.status) {
+              this.displayDeleteChoice(qIndex, cIndex);
+            } else {
+              console.log("Internal Server Error: Adding Quiz Option Failed")
+            }
         }
-      }.bind(this),
-      error: function (xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-        }.bind(this)
-    });
+    })
   },
   addQuestion: function() {
         var data = this.state;
-        $.ajax({
-          url: "/v/" + this.state.uuid + "/addquizquestion",
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            if (data.status) {
-                var questions = this.state.questions;
-              data.new_question.focus = true;
-                questions.push(data.new_question);
-                this.setState({questions: questions});
-              this.addNewChoice(data.new_question.id); /* always have at least one choice */
-                this.scrollToFromButton(data.new_question.id, questions.length - 1)
-            } else {
-                console.log("Internal Server Error: Adding Quiz Question Failed")
+        request.post(`/v/${this.state.uuid}/addquizquestion`, {
+            data: data,
+            success: (data) => {
+                if (data.status) {
+                    var questions = this.state.questions;
+                  data.new_question.focus = true;
+                    questions.push(data.new_question);
+                    this.setState({questions: questions});
+                  this.addNewChoice(data.new_question.id); /* always have at least one choice */
+                    this.scrollToFromButton(data.new_question.id, questions.length - 1)
+                } else {
+                    console.log("Internal Server Error: Adding Quiz Question Failed")
+                }
             }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
+        })
     },
     makeChoiceIsCorrect: function(cid, qIndex) {
         var tempQuestionList = this.state.questions;
@@ -247,32 +198,22 @@ module.exports = React.createClass({
         var data = {
             qid: qid
         };
-        $.ajax({
-          url: "/v/" + this.state.uuid + "/deletequizquestion",
-          dataType: 'json',
-          type: 'POST',
-          data: data,
-          beforeSend: function (xhr) {
-            xhr.withCredentials = true;
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          },
-          success: function(data) {
-            if (data.status) {
-                var questions = this.state.questions;
-                questions.splice(qIndex, 1);
-                this.setState({questions: questions});
-                if (qIndex > 0) {
-                    var newQuestionID = questions[qIndex - 1].id;
-                    this.scrollToFromButton(newQuestionID, qIndex - 1)
+        request.post(`/v/${this.state.uuid}/deletequizquestion`, {
+            data: data,
+            success: (data) => {
+                if (data.status) {
+                    var questions = this.state.questions;
+                    questions.splice(qIndex, 1);
+                    this.setState({questions: questions});
+                    if (qIndex > 0) {
+                        var newQuestionID = questions[qIndex - 1].id;
+                        this.scrollToFromButton(newQuestionID, qIndex - 1)
+                    }
+                } else {
+                    console.log("Internal Server Error: Deleting Quiz Question Failed")
                 }
-            } else {
-                console.log("Internal Server Error: Deleting Quiz Question Failed")
             }
-          }.bind(this),
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
+        })
     },
     render: function() {
         let height = $('.quizAddingForm').height() - 10;

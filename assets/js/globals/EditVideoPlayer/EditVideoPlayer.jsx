@@ -196,7 +196,7 @@ export default class EditVideoPlayer extends Component {
             time_clean: styleDuration(time),
             isCurrentTopic: true,
         };
-        const newTopicList = [...this.state.topicObjList, newTopic];
+        const newTopicList = [...topicList, newTopic];
         this.sortTopicListByTime(newTopicList);
         this.setState({
             topicObjList: newTopicList,
@@ -269,7 +269,6 @@ export default class EditVideoPlayer extends Component {
 
     render() {
         if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
-
         return (
                 <div className="ynVideoPlayer">
                     <ConfirmModal
