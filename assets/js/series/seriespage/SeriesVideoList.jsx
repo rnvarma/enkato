@@ -65,7 +65,7 @@ export default class SeriesVideoList extends Component {
             var oldIndex = parseInt($(this).find(".order").text()) - 1;
             order[oldIndex] = index;
         });
-        request.patch('/1/series/${this.props.seriesUUID}', {
+        request.patch(`/1/series/${this.props.seriesUUID}`, {
             data: {order: order},
             success: (data) => {
 
