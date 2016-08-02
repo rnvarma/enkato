@@ -53,9 +53,9 @@ export default class SeriesMainArea extends Component {
             <img src={DjangoImageLinkHandler("blank_thumbnail.png")} className="image"/>
         )
         if (this.props.thumbnails) {
-            img_src = this.props.thumbnails.map((img) => {
+            img_src = this.props.thumbnails.map((img, index) => {
                 return (
-                    <img src={img} key={img} className="image"/>
+                    <img key={index} src={img} className="image"/>
                 )
             })
         }

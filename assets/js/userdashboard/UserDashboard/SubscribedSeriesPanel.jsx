@@ -15,41 +15,17 @@ import { pluralize } from 'js/globals/utility';
 
 class SubscribedSeriesPanel extends Component {
     render() {
-        let katoGreen = '#79B546';
+        const katoGreen = '#79B546';
 
-        const { series } = this.props;
-        console.log(series)
+        const series = this.props.series;
+
         const videoData = series.user_data[0];
 
         const totalTime = series.total_time;
 
-        const percentMastery = Math.round(videoData.analysis.completed / series.video_count * 100);
-        const percentCompleted = Math.round(videoData.analysis.watched / series.video_count * 100);
-
         const numVideos = series.video_count;
 
         const numVideosString = numVideos + pluralize(' video', numVideos);
-
-        const continueVideo = videoData.videos_data[videoData.analysis.continue_video].video;
-        const nextVideoData = {
-            uuid: continueVideo.uuid,
-            num_quiz_questions: continueVideo.question_counter,
-            thumbnail: continueVideo.thumbnail,
-            name: continueVideo.name,
-            num_views: continueVideo.num_views,
-        };
-        const nextVideo = (
-            <div className="nextVideoBtn">
-                <div className="text">
-                    Up Next
-                </div>
-                <div className="link">
-                    <Link to={`/s/${this.props.series.uuid}/watch#${continueVideo.uuid}`}>
-                        {continueVideo.name}
-                    </Link>
-                </div>
-            </div>
-        )
 
         var thumbnails = series.thumbnails.map(function(s) {
             return (
@@ -64,6 +40,51 @@ class SubscribedSeriesPanel extends Component {
                 <img src={DjangoImageLinkHandler("blank_thumbnail.png")} className="image" />
             )
         }
+
+
+
+        let percentMastery = 0;
+        let percentCompleted = 0;
+        let continueVideo = null;
+        let nextVideo = "";
+
+        if(videoData){
+            percentMastery = Math.round(videoData.analysis.completed / series.video_count * 100);
+            percentCompleted = Math.round(videoData.analysis.watched / series.video_count * 100);
+
+            continueVideo = videoData.videos_data[videoData.analysis.continue_video].video;
+
+            const nextVideoData = {
+                uuid: continueVideo.uuid,
+                num_quiz_questions: continueVideo.question_counter,
+                thumbnail: continueVideo.thumbnail,
+                name: continueVideo.name,
+                num_views: continueVideo.num_views,
+            };
+            nextVideo = (
+                <div className="nextVideoBtn">
+                    <div className="text">
+                        Up Next
+                    </div>
+                    <div className="link">
+                        <Link to={`/s/${this.props.series.uuid}/watch#${continueVideo.uuid}`}>
+                            {continueVideo.name}
+                        </Link>
+                    </div>
+                </div>
+            )
+        } else {
+            nextVideo = <div></div>
+        }
+
+        
+
+
+
+
+
+
+
         return (
             <Row className="subscribedSeriesPanelRow">
                 <div className="subscribedSeriesPanel">

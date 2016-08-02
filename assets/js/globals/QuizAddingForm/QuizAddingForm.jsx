@@ -123,8 +123,8 @@ module.exports = React.createClass({
             }
         })
     },
-  validateDeleteChoice(choiceIndex) {
-      return choiceIndex > 0; /* anything that isn't the first one can be deleted */
+  validateDeleteChoice(questionIndex, choiceIndex) {
+    return (choiceIndex > 0)||(this.state.questions[questionIndex].choiceList.length>1);
   },
   displayDeleteChoice(questionIndex, choiceIndex) {
     const questions = $.extend(true, {}, this.state.questions);
@@ -132,23 +132,23 @@ module.exports = React.createClass({
     const correctRemoved = choices[choiceIndex].is_correct;
 
 
-    if (choiceIndex > 0) {
-      choices.splice(choiceIndex, 1);
-      let newFocus; /* new choice to focus on */
-      if (choiceIndex < choices.length) { /* not last elem */
-        newFocus = choices[choiceIndex];
-      } else {
-        newFocus = choices[choiceIndex - 1];
-      }
-      newFocus.focus = true;
-      if (correctRemoved) {
-        newFocus.is_correct = true;
-      }
+    // if (choiceIndex > 0) {
+    choices.splice(choiceIndex, 1);
+    let newFocus; /* new choice to focus on */
+    if (choiceIndex < choices.length) { /* not last elem */
+      newFocus = choices[choiceIndex];
+    } else {
+      newFocus = choices[choiceIndex - 1];
     }
+    newFocus.focus = true;
+    if (correctRemoved) {
+      newFocus.is_correct = true;
+    }
+    // }
     this.setState({ questions: listify(questions,this.state.numQuestions) });
   },
   deleteChoice: function(qid, cid, qIndex, cIndex) {
-    if (!this.validateDeleteChoice(cIndex)) return;
+    if (!this.validateDeleteChoice(qIndex,cIndex)) return;
 
     const payload = {
       qid: qid,
