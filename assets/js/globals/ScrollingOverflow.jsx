@@ -32,7 +32,11 @@ export default class TopicNode extends React.Component {
 
     componentDidMount() {
         this.getDimensions()
-        $(window).resize(this.getDimensions)
+        $(window).on('resize', this.getDimensions)
+    }
+
+    componentWillUnmount() {
+        $(window).off('resize')
     }
 
     onHoverOn() {

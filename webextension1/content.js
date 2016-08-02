@@ -22,7 +22,7 @@ function showMainMessage(message, uuid) {
   mainButton.style.fontFamily= "'Helvetica Neue', Helvetica, Arial, sans-serif";*/
 
   image.onclick = function(){
-    window.open("http://127.0.0.1:8000/v/" + uuid);
+    window.open("http://www.enkato.com/v/" + uuid);
   } 
 }
 
@@ -46,7 +46,7 @@ function showSideMessage(message, vidNum, uuid){
   sideButton.style.fontFamily = "Helvetica Neue, Helvetica, Arial, sans-serif";*/
 
   $(image).click(function(){
-    window.open("http://127.0.0.1:8000/v/" + uuid);
+    window.open("http://www.enkato.com/v/" + uuid);
     return false;
   });
 }
@@ -62,7 +62,7 @@ function showSearchMessage(vidNum, uuid){
   image.style.cursor = "pointer";  
 
   $(image).click(function(){
-    window.open("http://127.0.0.1:8000/v/" + uuid);
+    window.open("http://www.enkato.com/v/" + uuid);
     return false;
   });
 }
@@ -113,7 +113,7 @@ function getYTID(url){
 
 function findInDatabase(vid_id, vid_num, callback) {
   $.ajax({
-          url: "http://www.enkato.com/1/s/i7YoL5GbvinzWS5qTerdYG/2/v/" + vid_id,
+          url: "http://www.enkato.com/2/v/" + vid_id,
           dataType: 'json',
           cache: false,
           success: function(data) {

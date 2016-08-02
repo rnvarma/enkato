@@ -135,6 +135,7 @@ class Serializer(object):
         data["id"] = topic.uuid
         data['real_id'] = topic.id
         data["isCurrentTopic"] = False  # used in frontend
+        data["committed"] = True;
         return data
 
     @staticmethod
@@ -239,16 +240,21 @@ class SeriesVideoData(APIView):
     def get(self, request, v_id):
         try:
             video = Video.objects.filter(vid_id = v_id).first()
-            videoData = Serializer.serialize_video(video)
-            series = Series.objects.filter(creator= video.creator)
-            response = {}
-            response['inSeries'] = True
-            seriesData = {}
-            for serie in series:
-                seriesData[serie.uuid] = Serializer.serialize_series_videos(serie)
-            seriesData = findSeriesVideoData(seriesData, v_id)
-            response["seriesData"]=seriesData
-            return Response(response)
+            if(video != None):
+                videoData = Serializer.serialize_video(video)
+                series = Series.objects.filter(creator= video.creator)
+                response = {}
+                response['inSeries'] = True
+                seriesData = {}
+                for serie in series:
+                    seriesData[serie.uuid] = Serializer.serialize_series_videos(serie)
+                seriesVideoData = findSeriesVideoData(seriesData, v_id)
+                response["seriesVideoData"]=seriesVideoData
+                return Response(response)
+            else:
+                return Response({
+                    'inSeries': False
+                })
         except Series.DoesNotExist:
             return Response({
                 'inSeries': False

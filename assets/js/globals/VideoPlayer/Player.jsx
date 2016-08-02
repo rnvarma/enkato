@@ -11,44 +11,40 @@ module.exports = function (videoId, onPlayerStateChange, onPlayerReady) {
     this.onPlayerReady = onPlayerReady;
 
     this.init = function(videoId) {
-        var this2 = this
-        var loadPlayer = function(YT) {
-            this2.player = new YT.Player('player', {
+        const loadPlayer = (YT) => {
+            this.player = new YT.Player('player', {
                 height: '100%',
                 width: '100%',
                 videoId: videoId,
-                playerVars: { 
-                    'rel': 0, 
-                    'autoplay': 1, 
+                playerVars: {
+                    'rel': 0,
+                    'autoplay': 1,
                     'controls': 0,
                     'fs': 0,
                     'iv_load_policy': 3,
                     'modestbranding': 1,
-                    'showinfo': 0
+                    'showinfo': 0,
                 },
                 events: {
-                    'onReady': this2.onPlayerReady,
-                    'onStateChange': this2.onPlayerStateChange
-                }
+                    'onReady': this.onPlayerReady,
+                    'onStateChange': this.onPlayerStateChange,
+                },
             });
-        }
-        YouTubeIframeLoader.load(loadPlayer)
-    }
-    this.init(this.videoId)
-    console.log("player initialized"); 
+        };
+        YouTubeIframeLoader.load(loadPlayer);
+    };
+    this.init(this.videoId);
 
     this.destroy = function() {
         if (!this.player) return;
         this.player.destroy();
-    }
+    };
 
     /*
     *Plays Video
     */
     this.play = function(){
-        console.log("im playing")
         if (!this.player) return;
-        console.log("im playing2")
         return this.player.playVideo();
     }
 
@@ -81,17 +77,14 @@ module.exports = function (videoId, onPlayerStateChange, onPlayerReady) {
     *
     * Param: int seconds
     */
-    this.seekTo = function(seconds){
-        console.log(this.player);
-        console.log(seconds);
-        if (!this.player){
-            console.log("player is not seeking");
+    this.seekTo = function(seconds) {
+        if (!this.player) {
             return;
-        } 
-        if (seconds == Math.floor(this.player.getDuration())) {
-            seconds -= 0.5; /* YouTube bug, seeking to getDuration() floor doesn't work */
         }
-        console.log(seconds)
+        if (seconds === Math.floor(this.player.getDuration())) {
+            seconds -= 0.5;
+            /* YouTube bug, seeking to getDuration() floor doesn't work */
+        }
         return this.player.seekTo(seconds);
     }
 
@@ -176,7 +169,9 @@ module.exports = function (videoId, onPlayerStateChange, onPlayerReady) {
     }
 
     this.ended = function() {
-        if (!this.player) return;
-        return this.player.getPlayerState() == 0
+        if (this.player && this.player.getPlayerState) {
+            return (this.player.getPlayerState() === 0);
+        }
+        return;
     }
 }

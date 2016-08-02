@@ -22,11 +22,11 @@ module.exports = React.createClass({
             this.props.deleteChoice(this.props.choice.id, this.props.index)
     },
     onKeyDown: function(e) {
-        if (e.keyCode == 8 && !this.props.choice.text && this.props.index > 0) {
+        if (e.keyCode == 8 && !this.props.choice.text) {
             e.preventDefault()
             this.props.deleteChoice(this.props.choice.id, this.props.index)
         }
-    },
+    }, 
     onChoiceSelected: function() {
         this.props.makeChoiceIsCorrect(this.props.choice.id);
     },

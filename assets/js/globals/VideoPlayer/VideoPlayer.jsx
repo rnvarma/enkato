@@ -126,16 +126,16 @@ export default class VideoPlayer extends Component {
         this.setState({
             isPlaying: false,
             currentTime: "0:00",
-            percentDone: 0
+            percentDone: 0,
+            pollInterval: setInterval(this.updateCurrentState, pollInterval),
         })
-        window.onresize=this.setWindowSize;
         this.loadDataFromServer(this.props.videoUUID);
 
+        $(window).on('resize', this.setWindowSize);
+    }
 
-        //updates time and playing
-        this.setState({
-            pollInterval: setInterval(this.updateCurrentState, pollInterval)
-        });
+    componentWillUnmount() {
+        $(window).off('resize');
     }
 
     loadDataFromServer(v_id){
@@ -152,15 +152,6 @@ export default class VideoPlayer extends Component {
                 /* an optional prop */
                 if (this.props.setTopicList) {
                   this.props.setTopicList(data.topicList);
-                }
-
-                console.log(this.props);
-                if(this.props.loadQuiz){
-                    console.log(this.props.loadQuiz());
-                    if(this.props.loadQuiz() == "true"){
-                        console.log("loadQuiz is true");
-                        this.showQuiz();
-                    }
                 }
 
                 this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
@@ -239,17 +230,24 @@ export default class VideoPlayer extends Component {
     onPlayerReady(event){
         if (this.props.setStartTime() != null){
             this.state.currentTime = Number(this.props.setStartTime());
+            var startTime = this.state.currentTime;
+            var startSeconds;
+            if(typeof startTime == "string"){
+                startSeconds = timeToSeconds(startTime);
+            }
+            else{
+                startSeconds= startTime;
+            }
+            event.target.seekTo(startSeconds);
+            event.target.playVideo();
         }
-        var startTime = this.state.currentTime;
-        var startSeconds;
-        if(typeof startTime == "string"){
-            startSeconds = timeToSeconds(startTime);
+        if(this.props.loadQuiz){
+            console.log(this.props.loadQuiz());
+            if(this.props.loadQuiz() == "true"){
+                this.showQuiz();
+                event.target.pauseVideo();
+            }
         }
-        else{
-            startSeconds= startTime;
-        }
-        event.target.seekTo(startSeconds);
-        event.target.playVideo();
     }
 
     loadQuizData(v_id){
@@ -330,12 +328,10 @@ export default class VideoPlayer extends Component {
         this.state.Player.play()
     }
 
-    setWindowSize(){
+    setWindowSize() {
         this.setState({
-            videoDivHeight: $(".videoDiv").height()
-        });
-        this.setState({
-            videoDivWidth: $(".videoDiv").width()
+            videoDivHeight: $(".videoDiv").height(),
+            videoDivWidth: $(".videoDiv").width(),
         });
     }
 

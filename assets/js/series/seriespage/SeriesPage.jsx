@@ -44,6 +44,7 @@ class SeriesPage extends Component {
             is_subscribed: false,
             is_private: true,
             hide_series: false,
+            thumbnails: [],
         };
 
         this.loadPageData = this.loadPageData.bind(this);

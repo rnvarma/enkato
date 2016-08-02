@@ -49,7 +49,16 @@ export default class SeriesMainArea extends Component {
         })
     }
     render() {
-        const img_src = this.props.image || DjangoImageLinkHandler('blank_thumbnail.png')
+        var img_src = (
+            <img src={DjangoImageLinkHandler("blank_thumbnail.png")} className="image"/>
+        )
+        if (this.props.thumbnails) {
+            img_src = this.props.thumbnails.map((img, index) => {
+                return (
+                    <img key={index} src={img} className="image"/>
+                )
+            })
+        }
         var noVideos=false; 
 
         var privacyButton = <div></div>
@@ -184,7 +193,7 @@ export default class SeriesMainArea extends Component {
                     cancelCallback = {this.toggleDelete}/>
                 <div className="header">
                     <div className="picture-area">
-                        <img src={img_src} className="picture"/>
+                        {img_src}
                     </div>
                     <div className="metadata-area">
                         <div className="name">

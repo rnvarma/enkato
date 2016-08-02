@@ -9,8 +9,7 @@ export default class TakeQuizButton extends Component {
         return (
             <div
                 className="takeQuizButton"
-                onClick={this.props.showQuiz}
-            >
+                onClick={this.props.showQuiz}>
                 <FontAwesome
                     className="checkIcon"
                     name='check-square-o'/>

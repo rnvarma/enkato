@@ -79,12 +79,12 @@ export default class SeriesVideoList extends Component {
     }
 
     render() {
-        var videoPanels = this.props.videos.map(function(v, i) {
+        const videoPanels = this.props.videos.map(function(v, index) {
             return (
                 <SeriesVideoPanel
-                    key={v.order}
-                    order = {i}
-                    reordering = {this.state.reordering}
+                    key={index}
+                    order={index}
+                    reordering={this.state.reordering}
                     video={v}
                     seriesUUID={this.props.seriesUUID}
                     is_creator={this.props.is_creator}

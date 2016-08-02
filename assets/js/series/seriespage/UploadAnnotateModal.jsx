@@ -93,6 +93,9 @@ export default class UploadAnnotateModal extends Component {
     }
 
     onNext() {
+        if (this.props.quizMode) {
+            this.props.close();
+        }
         if (this.props.annotateMode) {
             this.setState({
                 publishAnnotations: true,
@@ -153,7 +156,6 @@ export default class UploadAnnotateModal extends Component {
     }
 
     onQuizMode() {
-        console.log('lol');
         if (this.state.annotationsToSave) {
             this.setLaunchKeeper(this.props.setQuizMode);
         } else {
@@ -180,16 +182,24 @@ export default class UploadAnnotateModal extends Component {
                     publishAnnotations={this.state.publishAnnotations}
                     showingAnnotationSave={this.state.showingAnnotationSave}
                     onConfirmQuit={this.state.onConfirmQuit}
-                    closeAnnotationsModal={this.props.close}
-                />
+                    closeAnnotationsModal={this.props.close}/>
             ),
           }
           nextText = "Save and Publish";
-          toggleBtns = (<div className="toggleMode"><Button
-                            className={"toggleAnnotating topics" + (this.props.quizMode ? "" : " active")}
-                            onClick={this.props.setTopicMode}>Topics</Button>
-          <Button className={"toggleAnnotating quizzes" + (this.props.quizMode ? " active" : "")}
-                  onClick={this.onQuizMode}>Quizzing</Button></div>);
+          toggleBtns = (
+                <div className="toggleMode">
+                    <Button
+                        className={"toggleAnnotating topics" + (this.props.quizMode ? "" : " active")}
+                        onClick={this.props.setTopicMode}>
+                        Topics
+                    </Button>
+                    <Button
+                        className={"toggleAnnotating quizzes" + (this.props.quizMode ? " active" : "")}
+                        onClick={this.onQuizMode}>
+                        Quizzing
+                    </Button>
+                </div>
+            );
         } else {
           modalInfo = {
             title: "Import Video(s)",
