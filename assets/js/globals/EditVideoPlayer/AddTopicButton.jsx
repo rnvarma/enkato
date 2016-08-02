@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 export default class AddTopicButton extends Component {
     constructor() {
         super()
-
         this.onClick = this.onClick.bind(this);
     }
 

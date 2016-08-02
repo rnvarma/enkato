@@ -135,6 +135,7 @@ class Serializer(object):
         data["id"] = topic.uuid
         data['real_id'] = topic.id
         data["isCurrentTopic"] = False  # used in frontend
+        data["committed"] = True;
         return data
 
     @staticmethod

@@ -14,29 +14,6 @@ import EditControlBar from 'js/globals/EditVideoPlayer/EditControlBar';
 
 const pollInterval = 100;
 
-function updateCurrentTopicOnKey(targetKey, topicList){
-    for(var i=0; i<topicList.length; i++){
-        if(topicList[i].id == targetKey){
-            topicList[i].isCurrentTopic = true;
-        } else {
-            topicList[i].isCurrentTopic = false;
-        }
-    }
-    return topicList;
-}
-
-/*
-* ASSUMES LIST IS SORTED BY TIME
-* this should be dealt with when adding new topics
-*/
-function getTopicById(targetKey, topicList) {
-    for(var i = 0; i < topicList.length; i++){
-        if(topicList[i].id == targetKey){
-            return topicList[i];
-        }
-    }
-}
-
 function updateCurrentTopicOnTime(seconds, topicList){
     if(topicList.length==0) return []
     var setTrue = false;
@@ -49,26 +26,6 @@ function updateCurrentTopicOnTime(seconds, topicList){
         }
     }
     if(!setTrue) topicList[i-1].isCurrentTopic=true;
-    return topicList;
-}
-
-function updateTopicNameById(id, newName) {
-    for (var i = 0; i < topicList.length; i++) {
-        if (topicList[i].id == id) {
-            topicList[i].name = newName;
-            return topicList;
-        }
-    }
-    return topicList;
-}
-
-function removeTopic(targetKey, topicList) {
-    for(var i = 0; i < topicList.length; i++){
-        if(topicList[i].id == targetKey){
-            break
-        }
-    }
-    topicList.splice(i, 1)
     return topicList;
 }
 
@@ -119,14 +76,11 @@ export default class EditVideoPlayer extends Component {
             isPlaying: true,
             currentTime: "0:00",
             currentSecond: 0,
-            percentDone: 0
-        })
-        window.onresize=this.setWindowSize;
-        //updates time and playing
-        this.setState({
-            pollInterval: setInterval(this.updateCurrentState, pollInterval)
+            percentDone: 0,
+            pollInterval: setInterval(this.updateCurrentState, pollInterval),
         });
-        $(window).on("unload", this.syncTopics);
+        $(window).on('unload', this.syncTopics);
+        $(window).on('resize', this.setWindowSize);
     }
 
     componentWillMount() {
@@ -136,6 +90,8 @@ export default class EditVideoPlayer extends Component {
 
     componentWillUnmount() {
         clearInterval(this.state.pollInterval);
+        $(window).off('unload');
+        $(window).off('resize');
     }
 
     componentWillReceiveProps(nextProps) {
@@ -178,7 +134,9 @@ export default class EditVideoPlayer extends Component {
                 break;
             }
         }
-        this.setState({topicObjList: topicList});
+        this.setState({
+            topicObjList: topicList
+        });
         this.props.setAnnotationsToSave();
     }
 
@@ -187,11 +145,16 @@ export default class EditVideoPlayer extends Component {
         const payload = {
             topics: JSON.stringify(this.state.topicObjList),
             removed_topics: JSON.stringify(this.removedTopics),
-        }
+        };
         request.post(`/v/${this.state.videoUUID}/updatetopics`, {
             data: payload,
             success: (data) => {
-                if (!data.status) {
+                if (data.status) {
+                    var topicList = this.state.topicObjList
+                    for (var i = 0; i < topicList.length; i++) {
+                        topicList[i].committed = true;
+                    }
+                } else {
                     console.log('error');
                 }
             }
@@ -208,6 +171,16 @@ export default class EditVideoPlayer extends Component {
     addNewTopic(name = '', topicTime = null) {
         this.state.Player.pause();
 
+        var topicList = this.state.topicObjList.filter((topic) => {
+            if (topic.name.length == 0) {
+                if (topic.committed) {
+                    this.removedTopics.push(topic)
+                }
+                return false
+            }
+            return true;
+        })
+
         var time;
 
         if (topicTime == null)
@@ -223,7 +196,6 @@ export default class EditVideoPlayer extends Component {
             time_clean: styleDuration(time),
             isCurrentTopic: true,
         };
-        console.log("new topic", newTopic, name);
         const newTopicList = [...this.state.topicObjList, newTopic];
         this.sortTopicListByTime(newTopicList);
         this.setState({
@@ -238,7 +210,7 @@ export default class EditVideoPlayer extends Component {
             if (topic.real_id !== id && topic.id !== id) {
                 return true;
             }
-            if (!topic.hasOwnProperty('committed')) { /* only add real topic to delete list */
+            if (topic.committed) { /* only add real topic to delete list */
                 this.removedTopics.push(topic);
             }
             return false;
@@ -249,31 +221,23 @@ export default class EditVideoPlayer extends Component {
         this.props.setAnnotationsToSave();
     }
 
-    updateCurrentState(){
-        //set time
-        var seconds = Math.round(this.state.Player.getCurrentTime())
-        this.setState({currentTime:styleTime(seconds)})
-        this.setState({currentSecond:seconds})
-        var percentDone = (seconds / this.state.Player.getDuration())*100
-        this.setState({percentDone:percentDone})
-        
+    updateCurrentState() {
+        const seconds = Math.round(this.state.Player.getCurrentTime());
+        const percentDone = (seconds / this.state.Player.getDuration()) * 100;
         this.setState({
-            topicObjList:updateCurrentTopicOnTime(seconds, this.state.topicObjList)
-        })
-        //set isplaying
-        var playing = !this.state.Player.paused();
-        this.setState({
-            isPlaying: playing,
+            currentTime: styleTime(seconds),
+            currentSecond: seconds,
+            percentDone: percentDone,
+            topicObjList: updateCurrentTopicOnTime(seconds, this.state.topicObjList),
+            isPlaying: !this.state.Player.paused(),
         });
         this.setWindowSize();
     }
 
     setWindowSize() {
         this.setState({
-            videoDivHeight: $(".videoDiv").height()
-        });
-        this.setState({
-            videoDivWidth: $(".videoDiv").width()
+            videoDivHeight: $(".videoDiv").height(),
+            videoDivWidth: $(".videoDiv").width(),
         });
     }
 
@@ -283,12 +247,6 @@ export default class EditVideoPlayer extends Component {
     }
 
     handleTopicClick(targetKey, time) {
-        //First, set the new currentTopic
-        this.setState({
-            //topicObjList:updateCurrentTopicOnKey(targetKey, this.state.topicObjList)
-        })
-        console.log('the current on topic is supposed to update');
-        //Second, Make API call to update video state
         this.state.Player.seekTo(time);
     }
 
