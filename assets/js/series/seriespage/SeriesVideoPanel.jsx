@@ -15,6 +15,7 @@ export default class SeriesVideoPanel extends Component {
         super(props);
         this.state = {
             deleting: false,
+            order: props.order,
         };
 
         this.delete = this.delete.bind(this)
@@ -48,6 +49,7 @@ export default class SeriesVideoPanel extends Component {
 
     render() {
         var video = this.props.video;
+        var key = this.props.order;
         if (video.order == 0) {
             var rightClass = "right first";
         } else {
@@ -61,7 +63,8 @@ export default class SeriesVideoPanel extends Component {
                 privacyButton = (
                     <div className="annotate-box">
                         <Button 
-                            onClick={this.makePublic}>
+                            onClick={this.makePublic}
+                            disabled={this.props.reordering}>
                             Private
                         </Button>
                     </div>
@@ -71,7 +74,8 @@ export default class SeriesVideoPanel extends Component {
                     <div className="annotate-box">
                         <Button  
                             className="structabl-red"
-                            onClick={this.makePrivate}>
+                            onClick={this.makePrivate}
+                            disabled={this.props.reordering}>
                             Public
                         </Button>
                     </div>
@@ -79,7 +83,7 @@ export default class SeriesVideoPanel extends Component {
             }
             deleteButton = (
                 <div className = "annotate-box">
-                    <Button onClick = {this.toggleDelete}>
+                    <Button onClick = {this.toggleDelete} disabled={this.props.reordering}>
                         Delete
                     </Button>
                 </div>
@@ -99,7 +103,7 @@ export default class SeriesVideoPanel extends Component {
                 />
                 <div className="left">
                     <div className="order">
-                        {video.order+1}
+                        {key+1}
                     </div>
                     <div className="thumbnailArea">
                         <Link to={`/s/${this.props.seriesUUID}/watch#${video.uuid}`}>

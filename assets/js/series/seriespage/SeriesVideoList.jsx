@@ -1,8 +1,10 @@
 require('css/series/seriespage/SeriesVideoList.scss');
 
 import React, { Component } from 'react';
+import Button from 'react-bootstrap/lib/Button';
 import { Sortable } from 'react-sortable';
 
+import request from 'js/globals/HttpRequest'
 import SeriesVideoPanel from 'js/series/seriespage/SeriesVideoPanel';
 
 var ListItem = React.createClass({
@@ -50,13 +52,39 @@ var SortableList = React.createClass({
 export default class SeriesVideoList extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {reordering: false,};
+
+        this.saveReordering = this.saveReordering.bind(this);
+        this.toggleReordering = this.toggleReordering.bind(this);
+    }
+
+    saveReordering() {
+        var order = []
+        $(".seriesVideoPanel").each(function(index) {
+            var oldIndex = parseInt($(this).find(".order").text()) - 1;
+            order[oldIndex] = index;
+        });
+        request.patch('/1/series/${this.props.seriesUUID}', {
+            data: {order: order},
+            success: (data) => {
+
+            }
+        });
+        this.toggleReordering()
+    }
+
+    toggleReordering() {
+        this.setState({reordering: !this.state.reordering})
     }
 
     render() {
-        var videoPanels = this.props.videos.map(function(v) {
+        var videoPanels = this.props.videos.map(function(v, i) {
             return (
                 <SeriesVideoPanel
                     key={v.order}
+                    order = {i}
+                    reordering = {this.state.reordering}
                     video={v}
                     seriesUUID={this.props.seriesUUID}
                     is_creator={this.props.is_creator}
@@ -66,10 +94,24 @@ export default class SeriesVideoList extends Component {
                     loadPageData={this.props.loadPageData}/>
             );
         }.bind(this))
-        var testList = ["Yo", "what", "is", "up", "with", "it", "i", "am", "trying", "to", "get", "this", "to", "work", "cmon", "haha"]
-        var videoList = <SortableList data = {{items: videoPanels}}/>
+        if (!this.state.reordering) {
+            var buttons = 
+                <div>
+                    <Button onClick = {this.toggleReordering}>Reorder</Button>
+                </div>
+            var videoList = videoPanels
+        }
+        else {
+            var buttons = 
+                <div>
+                    <Button onClick = {this.saveReordering}>Save</Button>
+                    <Button onClick = {this.toggleReordering}>Cancel</Button>
+                </div>
+            var videoList = <SortableList data = {{items: videoPanels}} parent = {this}/>
+        }
         return (
             <div className="seriesVideoList">
+                {buttons}
                 {videoList}
             </div>
         );
