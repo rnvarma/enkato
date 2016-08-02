@@ -17,51 +17,51 @@ import QuestionList from 'js/globals/QuestionAndAnswer/QuestionList';
 import QuestionDisplay from 'js/globals/QuestionAndAnswer/QuestionDisplay';
 
 class QuestionView extends React.Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      questions: [],
-      filteredQuestions: [],
-      currentQuestion: null,
-      filter: '',
-      filterAnswered: false,
-      filterUnanswered: false,
-      addingQuestion: false,
-      askQuestionText: '',
-    };
+        this.state = {
+            questions: [],
+            filteredQuestions: [],
+            currentQuestion: null,
+            filter: '',
+            filterAnswered: false,
+            filterUnanswered: false,
+            addingQuestion: false,
+            askQuestionText: '',
+        };
 
-    this.setCurrentQuestion = this.setCurrentQuestion.bind(this);
-    this.setFilter = this.setFilter.bind(this);
-    this.filterQuestions = this.filterQuestions.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.getQuestion = this.getQuestion.bind(this);
-    this.getResponse = this.getResponse.bind(this);
-    this.addQuestion = this.addQuestion.bind(this);
-    this.pushQuestion = this.pushQuestion.bind(this);
-    this.removeQuestion = this.removeQuestion.bind(this);
-    this.pushQuestionEditText = this.pushQuestionEditText.bind(this);
-    this.pushQuestionNewText = this.pushQuestionNewText.bind(this);
-    this.pushResponse = this.pushResponse.bind(this);
-    this.pushResponseText = this.pushResponseText.bind(this);
-    this.pushResponseEditText = this.pushResponseEditText.bind(this);
-    this.pushResponseNewText = this.pushResponseNewText.bind(this);
-    this.removeResponse = this.removeResponse.bind(this);
-    this.toggleEndorsedResponse = this.toggleEndorsedResponse.bind(this);
-    this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
-    this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
-    this.toggleEditQuestion = this.toggleEditQuestion.bind(this);
-    this.toggleEditResponse = this.toggleEditResponse.bind(this);
-    this.getQuestionData = this.getQuestionData.bind(this);
-    this.processQuestionData = this.processQuestionData.bind(this);
-    this.loadUserData = this.loadUserData.bind(this);
-    this.replaceQuestion = this.replaceQuestion.bind(this);
-    this.replaceResponse = this.replaceResponse.bind(this);
-    this.onQuestionFilterSelect = this.onQuestionFilterSelect.bind(this)
-    this.filterQuestionByTitle = this.filterQuestionByTitle.bind(this)
-    this.scrollToQuestionArea = this.scrollToQuestionArea.bind(this)
-    this.onAskQuestionChange = this.onAskQuestionChange.bind(this)
-  }
+        this.setCurrentQuestion = this.setCurrentQuestion.bind(this);
+        this.setFilter = this.setFilter.bind(this);
+        this.filterQuestions = this.filterQuestions.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.getQuestion = this.getQuestion.bind(this);
+        this.getResponse = this.getResponse.bind(this);
+        this.addQuestion = this.addQuestion.bind(this);
+        this.pushQuestion = this.pushQuestion.bind(this);
+        this.removeQuestion = this.removeQuestion.bind(this);
+        this.pushQuestionEditText = this.pushQuestionEditText.bind(this);
+        this.pushQuestionNewText = this.pushQuestionNewText.bind(this);
+        this.pushResponse = this.pushResponse.bind(this);
+        this.pushResponseText = this.pushResponseText.bind(this);
+        this.pushResponseEditText = this.pushResponseEditText.bind(this);
+        this.pushResponseNewText = this.pushResponseNewText.bind(this);
+        this.removeResponse = this.removeResponse.bind(this);
+        this.toggleEndorsedResponse = this.toggleEndorsedResponse.bind(this);
+        this.toggleAnsweredFilter = this.toggleAnsweredFilter.bind(this);
+        this.toggleUnansweredFilter = this.toggleUnansweredFilter.bind(this);
+        this.toggleEditQuestion = this.toggleEditQuestion.bind(this);
+        this.toggleEditResponse = this.toggleEditResponse.bind(this);
+        this.getQuestionData = this.getQuestionData.bind(this);
+        this.processQuestionData = this.processQuestionData.bind(this);
+        this.loadUserData = this.loadUserData.bind(this);
+        this.replaceQuestion = this.replaceQuestion.bind(this);
+        this.replaceResponse = this.replaceResponse.bind(this);
+        this.onQuestionFilterSelect = this.onQuestionFilterSelect.bind(this);
+        this.filterQuestionByTitle = this.filterQuestionByTitle.bind(this);
+        this.scrollToQuestionArea = this.scrollToQuestionArea.bind(this);
+        this.onAskQuestionChange = this.onAskQuestionChange.bind(this);
+    }
 
   componentDidMount() {
     this.getQuestionData(this.props.videoUUID);
@@ -90,8 +90,8 @@ class QuestionView extends React.Component {
       return;
     }
     request.get(`/1/questions?video_uuid=${videoUUID}`, {
-      success: onSuccess
-    })
+      success: onSuccess,
+    });
   }
 
   processQuestionData(data) {
@@ -177,13 +177,17 @@ class QuestionView extends React.Component {
 
   /* prompts user to add question, via modal in QuestionForm */
   addQuestion() {
-    if (auth.loggedIn()) {
-        this.setState({ addingQuestion: true });
-    } else {
-        this.props.openRegisterModal(() => {
-            this.setState({ addingQuestion: true });
-        });
-    }
+      if (auth.loggedIn()) {
+          this.setState({
+              addingQuestion: true,
+          });
+      } else {
+          this.props.openRegisterModal(() => {
+              this.setState({
+                  addingQuestion: true,
+              });
+          });
+      }
   }
 
   /* adds question to state */
@@ -367,10 +371,13 @@ class QuestionView extends React.Component {
   }
 
   onAskQuestionChange(e) {
-    this.setState({
-      askQuestionText: e.target.value
-    })
-    console.log(e.target.value);
+      if (e.key === 'Enter') {
+          this.addQuestion();
+      } else {
+          this.setState({
+              askQuestionText: e.target.value,
+          });
+      }
   }
 
   render() {
@@ -396,7 +403,7 @@ class QuestionView extends React.Component {
             placeholder="Don't understand something? Ask a question here."
             options={questionOptions}
             onOptionSelected={this.onQuestionFilterSelect}
-            onKeyUp={this.onAskQuestionChange}/>
+            onKeyUp={this.onAskQuestionChange} />
           <Button className="addQuestionBtn" onClick={this.addQuestion}>
             <FontAwesome name="plus-circle" />
             Ask A Question

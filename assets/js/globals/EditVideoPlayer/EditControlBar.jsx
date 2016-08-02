@@ -85,32 +85,34 @@ export default class EditControlBar extends Component {
                         />
                     </span>
                     <OverlayTrigger trigger="focus" placement="top" overlay=
-                                    {<Popover className="playbackPopover">
-                                            <div 
-                                                onClick={this.setPlaybackSpeed.bind(this,2)}
-                                                className="speedButton">
-                                                2x
-                                            </div>
-                                            <div 
-                                                onClick={this.setPlaybackSpeed.bind(this,1.5)}
-                                                className="speedButton">
-                                                1.5x
-                                            </div>
-                                            <div 
-                                                onClick={this.setPlaybackSpeed.bind(this,1)}
-                                                className="speedButton">
-                                                1x
-                                            </div>
-                                            <div 
-                                                onClick={this.setPlaybackSpeed.bind(this,.5)}
-                                                className="speedButton">
-                                                .5x
-                                            </div>
-                                            <div 
-                                                onClick={this.setPlaybackSpeed.bind(this,.25)}
-                                                className="speedButton">
-                                                .25x
-                                            </div>
+                                    {<Popover
+                                        id="playback-popover"
+                                        className="playbackPopover">
+                                        <div
+                                            onClick={this.setPlaybackSpeed.bind(this,2)}
+                                            className="speedButton">
+                                            2x
+                                        </div>
+                                        <div
+                                            onClick={this.setPlaybackSpeed.bind(this,1.5)}
+                                            className="speedButton">
+                                            1.5x
+                                        </div>
+                                        <div
+                                            onClick={this.setPlaybackSpeed.bind(this,1)}
+                                            className="speedButton">
+                                            1x
+                                        </div>
+                                        <div
+                                            onClick={this.setPlaybackSpeed.bind(this,.5)}
+                                            className="speedButton">
+                                            .5x
+                                        </div>
+                                        <div
+                                            onClick={this.setPlaybackSpeed.bind(this,.25)}
+                                            className="speedButton">
+                                            .25x
+                                        </div>
                                     </Popover>}>
                                     <span
                                         tabIndex={0}

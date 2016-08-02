@@ -126,16 +126,16 @@ export default class VideoPlayer extends Component {
         this.setState({
             isPlaying: false,
             currentTime: "0:00",
-            percentDone: 0
+            percentDone: 0,
+            pollInterval: setInterval(this.updateCurrentState, pollInterval),
         })
-        window.onresize=this.setWindowSize;
         this.loadDataFromServer(this.props.videoUUID);
 
+        $(window).on('resize', this.setWindowSize);
+    }
 
-        //updates time and playing
-        this.setState({
-            pollInterval: setInterval(this.updateCurrentState, pollInterval)
-        });
+    componentWillUnmount() {
+        $(window).off('resize');
     }
 
     loadDataFromServer(v_id){
@@ -328,12 +328,10 @@ export default class VideoPlayer extends Component {
         this.state.Player.play()
     }
 
-    setWindowSize(){
+    setWindowSize() {
         this.setState({
-            videoDivHeight: $(".videoDiv").height()
-        });
-        this.setState({
-            videoDivWidth: $(".videoDiv").width()
+            videoDivHeight: $(".videoDiv").height(),
+            videoDivWidth: $(".videoDiv").width(),
         });
     }
 

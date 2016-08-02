@@ -1,14 +1,13 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import JsonResponse
-from rest_framework.views import APIView
 
 from backend.models import *
 from backend.notification import *
 from backend.serializers import SeriesSerializer
 from backend.permissions import make_owner_permission
 
-from rest_framework.views import APIView
+from rest_framework.views import APIView, Response
 from rest_framework import viewsets, permissions
 
 
@@ -18,7 +17,7 @@ class SeriesViewset(viewsets.ModelViewSet):
     lookup_field = 'uuid'
     serializer_class = SeriesSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          make_owner_permission(user_field='creator', user_edit_fields=None))
+                          make_owner_permission(user_field='creator', user_edit_fields=('order[]', 'name', 'description',)))
 
     def get_queryset(self):
         creator = self.request.query_params.get('creator')
@@ -36,6 +35,14 @@ class SeriesViewset(viewsets.ModelViewSet):
             series_video.video.delete()
 
         instance.delete()
+
+    def perform_update(self, serializer):
+        series = serializer.save()
+
+        new_order = self.request.data.getlist('order[]')
+        for (index, series_video) in enumerate(series.videos.all()):
+            series_video.order = new_order[index]
+            series_video.save()
 
 
 class CreateSeries(APIView):

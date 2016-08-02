@@ -26,7 +26,7 @@ module.exports = React.createClass({
             e.preventDefault()
             this.props.deleteChoice(this.props.choice.id, this.props.index)
         }
-    },
+    }, 
     onChoiceSelected: function() {
         this.props.makeChoiceIsCorrect(this.props.choice.id);
     },
