@@ -7,6 +7,8 @@ import Button from 'react-bootstrap/lib/Button';
 
 export default class NoVideosArea extends Component {
     render() {
+        console.log(this.props.isCreator, "uygoyfcgjvhkbjhlkj")
+
         var hasVideos = (this.props.videos.length > 0)
         var title = hasVideos ? "Add more videos to this series." : "This series is currently empty."
         var overAllClass = hasVideos ? "noVideosArea hasVideos" : "noVideosArea"

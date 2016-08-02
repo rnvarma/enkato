@@ -20,8 +20,9 @@ def make_owner_permission(user_field, user_edit_fields=None, instructor_field=No
             # check if is owner
             current_user = request.user.customuser
             if request.method == 'PATCH':
-                if set(request.data).issubset(set(user_edit_fields)) and \
-                                getattr(obj, user_field).id == current_user.id:
+                if user_edit_fields and \
+                        set(request.data).issubset(set(user_edit_fields)) and \
+                        getattr(obj, user_field).id == current_user.id:
                     return True
             else:
                 if getattr(obj, user_field).id == current_user.id:

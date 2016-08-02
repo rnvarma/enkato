@@ -167,7 +167,7 @@ export default class EditVideoPlayer extends Component {
     }
 
     /* adds a new topic to topicObjList, sorts topic list, focuses on new topic */
-    addNewTopic(name, topicTime) {
+    addNewTopic(name = '', topicTime = null) {
         this.state.Player.pause();
 
         var topicList = this.state.topicObjList.filter((topic) => {
@@ -184,17 +184,18 @@ export default class EditVideoPlayer extends Component {
 
         if (topicTime == null)
             time = Math.round(this.state.Player.getCurrentTime());
-        else
-            time = topicTime
+        else {
+            time = topicTime;
+        }
         const newTopic = {
             id: `fake_${Date.now()}`, /* fake id, not in DB yet */
             committed: false,
-            name: name || '',
+            name: name,
             time: time,
             time_clean: styleDuration(time),
             isCurrentTopic: true,
         };
-        const newTopicList = [...topicList, newTopic];
+        const newTopicList = [...this.state.topicObjList, newTopic];
         this.sortTopicListByTime(newTopicList);
         this.setState({
             topicObjList: newTopicList,

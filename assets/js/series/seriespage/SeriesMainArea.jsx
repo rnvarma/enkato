@@ -112,7 +112,9 @@ export default class SeriesMainArea extends Component {
                         loadPageData={this.props.loadPageData}/>
                     <NoVideosArea
                         videos={this.props.videos}
-                        openModal={this.props.openModal}/>
+                        openModal={this.props.openModal}
+                        isCreator={this.props.is_creator}
+                        reloadPageData={this.props.reloadPageData}/>
                 </div>
             )
             var annotateVideosButton =  (

@@ -93,6 +93,9 @@ export default class UploadAnnotateModal extends Component {
     }
 
     onNext() {
+        if (this.props.quizMode) {
+            this.props.close();
+        }
         if (this.props.annotateMode) {
             this.setState({
                 publishAnnotations: true,
@@ -153,7 +156,6 @@ export default class UploadAnnotateModal extends Component {
     }
 
     onQuizMode() {
-        console.log('lol');
         if (this.state.annotationsToSave) {
             this.setLaunchKeeper(this.props.setQuizMode);
         } else {

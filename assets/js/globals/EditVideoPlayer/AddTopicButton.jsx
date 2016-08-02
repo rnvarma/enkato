@@ -3,13 +3,12 @@ require('css/globals/EditVideoPlayer/AddTopicButton.scss')
 import React, { Component } from 'react';
 
 export default class AddTopicButton extends Component {
-    constructor(props) {
-        super(props)
-
+    constructor() {
+        super()
         this.onClick = this.onClick.bind(this);
     }
 
-    onClick(e) {
+    onClick() {
         this.props.addNewTopic();
     }
 
@@ -18,6 +17,6 @@ export default class AddTopicButton extends Component {
             <div className="addTopicButton" onClick={this.onClick}>
                 Add a New Topic
             </div>
-        )
+        );
     }
 }

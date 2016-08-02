@@ -12,11 +12,9 @@ import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 
 import CreateSeriesModal from 'js/globals/CreateSeriesModal';
 import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
-import FontAwesome from 'react-fontawesome';
 import request from 'js/globals/HttpRequest';
-import auth from 'auth'
+import auth from 'auth';
 import Dotdotdot from 'react-dotdotdot';
-
 
 
 class NavBar extends Component {
@@ -116,14 +114,13 @@ class NavBar extends Component {
                         <Link to="/userprofile" activeClassName="active">{this.state.username}</Link>
                     </li>
                     <NavDropdown eventKey={3} title={numstring} id="basic-nav-dropdown">
-                        {this.state.notifications.map((notification) => {
+                        {this.state.notifications.map((notification, index) => {
                             if (notification.timestamp != "") {
                                 var timestring = moment(notification.timestamp).fromNow();
-                            }
-                            else {
+                            } else {
                                 var timestring = ""
                             }
-                            return (<MenuItem onClick = {this.getOnClick(notification)}><div className = "notification"><Dotdotdot clamp = {1}>{notification.description}</Dotdotdot>{timestring}</div></MenuItem>);
+                            return (<MenuItem key={index} onClick={this.getOnClick(notification)}><div className = "notification"><Dotdotdot clamp = {1}>{notification.description}</Dotdotdot>{timestring}</div></MenuItem>);
                         })}
                     </NavDropdown>
                 </Nav>
