@@ -55,7 +55,7 @@ export default class SeriesMainArea extends Component {
         if (this.props.thumbnails) {
             img_src = this.props.thumbnails.map((img) => {
                 return (
-                    <img src={img} className="image"/>
+                    <img src={img} key={img} className="image"/>
                 )
             })
         }
