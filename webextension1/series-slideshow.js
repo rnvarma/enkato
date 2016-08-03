@@ -16,22 +16,23 @@ function showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, mainVidId, vidTit
             slide.setAttribute("src", thumbnails[i]);
             slide.setAttribute("title", vidTitles[i]);
 
+            vidId = vidUUIDs[i];
+            var url = "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidId;
+            slide.setAttribute("url", url);
+
             var name = document.createElement("div");
             slideHolder.appendChild(name);
             name.innerHTML = vidTitles[i];
             name.setAttribute("class", "series-name");
-
-            vidId = vidUUIDs[i];
-            url = "http://www.enkato.com/s/" + seriesUUID + "/watch#" + vidId;
-            $(slide).click(function(){
-                console.log(url);
-                window.open(url);
-            });
         } 
     }
+    $('.mySlides').click(function(){
+        var url = this.getAttribute("url");
+        window.open(url);
+    });
     console.log("creating buttons");
-    createButtons();
-    carousel();
+    //createButtons();
+    //carousel();
 }
 
 function showSeriesTitle(){
