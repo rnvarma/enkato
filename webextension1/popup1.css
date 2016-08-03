@@ -36,11 +36,11 @@ body {
         height: 340px;
       }
       #topic-list-wrapper{
-        height:90px;
+        height:112px;
         text-align: center;
       }
       #series-wrapper{
-        height: 159px;
+        height: 157px;
       }
       #more-enkato-wrapper{
         height: 72px;
@@ -59,7 +59,7 @@ body {
         padding: 3px 3px 0px;
       }
       .topic-node:hover{
-        background-color: rgba(0,0,0,0.1);
+        background-color: rgb(220, 230, 225);
       }
       .topic-node{
         background-color: white;
@@ -67,71 +67,48 @@ body {
         font-size: 14px;
         text-align: left;
         text-overflow: ellipsis;
-        width: 100%;
+        width: 98%;
         overflow: hidden;
-        padding: 5px;
+        padding: 2px;
         border-bottom: 1px solid #eef1f7;
+        cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.298039) 2px 2px 2px;
+      }
+      .extra-topics{
+        font-size: 15px;
+        text-align: center;
+        font-weight: 500;
+        width: 100%;
+        padding:1px;
         cursor: pointer;
       }
       .no-topics{
-        font-size: 14px;
+        font-size: 15px;
         text-align: center;
-        padding: 3px;
+        margin: 25px;
       }
       .slide-wrapper{
         overflow: auto;
-        height: 140px;
-      }
-      .slide-runner{
-        width: 223px;
-        height: 120px;
+        height: 135px;
       }
       .mySlides{
         cursor: pointer;
         height: 100px;
         width: 219px;
-        padding: 2px;
+        margin: 2px;
+        box-shadow: rgba(0, 0, 0, 0.298039) 2px 2px 2px;
       }
-      .series-name{
+      .slide-name{
         width: 213px;
         text-align: center;
         font-weight: 500;
-        margin-bottom: 17px;
+        margin-bottom: 12px;
+        margin-left: 2px;
         top: 10px;
         left: 0;
-      }
-      .nav-button:hover{
-        box-shadow:0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19)}
-      .nav-button{
-        display:inline-block;
-        text-align:center;
-        color:#fff;
-        background-color:#000;
-        position:absolute;
-        overflow:hidden;
-        z-index:10;
-        padding:0;
-        border-radius:50%;
-        cursor:pointer;
-        font-size:20px;
-        width:30px;
-        height:30px;
-        line-height:28px;
-        opacity: 0.8;
-        position: absolute;
-        top: 48%;
-      }
-      .quiz-title{
-        font-size: 15px;
-        text-align: center;
+        cursor: pointer;
       }
       .quiz-button{
-        margin: 14px 51px;
+        margin: 4px 51px;
         cursor: pointer;
-      }
-      .more-button{
-        cursor: pointer;
-        height: 60px;
-        margin: 6px 14px;
-
       }

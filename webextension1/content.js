@@ -4,65 +4,46 @@ window.onpopstate = function(event){
 }
 
 
-function showMainMessage(message, uuid) {
+function showMainMessage(vidUUID, seriesUUID) {
   var image = document.createElement("img");
   var prevDiv = document.getElementById("placeholder-player").appendChild(image);
-  var imgurl = chrome.extension.getURL("main.gif");
+  var imgurl = chrome.extension.getURL("images/main.gif");
 
   image.setAttribute("src", imgurl);
   image.setAttribute("height", "20px");
   image.style.cursor = "pointer";  
-  //image.setAttribute("width", "640px"); 
-
-  /*mainButton.textContent= message;
-  mainButton.style.color= "white";
-  mainButton.style.background= "#0E133E";
-  mainButton.style.width= "640px";
-  mainButton.style.height= "20px";
-  mainButton.style.fontFamily= "'Helvetica Neue', Helvetica, Arial, sans-serif";*/
-
   image.onclick = function(){
-    window.open("http://127.0.0.1:8000/v/" + uuid);
+    window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID);
   } 
 }
 
-function showSideMessage(message, vidNum, uuid){
+function showSideMessage(vidNum, vidUUID, seriesUUID){
   var image = document.createElement("img");
   var parentDivs = document.getElementById("watch7-sidebar-modules").querySelectorAll(".content-wrapper");
   var parentNode = parentDivs[vidNum].appendChild(image);
-  var imgurl = chrome.extension.getURL("main.gif");
+  var imgurl = chrome.extension.getURL("images/main.gif");
 
   image.setAttribute("src", imgurl);
   image.setAttribute("height", "15px");
   image.style.cursor = "pointer";  
 
-  /*sideButton.textContent = message;
-  sideButton.style.color = "white";
-  sideButton.style.background = "#0E133E";
-  sideButton.style.width = "195px";
-  sideButton.style.height = "15.39px";
-  sideButton.style.textAlign = "left";
-  sideButton.style.paddingLeft = "3px";
-  sideButton.style.fontFamily = "Helvetica Neue, Helvetica, Arial, sans-serif";*/
-
   $(image).click(function(){
-    window.open("http://127.0.0.1:8000/v/" + uuid);
-    return false;
+    window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID);
   });
 }
 
-function showSearchMessage(vidNum, uuid){
+function showSearchMessage(vidNum, vidUUID, seriesUUID){
   var image = document.createElement("img");
   var allParents = document.getElementById("results").firstElementChild.lastElementChild.firstElementChild.children;
   var parent = allParents[vidNum].firstElementChild.firstElementChild.lastElementChild.appendChild(image);
-  var imgurl = chrome.extension.getURL("main.gif");
+  var imgurl = chrome.extension.getURL("images/main.gif");
 
   image.setAttribute("src", imgurl);
   image.setAttribute("height", "15px");  
   image.style.cursor = "pointer";  
 
   $(image).click(function(){
-    window.open("http://127.0.0.1:8000/v/" + uuid);
+    window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID);
     return false;
   });
 }
@@ -130,6 +111,22 @@ function findInDatabase(vid_id, vid_num, callback) {
         });
 }
 
+function getSeriesUUID(vid_id, callback){
+  $.ajax({
+    url: "http://127.0.0.1:8000/2/s/" + vid_id,
+    dataType: 'json',
+    cache: false,
+    success: function(data) {
+       var seriesInfo = data.seriesVideoData;
+      var seriesUUID = seriesInfo.seriesUUID;
+      callback(seriesUUID);
+    },
+    error: function(status, err) {
+      console.error(error.statusText, err.toString());
+    }
+  });
+}
+
 var windURL = "" + window.location.href;
 
 $(document).ready( function() {
@@ -138,7 +135,9 @@ $(document).ready( function() {
     var mainNum = 0;
     findInDatabase(vid_id, mainNum, function(inDB, mainNum, mainUUID){
       if (inDB){
-        showMainMessage("Watch this at enkato", mainUUID);
+        getSeriesUUID(vid_id, function(seriesUUID){
+          showMainMessage(mainUUID, seriesUUID);
+        });
       }
     });
     console.log("beginning side videos");
@@ -146,7 +145,9 @@ $(document).ready( function() {
     for (var i =0; i<sideVidIds.length; i++){
       findInDatabase(sideVidIds[i], i, function(inDB, i, sideUUID){
         if(inDB){
-          showSideMessage("Watch at enkato", i, sideUUID);
+          getSeriesUUID(sideVidIds[i], function(seriesUUID){
+            showSideMessage(i, sideUUID, seriesUUID);
+          });
         }
       });
     };
@@ -158,7 +159,9 @@ $(document).ready( function() {
         var searchUUID = "";
         findInDatabase(searchIds[i], i, function(inDB, i, searchUUID){
           if(inDB){
-            showSearchMessage(i, searchUUID);
+            getSeriesUUID(searchIds[i], function(seriesUUID){
+              showSearchMessage(i, searchUUID, seriesUUID);
+            })
           }
         });
       };
