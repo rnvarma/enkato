@@ -1,0 +1,9 @@
+@import '../../globals/colors.scss';
+@import '../../globals/mixins.scss';
+
+.seriesVideoPanelSortable {
+	&:hover {
+		cursor: move;
+		background-color: $grey-hover;
+	}
+}

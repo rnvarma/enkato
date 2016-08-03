@@ -40,9 +40,10 @@ class SeriesViewset(viewsets.ModelViewSet):
         series = serializer.save()
 
         new_order = self.request.data.getlist('order[]')
-        for (index, series_video) in enumerate(series.videos.all()):
-            series_video.order = new_order[index]
-            series_video.save()
+        if new_order != []:
+            for (index, series_video) in enumerate(series.videos.all().order_by("order")):
+                series_video.order = new_order[index]
+                series_video.save()
 
 
 class CreateSeries(APIView):

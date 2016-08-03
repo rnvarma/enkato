@@ -21,12 +21,20 @@ class EditSeriesModal extends Component {
             description: this.props.description,
         }
 
+        this.initForm = this.initForm.bind(this)
         this.onNameChange = this.onNameChange.bind(this)
         this.onDescriptionChange = this.onDescriptionChange.bind(this)
         this.onFormSubmit = this.onFormSubmit.bind(this)
         this.close = this.close.bind(this);
         this.open = this.open.bind(this)
         this.clearModal = this.clearModal.bind(this)
+    }
+
+    initForm() {
+        this.setState({
+            name: this.props.name,
+            description: this.props.description,
+        });
     }
 
     onNameChange(e) {
@@ -39,19 +47,15 @@ class EditSeriesModal extends Component {
 
     onFormSubmit() {
         if (!this.state.name || !this.state.description) return;
-        request.patch('1/series/${this.props.seriesUUID}', {
+        request.patch(`/1/series/${this.props.seriesUUID}`, {
             data: {
                 name: this.state.name,
                 description: this.state.description
             },
             success: (data) => {
-                if (data.status) {
-                    browserHistory.push(`/s/${this.props.seriesUUID}`);
-                    this.close();
-                    this.clearModal();
-                } else {
-                    console.log("sad face");
-                }
+                this.props.loadPageData();
+                this.close();
+                this.clearModal();
             },
         })
     }
@@ -87,11 +91,12 @@ class EditSeriesModal extends Component {
                         name = {this.props.name}
                         description = {this.props.description}
                         onNameChange={this.onNameChange}
-                        onDescriptionChange={this.onDescriptionChange}/>
+                        onDescriptionChange={this.onDescriptionChange}
+                        initForm={this.initForm}/>
                   </Modal.Body>
                   <Modal.Footer>
                     <Button onClick={this.close}>Cancel</Button>
-                    <Button className="structabl-red" disabled = {!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Create</Button>
+                    <Button className="structabl-red" disabled = {!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Submit</Button>
                   </Modal.Footer>
                 </Modal>
             </li>
