@@ -62,10 +62,6 @@ class CreateSeries(APIView):
 
         return JsonResponse({'status': True, 's_uuid': series.uuid})
 
-class SeriesPage(View):
-    def get(self, request, s_id):
-        return render(request, 'series/series.html', {'s_id': s_id})
-
 class SubscribeSeriesPage(APIView):
     def post(self, request, s_id):
         series = Series.objects.get(uuid=s_id)
@@ -117,18 +113,3 @@ class SetSeriesPrivacy(APIView):
             'status': True,
             'is_private': is_private,
             })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,4 +1,3 @@
-from django.views.generic.base import View
 from django.http import JsonResponse
 
 from rest_framework.views import APIView
@@ -248,8 +247,8 @@ class SeriesVideoData(APIView):
                 seriesData = {}
                 for serie in series:
                     seriesData[serie.uuid] = Serializer.serialize_series_videos(serie)
-                seriesData = findSeriesVideoData(seriesData, v_id)
-                response["seriesData"]=seriesData
+                seriesVideoData = findSeriesVideoData(seriesData, v_id)
+                response["seriesVideoData"]=seriesVideoData
                 return Response(response)
             else:
                 return Response({
@@ -261,7 +260,7 @@ class SeriesVideoData(APIView):
             })
 
 
-class VideoData(View):
+class VideoData(APIView):
     def get(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
         topicList = video.topics.all().order_by('time')
@@ -277,7 +276,7 @@ class VideoData(View):
             'numQuestions':quizQs.count()
         })
 
-class VideoIdData(View):
+class VideoIdData(APIView):
     def get(self, request, v_id):
         try:
             video = Video.objects.get(vid_id=v_id)

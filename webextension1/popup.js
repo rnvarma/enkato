@@ -16,12 +16,20 @@ function timeToSeconds(time){
     return seconds;
 }
 
+function showHeader(){
+	var headerLogo = document.getElementById("header").firstElementChild;
+	$(headerLogo).click(function(){
+		window.open("http://127.0.0.1:8000");
+	});
+}
+
 function showVideo(vidId, timestamp, vidTitle, vidUUID, seriesUUID){
 	var thumbnail = document.createElement("img");
 	var thumbnailUrl = "http://img.youtube.com/vi/" + vidId + "/mqdefault.jpg";
 	document.getElementById("main-video-wrapper").querySelector(".thumbnail").appendChild(thumbnail);
 	thumbnail.setAttribute("src", thumbnailUrl);
-	thumbnail.setAttribute("width", "250px");
+	thumbnail.setAttribute("width", "240px");
+	thumbnail.style.boxShadow = "2px 2px 2px rgba(0,0,0,0.3)";
 
 	var titleBox = document.getElementById("main-video-wrapper").querySelector(".video-title");
 	titleBox.innerHTML = vidTitle;
@@ -35,27 +43,28 @@ function showVideo(vidId, timestamp, vidTitle, vidUUID, seriesUUID){
 	var imgurl = chrome.extension.getURL("main.gif");
 	
 	watchButton.setAttribute("src", imgurl);
-	watchButton.setAttribute("height", "23px"); 
+	watchButton.setAttribute("height", "22px"); 
 	watchButton.style.padding = "3px";
 	watchButton.style.backgroundColor = "white";
-	watchButton.style.border = "1px solid #0E133E";
+	watchButton.style.border= "0.5px solid #425d90";
 	watchButton.style.borderRadius = "20px";
 	watchButton.style.cursor = "pointer";  
+	watchButton.style.boxShadow = "rgba(0, 0, 0, 0.298039) 2px 2px 2px"
 
 	var tsSeconds = timeToSeconds(timestamp);
+	$(watchButton).click(function(){
+		window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID+ "?t=" + tsSeconds);//add time stamp
+	})
 
 	var mainWrapper = document.getElementById("main-video-wrapper");
-	mainWrapper.style.border = "1px solid #0E133E";
-	$(watchButton).click(function(){
-		window.open("http://www.enkato.com/s/" + seriesUUID + "/watch#" + vidUUID+ "?t=" + tsSeconds);//add time stamp
-	})
+	mainWrapper.style.backgroundColor = "#DCE6E1";
 }
 
 function showNoVideoMessage(){
 	var contentWrapper = document.getElementById("content-wrapper");
 	document.body.removeChild(contentWrapper);
 
-	var noVideoDiv = document.getElementById("no-video");
+	var noVideoDiv = document.getElementById("no-video");	
 	var noVideoText = document.createElement("div");
 	noVideoDiv.appendChild(noVideoText);
 	noVideoText.innerHTML = "Sorry, there are no available videos on this page.";
@@ -68,40 +77,36 @@ function showNoVideoMessage(){
 	enkatoButton.className = "enkato-button";
 	enkatoButton.style.cursor = "pointer";
 	enkatoButton.setAttribute("height", "30px");
-	$(enkatoButton).click(function(){
-		window.open("http://www.enkato.com");
-	})
+
 }
 
 function showTopics(topics, vidUUID, seriesUUID){
 	var topicWrapper = document.getElementById("topic-list-wrapper");
-	topicWrapper.style.border= "1px solid #0E133E";
+	topicWrapper.style.borderBottom = "0.5px solid rgb(181, 202, 241)";
        
 	var titleDiv = topicWrapper.querySelector(".topic-header");
 	titleDiv.innerHTML="Topics";
+	titleDiv.style.textAlign= "center";
 
 	var listContainer = document.querySelector(".topics-list");
-	listContainer.style.margin = "5px";
+	listContainer.style.margin = "3px";
 	if (topics.length < 4){
 		for(i=0; i<topics.length; i++){
-			var topic = document.createElement("LI");
+			var topic = document.createElement("div");
+			topic.className = "topic-node";
 			listContainer.appendChild(topic);
 			topic.innerHTML = topics[i].name;
-			
-			$(topic).click(function(){
-				window.open("http://www.enkato.com/s/" + seriesUUID + "/watch#" + vidUUID);//add time stamp
-			});
+			topic.setAttribute("time", topics[i].time);
+			topic.setAttribute("url", "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID + "?t=" + topics[i].time);
 		}
 	}
 	else{
 		for(i=0; i<4; i++){
-			var topic = document.createElement("LI");
+			var topic = document.createElement("div");
 			listContainer.appendChild(topic);
 			topic.innerHTML = topics[i].name;
-			
-			$(topic).click(function(){
-				window.open("http://www.enkato.com/s/" + seriesUUID + "/watch#" + vidUUID);//add time stamp
-			});
+			topic.setAttribute("time", topics[i].time);
+			//topic.setAttribute("onclick", topicURL(this));
 		}
 
 		var topicOverfill = document.createElement("span");
@@ -110,11 +115,17 @@ function showTopics(topics, vidUUID, seriesUUID){
 		topicOverfill.style.fontSize = "15px";
 		topicOverfill.style.textAlign = "center";
 	}
+
+	$('.topic-node').click(function(){
+		var url = this.getAttribute("url");
+		window.open(url);
+	});
 }
 
 function showNoTopicsMessage(){
 	var topicWrapper = document.getElementById("topic-list-wrapper");
-	topicWrapper.style.border= "1px solid #0E133E";
+	topicWrapper.style.borderBottom= "0.5px solid rgb(181, 202, 241)";
+
 
 	var titleDiv = topicWrapper.querySelector(".topic-header");
 	titleDiv.innerHTML="Topics";
@@ -128,7 +139,7 @@ function showNoTopicsMessage(){
 
 function showQuizDiv(seriesUUID, vidUUID){
 	var quizWrapper = document.getElementById("quiz-wrapper");
-	quizWrapper.style.border = "1px solid #0E133E";
+	quizWrapper.style.borderBottom= "0.5px solid rgb(181, 202, 241)";
 
 	var quizButton = document.createElement("img");
 	quizWrapper.appendChild(quizButton);
@@ -136,26 +147,13 @@ function showQuizDiv(seriesUUID, vidUUID){
 	quizButton.className = "quiz-button";
 	quizButton.setAttribute("height", "60px");
 	$(quizButton).click(function(){
-		window.open("http://www.enkato.com/s/" + seriesUUID + "/watch#" + vidUUID + "?quiz=true");
-	})
-}
-
-function showMoreAtEnkato(){
-	var moreDiv = document.getElementById("more-enkato-wrapper");
-	moreDiv.style.border = "1px solid #0E133E";
-
-	var moreButton = document.createElement("img");
-	moreDiv.appendChild(moreButton);
-	moreButton.setAttribute("src", "more-enkato-button.gif");
-	moreButton.className = "more-button";
-	$(moreButton).click(function(){
-		window.open("http://www.enkato.com");
+		window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID + "?quiz=true");
 	})
 }
 
 function findTopicList(vid_uuid, callback){
 	$.ajax({
-		url: "http://www.enkato.com/1/v/" + vid_uuid,
+		url: "http://127.0.0.1:8000/1/v/" + vid_uuid,
 		dataType: 'json',
 		cache: false,
 		success: function(data) {
@@ -171,7 +169,7 @@ function findTopicList(vid_uuid, callback){
 
 function findInDatabase(vid_id, callback) {
 	$.ajax({
-		url: "http://www.enkato.com/2/v/" + vid_id,
+		url: "http://127.0.0.1:8000/2/v/" + vid_id,
 		dataType: 'json',
 		cache: false,
 		success: function(data) {
@@ -190,13 +188,13 @@ function findInDatabase(vid_id, callback) {
 
 function getSeriesInfo(videoId, callback){
 	$.ajax({
-		url: "http://www.enkato.com/2/s/" + videoId,
+		url: "http://127.0.0.1:8000/2/s/" + videoId,
 		dataType: 'json',
 		cache: false,
 		success: function(data) {
 			partOfSeries = data.inSeries;
 			if (partOfSeries){
-				var seriesInfo = data.seriesData;
+				var seriesInfo = data.seriesVideoData;
 				var vidUUIDs = seriesInfo.videoUUIDs;
 				var seriesId = seriesInfo.seriesUUID;
 				var thumbnails = seriesInfo.seriesThumbnails;
@@ -215,8 +213,9 @@ function getSeriesInfo(videoId, callback){
 $(document).ready( function(){
 	chrome.tabs.query({active:true, currentWindow:true}, function(tabs){
 		chrome.tabs.sendMessage(tabs[0].id, {from: "popup", subject:"url"}, function(info){
-			var vidId = info.videoId;
-			if(vidId != false){
+			showHeader();
+			if((info != null) && (info.videoId != false)){
+				var vidId = info.videoId;
 				getSeriesInfo(vidId, function(inSeries, seriesUUID, thumbnails, vidUUIDs, vidTitles){
 					console.log("got the thumbnails");
 					findInDatabase(vidId, function(inDB, vidData, vidUUID){
@@ -236,7 +235,7 @@ $(document).ready( function(){
 							showSeriesTitle();
 							showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, vidId, vidTitles);
 							showQuizDiv(seriesUUID, vidUUID);
-							showMoreAtEnkato();							
+							//showMoreAtEnkato();							
 						}
 						else{
 							console.log("show no video");

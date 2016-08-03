@@ -1,10 +1,10 @@
 function showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, mainVidId, vidTitles){
     console.log("showing slideshow");
     var seriesWrapper = document.getElementById("series-wrapper");
-    seriesWrapper.style.border = "1px solid #0E133E";
+    seriesWrapper.style.borderBottom = "0.5px solid rgb(181, 202, 241)";
     var sliderunner = document.getElementById("series-wrapper").querySelector(".slide-runner");
     var mainUrl = "https://i.ytimg.com/vi/" + mainVidId + "/mqdefault.jpg";
-    for (var i =0; i<4; i++){
+    for (var i =0; i<thumbnails.length; i++){
         if(thumbnails[i] != mainUrl){
             var slideHolder = document.createElement("div");
             sliderunner.appendChild(slideHolder);
@@ -16,28 +16,32 @@ function showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, mainVidId, vidTit
             slide.setAttribute("src", thumbnails[i]);
             slide.setAttribute("title", vidTitles[i]);
 
+            vidId = vidUUIDs[i];
+            var url = "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidId;
+            slide.setAttribute("url", url);
+
             var name = document.createElement("div");
             slideHolder.appendChild(name);
             name.innerHTML = vidTitles[i];
             name.setAttribute("class", "series-name");
-
-            vidId = vidUUIDs[i];
-            url = "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidId;
-            $(slide).click(function(){
-                console.log(url);
-                window.open(url);
-            });
         } 
     }
+    $('.mySlides').click(function(){
+        var url = this.getAttribute("url");
+        window.open(url);
+    });
     console.log("creating buttons");
-    createButtons();
-    carousel();
+    //createButtons();
+    //carousel();
 }
 
 function showSeriesTitle(){
     var title = document.getElementById("series-wrapper").querySelector(".series-title");
     title.innerHTML = "More in this series";
     title.style.fontSize = "16px";
+    title.style.height = "17px";
+    title.style.padding = "1px";
+    title.style.textAlign = "center";
 }
 
 function createButtons(){

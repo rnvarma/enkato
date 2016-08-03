@@ -1,6 +1,6 @@
 body {
         font-family: 'Roboto', sans-serif !important;
-        background: #ECEFF5;
+        border-radius: 30%;
         width: 500px;
         height: 381px;
       }
@@ -8,6 +8,10 @@ body {
         height: 40px;
         background: #0E133E;
         text-align: center;
+        border-radius: 7px 7px 0px 0px;
+      }
+      #content-wraper{
+        background-color: #fff;
       }
       #upper-level-wrapper{
         width: 500px;
@@ -35,11 +39,13 @@ body {
         width: 260px;
         height: 72px;
         float: left;
+        border-radius: 0px 0px 0px 7px;
       }
       #more-enkato-wrapper{
         width: 235px;
         height: 72px;
         overflow: hidden;
+        border-radius: 0px 0px 7px 0px;
       }
       #no-video{
         font-size: 20px;
