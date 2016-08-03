@@ -6,6 +6,8 @@
     border-bottom: 1px solid $structabl-bg-blue;
     border-right: 1px solid $structabl-bg-blue;
     text-align: center;
+    cursor: pointer;
+    z-index: 10;
 
     &.review {
         border-left: 4px solid red;

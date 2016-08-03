@@ -1,16 +1,17 @@
 require('css/globals/QuizView/QuizNavNode.scss');
 
-import React from 'react';
+var React = require('react')
 
 export default class QuizNavNode extends React.Component {
-    constructor() {
-        super();
-        this.onClick = this.onClick.bind(this);
+    constructor(props) {
+        super(props);
+
+        this.onClicked = this.onClicked.bind(this);
     }
 
-    onClick(){
-        console.log("wooo")
-        this.props.setQuestion(this.props.index)
+    onClicked(){
+        console.log("wooo");
+        this.props.setQuestion(this.props.index);
     }
 
     render() {
@@ -21,7 +22,7 @@ export default class QuizNavNode extends React.Component {
         return (
             <div
                 className={className} 
-                onClick={this.onClick}>
+                onClick={this.onClicked}>
                 {this.props.order}
             </div>
         );

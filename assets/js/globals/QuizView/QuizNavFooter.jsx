@@ -13,6 +13,10 @@ export default class QuizNavFooter extends React.Component {
     this.submitInfo = this.submitInfo.bind(this);
   }
 
+  componentDidMount(){
+    console.log(this.props);
+  }
+
   submitInfo(){
     this.props.submitInfo();
   }
@@ -39,7 +43,7 @@ export default class QuizNavFooter extends React.Component {
         }
 
         var submitButton = (<div></div>);
-        if(this.props.currentQuestion == this.props.numQuestions-1){
+        if((this.props.numQuestions >0)&&(this.props.numQsAnswered == this.props.numQuestions)){
           submitButton = (
               <Button
                 className="quizSubmitAnswerButton"
@@ -81,6 +85,7 @@ export default class QuizNavFooter extends React.Component {
 
       return (
         <div className="quizNavFooter">
+          {submitButton}
           {bottomLeftText}
           <Button
             className="cancelButton"
@@ -88,7 +93,6 @@ export default class QuizNavFooter extends React.Component {
             Cancel
           </Button>
           {prevNextBtns}
-          {submitButton}
         </div>
       );
     }
