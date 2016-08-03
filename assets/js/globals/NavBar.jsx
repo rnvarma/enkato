@@ -86,6 +86,9 @@ class NavBar extends Component {
     }
 
     getOnClick(notification) {
+        if (!notification.link) {
+            return () => {}
+        }
         return () => {
             this.markAsRead(notification);
             window.location.href = notification.link;
