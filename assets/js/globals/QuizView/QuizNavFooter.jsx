@@ -55,27 +55,30 @@ export default class QuizNavFooter extends React.Component {
 
       var bottomLeftText = <div></div>
 
-      if(this.props.reviewMode){
-        bottomLeftText = (
-          <BottomReviewText correct={this.props.isCorrect} />
-        );
-      } else if(!disableAll) {
-        if(this.props.numQsAnswered != this.props.numQuestions){
+
+      if(this.props.numQuestions != 0){
+        if(this.props.reviewMode){
             bottomLeftText = (
-                <div className="showNumAnswered">
-                    {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
-                </div>
-            )
-        } else {
-            bottomLeftText = (
-                <div>
-                    <Button
-                        className="showNumAnswered"
-                        onClick={this.submitInfo}>
-                        Submit
-                    </Button>
-                </div>
-            )
+              <BottomReviewText correct={this.props.isCorrect} />
+            );
+        } else if(!disableAll) {
+            if(this.props.numQsAnswered != this.props.numQuestions){
+                bottomLeftText = (
+                    <div className="showNumAnswered">
+                        {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
+                    </div>
+                )
+            } else {
+                bottomLeftText = (
+                    <div>
+                        <Button
+                            className="showNumAnswered"
+                            onClick={this.submitInfo}>
+                            Submit
+                        </Button>
+                    </div>
+                )
+            }
         }
       }
 
