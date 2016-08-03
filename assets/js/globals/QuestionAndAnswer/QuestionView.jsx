@@ -391,8 +391,7 @@ class QuestionView extends React.Component {
           showing={this.state.addingQuestion}
           close={this.closeModal}
           pushQuestion={this.pushQuestion}
-          askQuestionText={this.state.askQuestionText}
-        />
+          askQuestionText={this.state.askQuestionText}/>
       );
       var questionOptions = this.state.questions.map(function(q) {
         return q.title
@@ -403,7 +402,8 @@ class QuestionView extends React.Component {
             placeholder="Don't understand something? Ask a question here."
             options={questionOptions}
             onOptionSelected={this.onQuestionFilterSelect}
-            onKeyUp={this.onAskQuestionChange} />
+            onKeyUp={this.onAskQuestionChange}
+            customClasses={{input: 'typeahead-input'}}/>
           <Button className="addQuestionBtn" onClick={this.addQuestion}>
             <FontAwesome name="plus-circle" />
             Ask A Question
