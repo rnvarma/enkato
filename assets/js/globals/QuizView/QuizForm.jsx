@@ -121,51 +121,60 @@ export default class QuizForm extends Component {
                     setQuestion={this.setQuestion}/>
             )
         }
-
-        if(this.props.resultsPage){
+        if(this.props.questions.length == 0){
             modalBody = (
-                <CompletedQuizPage 
-                    numCorrect={this.props.completedQuizInfo.numCorrect}
-                    numQuestions={this.props.questions.length}
-                    showReviewMode={this.props.showReviewMode}
-                    onRetakeQuiz={this.props.onRetakeQuiz}/>
+                <div className="questionNode noQuiz">
+                    The instructor has not created a quiz for this video.
+                </div>
             )
         } else {
-            modalBody = (
-                <QuestionNode
-                  question={currentQuestionData}
-                  selectChoice={this.selectChoice}
-                  isLast={isLast}
-                  numQsAnswered={this.state.numQsAnswered}
-                  numQuestions={this.props.questions.length}
-                  selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}
-                  submitInfo={this.submitInfo}
-                  reviewMode={this.props.reviewMode}
-                  currentQuestionResults={currentQuestionResults}
-                  setCurrentQuestion={this.setCurrentQuestion}/>
-            )
+            if(this.props.resultsPage){
+                modalBody = (
+                    <CompletedQuizPage 
+                        numCorrect={this.props.completedQuizInfo.numCorrect}
+                        numQuestions={this.props.questions.length}
+                        showReviewMode={this.props.showReviewMode}
+                        nextVideo={this.props.nextVideo}
+                        onRetakeQuiz={this.props.onRetakeQuiz}/>
+                )
+            } else {
+                modalBody = (
+                    <QuestionNode
+                      question={currentQuestionData}
+                      selectChoice={this.selectChoice}
+                      isLast={isLast}
+                      numQsAnswered={this.state.numQsAnswered}
+                      numQuestions={this.props.questions.length}
+                      selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}
+                      reviewMode={this.props.reviewMode}
+                      currentQuestionResults={currentQuestionResults}
+                      setCurrentQuestion={this.setCurrentQuestion}/>
+                )
+            }
         }
-      return (
-        <div className="quizForm">
-          <div className="header">
-            Check Your Understanding
-            <FontAwesome className="closeForm" name="close" onClick={this.closeModal}/>
-                </div>
-          {navigation}
-          {modalBody}
-          <QuizNavFooter
-            quizExists={Boolean(this.props.questions[this.state.currentQuestion])}
-            currentQuestion={this.state.currentQuestion}
-            numQuestions={this.props.questions.length}
-            numQsAnswered={this.state.numQsAnswered}
-            nextQuestion={this.nextQuestion}
-            prevQuestion={this.prevQuestion}
-            closeModal={this.closeModal}
-            resultsPage={this.props.resultsPage}
-            reviewMode={this.props.reviewMode}
-            onFinishButton={this.props.onFinishButton}
-            isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion] ? this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect : false}/>
-        </div>
-      );
+        return (
+            <div className="quizForm">
+              <div className="header">
+                Check Your Understanding
+                <FontAwesome className="closeForm" name="close" onClick={this.closeModal}/>
+                    </div>
+              {navigation}
+              {modalBody}
+              <QuizNavFooter
+                quizExists={Boolean(this.props.questions[this.state.currentQuestion])}
+                currentQuestion={this.state.currentQuestion}
+                numQuestions={this.props.questions.length}
+                numQsAnswered={this.state.numQsAnswered}
+                nextQuestion={this.nextQuestion}
+                prevQuestion={this.prevQuestion}
+                closeModal={this.closeModal}
+                resultsPage={this.props.resultsPage}
+                reviewMode={this.props.reviewMode}
+                submitInfo={this.submitInfo}  
+                onFinishButton={this.props.onFinishButton}
+                submitInfo={this.submitInfo}
+                isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion] ? this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect : false}/>
+            </div>
+        );
     }
 }

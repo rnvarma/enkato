@@ -1,85 +1,85 @@
+require('css/globals/QuizAddingForm/singlequizaddingform.scss');
+import React, { Component } from 'react';
 
-require('css/globals/QuizAddingForm/singlequizaddingform.scss')
-var React = require('react')
-var ReactDOM = require('react-dom')
-
-var FontAwesome = require('react-fontawesome');
-
-var Form = require('react-bootstrap').Form;
-var FormGroup = require('react-bootstrap').FormGroup;
-var Row = require('react-bootstrap').Row;
-var FormControl = require('react-bootstrap').FormControl;
-var ControlLabel = require('react-bootstrap').ControlLabel;
-var InputGroup = require('react-bootstrap').InputGroup;
-var FontAwesome = require('react-fontawesome');
-
-var QuizQuestion = require('js/globals/QuizAddingForm/QuizQuestion');
+import QuizQuestion from 'js/globals/QuizAddingForm/QuizQuestion';
 var AddOptionButton = require('js/globals/QuizAddingForm/AddOptionButton');
 var MCChoiceList = require('js/globals/QuizAddingForm/MCChoiceList');
 
-//http://stackoverflow.com/questions/1349404/generate-a-string-of-5-random-characters-in-javascript
-function makeid()
-{
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+class SingleQuizForm extends Component {
+    constructor() {
+        super();
 
-    for( var i=0; i < 7; i++ )
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
+        this.handleQuizQuestionChange = this.handleQuizQuestionChange.bind(this);
+        this.handleChoiceTextChange = this.handleChoiceTextChange.bind(this);
+        this.moveFocusUp = this.moveFocusUp.bind(this);
+        this.moveFocusDownOrAddNewChoice = this.moveFocusDownOrAddNewChoice.bind(this);
+        this.addNewChoice = this.addNewChoice.bind(this);
+        this.deleteChoice = this.deleteChoice.bind(this);
+        this.makeChoiceIsCorrect = this.makeChoiceIsCorrect.bind(this);
+        this.scrollToQuestion = this.scrollToQuestion.bind(this);
+        this.deleteQuestion = this.deleteQuestion.bind(this);
+    }
 
-    return text;
-}
-
-
-module.exports = React.createClass({
-    getInitialState: function(){
-        return {
-            choiceList:[{text:"", keyCode:makeid()}]
-        }
-    },
-    handleQuizQuestionChange: function(questionText){
-        this.props.handleQuizQuestionChange(questionText, this.props.index)
-    },
-    handleChoiceTextChange: function(text, index, cid){
-        var tempChoiceList = this.props.question.choiceList;
-        tempChoiceList[index].text = text;
-        this.props.setChoiceList(tempChoiceList, this.props.index)
-    },
-    moveFocusDownOrAddNewChoice: function(index) {
-        if (index == this.props.question.choiceList.length -1 ) {
-            // at the bottom
-            this.addNewChoice()
-        } else {
-            // focus on the one below this one
-            $("#" + (this.props.question.choiceList[index + 1].id)).focus()
-        }
-    },
-    addNewChoice: function(){
-        this.props.addNewChoice(this.props.question.id)
-    },
-    componentDidUpdate: function(){
+    componentDidUpdate() {
         for (var i = 0; i < this.props.question.choiceList.length; i++) {
             if (this.props.question.choiceList[i].focus) {
-                $("#" + this.props.question.choiceList[i].id).focus()
+                $("#" + this.props.question.choiceList[i].id).focus();
                 this.props.question.choiceList[i].focus = false;
             }
         }
-    },
-    deleteChoice:function(choiceId, cindex){
+    }
+
+    handleQuizQuestionChange(questionText) {
+        this.props.handleQuizQuestionChange(questionText, this.props.index)
+    }
+
+    handleChoiceTextChange(text, index, cid) {
+        var tempChoiceList = this.props.question.choiceList;
+        tempChoiceList[index].text = text;
+        this.props.setChoiceList(tempChoiceList, this.props.index)
+    }
+
+    moveFocusUp(index) {
+        if (index !== 0 && this.props.question.choiceList.length) {
+            $(`#${this.props.question.choiceList[index - 1].id}`).focus();
+        } else {
+            $(`#${this.props.question.id}q .singleQuizForm .question-row .question-input`).focus();
+        }
+    }
+
+    moveFocusDownOrAddNewChoice(index) {
+        if (index === this.props.question.choiceList.length - 1) {
+            this.addNewChoice();
+        } else {
+            $(`#${this.props.question.choiceList[index + 1].id}`).focus();
+        }
+    }
+
+    addNewChoice() {
+        this.props.addNewChoice(this.props.question.id)
+    }
+
+    deleteChoice(choiceId, cindex){
         this.props.deleteChoice(this.props.question.id, choiceId, this.props.index, cindex)
-    },
-    makeChoiceIsCorrect: function(choiceId) {
+    }
+
+    makeChoiceIsCorrect(choiceId) {
         this.props.makeChoiceIsCorrect(choiceId, this.props.index)
-    },
-    scrollToQuestion: function() {
+    }
+
+    scrollToQuestion() {
         this.props.scrollToFromButton(this.props.question.id, this.props.index);
-    },
-    deleteQuestion: function() {
+    }
+
+    deleteQuestion() {
         this.props.deleteQuestion(this.props.question.id, this.props.index)
-    },
-    render: function() {
+    }
+
+    render() {
         return (
-            <div className="indi-quiz-form">
-                <QuizQuestion 
+            <div className="singleQuizForm">
+                <QuizQuestion
+                    index={this.props.index}
                     questionText={this.props.question.quizQuestionText}
                     handleQuizQuestionChange={this.handleQuizQuestionChange}
                     scrollToQuestion={this.scrollToQuestion}
@@ -90,9 +90,12 @@ module.exports = React.createClass({
                     choiceList={this.props.question.choiceList}
                     deleteChoice={this.deleteChoice}
                     makeChoiceIsCorrect={this.makeChoiceIsCorrect}
+                    moveFocusUp={this.moveFocusUp}
                     moveFocusDownOrAddNewChoice={this.moveFocusDownOrAddNewChoice}/>
                 <AddOptionButton handleClick={this.addNewChoice}/>
             </div>
         )
     }
-})
+}
+
+export default SingleQuizForm;

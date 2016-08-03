@@ -1,14 +1,14 @@
 
 require("css/globals/QuizAddingForm/QuizFormNode.scss");
 
-var React = require('react')
+import React, { Component } from 'react';
 
-var SingleQuizForm = require('js/globals/QuizAddingForm/SingleQuizForm')
+import SingleQuizForm from 'js/globals/QuizAddingForm/SingleQuizForm';
 
-module.exports = React.createClass({
-    render: function(){
-        return(
-            <div id={this.props.question.id+"q"}>
+class QuizFormNode extends Component {
+    render() {
+        return (
+            <div id={`${this.props.question.id}q`}>
                 <SingleQuizForm 
                     questionNumber={this.props.keyCode}
                     handleQuizQuestionChange={this.props.handleQuizQuestionChange}
@@ -22,6 +22,8 @@ module.exports = React.createClass({
                     index={this.props.index}
                     question={this.props.question}/>
             </div>
-        )
+        );
     }
-})
+}
+
+export default QuizFormNode;

@@ -59,19 +59,19 @@ class CreateSeriesModal extends Component {
     clearModal() {
         this.setState({
             name: "",
-            description: ""
+            description: "",
         })
     }
 
     close() {
         this.setState({
-            showModal: false
-        })
+            showModal: false,
+        });
     }
     open() {
         this.setState({
-            showModal: true
-        })
+            showModal: true,
+        });
     }
 
     render() {
@@ -89,7 +89,7 @@ class CreateSeriesModal extends Component {
                   </Modal.Body>
                   <Modal.Footer>
                     <Button onClick={this.close}>Cancel</Button>
-                    <Button className="structabl-red" disabled = {!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Create</Button>
+                    <Button className="structabl-red" disabled={!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Create</Button>
                   </Modal.Footer>
                 </Modal>
             </li>

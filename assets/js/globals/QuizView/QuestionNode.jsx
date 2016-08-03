@@ -10,16 +10,6 @@ import ChoiceList from 'js/globals/QuizView/ChoiceList';
 import BottomReviewText from 'js/globals/QuizView/ReviewingQuizView/BottomReviewText';
 
 export default class QuestionNode extends Component {
-    constructor(props) {
-        super(props)
-
-        this.submitInfo = this.submitInfo.bind(this)
-    }
-
-    submitInfo() {
-        this.props.submitInfo()
-    }
-
     render() {
         if (!this.props.question) {
             return (
@@ -28,19 +18,7 @@ export default class QuestionNode extends Component {
                 </div>
             )
         }
-        var submitSection = (<div></div>)
-        if(this.props.isLast && this.props.numQuestions==this.props.numQsAnswered && !this.props.reviewMode){
-            submitSection = (
-                <div>
-                    <hr className="quizSubmitButtonHR"/>
-                    <Button
-                        className="quizSubmitAnswerButton"
-                        onClick={this.submitInfo}>
-                        Submit
-                    </Button>
-                </div>
-            )
-        }
+
         return(
             <div className="questionNode">
                 <div className="title"> 
@@ -57,7 +35,6 @@ export default class QuestionNode extends Component {
                     currentQuestionResults={this.props.currentQuestionResults} 
                     reviewing={this.props.reviewMode}
                 />
-                {submitSection}
             </div>
         )
     }

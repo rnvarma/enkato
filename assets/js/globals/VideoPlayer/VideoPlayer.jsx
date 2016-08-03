@@ -325,7 +325,6 @@ export default class VideoPlayer extends Component {
             takingQuiz: false,
             showingOverlay: false
         })
-        this.state.Player.play()
     }
 
     setWindowSize() {

@@ -142,8 +142,7 @@ class QuestionDisplay extends Component {
                     acceptText="Delete"
                     acceptBsStyle="danger"
                     acceptCallback={this.delete}
-                    cancelCallback={this.toggleDelete}
-                />
+                    cancelCallback={this.toggleDelete}/>
                 <Row>
                     {this.props.question.editing
                         ? (

@@ -53,7 +53,7 @@ class Serializer(object):
         for series_video in series_videos:
             total_time += series_video.video.duration
         data["total_len"] = sanetizeTime(total_time)
-        data["is_creator"] = False if not request else series.creator == request.user.customuser
+        data["is_creator"] = False if not request else (series.creator == request.user.customuser or request.user.is_superuser)
         data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
         return data    
 
@@ -64,7 +64,7 @@ class Serializer(object):
         data["is_anonymous"], data["is_creator"], data["is_subscribed"] = False, False, False
         data["is_anonymous"] = False if not request else request.user.is_anonymous()
         if not data["is_anonymous"]:
-            is_creator = False if not request else series.creator == request.user.customuser
+            is_creator = False if not request else (series.creator == request.user.customuser or request.user.is_superuser)
             data["is_creator"] = is_creator
             data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
 
@@ -268,7 +268,7 @@ class VideoData(APIView):
         #get QuizList
         quizQs = video.quiz_questions.all()
         questions = map(Serializer.serialize_quiz_question, quizQs)
-        return JsonResponse({
+        return Response({
             'videoID': video.vid_id,
             'topicList': frontendTList,
             'videoData': Serializer.serialize_video(video),
@@ -282,7 +282,7 @@ class VideoIdData(APIView):
             video = Video.objects.get(vid_id=v_id)
             topicList = video.topics.all().order_by('time')
             frontendTList = map(Serializer.serialize_topic, topicList)
-            return JsonResponse({
+            return Response({
                 'inDatabase': True,
                 'topicList':frontendTList,
                 'videoData': Serializer.serialize_video(video)
@@ -291,13 +291,13 @@ class VideoIdData(APIView):
             video = Video.objects.filter(vid_id=v_id).first()
             topicList = video.topics.all().order_by('time')
             frontendTList = map(Serializer.serialize_topic, topicList)
-            return JsonResponse({
+            return Response({
                 'inDatabase': True,
                 'topicList':frontendTList,
                 'videoData': Serializer.serialize_video(video)
             })
         except Video.DoesNotExist:
-            return JsonResponse({
+            return Response({
                 'inDatabase': False
             })
 
