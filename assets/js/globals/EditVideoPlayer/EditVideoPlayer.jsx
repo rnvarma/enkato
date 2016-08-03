@@ -6,7 +6,6 @@ import React, { Component } from 'react';
 
 import request from 'js/globals/HttpRequest';
 import { styleDuration } from 'js/globals/utility';
-import ConfirmModal from 'js/globals/ConfirmModal';
 import Video from 'js/globals/videoPlayer/Video';
 import Player from 'js/globals/videoPlayer/Player';
 import EditableTopicList from 'js/globals/EditVideoPlayer/EditableTopicList';
@@ -79,7 +78,7 @@ export default class EditVideoPlayer extends Component {
             percentDone: 0,
             pollInterval: setInterval(this.updateCurrentState, pollInterval),
         });
-        $(window).on('unload', this.syncTopics);
+        /*$(window).on('unload', this.syncTopics);*/
         $(window).on('resize', this.setWindowSize);
     }
 
@@ -90,7 +89,7 @@ export default class EditVideoPlayer extends Component {
 
     componentWillUnmount() {
         clearInterval(this.state.pollInterval);
-        $(window).off('unload');
+        /*$(window).off('unload');*/
         $(window).off('resize');
     }
 
@@ -101,9 +100,9 @@ export default class EditVideoPlayer extends Component {
         }
 
         /* save and publish button was hit */
-        if (nextProps.publishAnnotations) {
+        if (nextProps.publishTopics) {
             this.syncTopics();
-            this.props.closeAnnotationsModal();
+            this.props.closeAnnotationModal();
         }
     }
 
@@ -135,9 +134,9 @@ export default class EditVideoPlayer extends Component {
             }
         }
         this.setState({
-            topicObjList: topicList
+            topicObjList: topicList,
         });
-        this.props.setAnnotationsToSave();
+        this.props.setUnsavedTopics();
     }
 
     /* When user publishes */
@@ -201,7 +200,7 @@ export default class EditVideoPlayer extends Component {
         this.setState({
             topicObjList: newTopicList,
         }, function() { $(`#${newTopic.id}`).focus(); });
-        this.props.setAnnotationsToSave();
+        this.props.setUnsavedTopics();
     }
 
     /* splices topic out of list by id, adds to removedTopics, sets topic list */
@@ -218,7 +217,7 @@ export default class EditVideoPlayer extends Component {
         this.setState({
             topicObjList: newTopicList,
         });
-        this.props.setAnnotationsToSave();
+        this.props.setUnsavedTopics();
     }
 
     updateCurrentState() {
@@ -271,11 +270,7 @@ export default class EditVideoPlayer extends Component {
         if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
         return (
                 <div className="ynVideoPlayer">
-                    <ConfirmModal
-                        showing={this.props.showingAnnotationSave}
-                        description="Are you sure you want to navigate away? Your changes are not saved and will be gone forever."
-                        acceptCallback={this.props.onConfirmQuit}
-                        cancelCallback={this.props.setKeepAnnotations}/>
+
                     <div className="topicButtonColumn">
                         <EditableTopicList
                             topicObjList={this.state.topicObjList}

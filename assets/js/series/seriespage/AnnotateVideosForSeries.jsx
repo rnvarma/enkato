@@ -1,4 +1,4 @@
-require("css/series/seriespage/AnnotateVideosForSeries.scss");
+require('css/series/seriespage/AnnotateVideosForSeries.scss');
 
 import React, { Component } from 'react';
 
@@ -18,8 +18,8 @@ export default class AnnotateVideosForSeries extends Component {
 
     /* wrapper to stop change if edits need to be saved still */
     updateCurrentVideo(id) {
-        if (this.props.annotationsToSave) {
-            this.props.setLaunchKeeper(this.updateCurrVideo.bind(null, id));
+        if (this.props.unsavedTopics || this.props.unsavedQuiz) {
+            this.props.launchUnsaved(this.updateCurrVideo.bind(null, id));
         } else {
             this.updateCurrVideo(id);
         }
@@ -44,14 +44,13 @@ export default class AnnotateVideosForSeries extends Component {
             <AnnotateSeriesVideoArea
                 currentVideo={video}
                 quizMode={this.props.quizMode}
-                setAnnotationsToSave={this.props.setAnnotationsToSave}
-                setKeepAnnotations={this.props.setKeepAnnotations}
-                annotationsToSave={this.props.annotationsToSave}
-                showingAnnotationSave={this.props.showingAnnotationSave}
-                onConfirmQuit={this.props.onConfirmQuit}
-                publishAnnotations={this.props.publishAnnotations}
-                closeAnnotationsModal={this.props.closeAnnotationsModal}
-            />
+                unsavedTopics={this.props.unsavedTopics}
+                unsavedQuiz={this.props.unsavedQuiz}
+                publishTopics={this.props.publishTopics}
+                publishQuiz={this.props.publishQuiz}
+                setUnsavedTopics={this.props.setUnsavedTopics}
+                setUnsavedQuiz={this.props.setUnsavedQuiz}
+                closeAnnotationModal={this.props.closeAnnotationModal}/>
         </div>
         );
     }

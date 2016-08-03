@@ -1,13 +1,12 @@
+require('css/globals/QuizAddingForm/QuizFormsList.scss');
 
-require("css/globals/QuizAddingForm/QuizFormsList.scss");
+import React, { Component } from 'react';
 
-var React = require('react')
+import QuizFormNode from 'js/globals/QuizAddingForm/QuizFormNode';
 
-var QuizFormNode = require('js/globals/QuizAddingForm/QuizFormNode');
-
-module.exports = React.createClass({
-    render: function(){
-        var QuizFormNodes = this.props.questions.map(function(question, index){
+class QuizFormsList extends Component {
+    render() {
+        const QuizFormNodes = this.props.questions.map((question, index) => {
             return (
                 <QuizFormNode
                     key={question.id}
@@ -20,13 +19,16 @@ module.exports = React.createClass({
                     makeChoiceIsCorrect={this.props.makeChoiceIsCorrect}
                     scrollToFromButton={this.props.scrollToFromButton}
                     index={index}
-                    question={question}/>
-            )
-        }.bind(this))
-        return(
+                    question={question} />
+            );
+        });
+
+        return (
             <div className="quizFormList">
                 {QuizFormNodes}
             </div>
-        )
+        );
     }
-})
+}
+
+export default QuizFormsList;
