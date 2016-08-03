@@ -136,7 +136,7 @@ export default class EditVideoPlayer extends Component {
         this.setState({
             topicObjList: topicList,
         });
-        this.props.setUnsavedTopics();
+        this.props.setUnsaved();
     }
 
     /* When user publishes */
@@ -200,7 +200,7 @@ export default class EditVideoPlayer extends Component {
         this.setState({
             topicObjList: newTopicList,
         }, function() { $(`#${newTopic.id}`).focus(); });
-        this.props.setUnsavedTopics();
+        this.props.setUnsaved();
     }
 
     /* splices topic out of list by id, adds to removedTopics, sets topic list */
@@ -217,7 +217,7 @@ export default class EditVideoPlayer extends Component {
         this.setState({
             topicObjList: newTopicList,
         });
-        this.props.setUnsavedTopics();
+        this.props.setUnsaved();
     }
 
     updateCurrentState() {
