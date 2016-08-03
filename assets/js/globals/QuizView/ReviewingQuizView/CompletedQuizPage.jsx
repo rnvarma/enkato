@@ -9,17 +9,7 @@ export default class CompletedQuizPage extends Component {
     constructor(props){
         super(props);
 
-        this.state = {
-            nextVideoUrl:null
-        }
-
         this.getNextVideoUrl = this.getNextVideoUrl.bind(this);
-    }
-
-    componentDidMount(){
-        this.setState({
-            nextVideoUrl: this.getNextVideoUrl
-        });
     }
 
     getNextVideoUrl(){
@@ -32,7 +22,7 @@ export default class CompletedQuizPage extends Component {
             nextVideo=(
                 <Button
                 className="nextVideoButton"
-                onClick ={this.state.nextVideoUrl}>
+                onClick ={this.getNextVideoUrl}>
                 Next Video
                 </Button>
             )

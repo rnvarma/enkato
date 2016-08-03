@@ -140,7 +140,6 @@ export default class QuizForm extends Component {
                   numQsAnswered={this.state.numQsAnswered}
                   numQuestions={this.props.questions.length}
                   selectedAnswer={this.state.selectedAnswers[this.state.currentQuestion]}
-                  submitInfo={this.submitInfo}
                   reviewMode={this.props.reviewMode}
                   currentQuestionResults={currentQuestionResults}
                   setCurrentQuestion={this.setCurrentQuestion}/>
@@ -165,6 +164,7 @@ export default class QuizForm extends Component {
             resultsPage={this.props.resultsPage}
             reviewMode={this.props.reviewMode}
             onFinishButton={this.props.onFinishButton}
+            submitInfo={this.submitInfo}
             isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion] ? this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect : false}/>
         </div>
       );
