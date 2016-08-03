@@ -1,16 +1,22 @@
+require('css/globals/QuizAddingForm/QuizQuestion.scss');
 
-require("css/globals/QuizAddingForm/QuizQuestion.scss");
+import React, { Component } from 'react';
 
-var React = require('react')
-var Row = require('react-bootstrap').Row;
-var FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome';
+import Row from 'react-bootstrap/lib/Row';
 
-module.exports = React.createClass({
-    handleQuestionTextChange: function(e){
-        this.props.handleQuizQuestionChange(e.target.value)
-    },
-    render: function(){
-        return(
+class QuizQuestion extends Component {
+    constructor() {
+        super();
+        this.handleQuestionTextChange = this.handleQuestionTextChange.bind(this);
+    }
+
+    handleQuestionTextChange(e) {
+        this.props.handleQuizQuestionChange(e.target.value);
+    }
+
+    render() {
+        return (
             <Row className="question-row">
                 <FontAwesome
                     className='arrow-icon' 
@@ -18,7 +24,7 @@ module.exports = React.createClass({
                 <input
                     className="question-input"
                     type="text"
-                    placeholder="Question"
+                    placeholder={`Question ${this.props.index+1}`}
                     value={this.props.questionText}
                     onChange={this.handleQuestionTextChange}
                     onFocus={this.props.scrollToQuestion}/>
@@ -27,6 +33,8 @@ module.exports = React.createClass({
                     name="times"
                     onClick={this.props.deleteQuestion}/>
             </Row>
-        )
+        );
     }
-})
+}
+
+export default QuizQuestion;

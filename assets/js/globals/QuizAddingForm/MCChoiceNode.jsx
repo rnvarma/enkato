@@ -22,33 +22,37 @@ module.exports = React.createClass({
             this.props.deleteChoice(this.props.choice.id, this.props.index)
     },
     onKeyDown: function(e) {
-        if (e.keyCode == 8 && !this.props.choice.text) {
+        if (e.keyCode === 8 && !this.props.choice.text) { // backspace
             e.preventDefault()
-            this.props.deleteChoice(this.props.choice.id, this.props.index)
+            this.props.deleteChoice(this.props.choice.id, this.props.index);
+        } else if (e.keyCode === 38) {  // up
+            this.props.moveFocusUp(this.props.index);
+        } else if (e.keyCode == 40) {  // down
+            this.props.moveFocusDownOrAddNewChoice(this.props.index);
         }
     }, 
     onChoiceSelected: function() {
         this.props.makeChoiceIsCorrect(this.props.choice.id);
     },
-    render: function(){
-        //add 1 to index because its an index // starts @ 0 ! 1
-        var placeholder = "Choice "+(this.props.index+1)
+    render: function() {
+        const { choice, index } = this.props;
+        const placeholder = `Choice ${index + 1}`;
 
         return(
             <form onSubmit={this.submit}>
                 <Row className="choice-row">
                     <FontAwesome
-                        className={'circle-icon' + (this.props.choice.is_correct ? " correct" : "")}
-                        name={this.props.choice.is_correct ? 'check-circle' : 'circle-thin'}
+                        className={'circle-icon' + (choice.is_correct ? " correct" : "")}
+                        name={choice.is_correct ? 'check-circle' : 'circle-thin'}
                         onClick={this.onChoiceSelected}/>
                     <input
                         className="choice-input"
                         type="text"
                         placeholder={placeholder}
                         onChange={this.handleChoiceTextChange}
-                        id={this.props.choice.id}
+                        id={choice.id}
                         onKeyDown={this.onKeyDown}
-                        value={this.props.choice.text}/>
+                        value={choice.text}/>
                     <FontAwesome 
                         className="timesIcon"
                         name='times'
