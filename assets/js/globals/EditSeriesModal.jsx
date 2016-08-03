@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Button from 'react-bootstrap/lib/Button';
 
-import CreateSeriesForm from 'js/globals/CreateSeriesForm';
+import EditSeriesForm from 'js/globals/EditSeriesForm';
 import request from 'js/globals/HttpRequest';
 
 class EditSeriesModal extends Component {
@@ -83,7 +83,9 @@ class EditSeriesModal extends Component {
                     <Modal.Title>Edit Series</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <CreateSeriesForm
+                    <EditSeriesForm
+                        name = {this.props.name}
+                        description = {this.props.description}
                         onNameChange={this.onNameChange}
                         onDescriptionChange={this.onDescriptionChange}/>
                   </Modal.Body>

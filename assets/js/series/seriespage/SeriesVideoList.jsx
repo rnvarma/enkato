@@ -94,15 +94,18 @@ export default class SeriesVideoList extends Component {
                     loadPageData={this.props.loadPageData}/>
             );
         }.bind(this))
+        var buttons = <div/>
         if (!this.state.reordering) {
-            var buttons = 
-                <div>
-                    <Button onClick = {this.toggleReordering}>Reorder</Button>
-                </div>
+            if (this.props.is_creator) {
+                buttons = 
+                    <div>
+                        <Button onClick = {this.toggleReordering}>Reorder</Button>
+                    </div>
+            }
             var videoList = videoPanels
         }
-        else {
-            var buttons = 
+        else if (this.props.is_creator) {
+            buttons = 
                 <div>
                     <Button onClick = {this.saveReordering}>Save</Button>
                     <Button onClick = {this.toggleReordering}>Cancel</Button>
