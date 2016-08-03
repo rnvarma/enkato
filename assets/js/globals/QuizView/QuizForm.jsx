@@ -128,6 +128,7 @@ export default class QuizForm extends Component {
                     numCorrect={this.props.completedQuizInfo.numCorrect}
                     numQuestions={this.props.questions.length}
                     showReviewMode={this.props.showReviewMode}
+                    nextVideo={this.props.nextVideo}
                     onRetakeQuiz={this.props.onRetakeQuiz}/>
             )
         } else {
@@ -164,6 +165,7 @@ export default class QuizForm extends Component {
             reviewMode={this.props.reviewMode}
             submitInfo={this.submitInfo}  
             onFinishButton={this.props.onFinishButton}
+            submitInfo={this.submitInfo}
             isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion] ? this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect : false}/>
         </div>
       );

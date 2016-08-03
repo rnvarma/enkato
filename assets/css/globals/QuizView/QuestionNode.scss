@@ -33,18 +33,6 @@ $questionIndent:50px;
         text-align: center;
         padding-top: 50px;
     }
-
-    .quizSubmitAnswerButton{
-        background-color:$kato-green;
-        color:white;
-        font-weight:800;
-        margin-left:$questionIndent;
-    }
-
-    .quizSubmitButtonHR{
-        margin-left:$questionIndent;
-        width:calc(100% - #{$questionIndent}*2);
-    }
 }
 
 

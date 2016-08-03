@@ -40,7 +40,7 @@ function showVideo(vidId, timestamp, vidTitle, vidUUID, seriesUUID){
 
 	var watchButton = document.createElement("img");
 	document.getElementById("main-video-wrapper").querySelector(".video-button").appendChild(watchButton);
-	var imgurl = chrome.extension.getURL("main.gif");
+	var imgurl = chrome.extension.getURL("images/main.gif");
 	
 	watchButton.setAttribute("src", imgurl);
 	watchButton.setAttribute("height", "22px"); 
@@ -73,10 +73,14 @@ function showNoVideoMessage(){
 
 	var enkatoButton = document.createElement("img");
 	noVideoDiv.appendChild(enkatoButton);
-	enkatoButton.setAttribute("src", "go-to-enkato.gif");
+	enkatoButton.setAttribute("src", "images/go-to-enkato.gif");
 	enkatoButton.className = "enkato-button";
 	enkatoButton.style.cursor = "pointer";
 	enkatoButton.setAttribute("height", "30px");
+
+	$(enkatoButton).click(function(){
+		window.open("http://www.enkato.com");
+	})
 
 }
 
@@ -101,19 +105,23 @@ function showTopics(topics, vidUUID, seriesUUID){
 		}
 	}
 	else{
-		for(i=0; i<4; i++){
+		for(i=0; i<3; i++){
 			var topic = document.createElement("div");
+			topic.className = "topic-node";
 			listContainer.appendChild(topic);
 			topic.innerHTML = topics[i].name;
 			topic.setAttribute("time", topics[i].time);
-			//topic.setAttribute("onclick", topicURL(this));
+			topic.setAttribute("url", "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID + "?t=" + topics[i].time);
 		}
 
 		var topicOverfill = document.createElement("span");
 		topicWrapper.appendChild(topicOverfill);
+		topicOverfill.className= "extra-topics";
 		topicOverfill.innerHTML = "More topics on enkato";
-		topicOverfill.style.fontSize = "15px";
-		topicOverfill.style.textAlign = "center";
+		$(topicOverfill).click(function(){
+			var url = "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID;
+			window.open(url);
+		})
 	}
 
 	$('.topic-node').click(function(){
@@ -143,7 +151,7 @@ function showQuizDiv(seriesUUID, vidUUID){
 
 	var quizButton = document.createElement("img");
 	quizWrapper.appendChild(quizButton);
-	quizButton.setAttribute("src", "quizbutton.gif");
+	quizButton.setAttribute("src", "images/quizbutton.gif");
 	quizButton.className = "quiz-button";
 	quizButton.setAttribute("height", "60px");
 	$(quizButton).click(function(){
@@ -173,7 +181,7 @@ function findInDatabase(vid_id, callback) {
 		dataType: 'json',
 		cache: false,
 		success: function(data) {
-			inDB = JSON.parse(data.inDatabase);
+			inDB = data.inDatabase;
 			if (inDB){
 				var vidData = data.videoData;
 				var vidUUID = vidData.uuid;
@@ -234,8 +242,7 @@ $(document).ready( function(){
 							});
 							showSeriesTitle();
 							showSlideshowImages(thumbnails, vidUUIDs, seriesUUID, vidId, vidTitles);
-							showQuizDiv(seriesUUID, vidUUID);
-							//showMoreAtEnkato();							
+							showQuizDiv(seriesUUID, vidUUID);							
 						}
 						else{
 							console.log("show no video");
@@ -250,7 +257,4 @@ $(document).ready( function(){
 			}
 		});
 	});
-
-
-
 })

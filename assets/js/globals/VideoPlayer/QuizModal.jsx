@@ -127,6 +127,7 @@ export default class QuizModal extends Component {
                 <div className="quizModal">
                     <QuizForm
                         videoUUID={this.props.videoUUID}
+                        nextVideo={this.props.nextVideo}
                         closeModal={this.closeModal}
                         onFinishButton={this.props.onFinishButton}
                         reviewMode={this.state.reviewMode}

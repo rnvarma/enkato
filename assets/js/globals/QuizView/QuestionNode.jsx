@@ -10,10 +10,6 @@ import ChoiceList from 'js/globals/QuizView/ChoiceList';
 import BottomReviewText from 'js/globals/QuizView/ReviewingQuizView/BottomReviewText';
 
 export default class QuestionNode extends Component {
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         if (!this.props.question) {
             return (

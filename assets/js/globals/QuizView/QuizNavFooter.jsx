@@ -15,11 +15,10 @@ export default class QuizNavFooter extends React.Component {
 
     submitInfo() {
         this.props.submitInfo()
-    }
-
+    } 
+    
     render() {
         var disableAll = this.props.resultsPage;
-
         var rightButton = <div></div>
         if(this.props.reviewMode&&(this.props.currentQuestion == this.props.numQuestions -1)){
             rightButton = (
@@ -36,6 +35,17 @@ export default class QuizNavFooter extends React.Component {
                     Next
                 </Button>
             )
+        }
+
+        var submitButton = (<div></div>);
+        if(this.props.currentQuestion == this.props.numQuestions-1){
+          submitButton = (
+              <Button
+                className="quizSubmitAnswerButton"
+                onClick={this.submitInfo}>
+                Submit
+              </Button>
+          )
         }
 
       let prevNextBtns;
@@ -89,6 +99,7 @@ export default class QuizNavFooter extends React.Component {
             Cancel
           </Button>
           {prevNextBtns}
+          {submitButton}
         </div>
       );
     }
