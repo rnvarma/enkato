@@ -53,7 +53,7 @@ class Serializer(object):
         for series_video in series_videos:
             total_time += series_video.video.duration
         data["total_len"] = sanetizeTime(total_time)
-        data["is_creator"] = False if not request else series.creator == request.user.customuser
+        data["is_creator"] = False if not request else (series.creator == request.user.customuser or request.user.is_superuser)
         data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
         return data    
 
@@ -64,7 +64,7 @@ class Serializer(object):
         data["is_anonymous"], data["is_creator"], data["is_subscribed"] = False, False, False
         data["is_anonymous"] = False if not request else request.user.is_anonymous()
         if not data["is_anonymous"]:
-            is_creator = False if not request else series.creator == request.user.customuser
+            is_creator = False if not request else (series.creator == request.user.customuser or request.user.is_superuser)
             data["is_creator"] = is_creator
             data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
 
