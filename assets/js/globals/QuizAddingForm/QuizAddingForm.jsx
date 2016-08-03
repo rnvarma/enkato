@@ -99,6 +99,8 @@ class QuizAddingForm extends Component {
         var tempQuestionList = this.state.questions;
         tempQuestionList[questionNumber].choiceList = choiceList;
         this.setState({questions: tempQuestionList})
+
+        this.props.setUnsaved();
     }
 
     setShouldRefocus(shouldRefocus, questionNumber) {
@@ -111,6 +113,8 @@ class QuizAddingForm extends Component {
         var tempQuestionList = this.state.questions;
         tempQuestionList[index].quizQuestionText = questionText;
         this.setState({questions: tempQuestionList})
+
+        this.props.setUnsaved();
     }
 
     scrollToFromButton(questionId, index) {
@@ -163,7 +167,7 @@ class QuizAddingForm extends Component {
             $(`#${choice.id}`).focus();
         });
 
-        this.props.setUnsavedQuiz();
+        this.props.setUnsaved();
     }
 
     deleteChoice(questionId, choiceId, qIndex, cIndex) {
@@ -216,7 +220,7 @@ class QuizAddingForm extends Component {
                 removedChoices: newRemovedChoices,
             });
 
-            this.props.setUnsavedQuiz();
+            this.props.setUnsaved();
         }
     }
 
@@ -231,7 +235,7 @@ class QuizAddingForm extends Component {
         }
         this.setState({questions: tempQuestionList})
 
-        this.props.setUnsavedQuiz();
+        this.props.setUnsaved();
     }
 
     addQuestion() {
@@ -252,7 +256,7 @@ class QuizAddingForm extends Component {
             $(`#${newQuestion.id}q .singleQuizForm .question-row .question-input`).focus();
         });
 
-        this.props.setUnsavedQuiz();
+        this.props.setUnsaved();
     }
 
     deleteQuestion(questionId, questionIndex) {
@@ -278,7 +282,7 @@ class QuizAddingForm extends Component {
             }
         });
 
-        this.props.setUnsavedQuiz();
+        this.props.setUnsaved();
     }
 
     render() {
