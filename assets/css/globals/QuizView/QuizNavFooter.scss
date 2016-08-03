@@ -14,10 +14,13 @@ $questionIndent:50px;
     .backButton {
         margin-right: 10px;
     }
+<<<<<<< HEAD
+=======
 
     .nextButton:disabled{
 
     }
+>>>>>>> 5e7ac681d0cdc854b96c43a0683ab973181e1a4e
     .nextButton {
     }
 
@@ -25,6 +28,7 @@ $questionIndent:50px;
         background-color:$kato-green;
         color:white;
         font-weight:800;
+        margin-right: 10px;
     }
 
     .showNumAnswered {
