@@ -12,8 +12,10 @@ class CreateSeriesArea extends Component{
                     {this.props.name}
                 </div>
                 <div className="titledPanel">
-                    <div>You have not yet created a series. Try it!</div>
-                    <div><CreateSeriesModal /></div>
+                    <div className="defaultMessage">
+                        You have not yet created a series. Try it!
+                        <div><CreateSeriesModal /></div>
+                    </div>
                 </div>
             </div>
         )

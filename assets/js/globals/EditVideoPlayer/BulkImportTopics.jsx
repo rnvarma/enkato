@@ -1,5 +1,3 @@
-require('css/globals/EditVideoPlayer/BulkImportTopics')
-
 import React, { Component } from 'react';
 
 import request from 'js/globals/HttpRequest';

@@ -38,6 +38,8 @@
 
 .notification {
     color: $base-dark;
+    max-width: 400;
+    font-weight: $bold-weight;
 }
 
 .navbar-toggle {

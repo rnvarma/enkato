@@ -1,5 +1,3 @@
-require("css/userdashboard/UserDashboard/SubscribedSeriesPanel.scss");
-
 import React, { Component } from 'react'
 import { Link } from 'react-router';
 

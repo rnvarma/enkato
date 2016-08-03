@@ -1,8 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/NavBar.scss")
-require("css/globals/base.scss")
-require("css/home/creator/EducatorOnboarding")
-
 import React, { Component } from 'react';
 
 import Col from 'react-bootstrap/lib/Col';
