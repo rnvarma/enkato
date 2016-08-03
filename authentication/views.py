@@ -1,7 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from django.views.generic.base import View
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from rest_framework.authtoken.models import Token

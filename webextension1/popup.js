@@ -19,7 +19,7 @@ function timeToSeconds(time){
 function showHeader(){
 	var headerLogo = document.getElementById("header").firstElementChild;
 	$(headerLogo).click(function(){
-		window.open("http://www.enkato.com");
+		window.open("http://127.0.0.1:8000");
 	});
 }
 
@@ -53,7 +53,7 @@ function showVideo(vidId, timestamp, vidTitle, vidUUID, seriesUUID){
 
 	var tsSeconds = timeToSeconds(timestamp);
 	$(watchButton).click(function(){
-		window.open("http://www.enkato.com/s/" + seriesUUID + "/watch#" + vidUUID+ "?t=" + tsSeconds);//add time stamp
+		window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID+ "?t=" + tsSeconds);//add time stamp
 	})
 
 	var mainWrapper = document.getElementById("main-video-wrapper");
@@ -77,9 +77,7 @@ function showNoVideoMessage(){
 	enkatoButton.className = "enkato-button";
 	enkatoButton.style.cursor = "pointer";
 	enkatoButton.setAttribute("height", "30px");
-	$(enkatoButton).click(function(){
-		window.open("http://www.enkato.com");
-	})
+
 }
 
 function showTopics(topics, vidUUID, seriesUUID){
@@ -94,16 +92,21 @@ function showTopics(topics, vidUUID, seriesUUID){
 	listContainer.style.margin = "3px";
 	if (topics.length < 4){
 		for(i=0; i<topics.length; i++){
-			var topic = document.createElement("LI");
+			var topic = document.createElement("div");
+			topic.className = "topic-node";
 			listContainer.appendChild(topic);
 			topic.innerHTML = topics[i].name;
+			topic.setAttribute("time", topics[i].time);
+			topic.setAttribute("url", "http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID + "?t=" + topics[i].time);
 		}
 	}
 	else{
 		for(i=0; i<4; i++){
-			var topic = document.createElement("LI");
+			var topic = document.createElement("div");
 			listContainer.appendChild(topic);
 			topic.innerHTML = topics[i].name;
+			topic.setAttribute("time", topics[i].time);
+			//topic.setAttribute("onclick", topicURL(this));
 		}
 
 		var topicOverfill = document.createElement("span");
@@ -112,6 +115,11 @@ function showTopics(topics, vidUUID, seriesUUID){
 		topicOverfill.style.fontSize = "15px";
 		topicOverfill.style.textAlign = "center";
 	}
+
+	$('.topic-node').click(function(){
+		var url = this.getAttribute("url");
+		window.open(url);
+	});
 }
 
 function showNoTopicsMessage(){
@@ -139,13 +147,13 @@ function showQuizDiv(seriesUUID, vidUUID){
 	quizButton.className = "quiz-button";
 	quizButton.setAttribute("height", "60px");
 	$(quizButton).click(function(){
-		window.open("http://www.enkato.com/s/" + seriesUUID + "/watch#" + vidUUID + "?quiz=true");
+		window.open("http://127.0.0.1:8000/s/" + seriesUUID + "/watch#" + vidUUID + "?quiz=true");
 	})
 }
 
 function findTopicList(vid_uuid, callback){
 	$.ajax({
-		url: "http://www.enkato.com/1/v/" + vid_uuid,
+		url: "http://127.0.0.1:8000/1/v/" + vid_uuid,
 		dataType: 'json',
 		cache: false,
 		success: function(data) {
@@ -161,7 +169,7 @@ function findTopicList(vid_uuid, callback){
 
 function findInDatabase(vid_id, callback) {
 	$.ajax({
-		url: "http://www.enkato.com/2/v/" + vid_id,
+		url: "http://127.0.0.1:8000/2/v/" + vid_id,
 		dataType: 'json',
 		cache: false,
 		success: function(data) {
@@ -180,7 +188,7 @@ function findInDatabase(vid_id, callback) {
 
 function getSeriesInfo(videoId, callback){
 	$.ajax({
-		url: "http://www.enkato.com/2/s/" + videoId,
+		url: "http://127.0.0.1:8000/2/s/" + videoId,
 		dataType: 'json',
 		cache: false,
 		success: function(data) {
@@ -205,9 +213,9 @@ function getSeriesInfo(videoId, callback){
 $(document).ready( function(){
 	chrome.tabs.query({active:true, currentWindow:true}, function(tabs){
 		chrome.tabs.sendMessage(tabs[0].id, {from: "popup", subject:"url"}, function(info){
-			var vidId = info.videoId;
 			showHeader();
-			if(vidId != false){
+			if((info != null) && (info.videoId != false)){
+				var vidId = info.videoId;
 				getSeriesInfo(vidId, function(inSeries, seriesUUID, thumbnails, vidUUIDs, vidTitles){
 					console.log("got the thumbnails");
 					findInDatabase(vidId, function(inDB, vidData, vidUUID){

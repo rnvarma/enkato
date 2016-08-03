@@ -32,14 +32,7 @@ class VideoViewset(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         instance.delete()
 
-
-class SingleVideoPage(View):
-    def get(self, request, v_uuid):
-        time = request.GET.get('t')
-        return render(request, 'singlevideo/singlevideo.html', {'v_uuid': v_uuid, 't': time})
-
-
-class AddTopic(View):
+class AddTopic(APIView):
     def post(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
         time = request.POST.get('currentTime')
@@ -55,7 +48,7 @@ class AddTopic(View):
         })
 
 
-class UpdateTopics(View):
+class UpdateTopics(APIView):
     def post(self, request, v_uuid):
         topics_json = request.POST.get('topics')
         topics = json.loads(topics_json)
@@ -85,7 +78,7 @@ class UpdateTopics(View):
         return JsonResponse({'status': True})
 
 
-class DeleteTopic(View):
+class DeleteTopic(APIView):
     def post(self, request):
         t_uuid = request.POST.get('uuid')
         topic = Topic.objects.get(uuid=t_uuid)
@@ -93,12 +86,12 @@ class DeleteTopic(View):
         return JsonResponse({'status': True})
 
 
-class EditVideoTesting(View):
+class EditVideoTesting(APIView):
     def get(self, request):
         return render(request, 'edit_video.html')
 
 
-class UpdateQuiz(View):
+class UpdateQuiz(APIView):
     def post(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
         questions_json = request.POST.get('questions')
@@ -118,7 +111,7 @@ class UpdateQuiz(View):
         return JsonResponse({'status': True})
 
 
-class AddQuizQuestion(View):
+class AddQuizQuestion(APIView):
     def post(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
         q_count = video.question_counter
@@ -136,7 +129,7 @@ class AddQuizQuestion(View):
         })
 
 
-class DeleteQuizQuestion(View):
+class DeleteQuizQuestion(APIView):
     def post(self, request, v_uuid):
         q_id = request.POST.get('qid')
         question = QuizQuestion.objects.get(id=q_id)
@@ -148,7 +141,7 @@ class DeleteQuizQuestion(View):
         })
 
 
-class AddQuizOption(View):
+class AddQuizOption(APIView):
     def post(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
         q_id = request.POST.get('qid')
@@ -166,7 +159,7 @@ class AddQuizOption(View):
         })
 
 
-class DeleteQuizOption(View):
+class DeleteQuizOption(APIView):
     def post(self, request, v_uuid):
         q_id = request.POST.get('qid')
         c_id = request.POST.get('cid')

@@ -58,31 +58,45 @@ body {
         font-size: 16px;
         padding: 3px 3px 0px;
       }
-      .topics-list{
+      .topic-node:hover{
+        background-color: rgba(0,0,0,0.1);
+      }
+      .topic-node{
+        background-color: white;
+        font-weight: 500;
         font-size: 14px;
         text-align: left;
         text-overflow: ellipsis;
+        width: 100%;
+        overflow: hidden;
+        padding: 5px;
+        border-bottom: 1px solid #eef1f7;
+        cursor: pointer;
       }
       .no-topics{
         font-size: 14px;
         text-align: center;
         padding: 3px;
       }
+      .slide-wrapper{
+        overflow: auto;
+        height: 140px;
+      }
       .slide-runner{
-        width: 230px;
+        width: 223px;
         height: 120px;
       }
       .mySlides{
         cursor: pointer;
         height: 100px;
-        width: 230px;
-        padding: 0px 2px;
+        width: 219px;
+        padding: 2px;
       }
       .series-name{
-        width: 100%;
+        width: 213px;
         text-align: center;
         font-weight: 500;
-        padding: 5px;
+        margin-bottom: 17px;
         top: 10px;
         left: 0;
       }
