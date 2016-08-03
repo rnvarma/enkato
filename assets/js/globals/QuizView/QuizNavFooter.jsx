@@ -7,6 +7,16 @@ import Button from 'react-bootstrap/lib/Button';
 import BottomReviewText from 'js/globals/QuizView/ReviewingQuizView/BottomReviewText';
 
 export default class QuizNavFooter extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.submitInfo = this.submitInfo.bind(this)
+    }
+
+    submitInfo() {
+        this.props.submitInfo()
+    }
+
     render() {
         var disableAll = this.props.resultsPage;
 
@@ -51,11 +61,23 @@ export default class QuizNavFooter extends React.Component {
           <BottomReviewText correct={this.props.isCorrect} />
         );
       } else if(!disableAll) {
-        bottomLeftText = (
-          <div className="showNumAnswered">
-              {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
-          </div>
-        )
+        if(this.props.numQsAnswered != this.props.numQuestions){
+            bottomLeftText = (
+                <div className="showNumAnswered">
+                    {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
+                </div>
+            )
+        } else {
+            bottomLeftText = (
+                <div>
+                    <Button
+                        className="showNumAnswered"
+                        onClick={this.submitInfo}>
+                        Submit
+                    </Button>
+                </div>
+            )
+        }
       }
 
       return (
