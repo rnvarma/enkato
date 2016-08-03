@@ -128,6 +128,7 @@ export default class QuizForm extends Component {
                     numCorrect={this.props.completedQuizInfo.numCorrect}
                     numQuestions={this.props.questions.length}
                     showReviewMode={this.props.showReviewMode}
+                    nextVideo={this.props.nextVideo}
                     onRetakeQuiz={this.props.onRetakeQuiz}/>
             )
         } else {

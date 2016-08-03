@@ -268,7 +268,7 @@ class VideoData(APIView):
         #get QuizList
         quizQs = video.quiz_questions.all()
         questions = map(Serializer.serialize_quiz_question, quizQs)
-        return JsonResponse({
+        return Response({
             'videoID': video.vid_id,
             'topicList': frontendTList,
             'videoData': Serializer.serialize_video(video),
@@ -282,7 +282,7 @@ class VideoIdData(APIView):
             video = Video.objects.get(vid_id=v_id)
             topicList = video.topics.all().order_by('time')
             frontendTList = map(Serializer.serialize_topic, topicList)
-            return JsonResponse({
+            return Response({
                 'inDatabase': True,
                 'topicList':frontendTList,
                 'videoData': Serializer.serialize_video(video)
@@ -291,13 +291,13 @@ class VideoIdData(APIView):
             video = Video.objects.filter(vid_id=v_id).first()
             topicList = video.topics.all().order_by('time')
             frontendTList = map(Serializer.serialize_topic, topicList)
-            return JsonResponse({
+            return Response({
                 'inDatabase': True,
                 'topicList':frontendTList,
                 'videoData': Serializer.serialize_video(video)
             })
         except Video.DoesNotExist:
-            return JsonResponse({
+            return Response({
                 'inDatabase': False
             })
 
