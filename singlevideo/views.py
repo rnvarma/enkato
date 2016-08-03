@@ -93,20 +93,47 @@ class EditVideoTesting(APIView):
 
 class UpdateQuiz(APIView):
     def post(self, request, v_uuid):
-        video = Video.objects.get(uuid=v_uuid)
         questions_json = request.POST.get('questions')
         questions = json.loads(questions_json)
-        count = 0
+        removed_questions_json = request.POST.get('removedQuestions')
+        removed_questions = json.loads(removed_questions_json)
+        removed_choices_json = request.POST.get('removedChoices')
+        removed_choices = json.loads(removed_choices_json)
+
+        video = Video.objects.get(uuid=v_uuid)
         for q in questions:
-            qObj = QuizQuestion.objects.get(id=q["id"])
-            qObj.question_text = q["quizQuestionText"]
-            for choice in q["choiceList"]:
-                cObj = MCChoice.objects.get(id=choice["id"])
-                cObj.choice_text = choice["text"]
-                cObj.is_correct = choice["is_correct"]
-                cObj.save()
+            if q.get('new'):
+                qObj = QuizQuestion(
+                    video=video,
+                    question_text=q['quizQuestionText'],
+                )
+            else:
+                qObj = QuizQuestion.objects.get(id=q['id'])
+                qObj.question_text = q['quizQuestionText']
+
             qObj.save()
-            count += 1
+
+            for choice in q['choiceList']:
+                if choice.get('new'):
+                    cObj = MCChoice(
+                        quiz_question=qObj,
+                        choice_text=choice['text'],
+                        is_correct=choice['is_correct'],
+                    )
+                else:
+                    cObj = MCChoice.objects.get(id=choice['id'])
+                    cObj.choice_text = choice['text']
+                    cObj.is_correct = choice['is_correct']
+
+                cObj.save()
+
+        for removed_choice in removed_choices:
+            choice = MCChoice.objects.get(id=removed_choice['id'])
+            choice.delete()
+
+        for removed_question in removed_questions:
+            question = QuizQuestion.objects.get(id=removed_question['id'])
+            question.delete()
 
         return JsonResponse({'status': True})
 
@@ -143,7 +170,6 @@ class DeleteQuizQuestion(APIView):
 
 class AddQuizOption(APIView):
     def post(self, request, v_uuid):
-        video = Video.objects.get(uuid=v_uuid)
         q_id = request.POST.get('qid')
         question = QuizQuestion.objects.get(id=q_id)
         new_choice = MCChoice(
