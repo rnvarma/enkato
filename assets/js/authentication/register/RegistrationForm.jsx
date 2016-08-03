@@ -80,7 +80,12 @@ class RegistrationForm extends Component {
                 if (data.status) {
                     auth.login(postData.username, postData.password1, function(success) {
                         if (success) {
-                            window.location.href = '/'
+                            if (this.props.callbackFn) {
+                                this.props.callbackFn()
+                                this.props.closeRegisterModal()
+                            } else {
+                                window.location.href = '/'
+                            }
                         } else {
                             browserHistory.push('/login')
                         }

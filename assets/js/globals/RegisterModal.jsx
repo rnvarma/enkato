@@ -23,7 +23,9 @@ class RegisterModal extends Component {
                         <Modal.Title>Register to use this feature!</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
-                        <RegistrationForm />
+                        <RegistrationForm
+                          callbackFn={this.props.callbackFn}
+                          closeRegisterModal={this.props.closeRegisterModal}/>
                       </Modal.Body>
                     </Modal>
                 </li>
