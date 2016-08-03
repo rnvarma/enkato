@@ -1,17 +1,10 @@
 require('css/globals/QuizAddingForm/quizaddingform.scss');
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-import { getCookie } from 'js/globals/utility';
+import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';
-import ScrollArea from 'react-scrollbar';
-
-import { Row, Form, FormGroup, ControlLabel, InputGroup } from 'react-bootstrap';
 
 import request from 'js/globals/HttpRequest';
-import SingleQuizForm from 'js/globals/QuizAddingForm/SingleQuizForm';
 import QuizFormsList from 'js/globals/QuizAddingForm/QuizFormsList';
 import ScrollButtonList from 'js/globals/QuizAddingForm/ScrollButtonList';
 
@@ -26,164 +19,199 @@ function listify(dict){
   return arr;
 }
 
-module.exports = React.createClass({
-    loadDataFromServer: function(vuuid){
+class QuizAddingForm extends Component {
+    constructor() {
+        super();
+
+        this.state = {
+            questions: [],
+            removedQuestions: [],
+            removedChoices: [],
+            numQuestions: 1,
+        };
+
+        this.loadDataFromServer = this.loadDataFromServer.bind(this);
+        this.saveDataToServer = this.saveDataToServer.bind(this);
+        this.setChoiceList = this.setChoiceList.bind(this);
+        this.setShouldRefocus = this.setShouldRefocus.bind(this);
+        this.handleQuizQuestionChange = this.handleQuizQuestionChange.bind(this);
+        this.scrollToFromButton = this.scrollToFromButton.bind(this);
+        this.addNewChoice = this.addNewChoice.bind(this);
+        this.addQuestion = this.addQuestion.bind(this);
+        this.makeChoiceIsCorrect = this.makeChoiceIsCorrect.bind(this);
+        this.deleteQuestion = this.deleteQuestion.bind(this);
+        this.deleteChoice = this.deleteChoice.bind(this);
+    }
+
+    componentDidMount() {
+        this.loadDataFromServer(this.props.videoUUID);
+        /*$(window).on('unload', this.saveDataToServer); TODO: unloadbefore */
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.videoUUID != nextProps.videoUUID) {
+            this.saveDataToServer();
+            this.loadDataFromServer(nextProps.videoUUID);
+        }
+
+        if (nextProps.publishQuiz) {
+            this.saveDataToServer();
+            this.props.closeAnnotationModal();
+        }
+    }
+
+    componentWillUnmount() {
+        /*$(window).off('unload');*/
+    }
+
+    loadDataFromServer(vuuid) {
         request.get(`/1/quizdata/${vuuid}`, {
             success: (data) => {
-                this.setState(data)
+                if (data.questions.length > 0) {
+                    this.setState({
+                        questions: data.questions,
+                    });
+                } else { /* add blank question */
+                    this.setState({
+                        questions: [],
+                    });
+                    this.addQuestion();
+                }
             }
-        })
-    },
-    saveDataToServer: function(){
-        var data = {
-            'questions': JSON.stringify(this.state.questions)
+        });
+    }
+
+    saveDataToServer() {
+        const payload = {
+            questions: JSON.stringify(this.state.questions),
+            removedQuestions: JSON.stringify(this.state.removedQuestions),
+            removedChoices: JSON.stringify(this.state.removedChoices),
         };
-        request.post(`/v/${this.state.uuid}/updatequiz`, {
-            data: data,
-        })
-    },
-    setChoiceList: function(choiceList, questionNumber){
+        request.post(`/v/${this.props.videoUUID}/updatequiz`, {
+            data: payload,
+            error: () => {
+                console.error('something went wrong');
+            }
+        });
+    }
+
+    setChoiceList(choiceList, questionNumber) {
         var tempQuestionList = this.state.questions;
         tempQuestionList[questionNumber].choiceList = choiceList;
         this.setState({questions: tempQuestionList})
-    },
-    setShouldRefocus: function(shouldRefocus, questionNumber){
+    }
+
+    setShouldRefocus(shouldRefocus, questionNumber) {
         var tempQuestionList = this.state.questions;
         tempQuestionList[questionNumber - 1].shouldRefocus = shouldRefocus;
         this.setState({questions: tempQuestionList})
-    },
-    handleQuizQuestionChange: function(questionText, index){
+    }
+
+    handleQuizQuestionChange(questionText, index) {
         var tempQuestionList = this.state.questions;
         tempQuestionList[index].quizQuestionText = questionText;
         this.setState({questions: tempQuestionList})
-    },
-    scrollToFromButton: function(idNum, index){
-        var height = $("#" + idNum + "q").height();
-        var scrollTop = height * index;
-        $(".quizAddingForm").animate({scrollTop: scrollTop}, 500);
-        var tempQuestionList = this.state.questions;
-        for (var i = 0; i < tempQuestionList.length; i++) {
-          tempQuestionList[i].active = false;
+    }
+
+    scrollToFromButton(questionId, index) {
+        if (!this.state.questions[index].active) {
+            const distanceToScroll = $(`#${questionId}q`).position().top;
+            const $quizForm = $('.quizAddingForm');
+            $quizForm.animate({scrollTop: $quizForm.scrollTop() + distanceToScroll}, 400);
+
+            const questions = $.extend(true, [], this.state.questions);
+            for (let i = 0; i < questions.length; i++) {
+                questions[i].active = false;
+            }
+            questions[index].active = true;
+            this.setState({
+                questions: questions,
+            });
         }
-        tempQuestionList[index].active = true;
-        this.setState({questions: tempQuestionList})
-    },
-    componentDidMount: function(){
-        this.setState({uuid: this.props.videoUUID});
-        this.loadDataFromServer(this.props.videoUUID);
-        $(window).on('unload', this.saveDataToServer)
-    },
-    componentWillUnmount: function() {
-        this.saveDataToServer();
-    },
-    componentWillReceiveProps: function(nextProps) {
-        if (this.state.uuid != nextProps.videoUUID) {
-            this.saveDataToServer();
-            this.setState({uuid: nextProps.videoUUID});
-            this.loadDataFromServer(nextProps.videoUUID);
-        }
-    },
-    getInitialState:function(){
+    }
+
+    makeChoice(isCorrect = false) {
         return {
-            questions:[{
-                text: "",
-                choiceList: [{text:"", id:0}],
-                shouldRefocus: false,
-                currentFocus: 0,
-                id: 1,
-                new: true
-            }],
-            numQuestions: 1,
-            uuid: ''
+            id: `fake_${Date.now()}`,
+            text: '',
+            is_correct: isCorrect,
+            new: true,
         }
-    },
-    addNewChoice: function(qid) {
-        var data = {
-            qid: qid
-        };
-        request.post(`/v/${this.state.uuid}/addquizoption`, {
-            data: data,
-            success: (data) => {
-                if (data.status) {
-                    var questions = this.state.questions;
-                    for (var i = 0; i < questions.length; i++) {
-                        if (questions[i].id == qid) {
-                          if (questions[i].choiceList.length === 0) {
-                            data.new_choice.is_correct = true;
-                            data.new_choice.focus = false;
-                          }
-                            questions[i].choiceList.push(data.new_choice);
-                            break;
-                        }
-                    }
-                    this.setState({questions: questions})
+    }
+
+    addNewChoice(questionId) {
+        const questions = $.extend(true, [], this.state.questions);
+
+        const question = questions.find(question => {
+            return questionId === question.id;
+        });
+
+        const choice = this.makeChoice();
+        question.choiceList.push(choice);
+
+        this.setState({
+            questions: questions,
+        }, () => {
+            $(`#${choice.id}`).focus();
+        });
+
+        this.props.setUnsavedQuiz();
+    }
+
+    deleteChoice(questionId, choiceId, qIndex, cIndex) {
+        const newQuestions = $.extend(true, [], this.state.questions);
+        const question = newQuestions.find((question) => {
+            return question.id === questionId;
+        });
+
+        if (question.choiceList.length > 1) {
+            const newRemovedChoices = [...this.state.removedChoices];
+
+            let needNewAnswer, needNewFocus;
+            let choiceIndex;
+            const newChoiceList = question.choiceList.filter((choice, index) => {
+                if (choice.id !== choiceId) {
+                    return true;
+                }
+
+                if (!question.new && !choice.new) {
+                    newRemovedChoices.push(choice);
+                }
+                needNewAnswer = choice.is_correct;
+                needNewFocus = choice.focus;
+                choiceIndex = index;
+
+                return false;
+            });
+
+            let newChoice;
+            if (typeof choiceIndex !== 'undefined') {
+                if (choiceIndex > 0) {
+                    newChoice = newChoiceList[choiceIndex - 1];
                 } else {
-                    console.log("Internal Server Error: Adding Quiz Option Failed")
+                    newChoice = newChoiceList[choiceIndex];
                 }
             }
-        })
-    },
-  validateDeleteChoice(questionIndex, choiceIndex) {
-    return (choiceIndex > 0)||(this.state.questions[questionIndex].choiceList.length>1);
-  },
-  displayDeleteChoice(questionIndex, choiceIndex) {
-    const questions = $.extend(true, {}, this.state.questions);
-    const choices = questions[questionIndex].choiceList;
-    const correctRemoved = choices[choiceIndex].is_correct;
 
-
-    // if (choiceIndex > 0) {
-    choices.splice(choiceIndex, 1);
-    let newFocus; /* new choice to focus on */
-    if (choiceIndex < choices.length) { /* not last elem */
-      newFocus = choices[choiceIndex];
-    } else {
-      newFocus = choices[choiceIndex - 1];
-    }
-    newFocus.focus = true;
-    if (correctRemoved) {
-      newFocus.is_correct = true;
-    }
-    // }
-    this.setState({ questions: listify(questions,this.state.numQuestions) });
-  },
-  deleteChoice: function(qid, cid, qIndex, cIndex) {
-    if (!this.validateDeleteChoice(qIndex,cIndex)) return;
-
-    const payload = {
-      qid: qid,
-      cid: cid,
-    };
-    request.post(`/v/${this.state.uuid}/deletequizoption`, {
-        data: payload,
-        success: (data) => {
-            if (data.status) {
-              this.displayDeleteChoice(qIndex, cIndex);
-            } else {
-              console.log("Internal Server Error: Adding Quiz Option Failed")
+            if (needNewAnswer) {
+                newChoice.is_correct = true;
             }
+            if (needNewFocus) {
+                newChoice.focus = true; /* TODO: SHIFTING CURRENT FOCUS? */
+            }
+
+            question.choiceList = newChoiceList;
+
+            this.setState({
+                questions: newQuestions,
+                removedChoices: newRemovedChoices,
+            });
+
+            this.props.setUnsavedQuiz();
         }
-    })
-  },
-  addQuestion: function() {
-        var data = this.state;
-        request.post(`/v/${this.state.uuid}/addquizquestion`, {
-            data: data,
-            success: (data) => {
-                if (data.status) {
-                    var questions = this.state.questions;
-                  data.new_question.focus = true;
-                    questions.push(data.new_question);
-                    this.setState({questions: questions});
-                  this.addNewChoice(data.new_question.id); /* always have at least one choice */
-                    this.scrollToFromButton(data.new_question.id, questions.length - 1)
-                } else {
-                    console.log("Internal Server Error: Adding Quiz Question Failed")
-                }
-            }
-        })
-    },
-    makeChoiceIsCorrect: function(cid, qIndex) {
+    }
+
+    makeChoiceIsCorrect(cid, qIndex) {
         var tempQuestionList = this.state.questions;
         for (var i = 0; i < tempQuestionList[qIndex].choiceList.length; i++) {
             if (tempQuestionList[qIndex].choiceList[i].id == cid) {
@@ -193,29 +221,56 @@ module.exports = React.createClass({
             }
         }
         this.setState({questions: tempQuestionList})
-    },
-    deleteQuestion: function(qid, qIndex) {
-        var data = {
-            qid: qid
+    }
+
+    addQuestion() {
+        const newQuestion = {
+            id: `fake_${Date.now()}`, /* fake ID, not in DB yet */
+            quizQuestionText: '',
+            new: true,
+            currentFocus: 0,
+            choiceList: [this.makeChoice(true)],
         };
-        request.post(`/v/${this.state.uuid}/deletequizquestion`, {
-            data: data,
-            success: (data) => {
-                if (data.status) {
-                    var questions = this.state.questions;
-                    questions.splice(qIndex, 1);
-                    this.setState({questions: questions});
-                    if (qIndex > 0) {
-                        var newQuestionID = questions[qIndex - 1].id;
-                        this.scrollToFromButton(newQuestionID, qIndex - 1)
-                    }
-                } else {
-                    console.log("Internal Server Error: Deleting Quiz Question Failed")
-                }
+
+        const newQuestions = [...this.state.questions, newQuestion];
+
+        this.setState({
+            questions: newQuestions,
+        }, () => {
+            this.scrollToFromButton(newQuestion.id, newQuestions.length - 1);
+            $(`#${newQuestion.id}q .singleQuizForm .question-row .question-input`).focus();
+        });
+
+        this.props.setUnsavedQuiz();
+    }
+
+    deleteQuestion(questionId, questionIndex) {
+        const newRemovedQuestion = [...this.state.removedQuestions];
+        const newQuestions = this.state.questions.filter((question) => {
+            if (question.id !== questionId) {
+                return true;
             }
-        })
-    },
-    render: function() {
+
+            if (!question.new) {
+                newRemovedQuestion.push(question);
+            }
+            return false;
+        });
+        this.setState({
+            questions: newQuestions,
+            removedQuestions: newRemovedQuestion,
+        }, () => {
+            if (questionIndex !== 0) {
+                this.scrollToFromButton(newQuestions[questionIndex - 1].id, questionIndex - 1);
+            } else if (newQuestions.length > 0) {
+                this.scrollToFromButton(newQuestions[questionIndex].id, questionIndex);
+            }
+        });
+
+        this.props.setUnsavedQuiz();
+    }
+
+    render() {
         let height = $('.quizAddingForm').height() - 10;
         if (isNaN(height)) {
             height = 530;
@@ -244,4 +299,6 @@ module.exports = React.createClass({
             </div>
         )
     }
-});
+}
+
+export default QuizAddingForm;

@@ -8,6 +8,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import request from 'js/globals/HttpRequest';
 import AddVideoToSeriesForm from 'js/series/seriespage/AddVideoToSeriesForm';
 import AnnotateVideosForSeries from 'js/series/seriespage/AnnotateVideosForSeries';
+import ConfirmModal from 'js/globals/ConfirmModal';
 
 export default class UploadAnnotateModal extends Component {
     constructor(props) {
@@ -15,66 +16,80 @@ export default class UploadAnnotateModal extends Component {
 
         this.state = {
             error: '',
-            publishAnnotations: false,
-            annotationsToSave: false,
-            showingAnnotationSave: false,
-            onConfirmQuit: null,
+            unsavedTopics: false,
+            publishTopics: false,
+            unsavedQuiz: false,
+            publishQuiz: false,
+            showingConfirmSave: false,
+            onConfirmQuit: function() {},
         };
 
-        this.setAnnotationsToSave = this.setAnnotationsToSave.bind(this);
-        this.setKeepAnnotations = this.setKeepAnnotations.bind(this);
-        this.setLaunchKeeper = this.setLaunchKeeper.bind(this);
-        this.clearAnnotationMemory = this.clearAnnotationMemory.bind(this);
+        this.setUnsavedTopics = this.setUnsavedTopics.bind(this);
+        this.setUnsavedQuiz = this.setUnsavedQuiz.bind(this);
+        this.launchUnsaved = this.launchUnsaved.bind(this);
+        this.setKeepChanges = this.setKeepChanges.bind(this);
+        this.resetUnsaved = this.resetUnsaved.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.onBack = this.onBack.bind(this);
         this.onNext = this.onNext.bind(this);
+        this.onTopicMode = this.onTopicMode.bind(this);
         this.onQuizMode = this.onQuizMode.bind(this);
     }
 
-    /* reopening the annotating modal after closing it resets annotationsToSave to false */
+    /* reopening the annotating modal after closing it resets unsavedChanges to false */
     componentWillReceiveProps(newProps) {
         if (!this.props.annotateMode && newProps.annotateMode) {
-            this.clearAnnotationMemory();
+            this.resetUnsaved();
         }
     }
 
-    setAnnotationsToSave() {
-        if (!this.state.annotationsToSave) {
+    setUnsavedTopics() {
+        if (!this.state.unsavedTopics) {
             this.setState({
-                annotationsToSave: true,
+                unsavedTopics: true,
+            });
+        }
+    }
+
+    setUnsavedQuiz() {
+        if (!this.state.unsavedQuiz) {
+            this.setState({
+                unsavedQuiz: true,
             });
         }
     }
 
     /* close annotations to save modal, continue editing */
-    setKeepAnnotations() {
+    setKeepChanges() {
         this.setState({
-            showingAnnotationSave: false,
+            showingConfirmSave: false,
         });
     }
 
-    setLaunchKeeper(callbackOnConfirm) {
+    launchUnsaved(callbackOnConfirm) {
         this.setState({
-            showingAnnotationSave: true,
+            showingConfirmSave: true,
             onConfirmQuit: () => {
                 callbackOnConfirm();
-                this.clearAnnotationMemory();
+                this.resetUnsaved();
             },
         });
     }
 
-    clearAnnotationMemory() {
+    resetUnsaved() {
         this.setState({
-            publishAnnotations: false,
-            annotationsToSave: false,
-            showingAnnotationSave: false,
+            publishTopics: false,
+            publishQuiz: false,
+            unsavedTopics: false,
+            unsavedQuiz: false,
+            showingConfirmSave: false,
         });
     }
 
     /* modal closes if there are no annotations to save */
     closeModal() {
-        if (this.state.annotationsToSave) {
-            this.setLaunchKeeper(this.props.close);
+        if (this.state.unsavedTopics || this.state.unsavedQuiz) {
+            this.launchUnsaved(this.props.close);
         } else {
             this.props.close();
         }
@@ -82,8 +97,8 @@ export default class UploadAnnotateModal extends Component {
 
     onBack() {
         if (this.props.annotateMode) {
-            if (this.state.annotationsToSave) {
-                this.setLaunchKeeper(this.props.setUploadMode);
+            if (this.state.unsavedTopics || this.state.unsavedQuiz) {
+                this.launchUnsaved(this.props.setUploadMode);
             } else {
                 this.props.setUploadMode();
             }
@@ -94,11 +109,13 @@ export default class UploadAnnotateModal extends Component {
 
     onNext() {
         if (this.props.quizMode) {
-            this.props.close();
+            this.setState({
+                publishQuiz: true,
+            });
         }
         if (this.props.annotateMode) {
             this.setState({
-                publishAnnotations: true,
+                publishTopics: true,
             });
         } else {
             if (this.props.urls) {
@@ -155,9 +172,17 @@ export default class UploadAnnotateModal extends Component {
         }
     }
 
+    onTopicMode() {
+        if (this.state.unsavedQuiz) {
+            this.launchUnsaved(this.props.setTopicMode);
+        } else {
+            this.props.setTopicMode();
+        }
+    }
+
     onQuizMode() {
-        if (this.state.annotationsToSave) {
-            this.setLaunchKeeper(this.props.setQuizMode);
+        if (this.state.unsavedTopics) {
+            this.launchUnsaved(this.props.setQuizMode);
         } else {
             this.props.setQuizMode();
         }
@@ -175,14 +200,14 @@ export default class UploadAnnotateModal extends Component {
                 <AnnotateVideosForSeries
                     videos={this.props.videos}
                     quizMode={this.props.quizMode}
-                    setAnnotationsToSave={this.setAnnotationsToSave}
-                    setKeepAnnotations={this.setKeepAnnotations}
-                    setLaunchKeeper={this.setLaunchKeeper}
-                    annotationsToSave={this.state.annotationsToSave}
-                    publishAnnotations={this.state.publishAnnotations}
-                    showingAnnotationSave={this.state.showingAnnotationSave}
-                    onConfirmQuit={this.state.onConfirmQuit}
-                    closeAnnotationsModal={this.props.close}/>
+                    unsavedTopics={this.state.unsavedTopics}
+                    unsavedQuiz={this.state.unsavedQuiz}
+                    publishTopics={this.state.publishTopics}
+                    publishQuiz={this.state.publishQuiz}
+                    setUnsavedTopics={this.setUnsavedTopics}
+                    setUnsavedQuiz={this.setUnsavedQuiz}
+                    launchUnsaved={this.launchUnsaved}
+                    closeAnnotationModal={this.props.close}/>
             ),
           }
           nextText = "Save and Publish";
@@ -190,7 +215,7 @@ export default class UploadAnnotateModal extends Component {
                 <div className="toggleMode">
                     <Button
                         className={"toggleAnnotating topics" + (this.props.quizMode ? "" : " active")}
-                        onClick={this.props.setTopicMode}>
+                        onClick={this.onTopicMode}>
                         Topics
                     </Button>
                     <Button
@@ -218,6 +243,11 @@ export default class UploadAnnotateModal extends Component {
                         <Modal.Title>{modalInfo.title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
+                        <ConfirmModal
+                            showing={this.state.showingConfirmSave}
+                            description="Are you sure you want to navigate away? Your changes are not saved and will be gone forever."
+                            acceptCallback={this.state.onConfirmQuit}
+                            cancelCallback={this.setKeepChanges}/>
                         {this.state.error}
                         {modalInfo.body}
                     </Modal.Body>

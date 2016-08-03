@@ -163,6 +163,7 @@ export default class QuizForm extends Component {
             closeModal={this.closeModal}
             resultsPage={this.props.resultsPage}
             reviewMode={this.props.reviewMode}
+            submitInfo={this.submitInfo}  
             onFinishButton={this.props.onFinishButton}
             submitInfo={this.submitInfo}
             isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion] ? this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect : false}/>
