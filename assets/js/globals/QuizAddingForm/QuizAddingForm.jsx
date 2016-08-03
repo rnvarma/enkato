@@ -50,7 +50,6 @@ class QuizAddingForm extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.props.videoUUID != nextProps.videoUUID) {
-            this.saveDataToServer();
             this.loadDataFromServer(nextProps.videoUUID);
         }
 

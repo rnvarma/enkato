@@ -86,25 +86,6 @@ class LandingPageBody extends Component {
                                  Our mission is to unlock the full potential of online learning.
                             </div>
                         </Col>
-                        <Col md={6} sm={12} className="right">
-                            <div className="signUpTitle">
-                                <span className="bold">Sign up</span> for our free beta!
-                            </div>
-                            <Form onSubmit={this.onFormSubmit}>
-                                <FormGroup controlId="name">
-                                    <FormControl onChange={this.onNameChange} type="text" placeholder="Your Name" />
-                                </FormGroup>
-                                <FormGroup controlId="email">
-                                    <FormControl onChange={this.onEmailChange} type="text" placeholder="Email" />
-                                </FormGroup>
-
-                                <FormGroup>
-                                    <Button className="greenBtn" type="submit">
-                                        Sign Up
-                                    </Button>
-                                </FormGroup>
-                            </Form>
-                        </Col>
                     </Row>
                 </div>
                 <div className="curatedContent">
