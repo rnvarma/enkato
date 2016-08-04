@@ -36,6 +36,7 @@ class QuizAddingForm extends Component {
         this.setShouldRefocus = this.setShouldRefocus.bind(this);
         this.handleQuizQuestionChange = this.handleQuizQuestionChange.bind(this);
         this.scrollToFromButton = this.scrollToFromButton.bind(this);
+        this.scrollToChoice = this.scrollToChoice.bind(this);
         this.addNewChoice = this.addNewChoice.bind(this);
         this.addQuestion = this.addQuestion.bind(this);
         this.makeChoiceIsCorrect = this.makeChoiceIsCorrect.bind(this);
@@ -98,6 +99,8 @@ class QuizAddingForm extends Component {
         var tempQuestionList = this.state.questions;
         tempQuestionList[questionNumber].choiceList = choiceList;
         this.setState({questions: tempQuestionList})
+
+        this.props.setUnsaved();
     }
 
     setShouldRefocus(shouldRefocus, questionNumber) {
@@ -110,6 +113,8 @@ class QuizAddingForm extends Component {
         var tempQuestionList = this.state.questions;
         tempQuestionList[index].quizQuestionText = questionText;
         this.setState({questions: tempQuestionList})
+
+        this.props.setUnsaved();
     }
 
     scrollToFromButton(questionId, index) {
@@ -127,6 +132,14 @@ class QuizAddingForm extends Component {
                 questions: questions,
             });
         }
+    }
+
+    scrollToChoice(choiceId) {
+        const $choiceForm = $(`#${choiceId}`);
+        const distanceToScroll = $choiceForm.position().top;
+        const $quizForm = $('.quizAddingForm');
+        $quizForm.animate({scrollTop: $quizForm.scrollTop() + distanceToScroll}, 400);
+        $choiceForm.focus();
     }
 
     makeChoice(isCorrect = false) {
@@ -154,7 +167,7 @@ class QuizAddingForm extends Component {
             $(`#${choice.id}`).focus();
         });
 
-        this.props.setUnsavedQuiz();
+        this.props.setUnsaved();
     }
 
     deleteChoice(questionId, choiceId, qIndex, cIndex) {
@@ -196,7 +209,8 @@ class QuizAddingForm extends Component {
                 newChoice.is_correct = true;
             }
             if (needNewFocus) {
-                newChoice.focus = true; /* TODO: SHIFTING CURRENT FOCUS? */
+                newChoice.focus = true;
+                $(`#${newChoice.id}`).focus();
             }
 
             question.choiceList = newChoiceList;
@@ -206,7 +220,7 @@ class QuizAddingForm extends Component {
                 removedChoices: newRemovedChoices,
             });
 
-            this.props.setUnsavedQuiz();
+            this.props.setUnsaved();
         }
     }
 
@@ -220,6 +234,8 @@ class QuizAddingForm extends Component {
             }
         }
         this.setState({questions: tempQuestionList})
+
+        this.props.setUnsaved();
     }
 
     addQuestion() {
@@ -240,7 +256,7 @@ class QuizAddingForm extends Component {
             $(`#${newQuestion.id}q .singleQuizForm .question-row .question-input`).focus();
         });
 
-        this.props.setUnsavedQuiz();
+        this.props.setUnsaved();
     }
 
     deleteQuestion(questionId, questionIndex) {
@@ -266,7 +282,7 @@ class QuizAddingForm extends Component {
             }
         });
 
-        this.props.setUnsavedQuiz();
+        this.props.setUnsaved();
     }
 
     render() {

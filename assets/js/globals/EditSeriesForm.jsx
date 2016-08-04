@@ -9,7 +9,7 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
 
-class CreateSeriesForm extends Component {
+class EditSeriesForm extends Component {
     constructor(props) {
         super(props);
 
@@ -19,6 +19,10 @@ class CreateSeriesForm extends Component {
     onSubmit(e) {
         e.preventDefault()
         this.props.onFormSubmit(this.state);
+    }
+
+    componentWillMount() {
+        this.props.initForm();
     }
 
     render() {
@@ -45,4 +49,4 @@ class CreateSeriesForm extends Component {
     }
 }
 
-export default CreateSeriesForm;
+export default EditSeriesForm;

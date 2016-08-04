@@ -44,8 +44,6 @@ export default class AnnotateVideosForSeries extends Component {
             <AnnotateSeriesVideoArea
                 currentVideo={video}
                 quizMode={this.props.quizMode}
-                unsavedTopics={this.props.unsavedTopics}
-                unsavedQuiz={this.props.unsavedQuiz}
                 publishTopics={this.props.publishTopics}
                 publishQuiz={this.props.publishQuiz}
                 setUnsavedTopics={this.props.setUnsavedTopics}

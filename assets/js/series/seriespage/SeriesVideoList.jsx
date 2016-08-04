@@ -1,6 +1,8 @@
 require('css/series/seriespage/SeriesVideoList.scss');
+require('css/series/seriespage/SeriesVideoPanelSortable.scss');
 
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 import Button from 'react-bootstrap/lib/Button';
 import { Sortable } from 'react-sortable';
 
@@ -61,8 +63,11 @@ export default class SeriesVideoList extends Component {
 
     saveReordering() {
         var order = []
+        var newVideos = []
+        var handle = this
         $(".seriesVideoPanel").each(function(index) {
             var oldIndex = parseInt($(this).find(".order").text()) - 1;
+            newVideos[index] = handle.props.videos[oldIndex]
             order[oldIndex] = index;
         });
         request.patch(`/1/series/${this.props.seriesUUID}`, {
@@ -70,6 +75,10 @@ export default class SeriesVideoList extends Component {
             success: (data) => {
 
             }
+        });
+        this.props.videos.map((item, index) => {
+            this.props.videos[index] = newVideos[index];
+            return 0;
         });
         this.toggleReordering()
     }
@@ -82,7 +91,7 @@ export default class SeriesVideoList extends Component {
         const videoPanels = this.props.videos.map(function(v, index) {
             return (
                 <SeriesVideoPanel
-                    key={index}
+                    key={v.uuid}
                     order={index}
                     reordering={this.state.reordering}
                     video={v}
@@ -110,7 +119,7 @@ export default class SeriesVideoList extends Component {
                     <Button onClick = {this.saveReordering}>Save</Button>
                     <Button onClick = {this.toggleReordering}>Cancel</Button>
                 </div>
-            var videoList = <SortableList data = {{items: videoPanels}}/>
+            var videoList = <SortableList data = {{items: videoPanels.map((item) => {return <div className = "seriesVideoPanelSortable">{item}</div>})}}/>
         }
         return (
             <div className="seriesVideoList">
