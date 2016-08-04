@@ -14,7 +14,7 @@ import Player from 'js/globals/VideoPlayer/Player';
 
 // How often the video player checks the video's state
 const pollInterval = 100;
-console.log("videoplayer running");
+
 function updateCurrentTopicOnKey(targetKey, topicList){
     for(var i=0; i<topicList.length; i++){
         if(topicList[i].id == targetKey){
@@ -60,7 +60,7 @@ function clearCurrentTopic(topicList){
 function timeToSeconds(time){
     var timeA = time.split(":");
     var seconds = 0;
-    console.log(timeA);
+
     if(timeA.length == 2){
         seconds = Number(timeA[0])*60 + Number(timeA[1]);
     }
@@ -148,7 +148,11 @@ export default class VideoPlayer extends Component {
                 this.setState({
                     Player: vidPlayer
                 });
-                
+                if(this.state.quizTaken){
+                    this.setState({
+                        quizTaken: false
+                    })
+                }
                 /* an optional prop */
                 if (this.props.setTopicList) {
                   this.props.setTopicList(data.topicList);
@@ -181,7 +185,8 @@ export default class VideoPlayer extends Component {
             this.setState({
                 uuid: nextProps.videoUUID,
                 takingQuiz: false,
-                showingOverlay: false
+                showingOverlay: false,
+                quizTaken: false
             })
             this.loadDataFromServer(nextProps.videoUUID);
         }
@@ -220,7 +225,6 @@ export default class VideoPlayer extends Component {
     }
 
     onPlayerStateChange(event) {
-        console.log("player changed");
         if (event.data == 0) {
             this.onVideoEnd()
         } else if (event.data == 1) {
@@ -242,7 +246,6 @@ export default class VideoPlayer extends Component {
             event.target.playVideo();
         }
         if(this.props.loadQuiz){
-            console.log(this.props.loadQuiz());
             if(this.props.loadQuiz() == "true"){
                 this.showQuiz();
                 event.target.pauseVideo();
@@ -306,7 +309,7 @@ export default class VideoPlayer extends Component {
         if (auth.loggedIn()) {
             this.setState({
                 showingOverlay: false,
-                takingQuiz: true
+                takingQuiz: true,
             })
         } else {
             this.props.openRegisterModal(() => {
@@ -323,7 +326,8 @@ export default class VideoPlayer extends Component {
     closeModal() {
         this.setState({
             takingQuiz: false,
-            showingOverlay: false
+            showingOverlay: false,
+            quizTaken: false
         })
     }
 
@@ -368,7 +372,8 @@ export default class VideoPlayer extends Component {
     onFinishButton(){
         this.setState({
             showingOverlay: true,
-            takingQuiz: false
+            takingQuiz: false,
+            quizTaken: false
         })
         this.loadQuizData(this.props.videoUUID)
     }

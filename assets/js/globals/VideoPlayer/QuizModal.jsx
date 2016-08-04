@@ -59,15 +59,25 @@ export default class QuizModal extends Component {
             resultsPage: false
         })
         this.props.showQuiz()
-        
+    }
+
+    onNextQuiz(){
+
     }
 
     closeModal() {
         this.setState({
             reviewMode: false,
-            resultsPage: this.props.quizTaken
+            resultsPage: false
         })
         this.props.closeModal()
+    }
+
+    componentWillUnmount(){
+        this.setState({
+            resultsPage: false,
+            reviewMode: false
+        })
     }
 
     render(){

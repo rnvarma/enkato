@@ -131,6 +131,7 @@ export default class QuizForm extends Component {
             if(this.props.resultsPage){
                 modalBody = (
                     <CompletedQuizPage 
+                        closeModal={this.props.closeModal}
                         numCorrect={this.props.completedQuizInfo.numCorrect}
                         numQuestions={this.props.questions.length}
                         showReviewMode={this.props.showReviewMode}
