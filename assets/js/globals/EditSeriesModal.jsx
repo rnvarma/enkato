@@ -81,7 +81,7 @@ class EditSeriesModal extends Component {
     render() {
         return (
             <li className="createSeriesModal">
-                <Button className="createBtn structabl-red" eventKey={3} onClick={this.open}>Edit</Button>
+                <Button className="createBtn structabl-red" onClick={this.open}>Edit</Button>
                 <Modal show={this.state.showModal} onHide={this.close}>
                   <Modal.Header closeButton>
                     <Modal.Title>Edit Series</Modal.Title>
