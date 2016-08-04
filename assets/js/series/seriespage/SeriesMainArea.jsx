@@ -64,6 +64,7 @@ export default class SeriesMainArea extends Component {
 
         var privacyButton = <div></div>
         var deleteButton = <div></div>
+        var editButton = <div></div>
 
         //noVideos^^ is used to get rid of the border on the right side
         //of the totalSeconds if there's no Videos
@@ -149,6 +150,7 @@ export default class SeriesMainArea extends Component {
                     </Button>
                 </div>
             );
+            editButton = <EditSeriesModal seriesUUID = {this.props.seriesUUID} name = {this.props.name} description = {this.props.description} loadPageData = {this.props.loadPageData}/>
             
         } else {
             var video_area = (
@@ -203,7 +205,7 @@ export default class SeriesMainArea extends Component {
                         <div className="description">
                             {this.props.description}
                         </div>
-                        <EditSeriesModal seriesUUID = {this.props.seriesUUID} name = {this.props.name} description = {this.props.description} loadPageData = {this.props.loadPageData}/>
+                        {editButton}
                         <div className="stats">
                             <div className="creator">
                                 <Link to={`/userprofile/${this.props.creator.user_id}`}>{this.props.creator.name}</Link>
