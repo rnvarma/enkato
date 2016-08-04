@@ -15,9 +15,6 @@ $questionIndent:50px;
         margin-right: 10px;
     }
 
-    .nextButton:disabled{
-
-    }
 
     .nextButton {
     }
@@ -26,7 +23,8 @@ $questionIndent:50px;
         background-color:$kato-green;
         color:white;
         font-weight:800;
-        margin-right: 10px;
+        margin-left: 35px;
+        float: left;
     }
 
     .showNumAnswered {
