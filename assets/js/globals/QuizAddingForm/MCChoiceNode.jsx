@@ -1,27 +1,37 @@
+require('css/globals/QuizAddingForm/MCChoiceNode.scss');
 
-require("css/globals/QuizAddingForm/MCChoiceNode.scss");
+import React, { Component } from 'react';
 
-var React = require('react')
-var Row = require('react-bootstrap').Row;
-var FontAwesome = require('react-fontawesome');
+import FontAwesome from 'react-fontawesome';
 
-module.exports = React.createClass({
-    handleChoiceTextChange: function(e){
-        this.props.handleChoiceTextChange(
-            e.target.value, 
-            this.props.index,
-            this.props.choice.id
-        )
-    },
-    submit: function(e){
+import Row from 'react-bootstrap/lib/Row';
+
+class MCChoiceNode extends Component {
+    constructor() {
+        super();
+
+        this.handleChoiceTextChange = this.handleChoiceTextChange.bind(this);
+        this.submit = this.submit.bind(this);
+        this.deleteChoice = this.deleteChoice.bind(this);
+        this.onKeyDown = this.onKeyDown.bind(this);
+        this.onChoiceSelected = this.onChoiceSelected.bind(this);
+    }
+
+    handleChoiceTextChange(e) {
+        this.props.handleChoiceTextChange(e.target.value, this.props.index, this.props.choice.id)
+    }
+
+    submit(e) {
         e.preventDefault()
         this.props.moveFocusDownOrAddNewChoice(this.props.index)
-    },
-    deleteChoice: function(){
+    }
+
+    deleteChoice() {
         if(this.props.shouldUseX)
             this.props.deleteChoice(this.props.choice.id, this.props.index)
-    },
-    onKeyDown: function(e) {
+    }
+
+    onKeyDown(e) {
         if (e.keyCode === 8 && !this.props.choice.text) { // backspace
             e.preventDefault()
             this.props.deleteChoice(this.props.choice.id, this.props.index);
@@ -30,23 +40,25 @@ module.exports = React.createClass({
         } else if (e.keyCode == 40) {  // down
             this.props.moveFocusDownOrAddNewChoice(this.props.index);
         }
-    }, 
-    onChoiceSelected: function() {
+    }
+
+    onChoiceSelected() {
         this.props.makeChoiceIsCorrect(this.props.choice.id);
-    },
-    render: function() {
+    }
+
+    render() {
         const { choice, index } = this.props;
         const placeholder = `Choice ${index + 1}`;
 
-        return(
+        return (
             <form onSubmit={this.submit}>
-                <Row className="choice-row">
+                <Row className={'choice-row' + (this.props.invalid ? ' invalid' : '')}>
                     <FontAwesome
                         className={'circle-icon' + (choice.is_correct ? " correct" : "")}
                         name={choice.is_correct ? 'check-circle' : 'circle-thin'}
                         onClick={this.onChoiceSelected}/>
                     <input
-                        className="choice-input"
+                        className={'choice-input' + (this.props.invalid ? ' invalid' : '')}
                         type="text"
                         placeholder={placeholder}
                         onChange={this.handleChoiceTextChange}
@@ -61,6 +73,8 @@ module.exports = React.createClass({
                     </div>
                 </Row>
             </form>
-        )
+        );
     }
-})
+}
+
+export default MCChoiceNode;

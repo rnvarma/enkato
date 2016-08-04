@@ -1,27 +1,29 @@
+require('css/globals/QuizAddingForm/ScrollButtonList.scss');
 
-require("css/globals/QuizAddingForm/ScrollButtonList.scss");
+import React, { Component } from 'react';
 
-var React = require('react')
+import ScrollButtonNode from 'js/globals/QuizAddingForm/ScrollButtonNode';
 
-var ScrollButtonNode = require('js/globals/QuizAddingForm/ScrollButtonNode');
-
-module.exports = React.createClass({
-    render:function(){
-        var ScrollButtonNodes = this.props.questions.map(function(question, index) {
+class ScrollButtonList extends Component {
+    render() {
+        const ScrollButtonNodes = this.props.questions.map((question, index) => {
             return (
                 <ScrollButtonNode
-                    id={question.id}
-                    scrollToFromButton={this.props.scrollToFromButton}
                     key={question.id}
-                    index={index}
+                    questionId={question.id}
                     active={question.active}
+                    scrollToQuestion={this.props.scrollToFromButton}
+                    index={index}
                     order={index + 1}/>
-            )
-        }.bind(this))
-        return(
+            );
+        });
+
+        return (
             <div>
                 {ScrollButtonNodes}
             </div>
-        )
+        );
     }
-})
+}
+
+export default ScrollButtonList;

@@ -1,19 +1,26 @@
+require('css/globals/QuizAddingForm/ScrollButtonNode.scss');
 
-require("css/globals/QuizAddingForm/ScrollButtonNode.scss");
+import React, { Component } from 'react';
 
-var React = require('react')
+class ScrollButtonNode extends Component {
+    constructor() {
+        super();
+        this.onClick = this.onClick.bind(this);
+    }
 
-module.exports = React.createClass({
-    onClick: function(e) {
-        this.props.scrollToFromButton(this.props.id, this.props.index)
-    },
-    render: function() {
-        return(
+    onClick(e) {
+        this.props.scrollToQuestion(this.props.questionId, this.props.index);
+    }
+
+    render() {
+        return (
             <div 
                 onClick={this.onClick}
-                className={"singleNumberButton" + (this.props.active ? " active" : "")}>
+                className={'singleNumberButton' + (this.props.active ? ' active' : '')}>
                 {this.props.order}
             </div>
-        )
+        );
     }
-})
+}
+
+export default ScrollButtonNode;

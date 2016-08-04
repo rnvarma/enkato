@@ -100,7 +100,7 @@ export default class EditVideoPlayer extends Component {
         }
 
         /* save and publish button was hit */
-        if (nextProps.publishTopics) {
+        if (nextProps.readyToPublish) {
             this.syncTopics();
             this.props.closeAnnotationModal();
         }

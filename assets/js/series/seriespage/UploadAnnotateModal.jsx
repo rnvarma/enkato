@@ -16,14 +16,14 @@ export default class UploadAnnotateModal extends Component {
 
         this.state = {
             error: '',
+            readyToPublish: false,
             unsavedTopics: false,
-            publishTopics: false,
             unsavedQuiz: false,
-            publishQuiz: false,
             showingConfirmSave: false,
             onConfirmQuit: function() {},
         };
 
+        this.cancelPublish = this.cancelPublish.bind(this);
         this.setUnsavedTopics = this.setUnsavedTopics.bind(this);
         this.setUnsavedQuiz = this.setUnsavedQuiz.bind(this);
         this.launchUnsaved = this.launchUnsaved.bind(this);
@@ -41,6 +41,12 @@ export default class UploadAnnotateModal extends Component {
         if (!this.props.annotateMode && newProps.annotateMode) {
             this.resetUnsaved();
         }
+    }
+
+    cancelPublish() {
+        this.setState({
+            readyToPublish: false,
+        });
     }
 
     setUnsavedTopics() {
@@ -78,8 +84,7 @@ export default class UploadAnnotateModal extends Component {
 
     resetUnsaved() {
         this.setState({
-            publishTopics: false,
-            publishQuiz: false,
+            readyToPublish: false,
             unsavedTopics: false,
             unsavedQuiz: false,
             showingConfirmSave: false,
@@ -110,12 +115,12 @@ export default class UploadAnnotateModal extends Component {
     onNext() {
         if (this.props.quizMode) {
             this.setState({
-                publishQuiz: true,
+                readyToPublish: true,
             });
         }
         if (this.props.annotateMode) {
             this.setState({
-                publishTopics: true,
+                readyToPublish: true,
             });
         } else {
             if (this.props.urls) {
@@ -202,11 +207,11 @@ export default class UploadAnnotateModal extends Component {
                     quizMode={this.props.quizMode}
                     unsavedTopics={this.state.unsavedTopics}
                     unsavedQuiz={this.state.unsavedQuiz}
-                    publishTopics={this.state.publishTopics}
-                    publishQuiz={this.state.publishQuiz}
+                    readyToPublish={this.state.readyToPublish}
                     setUnsavedTopics={this.setUnsavedTopics}
                     setUnsavedQuiz={this.setUnsavedQuiz}
                     launchUnsaved={this.launchUnsaved}
+                    cancelPublish={this.cancelPublish}
                     closeAnnotationModal={this.props.close}/>
             ),
           }

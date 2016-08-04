@@ -1,19 +1,20 @@
+require('css/globals/QuizAddingForm/MCChoiceList.scss');
 
-require("css/globals/QuizAddingForm/MCChoiceList.scss");
+import React, { Component } from 'react';
 
-var React = require('react')
+import MCChoiceNode from 'js/globals/QuizAddingForm/MCChoiceNode';
 
-var MCChoiceNode = require('js/globals/QuizAddingForm/MCChoiceNode');
-
-module.exports = React.createClass({
-    render: function(){
-        var shouldUseX = this.props.choiceList.length !== 1
-        var MCChoiceNodes = this.props.choiceList.map(function(choice, index) {
+class MCChoiceList extends Component {
+    render() {
+        const shouldUseX = this.props.choiceList.length !== 1
+        const MCChoiceNodes = this.props.choiceList.map((choice, index) => {
+            const invalid = this.props.invalidChoice !== null && choice.id === this.props.invalidChoice.id
             return (
                 <MCChoiceNode
                     key={choice.id}
                     index={index}
                     choice={choice}
+                    invalid={invalid}
                     handleChoiceTextChange={this.props.handleChoiceTextChange}
                     addNewChoice={this.props.addNewChoice}
                     deleteChoice={this.props.deleteChoice}
@@ -21,12 +22,14 @@ module.exports = React.createClass({
                     moveFocusUp={this.props.moveFocusUp}
                     moveFocusDownOrAddNewChoice={this.props.moveFocusDownOrAddNewChoice}
                     shouldUseX={shouldUseX}/>
-            )
-        }.bind(this))
+            );
+        });
         return (
             <div>
                 {MCChoiceNodes}
             </div>
-        )
+        );
     }
-})
+}
+
+export default MCChoiceList;

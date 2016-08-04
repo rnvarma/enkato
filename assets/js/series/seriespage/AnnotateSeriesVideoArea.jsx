@@ -8,30 +8,33 @@ import QuizAddingForm from 'js/globals/QuizAddingForm/QuizAddingForm';
 
 export default class AnnotateSeriesVideoArea extends Component {
     render() {
-        var editingBody;
-        if(this.props.quizMode){
+        let editingBody;
+        if (this.props.quizMode) {
             editingBody = (
-                <QuizAddingForm 
+                <QuizAddingForm
                     videoUUID={this.props.currentVideo.uuid}
-                    publishQuiz={this.props.publishQuiz}
+                    readyToPublish={this.props.readyToPublish}
                     setUnsaved={this.props.setUnsavedQuiz}
+                    cancelPublish={this.props.cancelPublish}
                     closeAnnotationModal={this.props.closeAnnotationModal}/>
-            )
+            );
         } else {
             editingBody = (
                 <div className="video">
-                    <EditVideoPlayer 
+                    <EditVideoPlayer
                         videoUUID={this.props.currentVideo.uuid}
-                        publishTopics={this.props.publishTopics}
+                        readyToPublish={this.props.readyToPublish}
                         setUnsaved={this.props.setUnsavedTopics}
+                        cancelPublish={this.props.cancelPublish}
                         closeAnnotationModal={this.props.closeAnnotationModal}/>
                 </div>
-            )
+            );
         }
+
         return (
             <div className="annotateSeriesVideoArea">
                 {editingBody}
             </div>
-        )
+        );
     }
 }

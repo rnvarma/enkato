@@ -27,16 +27,18 @@ class QuizAddingForm extends Component {
             questions: [],
             removedQuestions: [],
             removedChoices: [],
+            invalidQuestion: null,
+            invalidChoice: null,
             numQuestions: 1,
         };
 
         this.loadDataFromServer = this.loadDataFromServer.bind(this);
+        this.validateData = this.validateData.bind(this);
+        this.markInvalidInput = this.markInvalidInput.bind(this);
         this.saveDataToServer = this.saveDataToServer.bind(this);
         this.setChoiceList = this.setChoiceList.bind(this);
-        this.setShouldRefocus = this.setShouldRefocus.bind(this);
         this.handleQuizQuestionChange = this.handleQuizQuestionChange.bind(this);
         this.scrollToFromButton = this.scrollToFromButton.bind(this);
-        this.scrollToChoice = this.scrollToChoice.bind(this);
         this.addNewChoice = this.addNewChoice.bind(this);
         this.addQuestion = this.addQuestion.bind(this);
         this.makeChoiceIsCorrect = this.makeChoiceIsCorrect.bind(this);
@@ -54,9 +56,13 @@ class QuizAddingForm extends Component {
             this.loadDataFromServer(nextProps.videoUUID);
         }
 
-        if (nextProps.publishQuiz) {
-            this.saveDataToServer();
-            this.props.closeAnnotationModal();
+        if (nextProps.readyToPublish) {
+            if (this.validateData()) {
+                this.saveDataToServer();
+                this.props.closeAnnotationModal();
+            } else {
+                this.props.cancelPublish();
+            }
         }
     }
 
@@ -68,8 +74,12 @@ class QuizAddingForm extends Component {
         request.get(`/1/quizdata/${vuuid}`, {
             success: (data) => {
                 if (data.questions.length > 0) {
+                    data.questions[0].active = true;
                     this.setState({
                         questions: data.questions,
+                    }, () => {
+                        $('.quizAddingForm').animate({scrollTop: 0}, 400);
+                        $(`#${data.questions[0].id}.question-input`).focus();
                     });
                 } else { /* add blank question */
                     this.setState({
@@ -78,6 +88,35 @@ class QuizAddingForm extends Component {
                     this.addQuestion();
                 }
             }
+        });
+    }
+
+    validateData() {
+        let questionIndex = 0;
+        for (const question of this.state.questions) {
+            if (!question.quizQuestionText) {
+                this.markInvalidInput(question);
+                this.scrollToFromButton(question.id, questionIndex);
+                return false;
+            }
+
+            for (const choice of question.choiceList) {
+                if (!choice.text) {
+                    this.markInvalidInput(question, choice);
+                    this.scrollToFromButton(question.id, questionIndex, true, choice.id);
+                    return false;
+                }
+            }
+            questionIndex++;
+        }
+
+        return true;
+    }
+
+    markInvalidInput(question, choice = null) {
+        this.setState({
+                invalidQuestion: question,
+                invalidChoice: choice,
         });
     }
 
@@ -96,17 +135,15 @@ class QuizAddingForm extends Component {
     }
 
     setChoiceList(choiceList, questionNumber) {
-        var tempQuestionList = this.state.questions;
-        tempQuestionList[questionNumber].choiceList = choiceList;
-        this.setState({questions: tempQuestionList})
+        const newQuestions = $.extend(true, [], this.state.questions);
+
+        newQuestions[questionNumber].choiceList = choiceList;
+
+        this.setState({
+            questions: newQuestions,
+        });
 
         this.props.setUnsaved();
-    }
-
-    setShouldRefocus(shouldRefocus, questionNumber) {
-        var tempQuestionList = this.state.questions;
-        tempQuestionList[questionNumber - 1].shouldRefocus = shouldRefocus;
-        this.setState({questions: tempQuestionList})
     }
 
     handleQuizQuestionChange(questionText, index) {
@@ -117,29 +154,34 @@ class QuizAddingForm extends Component {
         this.props.setUnsaved();
     }
 
-    scrollToFromButton(questionId, index) {
-        if (!this.state.questions[index].active) {
-            const distanceToScroll = $(`#${questionId}q`).position().top;
-            const $quizForm = $('.quizAddingForm');
+    scrollToFromButton(questionId, index, refocus = true, choiceId = null) {
+        const refocusFunc = () => {
+            if (refocus) {
+                if (choiceId !== null) {
+                    $(`#${choiceId}.choice-input`).focus();
+                } else {
+                    $(`#${this.state.questions[index].id}.question-input`).focus();
+                }
+            }
+        };
+        const distanceToScroll = $(`#${questionId}q`).position().top;
+        if (distanceToScroll !== 0) {
+            const $quizForm = $('.quizAddingForm'); /* TODO: cache */
             $quizForm.animate({scrollTop: $quizForm.scrollTop() + distanceToScroll}, 400);
 
-            const questions = $.extend(true, [], this.state.questions);
+            let questions = $.extend(true, [], this.state.questions);
             for (let i = 0; i < questions.length; i++) {
                 questions[i].active = false;
             }
             questions[index].active = true;
             this.setState({
                 questions: questions,
-            });
+            }, refocusFunc);
+        } else {
+            /* this works because state updates are batched, the problem here
+             * is that focus is lost once the cancelPublish changes state */
+            this.setState({}, refocusFunc);
         }
-    }
-
-    scrollToChoice(choiceId) {
-        const $choiceForm = $(`#${choiceId}`);
-        const distanceToScroll = $choiceForm.position().top;
-        const $quizForm = $('.quizAddingForm');
-        $quizForm.animate({scrollTop: $quizForm.scrollTop() + distanceToScroll}, 400);
-        $choiceForm.focus();
     }
 
     makeChoice(isCorrect = false) {
@@ -190,7 +232,7 @@ class QuizAddingForm extends Component {
                     newRemovedChoices.push(choice);
                 }
                 needNewAnswer = choice.is_correct;
-                needNewFocus = choice.focus;
+                needNewFocus = $(`#${choice.id}.choice-input`).is(':focus');
                 choiceIndex = index;
 
                 return false;
@@ -208,9 +250,9 @@ class QuizAddingForm extends Component {
             if (needNewAnswer) {
                 newChoice.is_correct = true;
             }
+            /* choice.focus might be useless */
             if (needNewFocus) {
                 newChoice.focus = true;
-                $(`#${newChoice.id}`).focus();
             }
 
             question.choiceList = newChoiceList;
@@ -218,6 +260,10 @@ class QuizAddingForm extends Component {
             this.setState({
                 questions: newQuestions,
                 removedChoices: newRemovedChoices,
+            }, function() {
+                if (newChoice.focus) {
+                    $(`#${newChoice.id}.choice-input`).focus();
+                }
             });
 
             this.props.setUnsaved();
@@ -253,7 +299,6 @@ class QuizAddingForm extends Component {
             questions: newQuestions,
         }, () => {
             this.scrollToFromButton(newQuestion.id, newQuestions.length - 1);
-            $(`#${newQuestion.id}q .singleQuizForm .question-row .question-input`).focus();
         });
 
         this.props.setUnsaved();
@@ -301,16 +346,17 @@ class QuizAddingForm extends Component {
                         onClick={this.addQuestion}
                         name='plus'/>
                 </div>
-                <QuizFormsList 
+                <QuizFormsList
                     setChoiceList={this.setChoiceList}
-                    setShouldRefocus={this.setShouldRefocus}
                     handleQuizQuestionChange={this.handleQuizQuestionChange}
                     addNewChoice={this.addNewChoice}
                     deleteChoice={this.deleteChoice}
                     deleteQuestion={this.deleteQuestion}
                     makeChoiceIsCorrect={this.makeChoiceIsCorrect}
-                    scrollToFromButton={this.scrollToFromButton}
-                    questions={this.state.questions}/>
+                    scrollToQuestion={this.scrollToFromButton}
+                    questions={this.state.questions}
+                    invalidQuestion={this.state.invalidQuestion}
+                    invalidChoice={this.state.invalidChoice}/>
             </div>
         )
     }
