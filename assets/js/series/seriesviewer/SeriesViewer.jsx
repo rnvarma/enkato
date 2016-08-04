@@ -146,14 +146,12 @@ class SeriesViewer extends Component {
     loadQuiz(){
       var params = [];
       var hashes = window.location.hash.slice(24).split('&');
-      console.log(hashes);
       for(var i = 0; i < hashes.length; i++){
         var param = hashes[i].split('=');
         params.push(param[0]);
         params[param[0]] = param[1];
       }
       var showQuiz= params["quiz"];
-      console.log(showQuiz);
       return showQuiz;
     }
 

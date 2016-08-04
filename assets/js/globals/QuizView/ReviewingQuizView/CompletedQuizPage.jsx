@@ -8,11 +8,12 @@ import Button from 'react-bootstrap/lib/Button';
 export default class CompletedQuizPage extends Component {
     constructor(props){
         super(props);
-
+        
         this.getNextVideoUrl = this.getNextVideoUrl.bind(this);
     }
 
     getNextVideoUrl(){
+        this.props.closeModal();
         window.location.hash = this.props.nextVideo.uuid;
     }
 
@@ -27,7 +28,6 @@ export default class CompletedQuizPage extends Component {
                 </Button>
             )
         }
-
 
         return(
             <div className="CompletedQuizPage">

@@ -13,10 +13,6 @@ export default class QuizNavFooter extends React.Component {
     this.submitInfo = this.submitInfo.bind(this);
   }
 
-  componentDidMount(){
-    console.log(this.props);
-  }
-
   submitInfo(){
     this.props.submitInfo();
   }
