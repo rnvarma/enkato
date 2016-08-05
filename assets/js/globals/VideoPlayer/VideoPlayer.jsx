@@ -84,15 +84,19 @@ export default class VideoPlayer extends Component {
             videoDivWidth: 0,
             uuid: this.props.videoUUID,
             questions:[],
-            showingOverlay:false,
-            takingQuiz:false,
             viewStats: {
                 duration: 0,
                 end: 0
             },
             seriesUUID: this.props.seriesUUID,
             videoTitle: "",
+
+            showingOverlay:false,
+            takingQuiz:false,
+            reviewMode: false,
+            resultsPage: false,
             quizTaken: false,
+
             completedQuizInfo:{
                 result:[],
                 numCorrect:0
@@ -119,6 +123,34 @@ export default class VideoPlayer extends Component {
         this.onFinishButton = this.onFinishButton.bind(this);
         this.afterTopicListUpdate = this.afterTopicListUpdate.bind(this);
         this.playVideo = this.playVideo.bind(this);
+        this.retakeQuiz = this.retakeQuiz.bind(this);
+        this.reviewQuiz = this.reviewQuiz.bind(this);
+        this.showQuizResultsPage = this.showQuizResultsPage.bind(this);
+    }
+
+    retakeQuiz() {
+        this.setState({
+            showingOverlay: false,
+            takingQuiz: true,
+            reviewMode: false,
+            resultsPage: false,
+        })
+    }
+
+    reviewQuiz() {
+        this.setState({
+            showingOverlay: false,
+            takingQuiz: true,
+            reviewMode: true,
+            resultsPage: false,
+        })
+    }
+
+    showQuizResultsPage() {
+        this.setState({
+            reviewMode: false,
+            resultsPage: true
+        })
     }
 
     componentDidMount() {
@@ -148,11 +180,6 @@ export default class VideoPlayer extends Component {
                 this.setState({
                     Player: vidPlayer
                 });
-                if(this.state.quizTaken){
-                    this.setState({
-                        quizTaken: false
-                    })
-                }
                 /* an optional prop */
                 if (this.props.setTopicList) {
                   this.props.setTopicList(data.topicList);
@@ -186,7 +213,6 @@ export default class VideoPlayer extends Component {
                 uuid: nextProps.videoUUID,
                 takingQuiz: false,
                 showingOverlay: false,
-                quizTaken: false
             })
             this.loadDataFromServer(nextProps.videoUUID);
         }
@@ -259,6 +285,8 @@ export default class VideoPlayer extends Component {
             request.get(`/1/studentquizdata/s/${seriesUUID}/v/${v_id}`, {
                 success: (data) => {
                     this.setState(data)
+                    if (data.quizTaken)
+                        this.setState({resultsPage: true})
                     this.setState({quizDataLoaded: true})
                 }
             })
@@ -272,6 +300,8 @@ export default class VideoPlayer extends Component {
                 this.setState({
                     quizTaken: true,
                     completedQuizInfo: data,
+                    reviewMode: false,
+                    resultsPage: true,
                 });
             }
         })
@@ -310,12 +340,15 @@ export default class VideoPlayer extends Component {
             this.setState({
                 showingOverlay: false,
                 takingQuiz: true,
+                reviewMode: false,
+                resultsPage: this.state.quizTaken
             })
         } else {
             this.props.openRegisterModal(() => {
                 this.setState({
                     showingOverlay: false,
-                    takingQuiz: true
+                    takingQuiz: true,
+                    reviewMode: false,
                 })
                 this.loadQuizData(this.state.uuid)
             });
@@ -327,7 +360,6 @@ export default class VideoPlayer extends Component {
         this.setState({
             takingQuiz: false,
             showingOverlay: false,
-            quizTaken: false
         })
     }
 
@@ -373,7 +405,6 @@ export default class VideoPlayer extends Component {
         this.setState({
             showingOverlay: true,
             takingQuiz: false,
-            quizTaken: false
         })
         this.loadQuizData(this.props.videoUUID)
     }
@@ -431,6 +462,8 @@ export default class VideoPlayer extends Component {
                             controlBarHeight={$('.ControlBar').height()}
                             showingOverlay={this.state.showingOverlay}
                             takingQuiz={this.state.takingQuiz}
+                            reviewMode={this.state.reviewMode}
+                            resultsPage={this.state.resultsPage}
                             showQuiz={this.showQuiz}
                             videoUUID={this.state.uuid}
                             closeModal={this.closeModal}
@@ -441,7 +474,10 @@ export default class VideoPlayer extends Component {
                             questions={this.state.questions}
                             onFinishButton={this.onFinishButton}
                             quizDataLoaded={this.state.quizDataLoaded}
-                            submitQuizAnswers={this.submitQuiz}/>
+                            submitQuizAnswers={this.submitQuiz}
+                            retakeQuiz={this.retakeQuiz}
+                            reviewQuiz={this.reviewQuiz}
+                            showQuizResultsPage={this.showQuizResultsPage}/>
                         <ControlBar 
                             className="ControlBar"
                             isPlaying={this.state.isPlaying}

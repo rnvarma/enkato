@@ -10,78 +10,9 @@ import SeriesViewerSidebarVideoPanel from 'js/series/seriesviewer/SeriesViewerSi
 import FontAwesome from 'react-fontawesome';
 
 export default class QuizModal extends Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            reviewMode: false,
-            resultsPage: false
-        }
-
-        this.onReviewQuizClicked = this.onReviewQuizClicked.bind(this)
-        this.showResultsPage = this.showResultsPage.bind(this)
-        this.showReviewMode = this.showReviewMode.bind(this)
-        this.onRetakeQuiz = this.onRetakeQuiz.bind(this)
-        this.closeModal = this.closeModal.bind(this)
-    }
-
-    componentDidMount() {
-        this.setState({
-            resultsPage: this.props.quizTaken
-        })
-    }
-
-    onReviewQuizClicked(){
-        this.setState({
-            reviewMode: true,
-            resultsPage: false
-        })
-        this.props.showQuiz()
-    }
-
-    showResultsPage() {
-        this.setState({
-            reviewMode: false,
-            resultsPage: true
-        })
-    }
-
-    showReviewMode() {
-        this.setState({
-            reviewMode: true,
-            resultsPage: false
-        })
-    }
-
-    onRetakeQuiz() {
-        this.setState({
-            reviewMode: false,
-            resultsPage: false
-        })
-        this.props.showQuiz()
-    }
-
-    onNextQuiz(){
-
-    }
-
-    closeModal() {
-        this.setState({
-            reviewMode: false,
-            resultsPage: false
-        })
-        this.props.closeModal()
-    }
-
-    componentWillUnmount(){
-        this.setState({
-            resultsPage: false,
-            reviewMode: false
-        })
-    }
 
     render(){
-        var bg_style = (this.props.showingOverlay ? {} : {display:"none"})
+        var quiz_style = (this.props.showingOverlay ? {} : {display:"none"})
 
         var overlay_style = (this.props.takingQuiz || this.props.showingOverlay ? {} : {display:"none"})
         var nextVideo;
@@ -106,7 +37,7 @@ export default class QuizModal extends Component {
             TitleText = "You answered "+numCorrect+" of "+numQuestions+" correctly."
 
             greenButton = (
-                <Button className="takeQuizButton" onClick={this.onReviewQuizClicked}>
+                <Button className="takeQuizButton" onClick={this.props.reviewQuiz}>
                     Review Answers
                 </Button>
             )
@@ -138,16 +69,16 @@ export default class QuizModal extends Component {
                     <QuizForm
                         videoUUID={this.props.videoUUID}
                         nextVideo={this.props.nextVideo}
-                        closeModal={this.closeModal}
+                        closeModal={this.props.closeModal}
                         onFinishButton={this.props.onFinishButton}
-                        reviewMode={this.state.reviewMode}
+                        reviewMode={this.props.reviewMode}
                         completedQuizInfo={this.props.completedQuizInfo}
-                        resultsPage={this.state.resultsPage}
+                        resultsPage={this.props.resultsPage}
                         questions={this.props.questions}
-                        showReviewMode={this.showReviewMode}
-                        onRetakeQuiz={this.onRetakeQuiz}
+                        showReviewMode={this.props.reviewQuiz}
+                        onRetakeQuiz={this.props.retakeQuiz}
                         submitQuizAnswers={this.props.submitQuizAnswers}
-                        showResultsPage={this.showResultsPage}/>
+                        showResultsPage={this.props.showQuizResultsPage}/>
                 </div>
             )
         }
@@ -156,7 +87,7 @@ export default class QuizModal extends Component {
             <div>
                 <div className="greyBackground" style={overlay_style}>
                 </div>
-                <div className="greyBackground" style={bg_style}>
+                <div className="greyBackground" style={quiz_style}>
                     <div className="questionText">
                         {TitleText}
                     </div>

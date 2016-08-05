@@ -17,6 +17,8 @@ export default class Video extends Component {
                 onFinishButton={this.props.onFinishButton}
                 showingOverlay={this.props.showingOverlay}
                 takingQuiz={this.props.takingQuiz}
+                reviewMode={this.props.reviewMode}
+                resultsPage={this.props.resultsPage}
                 showQuiz={this.props.showQuiz}
                 videoUUID={this.props.videoUUID}
                 closeModal={this.props.closeModal}
@@ -25,7 +27,10 @@ export default class Video extends Component {
                 quizTaken={this.props.quizTaken}
                 questions={this.props.questions}
                 completedQuizInfo={this.props.completedQuizInfo}
-                submitQuizAnswers={this.props.submitQuizAnswers}/>
+                submitQuizAnswers={this.props.submitQuizAnswers}
+                retakeQuiz={this.props.retakeQuiz}
+                reviewQuiz={this.props.reviewQuiz}
+                showQuizResultsPage={this.props.showQuizResultsPage}/>
         )
         return (
             <div 

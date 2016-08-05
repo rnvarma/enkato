@@ -20,7 +20,7 @@ export default class QuizNavFooter extends React.Component {
     render() {
         var disableAll = this.props.resultsPage;
         var rightButton = <div></div>
-        if(this.props.reviewMode&&(this.props.currentQuestion == this.props.numQuestions -1)){
+        if(this.props.reviewMode && (this.props.currentQuestion == this.props.numQuestions -1)){
             rightButton = (
                 <Button className="finishButton" onClick={this.props.onFinishButton}>
                     Finish
