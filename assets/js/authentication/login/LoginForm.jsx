@@ -41,7 +41,12 @@ class LoginForm extends Component {
         e.preventDefault();
         auth.login(this.state.username, this.state.password, (success) => {
             if (success) {
-                window.location.href = "/"
+                if (this.props.callbackFn) {
+                    this.props.callbackFn()
+                    this.props.closeRegisterModal()
+                } else {
+                    window.location.href = "/"
+                }
             }
         }, (errorMsg) => {
             this.setState({
@@ -66,10 +71,10 @@ class LoginForm extends Component {
                 {errorMsg}
                 <FormGroup
                     controlId="user-name">
-                    <Col componentClass={ControlLabel} sm={2}>
+                    <Col componentClass={ControlLabel} sm={3}>
                         User Name
                     </Col>
-                    <Col sm={10}>
+                    <Col sm={9}>
                         <InputGroup>
                             <FormControl onChange={this.onUserNameChange} type="text" placeholder="User Name" />
                             <InputGroup.Addon>
@@ -79,10 +84,10 @@ class LoginForm extends Component {
                     </Col>
                 </FormGroup>
                 <FormGroup controlId="password">
-                    <Col componentClass={ControlLabel} sm={2}>
+                    <Col componentClass={ControlLabel} sm={3}>
                         Password
                     </Col>
-                    <Col sm={10}>
+                    <Col sm={9}>
                         <InputGroup>
                             <FormControl onChange={this.onPasswordChange} type="password" placeholder="Password" />
                             <InputGroup.Addon>
@@ -93,9 +98,9 @@ class LoginForm extends Component {
                 </FormGroup>
 
                 <FormGroup>
-                    <Col sm={10} smOffset={2}>
+                    <Col sm={9} smOffset={3}>
                         <Button className="structabl-red" type="submit" disabled={disabled}>
-                            Submit
+                            Login
                         </Button>
                     </Col>
                 </FormGroup>
