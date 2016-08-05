@@ -6,6 +6,7 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Button from 'react-bootstrap/lib/Button';
 
 import RegistrationForm from 'js/authentication/register/RegistrationForm';
+import LoginForm from 'js/authentication/login/LoginForm';
 import getCookie from 'js/globals/GetCookie'
 
 import auth from 'auth';
@@ -20,9 +21,12 @@ class RegisterModal extends Component {
                         show={this.props.registerModalOpen} 
                         onHide={this.props.closeRegisterModal}>
                       <Modal.Header closeButton>
-                        <Modal.Title>Register to use this feature!</Modal.Title>
+                        <Modal.Title>Login or Register to use this feature!</Modal.Title>
                       </Modal.Header>
                       <Modal.Body>
+                        <LoginForm
+                          callbackFn={this.props.callbackFn}
+                          closeRegisterModal={this.props.closeRegisterModal}/>
                         <RegistrationForm
                           callbackFn={this.props.callbackFn}
                           closeRegisterModal={this.props.closeRegisterModal}/>

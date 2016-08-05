@@ -228,12 +228,12 @@ class RegistrationForm extends Component {
                 </FormGroup>
 
                 <FormGroup>
-                    <Col sm={10} smOffset={2}>
+                    <Col sm={9} smOffset={3}>
                         <Button
                             className="structabl-red"
                             type="submit"
                             disabled={disabled}>
-                            Submit
+                            Register
                         </Button>
                     </Col>
                 </FormGroup>
