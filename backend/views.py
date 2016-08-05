@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from backend.models import *
 from backend.utility import *
-from backend.serializers import CustomUserSerializer
+from backend.serializers import CustomUserSerializer, BreakpointSerializer
 
 from rest_framework import viewsets, permissions
 
@@ -268,12 +268,20 @@ class VideoData(APIView):
         #get QuizList
         quizQs = video.quiz_questions.all()
         questions = map(Serializer.serialize_quiz_question, quizQs)
+
+        breakpoint_data = {}
+        serializer = BreakpointSerializer(video.breakpoints, many=True)
+        for breakpoint in serializer.data:
+            time = breakpoint.pop('time')
+            breakpoint_data[time] = breakpoint
+
         return Response({
             'videoID': video.vid_id,
             'topicList': frontendTList,
             'videoData': Serializer.serialize_video(video),
             'questions': questions,
-            'numQuestions':quizQs.count()
+            'breakpoints': breakpoint_data,
+            'numQuestions': quizQs.count(),
         })
 
 class VideoIdData(APIView):

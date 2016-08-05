@@ -205,3 +205,16 @@ class InstructorGeneralSeriesSerializer(serializers.ModelSerializer):
                     all_video_data[video_id]['question_data']['avg_time_asked'] = None
 
         return all_video_data
+
+
+class QuizQuestionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuizQuestion
+
+
+class BreakpointSerializer(serializers.ModelSerializer):
+    quiz_questions = QuizQuestionSerializer(many=True)
+
+    class Meta:
+        model = Breakpoint

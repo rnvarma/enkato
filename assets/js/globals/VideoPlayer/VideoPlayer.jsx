@@ -201,6 +201,8 @@ export default class VideoPlayer extends Component {
                 if (this.props.setGetCurrentTime) {
                       this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
                 }
+
+                console.log(data.breakpoints);
             }
         })
         this.loadQuizData(v_id)

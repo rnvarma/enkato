@@ -291,7 +291,8 @@ class QuestionResponseUpvote(models.Model):
 # =================================================================================== #
 
 class QuizQuestion(models.Model):
-    video = models.ForeignKey(Video, related_name="quiz_questions")
+    video = models.ForeignKey(Video, related_name="quiz_questions", null=True, blank=True)
+    breakpoint = models.ForeignKey('Breakpoint', related_name="quiz_questions", blank=True, null=True)
     order = models.IntegerField(default=0)
     question_text = models.TextField(default="")
     question_type = models.CharField(max_length=10, default="")  # mc/tf or fr
@@ -314,6 +315,17 @@ class FRAnswer(models.Model):
 
     def __str__(self):
         return self.response
+
+
+# ## Breakpoint Models ## #
+
+class Breakpoint(models.Model):
+    video = models.ForeignKey(Video, related_name="breakpoints")
+    time = models.IntegerField()
+    text = models.TextField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['time']
 
 
 # =================================================================================== #
