@@ -40,3 +40,35 @@
         cursor: pointer;
     }
 }
+
+// single quiz adding form
+
+.indi-quiz-form{
+    height: 100%;
+    width: 100%;
+    padding: $page-padding;
+}
+
+.choice-row {
+    height: 30px;
+    margin-left: 90px;
+}
+
+.question-row{ 
+    width:100%;
+    height:30px;
+    padding-left:70px;
+    margin-bottom:50px;
+    padding-top: $content-padding;
+}
+
+.add-option-button{
+    font-size: $large-size;
+    border: none;
+    width:90%;
+    color:#BBBBBB;
+
+    &:hover {
+        cursor: pointer;
+    }
+}

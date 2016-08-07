@@ -1,30 +1,76 @@
 .btn {
     border-radius: $base-border-radius;
-    border: 0px;
+    border: 0;
     font-weight: $bold-weight;
+    letter-spacing: 0.3px;
+    margin-right: $content-padding / 2;
+
+    &:hover {
+        cursor: pointer !important;
+    }
 
     &:focus, &:active {
         outline: 0 !important;
     }
-}
 
-.btn.btn-primary {
-    color: $blank;
-    background-color: $primary-accent;
+    &-primary {
+        color: $blank;
+        background-color: $primary-accent;
 
-    &:hover {
-        border: 1px solid $primary-accent;
-        color: $primary-accent;
-        background-color: $blank;
+        &:hover {
+        background-color: lighten($primary-accent, 5%);
+        }
+
+        &:active {
+            background-color: darken($primary-accent, 5%);
+        }
     }
 
-    &:focus {
-        outline: 0 !important;
+    &-secondary {
+        background-color: $base-bg;
+
+        &:hover {
+            background-color: lighten($base-bg, 2%);
+        }
+
+        &:active {
+            background-color: darken($base-bg, 2%);
+        }
+    }
+
+    &-danger {
+        background-color: darken($alert-accent, 5%);
+
+        &.muted {
+            color: $base-font-color;
+            background-color: $base-bg;
+        }
+
+        &:hover {
+            color: $blank;
+            background-color: darken($alert-accent, 2%);
+        }
+
+        &:active {
+            background-color: darken($alert-accent, 7%);
+        }
+    }
+
+    &.addQuestionBtn {
+        background: $primary-accent;
+        color: $blank;
+        text-align: left;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        margin-right: 0;
+        height: 35px;
+        margin-top: -1px;
+        width: 150px;
     }
 }
 
-.createBtn {
-    margin-top: 8px;
+.annotate-box {
+    display: inline-block;
 }
 
 .takeQuizButton{
@@ -92,30 +138,10 @@
 
     border-top: 1px solid $structabl-bg-blue;
 
-    .upNext {
-        font-weight: bold;
-        color: grey;
-        font-size: 13px;
-    }
-
     .name {
         font-weight: bold;
         color: $structabl-blue;
     }
-}
-
-.btn.addQuestionBtn {
-      background: $primary-accent;
-      color: white;
-      text-align: left;
-      font-size: 15px;
-      letter-spacing: 0.3px;
-      font-weight: 500;
-      border-top-left-radius: 0px;
-      border-bottom-left-radius: 0px;
-      height: 35px;
-      margin-top: -1px;
-      width: 150px;
 }
 
 .filterQuery {

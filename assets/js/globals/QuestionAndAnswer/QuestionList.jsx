@@ -27,7 +27,7 @@ class QuestionList extends Component {
           className={(question.id === this.props.currentQuestion.id ? 'selected ' : '') + 'questionPreview'}
           onClick={this.props.setCurrentQuestion.bind(null, question)}
         >
-          <div className="questionPreviewHeader">
+          <div className="questionPreviewHeader smallTitle">
             <Dotdotdot className="questionPreviewHeaderTopic" clamp={1}>
               {header}
             </Dotdotdot>

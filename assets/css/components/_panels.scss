@@ -1,4 +1,4 @@
-.basePanel {
+.listPanel {
     border-bottom: 1px solid $base-bg;
     background-color: $blank;
 
@@ -38,17 +38,14 @@
 // LISTING VIDEOS IN SERIES //
 
 .seriesVideoPanel {
-    @extend .basePanel;
+    @extend .listPanel;
     position: relative;
     padding: $content-padding 0;
 
-    .listNumber {
+    .order {
         display: inline-block;
-        vertical-align: top;
-        padding: 0 10px;
-        margin-top: 17px;
-        font-weight: $boldest-weight;
-        color: $base-dark;
+        font-weight: $bold-weight;
+        padding-right: $content-padding;
     }
 
     .right {
@@ -69,7 +66,7 @@
 }
 
 .seriesViewerSidebarVideoPanel {
-    @extend .basePanel;
+    @extend .listPanel;
     padding: $content-padding $content-padding;
 
     .thumbnailArea {
@@ -89,7 +86,7 @@
 // TOPIC NODES //
 
 .topicNode {
-    @extend .basePanel;
+    @extend .listPanel;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -152,7 +149,7 @@
 // ANNOTATIONS
 
 .annotateSeriesSideBarButton {
-    @extend .basePanel;
+    @extend .listPanel;
     padding: 10px 20px;
 
     &:first-of-type {
@@ -182,7 +179,7 @@
 // QUESTION-ANSWERING SYSTEM //
 
 .questionPreview {
-    @extend .basePanel;
+    @extend .listPanel;
     padding: 15px 20px;
     cursor: pointer;
 
@@ -191,9 +188,6 @@
     }
 
     .questionPreviewHeader {
-      color: $secondary-accent;
-      font-weight: $bold-weight;
-      font-size: $small-size;
 
       .questionPreviewHeaderTopic {
         width: 92%;

@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+
+import FontAwesome from 'react-fontawesome';
+import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
+
 import { Link, browserHistory } from 'react-router'
 import Button from 'react-bootstrap/lib/Button';
 
@@ -117,35 +122,38 @@ export default class SeriesMainArea extends Component {
                 </div>
             )
             var annotateVideosButton =  (
-                <div className="annotate-box">
-                    <Button onClick={this.props.openModal.bind(null, true)}>
-                        Annotate Video(s)
-                    </Button>
-                </div>
+                <Button
+                    className="btn-primary"
+                    onClick={this.props.openModal.bind(null, true)}>
+                    Annotate
+                </Button>
             );
             if(this.props.is_private){
                 privacyButton = (
-                    <div className="privacyButton">
-                        <Button onClick={this.setPublic}>
-                            Private
-                        </Button>
-                    </div>
+                    <Button
+                        className="btn-secondary"
+                        onClick={this.setPublic}
+                        title="Make Series Public">
+                        Private
+                    </Button>
                 );
             } else {
                 privacyButton = (
-                    <div className="privacyButton">
-                        <Button onClick={this.setPrivate}>
-                            Public
-                        </Button>
-                    </div>
+                    <Button
+                        className="btn-secondary"
+                        onClick={this.setPrivate}
+                        title="Make Series Private">
+                        Public
+                    </Button>
                 );
             }
             deleteButton = (
-                <div className="deleteButton">
-                    <Button onClick={this.toggleDelete}>
-                        Delete
-                    </Button>
-                </div>
+                <Button
+                    className="btn-danger muted"
+                    onClick={this.toggleDelete}
+                    title="Delete This Series">
+                    Delete
+                </Button>
             );
             editButton = <EditSeriesModal seriesUUID = {this.props.seriesUUID} name = {this.props.name} description = {this.props.description} loadPageData = {this.props.loadPageData}/>
             
@@ -162,23 +170,19 @@ export default class SeriesMainArea extends Component {
              
             if (auth.loggedIn() && this.props.is_subscribed) {
                 var annotateVideosButton = (
-                    <div className="annotate-box">
-                        <Button 
-                            className="unsubscribeButton" 
-                            onClick={this.props.onUnsubscribe}>
-                            Unsubscribe
-                        </Button>
-                    </div>
+                    <Button 
+                        className="unsubscribeButton" 
+                        onClick={this.props.onUnsubscribe}>
+                        Unsubscribe
+                    </Button>
                 )
             } else {
                 var annotateVideosButton = (
-                    <div className="annotate-box">
-                        <Button  
-                            className="subscribeButton" 
-                            onClick={this.props.onSubscribe}>
-                            Subscribe
-                        </Button>
-                    </div>
+                    <Button  
+                        className="btn btn-primary" 
+                        onClick={this.props.onSubscribe}>
+                        Subscribe
+                    </Button>
                 )
             }
         }
@@ -191,35 +195,39 @@ export default class SeriesMainArea extends Component {
                     acceptBsStyle = "danger"
                     acceptCallback = {this.delete}
                     cancelCallback = {this.toggleDelete}/>
-                <div className="header">
-                    <div className="picture-area">
-                        {img_src}
-                    </div>
-                    <div className="imageInfo metadata-area">
-                        <div className="title">
-                            {this.props.name}
+                <div className="header baseContainer">
+                    <Row>
+                        <div className="thumbnailArea col-lg-3 col-md-4 col-sm-12">
+                            {img_src}
                         </div>
-                        <div className="description">
-                            {this.props.description}
+                        <div className="imageInfo col-lg-6 col-md-7 col-sm-12">
+                            <div className="title">
+                                {this.props.name}
+                            </div>
+                            <div className="metadata">
+                                <div className="creator metaItem">
+                                    <Link to={`/userprofile/${this.props.creator.user_id}`}>{this.props.creator.name}</Link>
+                                </div>
+                                <div className="num-videos metaItem">
+                                    {this.props.num_videos} {pluralize("video", this.props.num_videos)}
+                                </div>
+                                <div 
+                                    className="num-mins metaItem"
+                                    id={noVideos?"noVideos":""}>
+                                    {this.props.total_len}
+                                </div>
+                            </div>
+                            <div className="description">
+                                {this.props.description}
+                            </div>
+                            <div className="annotate-box">
+                                {annotateVideosButton}
+                                {privacyButton}
+                                {deleteButton}
+                                {editButton}
+                            </div>
                         </div>
-                        {editButton}
-                        <div className="stats">
-                            <div className="creator metaItem">
-                                <Link to={`/userprofile/${this.props.creator.user_id}`}>{this.props.creator.name}</Link>
-                            </div>
-                            <div className="num-videos metaItem">
-                                {this.props.num_videos} {pluralize("video", this.props.num_videos)}
-                            </div>
-                            <div 
-                                className="num-mins metaItem"
-                                id={noVideos?"noVideos":""}>
-                                {this.props.total_len}
-                            </div>
-                            {annotateVideosButton}
-                            {privacyButton}
-                            {deleteButton}
-                        </div>
-                    </div>
+                    </Row>
                 </div>
                 {video_area}
             </div>

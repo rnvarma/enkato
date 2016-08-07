@@ -109,7 +109,6 @@ class NavBar extends Component {
             var numstring = this.state.num_notifications
             var RightBar = (
                 <Nav pullRight>
-                    <CreateSeriesModal />
                     <NavItem eventKey={2} onClick={this.logout}>Logout</NavItem>
                     <li role="presentation">
                         <Link to="/userprofile" activeClassName="active">{this.state.username}</Link>

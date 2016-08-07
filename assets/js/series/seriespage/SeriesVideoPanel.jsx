@@ -62,32 +62,36 @@ export default class SeriesVideoPanel extends Component {
         if (this.props.is_creator) {
             if (this.props.is_private) {
                 privacyButton = (
-                    <div className="annotate-box">
-                        <Button 
-                            onClick={this.makePublic}
-                            disabled={this.props.reordering}>
-                            Private
-                        </Button>
-                    </div>
+                    <Button 
+                        className="btn-secondary"
+                        onClick={this.makePublic}
+                        disabled={this.props.reordering}
+                        title="Make Video Public">
+                        <FontAwesome
+                            name="lock"/>
+                    </Button>
                 )
             } else {
                 privacyButton = (
-                    <div className="annotate-box">
-                        <Button  
-                            className="structabl-red"
-                            onClick={this.makePrivate}
-                            disabled={this.props.reordering}>
-                            Public
-                        </Button>
-                    </div>
+                    <Button  
+                        className="btn-secondary"
+                        onClick={this.makePrivate}
+                        disabled={this.props.reordering}
+                        title="Make Video Private">
+                        <FontAwesome
+                            name="unlock-alt"/>
+                    </Button>
                 )
             }
             deleteButton = (
-                <div className = "annotate-box">
-                    <Button onClick = {this.toggleDelete} disabled={this.props.reordering}>
-                        Delete
-                    </Button>
-                </div>
+                <Button
+                    className="btn-danger muted"
+                    onClick = {this.toggleDelete}
+                    disabled={this.props.reordering}
+                    title="Delete Video">
+                    <FontAwesome
+                        name="trash"/>
+                </Button>
             )
         }
 
@@ -133,10 +137,8 @@ export default class SeriesVideoPanel extends Component {
                 </div>
 
                 <div className={rightClass}>
-                    <div className="deleteButton">
+                    <div className="annotate-box">
                         {deleteButton}
-                    </div>
-                    <div className="privacyButton">
                         {privacyButton}
                     </div>
                     <div className="numViews metaItem">

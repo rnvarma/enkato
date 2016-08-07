@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';
+import Modal from 'react-bootstrap/lib/Modal';
 
 import QuestionNode from 'js/globals/QuizView/QuestionNode';
 import ReviewingQuizNav from "js/globals/QuizView/ReviewingQuizView/ReviewingQuizNav";
@@ -152,10 +153,10 @@ export default class QuizForm extends Component {
         }
         return (
             <div className="quizForm">
-              <div className="header">
-                Check Your Understanding
+              <Modal.Header>
+                <Modal.Title>Check Your Understanding</Modal.Title>
                 <FontAwesome className="closeForm" name="close" onClick={this.closeModal}/>
-                    </div>
+              </Modal.Header>
               {navigation}
               {modalBody}
               <QuizNavFooter

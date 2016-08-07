@@ -105,7 +105,7 @@ export default class SeriesVideoList extends Component {
             if (this.props.is_creator) {
                 buttons = 
                     <div>
-                        <Button onClick = {this.toggleReordering}>Reorder</Button>
+                        <Button className="btn-secondary" onClick = {this.toggleReordering}>Reorder</Button>
                     </div>
             }
             var videoList = videoPanels
@@ -113,13 +113,21 @@ export default class SeriesVideoList extends Component {
         else if (this.props.is_creator) {
             buttons = 
                 <div>
-                    <Button onClick = {this.saveReordering}>Save</Button>
-                    <Button onClick = {this.toggleReordering}>Cancel</Button>
+                    <Button
+                        className="btn-secondary"
+                        onClick = {this.saveReordering}>
+                        Save
+                    </Button>
+                    <Button
+                        className="btn-secondary"
+                        onClick = {this.toggleReordering}>
+                        Cancel
+                    </Button>
                 </div>
             var videoList = <SortableList data = {{items: videoPanels.map((item) => {return <div className = "seriesVideoPanelSortable">{item}</div>})}}/>
         }
         return (
-            <div className="seriesVideoList">
+            <div className="seriesVideoList baseContainer">
                 {buttons}
                 {videoList}
             </div>

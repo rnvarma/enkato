@@ -16,7 +16,7 @@ export default class SubscribedSeriesList extends Component {
                 <div className="title">
                     {this.props.name}
                 </div>
-                <Row className="titledPanel">
+                <Row className="titledContainer">
                     {seriesPanels}
                 </Row>
             </div>

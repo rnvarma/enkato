@@ -8,17 +8,9 @@ $questionIndent:50px;
     position:relative;
     overflow-y: scroll;
 
-    .title{
-        font-size:20px;
-        color:$structabl-blue;
-        
-        .titleText{
-            font-weight:700;
-        }
-    }
     .choiceList{
         padding-left:$questionIndent;
-        padding-top:35px;
+        padding-top:1.5em;
     }
 
     &.noQuiz {

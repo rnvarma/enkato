@@ -1,15 +1,13 @@
 .choiceNode{
-    margin-bottom:20px;
+    margin-bottom: 1em;
     font-size:16px;
     position: relative;
-    padding:7px;
     border-radius:5px;
     width:90%;
+    height:30px;
 
     .choiceText{
         position:absolute;
-        top:7;
-        left:40;
     }
 } 
 

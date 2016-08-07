@@ -34,6 +34,12 @@ a {
     font-weight: $base-weight;
 }
 
+.smallTitle {
+    font-size: $small-size;
+    color: $secondary-accent;
+    font-weight: $bold-weight;
+}
+
 /*
  * metaItem: Used for displaying video metadata, eg. video length, number of
  * topics, number of views, etc.
@@ -59,7 +65,7 @@ a {
  * defaultMessage: Handles the empty case for situations like no questions to
  * show, no videos in a series, etc.
  */
-.defaultMessage, .noVideosArea, .questionDisplay.empty {
+.noVideosArea, .questionDisplay.empty {
     text-align: center;
     font-size: $large-size;
     color: $base-dark;

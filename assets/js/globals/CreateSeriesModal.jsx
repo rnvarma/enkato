@@ -75,7 +75,7 @@ class CreateSeriesModal extends Component {
     render() {
         return (
             <li className="createSeriesModal">
-                <Button className="createBtn structabl-red" onClick={this.open}>Create</Button>
+                <Button className="btn-primary" onClick={this.open}>Create</Button>
                 <Modal show={this.state.showModal} onHide={this.close}>
                   <Modal.Header closeButton>
                     <Modal.Title>Create a New Series</Modal.Title>
@@ -87,7 +87,7 @@ class CreateSeriesModal extends Component {
                   </Modal.Body>
                   <Modal.Footer>
                     <Button onClick={this.close}>Cancel</Button>
-                    <Button className="structabl-red" disabled={!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Create</Button>
+                    <Button className="btn-primary" disabled = {!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Create</Button>
                   </Modal.Footer>
                 </Modal>
             </li>

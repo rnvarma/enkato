@@ -13,15 +13,15 @@
 // QUIZZING ICONS //
 
 .arrowIcon {
-    margin-right: 25px;
     font-size: 20px;
     color: $base-dark;
+    padding-right: $content-padding;
 }
 
 .circle-icon {
     color: $radio-unchecked;
     font-size: 20px;
-    margin-right: 20px;
+    margin-right: $content-padding;
 
     &:hover {
         cursor: pointer;
@@ -42,6 +42,8 @@
 
 .timesIcon {
     cursor: pointer;
+    margin-left: -20px;
+    font-size: 20px;
 }
 
 .undoIcon {
