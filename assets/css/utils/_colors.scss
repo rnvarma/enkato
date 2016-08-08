@@ -16,8 +16,6 @@ $black-active: #ccc;
 
 $enkato-bright-green: #2EB73A;
 
-$main-bg-shadow: transparentize($base-dark, 0.8);
-
 // Highlight Colors
 $blank: #FFFFFF; // Previously "white" lol
 
@@ -41,3 +39,5 @@ $control-bar-bg: #333333; // Previously grey-control-bar-bg-color
 $control-bar-font-color: #999999; // Previously grey-progress-bar-text
 $panel-hover-bg: #FBFBFB; // Previously hover-grey
 $panel-active-bg: darken($panel-hover-bg, 2%);
+
+$main-bg-shadow: transparentize($base-dark, 0.8);
