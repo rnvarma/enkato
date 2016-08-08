@@ -1,32 +1,20 @@
-$white:#FFFFFF;
-
 // $yn-green: #0D8809;
 
 $bg-grey: #F3F3F3;
-$hover-grey: #FBFBFB;
 $yn-dark-grey: #3A3A3A;
 $grey-topic-button: #FBFBFB;
 $grey-topic-button-section-bg:#F7F7F7;
 $grey-topic-button-section-bg-hover:#F3F3F3;
-$grey-topic-button-text:#535353;
-$grey-progress-bar-not-watched:#777777;
-$grey-progress-bar-text:#999999;
 $grey-control-bar-bg-color:#333333;
 
 $form-control-border-color: #acacac;
 
-$structabl-blue: #01113e;
 $structabl-red: #CD000A;
-$structabl-bg-blue: #EEF1F7;
 $grey-hover: #eee;
 
 $black-active: #ccc;
 
-$kato-green: #79B546;
-$enkato-green: #00765A;
 $enkato-bright-green: #2EB73A;
-
-$main-bg-shadow: transparentize($structabl-blue, 0.8);
 
 // Highlight Colors
 $blank: #FFFFFF; // Previously "white" lol
@@ -52,3 +40,5 @@ $control-bar-font-color: #999999; // Previously grey-progress-bar-text
 $panel-hover-bg: #FBFBFB; // Previously hover-grey
 $panel-active-bg: darken($panel-hover-bg, 2%);
 $deep-panel: darken($panel-active-bg, 1%);
+
+$main-bg-shadow: transparentize($base-dark, 0.8);

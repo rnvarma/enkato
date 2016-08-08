@@ -93,12 +93,12 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    color:$structabl-blue;
+    color: $base-dark;
     padding: 10px 20px;
-    border-bottom: 1px solid $structabl-bg-blue;
+    border-bottom: 1px solid $base-bg;
 
     &#selectedTopicNode {
-        background-color: $enkato-green;
+        background-color: $secondary-accent;
         color: white;
 
         .text {
@@ -126,7 +126,7 @@
 }
 
 .addTopicButton {
-    background-color: $enkato-green;
+    background-color: $secondary-accent;
     text-align: center;
     color: white;
     font-size: 18px;
@@ -151,11 +151,11 @@
     height: 100px;
     padding: 20px 15px;
 
-    border-top: 1px solid $structabl-bg-blue;
+    border-top: 1px solid $base-bg;
 
     .name {
         font-weight: bold;
-        color: $structabl-blue;
+        color: $base-dark;
     }
 }
 
