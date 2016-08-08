@@ -49,7 +49,10 @@
     }
 
     .right {
-        position: absolute;
+        @include respond-to(small) {
+            position: absolute;
+            padding: $content-padding;
+        }
         right: $content-padding;
         top: 25px;
         color: $base-dark;
