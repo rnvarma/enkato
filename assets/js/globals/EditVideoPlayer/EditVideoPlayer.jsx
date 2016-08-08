@@ -46,7 +46,8 @@ export default class EditVideoPlayer extends Component {
             videoDivHeight: 0,
             videoDivWidth: 0,
             videoUUID: "",
-            pollingInterval:null
+            pollingInterval:null,
+            breakpoints: [],
         };
         this.removedTopics = [];
 
@@ -63,6 +64,7 @@ export default class EditVideoPlayer extends Component {
         this.handlePlayPauseClick = this.handlePlayPauseClick.bind(this)
         this.playInContext = this.playInContext.bind(this)
         this.playerSeekTo = this.playerSeekTo.bind(this)
+        this.addBreakpoint = this.addBreakpoint.bind(this)
     }
 
     componentDidMount() {
@@ -113,6 +115,7 @@ export default class EditVideoPlayer extends Component {
                 this.setState({
                     Player: new Player(data.videoID),
                     topicObjList: data.topicList,
+                    breakpoints: data.breakpoints,
                 });
 
                 this.forceUpdate();
@@ -262,6 +265,23 @@ export default class EditVideoPlayer extends Component {
         this.state.Player.seekTo(seconds);
     }
 
+    addBreakpoint() {
+        const payload = {
+            video_uuid: this.props.videoUUID,
+            time: Math.round(this.state.Player.getCurrentTime()),
+            text: 'a text breakpoint',
+        };
+
+        request.post(`1/breakpoints`, {
+            data: payload,
+            success: (data) => {
+                this.setState({
+                    breakpoints: [...this.state.breakpoints, data],
+                });
+            },
+        })
+    }
+
     render() {
         if (this.state.Player==null) return (<div className="loading">Loading video player...</div>)
         return (
@@ -275,7 +295,8 @@ export default class EditVideoPlayer extends Component {
                             addNewTopic={this.addNewTopic}
                             videoDuration={this.state.Player.getDuration()}
                             handleTopicDelete={this.handleTopicDelete}
-                            playVideo={this.playInContext}/>
+                            playVideo={this.playInContext}
+                            addBreakpoint={this.addBreakpoint}/>
                     </div>
                     <div className="videoDiv">
                         <Video

@@ -28,6 +28,7 @@ export default class EditableTopicList extends Component {
                         addNewTopic={this.props.addNewTopic}
                         videoDuration={this.props.videoDuration}/>
                 </ScrollArea>
+                <button onClick={this.props.addBreakpoint}>Add Breakpoint</button>
                 <AddTopicButton 
                     addNewTopic={this.props.addNewTopic}/>
             </div>

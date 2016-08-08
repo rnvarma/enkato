@@ -214,7 +214,8 @@ class QuizQuestionSerializer(serializers.ModelSerializer):
 
 
 class BreakpointSerializer(serializers.ModelSerializer):
-    quiz_questions = QuizQuestionSerializer(many=True)
+    quiz_questions = QuizQuestionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Breakpoint
+        fields = ('time', 'text', 'quiz_questions')

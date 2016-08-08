@@ -204,7 +204,7 @@ export default class VideoPlayer extends Component {
                       this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
                 }
 
-                this.seconds = 0;
+                this.seconds = null;
             }
         })
         this.loadQuizData(v_id)
