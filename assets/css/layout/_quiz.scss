@@ -1,7 +1,7 @@
 .quizNavNode {
     padding: 5px 10px;
-    border-bottom: 1px solid $structabl-bg-blue;
-    border-right: 1px solid $structabl-bg-blue;
+    border-bottom: 1px solid $base-bg;
+    border-right: 1px solid $base-bg;
     text-align: center;
 
     &.review {
@@ -13,13 +13,13 @@
     }
 
     &:hover {
-        background-color: $structabl-blue;
+        background-color: $base-dark;
         color: white;
         cursor: pointer;
     }
 
     &.active {
-        background-color: $structabl-blue;
+        background-color: $base-dark;
         color: white;
     }
 }
@@ -55,7 +55,7 @@
         color:white;
         font-size:20px;
         font-weight:700;
-        background-color: $structabl-blue;
+        background-color: $base-dark;
         padding: 15px;
 
         width:100%;
