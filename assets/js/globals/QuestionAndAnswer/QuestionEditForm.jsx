@@ -51,7 +51,7 @@ class QuestionEditForm extends React.Component {
 
   render() {
     return (
-      <div className="questionEditForm">
+      <div className="questionEditForm contentArea">
         <QuestionForm
           topicList={this.props.topicList}
           onSubmit={this.onSubmit}

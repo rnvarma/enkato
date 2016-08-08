@@ -111,7 +111,7 @@
     width: 80%;
     height: 50%;
     background-color: white;
-    box-shadow: 2px 2px 2px $bg-grey;
+    box-shadow: 2px 2px 2px $deep-panel;
 
     color: $structabl-blue;
     font-size: 40px;
@@ -126,4 +126,8 @@
     .title {
         padding-bottom: $content-padding;
     }
+}
+
+.qaContent {
+    margin-bottom: -15px;
 }

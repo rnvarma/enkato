@@ -50,6 +50,11 @@ a {
     font-weight: $bold-weight;
 }
 
+.smallDarkTitle {
+    @extend .smallTitle;
+    color: $base-font-color;
+}
+
 /*
  * metaItem: Used for displaying video metadata, eg. video length, number of
  * topics, number of views, etc.
@@ -75,7 +80,7 @@ a {
  * defaultMessage: Handles the empty case for situations like no questions to
  * show, no videos in a series, etc.
  */
-.noVideosArea, .questionDisplay.empty {
+.noVideosArea {
     text-align: center;
     font-size: $large-size;
     color: $base-dark;

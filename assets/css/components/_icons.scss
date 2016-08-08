@@ -170,3 +170,24 @@
     margin-top:5px;
     width: 75px;
 }
+
+.responseBadges {
+    width: 30%;
+    display: inline-block;
+    text-align: right;
+    float: right;
+    vertical-align: top;
+    padding: 15px 20px;
+
+    .fa {
+      padding-right: 6px;
+
+      &.endorsed {
+        color: $secondary-accent;
+      }
+
+      &.instructor {
+        color: $primary-accent;
+      }
+    }
+  }

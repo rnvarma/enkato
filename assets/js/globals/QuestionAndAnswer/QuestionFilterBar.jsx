@@ -27,7 +27,7 @@ export default class QuestionFilterBar extends React.Component {
     if (!this.props.showingSeries) {
       viewAll = (
         <div
-          className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
+          className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'btn-plain'}
           onClick={this.props.setFilter.bind(null, '', true)}
         >
           View All
@@ -36,7 +36,7 @@ export default class QuestionFilterBar extends React.Component {
     } else {
       viewAll = (
         <div
-          className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
+          className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'btn-plain'}
           onClick={this.props.setFilter.bind(null, '', true)}
         >
           View All Series
@@ -47,13 +47,13 @@ export default class QuestionFilterBar extends React.Component {
       <Row className="questionFilterBar">
         {viewAll}
         <div
-          className={(this.props.filterAnswered ? 'selected ' : '') + 'filterOption'}
+          className={(this.props.filterAnswered ? 'selected ' : '') + 'btn-plain'}
           onClick={this.props.toggleAnsweredFilter}
         >
           Resolved
         </div>
         <div
-          className={(this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
+          className={(this.props.filterUnanswered ? 'selected ' : '') + 'btn-plain'}
           onClick={this.props.toggleUnansweredFilter}
         >
           Unresolved

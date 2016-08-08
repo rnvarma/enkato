@@ -40,7 +40,12 @@ class QuestionList extends Component {
             {question.text}
           </Dotdotdot>
           <div className="questionPreviewFooter">
-            {question.modified.fromNow()} | {responseCount} {pluralize('answer', responseCount)}
+            <div className="metaItem">
+              {question.modified.fromNow()}
+            </div>
+            <div className="metaItem">
+              {responseCount} {pluralize('answer', responseCount)}
+            </div>
           </div>
         </div>
       );

@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import moment from 'moment';
 import FontAwesome from 'react-fontawesome';
 import Row from 'react-bootstrap/lib/Row';
+import Button from 'react-bootstrap/lib/Button';
 
 import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 import request from 'js/globals/HttpRequest'
@@ -56,7 +57,7 @@ class QuestionDisplayResponse extends Component {
   render() {
     if (this.props.response.editing) {
       return (
-        <Row className="questionDisplayResponse">
+        <Row className="questionDisplayResponse qaPanel">
           <QuestionResponseEditForm
             question={this.props.question}
             response={this.props.response}
@@ -77,9 +78,9 @@ class QuestionDisplayResponse extends Component {
     }
 
     const badges = (
-      <div className="responseBadges">
-        {this.props.response.is_instructor ? <div><FontAwesome name="star" className="instructor" />instructor answer</div> : ''}
-        {this.props.response.endorsed ? <div><FontAwesome name="check-circle-o" className="endorsed" />instructor endorsed</div> : ''}
+      <div className="responseBadges smallDarkTitle">
+        {this.props.response.is_instructor ? <div><FontAwesome name="star" className="instructor" />Instructor Answer</div> : ''}
+        {this.props.response.endorsed ? <div><FontAwesome name="check-circle-o" className="endorsed" />Instructor Endorsed</div> : ''}
       </div>
     );
 
@@ -89,7 +90,7 @@ class QuestionDisplayResponse extends Component {
     const isInstructor = this.props.currentUser && this.props.currentUser.id === this.props.question.video.creator;
 
     return (
-      <Row>
+      <Row className="qaPanel">
         <ConfirmModal
           showing={this.state.deleting}
           description="You're deleting this response. Are you sure you want to continue? This is irreversible."
@@ -98,17 +99,19 @@ class QuestionDisplayResponse extends Component {
           acceptCallback={this.delete}
           cancelCallback={this.toggleDelete}
         />
-        <div className={(this.props.response.is_instructor ? 'instructor ' : this.props.response.endorsed ? 'endorsed ' : '') + 'questionDisplayResponse'}>
-          <div className="responseText">
+        <div className={(this.props.response.is_instructor ? 'instructor ' : this.props.response.endorsed ? 'endorsed ' : '') + 'response'}>
+          {badges}
+          <div className="responseText contentArea">
             {this.props.response.text}
           </div>
-          {badges}
-          <div className="responseFooter">
+          <div className="responseFooter footer">
             <Link to={`/userprofile/${this.props.response.user.id}`}><img src={DjangoImageLinkHandler(this.props.response.user.image || 'blank_avatar.jpg')}></img>
             <span className="studentName">{this.props.response.user.first_name} {this.props.response.user.last_name}</span></Link> answered {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
-            {isOwner || isInstructor ? <div onClick={this.toggleDelete} className="plainBtn">Delete</div> : '' }
-            {isOwner ? <div onClick={this.toggleEdit} className="plainBtn">Edit Answer</div> : '' }
-            {!isOwner && isInstructor ? <div onClick={this.toggleEndorse} className="plainBtn">{endorseText}</div> : ''}
+            <div className="right">
+              {isOwner || isInstructor ? <div onClick={this.toggleDelete} className="btn-plain">Delete</div> : '' }
+              {isOwner ? <div onClick={this.toggleEdit} className="btn-plain">Edit Answer</div> : '' }
+              {!isOwner && isInstructor ? <div onClick={this.toggleEndorse} className="btn-plain">{endorseText}</div> : ''}
+            </div>
           </div>
         </div>
       </Row>

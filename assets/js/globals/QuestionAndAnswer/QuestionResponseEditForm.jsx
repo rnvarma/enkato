@@ -41,7 +41,7 @@ class QuestionResponseEditForm extends React.Component {
 
     render() {
         return (
-          <div className="questionResponseEditForm">
+          <div className="questionResponseEditForm contentArea">
               <QuestionResponseForm
                 onSubmit={this.onSubmit}
                 onTextChange={this.onTextChange}

@@ -56,6 +56,21 @@
         }
     }
 
+    &-plain {
+        color: $base-dark;
+        padding: 8px 15px;
+        display: inline-block;
+        font-weight: $bold-weight;
+
+        &.selected {
+            font-weight: $boldest-weight;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
     &.addQuestionBtn {
         background: $primary-accent;
         color: $blank;

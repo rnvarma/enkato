@@ -420,7 +420,7 @@ class QuestionView extends React.Component {
               <div className="qaTitle headline">Question & Answer</div>
             </Col>
           </Row>
-          <div className="titledContainer qaContent">
+          <div className="titledContainer">
             <QuestionFilterBar
               showingSeries={!this.props.videoUUID}
               filter={this.state.filter}
@@ -429,7 +429,7 @@ class QuestionView extends React.Component {
               setFilter={this.setFilter}
               toggleAnsweredFilter={this.toggleAnsweredFilter}
               toggleUnansweredFilter={this.toggleUnansweredFilter}/>
-            <Row>
+            <Row className="qaContent">
               <QuestionList
                 showingSeries={!this.props.videoUUID}
                 questions={this.state.filteredQuestions}

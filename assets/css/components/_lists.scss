@@ -24,3 +24,12 @@
     height: calc(100% - 200px);
     overflow-y: scroll;
 }
+
+.questionDisplayList {
+  background-color: $deep-panel;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 10px;
+  box-shadow: inset 3px 3px 3px darken($deep-panel, 3%);
+}
