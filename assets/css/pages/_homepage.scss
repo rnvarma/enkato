@@ -2,7 +2,8 @@
     .header {
         background-repeat: no-repeat;
         background-size: cover;
-        padding: 150px 0px 100px 0px;
+        padding: 100px;
+        min-height: 65vh;
 
         @include respond-to(xsmall) {
             padding: 0px;
@@ -14,8 +15,8 @@
 
         .left {
             color: white;
-            padding: 0px 100px;
-            padding-right: 70px;
+            padding-top: 10vh;
+            text-align: center;
 
             @include respond-to(xsmall) {
                 padding: 40px;
@@ -75,6 +76,10 @@
 
     .curatedContent {
         padding: 25px;
+
+        .panels {
+
+        }
     }
 
     .studentBenefits {
@@ -186,6 +191,8 @@
             }
 
             .button {
+                background-color: $primary-accent;
+                color: $blank;
                 margin-top: 20px;
                 font-size: 16px;
                 padding: 8px 15px 8px 15px;

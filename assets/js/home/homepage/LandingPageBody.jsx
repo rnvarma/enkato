@@ -73,7 +73,7 @@ class LandingPageBody extends Component {
             <div>
                 <div className="header" style={headerStyle}>
                     <Row>
-                        <Col md={6} sm={12} className="left">
+                        <Col md={12} sm={12} className="left">
                             <div className="logo">
                                 Education starts with you.
                             </div>

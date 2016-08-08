@@ -22,7 +22,7 @@ class SeriesViewerSidebarVideoPanel extends React.Component {
         let quizQuestionCount;
         if (this.props.video.num_quiz_questions) {
             quizQuestionCount = (
-                <div className="numQuizQuestions">
+                <div className="numQuizQuestions metaItem">
                     {this.props.video.num_quiz_questions} {pluralize("Q", this.props.video.num_quiz_questions)}
                 </div>
             );
