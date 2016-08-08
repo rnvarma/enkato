@@ -218,4 +218,4 @@ class BreakpointSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Breakpoint
-        fields = ('time', 'text', 'quiz_questions')
+        fields = ('id', 'time', 'text', 'quiz_questions')

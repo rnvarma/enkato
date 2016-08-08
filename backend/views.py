@@ -272,8 +272,7 @@ class VideoData(APIView):
         breakpoint_data = {}
         serializer = BreakpointSerializer(video.breakpoints, many=True)
         for breakpoint in serializer.data:
-            time = breakpoint.pop('time')
-            breakpoint_data[time] = breakpoint
+            breakpoint_data[breakpoint['time']] = breakpoint
 
         return Response({
             'videoID': video.vid_id,

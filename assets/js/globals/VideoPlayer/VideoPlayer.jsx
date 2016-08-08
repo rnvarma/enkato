@@ -187,7 +187,10 @@ export default class VideoPlayer extends Component {
                   this.props.setTopicList(data.topicList);
                 }
 
-                this.setState({topicObjList:data.topicList}, this.afterTopicListUpdate);
+                this.setState({
+                    topicObjList: data.topicList
+                }, this.afterTopicListUpdate);
+
                 this.forceUpdate();
 
                 this.videoPlayerClass = "";
@@ -322,7 +325,6 @@ export default class VideoPlayer extends Component {
             this.state.viewStats.duration += 100
 
         if (previousSeconds !== this.seconds && this.state.breakpoints[this.seconds]) {
-            console.log('hit breakpoint');
             this.setState({
                 currentBreakpoint: this.state.breakpoints[this.seconds],
             });

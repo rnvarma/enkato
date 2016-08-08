@@ -8,22 +8,31 @@ import BulkImportTopics from 'js/globals/EditVideoPlayer/BulkImportTopics'
 
 export default class EditableTopicList extends Component {
     render() {
-        var topicNodes = this.props.topicObjList.map(function(topic) {
-            return (
-                <EditableTopicNode
-                    key={topic.id}
-                    id={topic.id}
-                    topic={topic}
-                    handleTopicClick={this.props.handleTopicClick}
-                    updateName={this.props.updateName}
-                    handleTopicDelete={this.props.handleTopicDelete}
-                    playVideo={this.props.playVideo}/>
-            );
-        },this);
+        const nodes = this.props.topicObjList.map((node) => {
+            if (node.type && node.type === 'breakpoint') {
+                return (
+                    <div>
+                        {node.clean_time} - {node.text}
+                    </div>
+                );
+            } else {
+                return (
+                    <EditableTopicNode
+                        key={node.id}
+                        id={node.id}
+                        topic={node}
+                        handleTopicClick={this.props.handleTopicClick}
+                        updateName={this.props.updateName}
+                        handleTopicDelete={this.props.handleTopicDelete}
+                        playVideo={this.props.playVideo}/>
+                );
+            }
+        });
+
         return(
             <div>
                 <ScrollArea className="editableTopicList">
-                    {topicNodes}
+                    {nodes}
                     <BulkImportTopics
                         addNewTopic={this.props.addNewTopic}
                         videoDuration={this.props.videoDuration}/>

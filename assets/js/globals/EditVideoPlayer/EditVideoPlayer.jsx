@@ -47,14 +47,13 @@ export default class EditVideoPlayer extends Component {
             videoDivWidth: 0,
             videoUUID: "",
             pollingInterval:null,
-            breakpoints: [],
+            breakpoints: {},
         };
         this.removedTopics = [];
 
         this.loadDataFromServer = this.loadDataFromServer.bind(this)
         this.updateTopicName = this.updateTopicName.bind(this)
         this.syncTopics = this.syncTopics.bind(this)
-        this.sortTopicListByTime = this.sortTopicListByTime.bind(this)
         this.addNewTopic = this.addNewTopic.bind(this)
         this.handleTopicDelete = this.handleTopicDelete.bind(this)
         this.updateCurrentState = this.updateCurrentState.bind(this)
@@ -111,6 +110,13 @@ export default class EditVideoPlayer extends Component {
                 if (this.state.Player) {
                     this.state.Player.destroy();
                 }
+
+                for (const time in data.breakpoints) {
+                    data.breakpoints[time].type = 'breakpoint';
+                    data.breakpoints[time].clean_time = styleDuration(time);
+                    data.topicList.push(data.breakpoints[time]);
+                }
+                this.sortTopicListByTime(data.topicList);
 
                 this.setState({
                     Player: new Player(data.videoID),
