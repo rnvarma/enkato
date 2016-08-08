@@ -69,7 +69,7 @@ export default class QuizNavFooter extends React.Component {
                 bottomLeftText = (
                     <div>
                         <Button
-                            className="quizSubmitAnswerButton"
+                            className="btn-primary"
                             onClick={this.submitInfo}>
                             Submit
                         </Button>

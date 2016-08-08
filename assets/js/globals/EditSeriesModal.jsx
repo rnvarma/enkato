@@ -1,7 +1,7 @@
-require("css/globals/CreateSeriesModal.scss")
-
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
+
+import FontAwesome from 'react-fontawesome';
 
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -80,8 +80,10 @@ class EditSeriesModal extends Component {
 
     render() {
         return (
-            <li className="createSeriesModal">
-                <Button className="createBtn structabl-red" onClick={this.open}>Edit</Button>
+            <div className="createSeriesModal">
+                <Button className="btn-secondary" onClick={this.open}>
+                    <FontAwesome name="cog" />
+                </Button>
                 <Modal show={this.state.showModal} onHide={this.close}>
                   <Modal.Header closeButton>
                     <Modal.Title>Edit Series</Modal.Title>
@@ -96,10 +98,10 @@ class EditSeriesModal extends Component {
                   </Modal.Body>
                   <Modal.Footer>
                     <Button onClick={this.close}>Cancel</Button>
-                    <Button className="structabl-red" disabled = {!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Submit</Button>
+                    <Button className="btn-primary" disabled = {!this.state.name || !this.state.description} onClick={this.onFormSubmit}>Submit</Button>
                   </Modal.Footer>
                 </Modal>
-            </li>
+            </div>
         )
     }
 }
