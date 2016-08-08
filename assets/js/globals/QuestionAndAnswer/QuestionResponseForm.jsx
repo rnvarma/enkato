@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionResponseForm.scss');
-
 import React from 'react';
 
 import Form from 'react-bootstrap/lib/Form';

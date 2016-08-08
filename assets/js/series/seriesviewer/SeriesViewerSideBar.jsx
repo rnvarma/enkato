@@ -1,5 +1,3 @@
-require('css/series/seriesviewer/SeriesViewerSideBar.scss');
-
 import React from 'react';
 
 import SeriesViewerHeader from 'js/series/seriesviewer/SeriesViewerHeader';

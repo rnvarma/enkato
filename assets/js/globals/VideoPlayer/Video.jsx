@@ -1,6 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/VideoPlayer/Video")
-
 import React, { Component } from 'react';
 
 import QuizModal from 'js/globals/VideoPlayer/QuizModal';

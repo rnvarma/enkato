@@ -1,6 +1,3 @@
-
-require("css/globals/QuizAddingForm/AddOptionButton.scss");
-
 var React = require('react')
 var FontAwesome = require('react-fontawesome');
 var Row = require('react-bootstrap').Row;

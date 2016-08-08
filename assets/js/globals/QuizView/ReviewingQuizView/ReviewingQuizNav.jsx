@@ -1,6 +1,3 @@
-require('bootstrap-loader');
-require('css/globals/QuizView/QuizNav.scss');
-
 import React, { Component } from 'react';
 
 import QuizNavNode from 'js/globals/QuizView/QuizNavNode';

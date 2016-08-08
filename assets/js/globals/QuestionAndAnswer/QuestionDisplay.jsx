@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionDisplay.scss');
-
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
@@ -157,7 +155,7 @@ class QuestionDisplay extends Component {
                             delete={this.delete}/>
                     ) : (
                         <div className="questionBox">
-                            <div className="questionHeader">
+                            <div className="questionHeader smallTitle">
                                 <span className="questionHeaderTopic">{topic}</span>
                                 {isOwner || isInstructor ? <Button onClick={this.patchAsResolved}>Mark as {resolvedText}</Button> : ''}
                             </div>
@@ -185,7 +183,7 @@ class QuestionDisplay extends Component {
                             textValue={this.props.question.responseInput}
                             key={this.props.question.id}
                         />
-                        <Button className="publishResponse" onClick={this.onSubmit}>Publish</Button>
+                        <Button className="btn-primary" onClick={this.onSubmit}>Publish</Button>
                     </div>
                 </Row>
             </Col>

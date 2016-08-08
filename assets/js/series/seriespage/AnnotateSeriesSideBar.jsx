@@ -1,6 +1,3 @@
-
-require("css/series/seriespage/AnnotateSeriesSideBar.scss");
-
 import React, { Component } from 'react';
 
 import AnnotateSeriesSideBarButton from 'js/series/seriespage/AnnotateSeriesSideBarButton';

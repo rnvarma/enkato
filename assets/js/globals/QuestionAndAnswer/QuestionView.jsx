@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionView.scss');
-
 import React from 'react';
 
 import Fuse from 'fuse.js';
@@ -405,7 +403,7 @@ class QuestionView extends React.Component {
             onKeyUp={this.onAskQuestionChange}
             customClasses={{input: 'typeahead-input'}}/>
           <Button className="addQuestionBtn" onClick={this.addQuestion}>
-            <FontAwesome name="plus-circle" />
+            <FontAwesome name="plus-circle addQuestionIcon" />
             Ask A Question
           </Button>
         </div>
@@ -419,45 +417,47 @@ class QuestionView extends React.Component {
           {askModal}
           <Row>
             <Col md={5}>
-              <div className="qaTitle">Question & Answer</div>
+              <div className="qaTitle headline">Question & Answer</div>
             </Col>
           </Row>
-          <QuestionFilterBar
-            showingSeries={!this.props.videoUUID}
-            filter={this.state.filter}
-            filterAnswered={this.state.filterAnswered}
-            filterUnanswered={this.state.filterUnanswered}
-            setFilter={this.setFilter}
-            toggleAnsweredFilter={this.toggleAnsweredFilter}
-            toggleUnansweredFilter={this.toggleUnansweredFilter}/>
-          <Row>
-            <QuestionList
+          <div className="titledContainer qaContent">
+            <QuestionFilterBar
               showingSeries={!this.props.videoUUID}
-              questions={this.state.filteredQuestions}
-              currentQuestion={this.state.currentQuestion}
-              setCurrentQuestion={this.setCurrentQuestion}/>
-            <QuestionDisplay
-              openRegisterModal={this.props.openRegisterModal}
-              showingSeries={!this.props.videoUUID}
-              topicList={this.props.topicList}
-              getCurrentTime={this.props.getCurrentTime}
-              question={this.state.currentQuestion}
-              removeQuestion={this.removeQuestion}
-              pushQuestionEditText={this.pushQuestionEditText}
-              pushQuestionNewText={this.pushQuestionNewText}
-              pushResponse={this.pushResponse}
-              pushResponseText={this.pushResponseText}
-              pushResponseEditText={this.pushResponseEditText}
-              pushResponseNewText={this.pushResponseNewText}
-              removeResponse={this.removeResponse}
-              toggleEndorsedResponse={this.toggleEndorsedResponse}
-              toggleEditQuestion={this.toggleEditQuestion}
-              toggleEditResponse={this.toggleEditResponse}
-              replaceQuestion={this.replaceQuestion}
-              replaceResponse={this.replaceResponse}
-              videoUUID={this.props.videoUUID}
-              currentUser={this.currentUser}/>
-          </Row>
+              filter={this.state.filter}
+              filterAnswered={this.state.filterAnswered}
+              filterUnanswered={this.state.filterUnanswered}
+              setFilter={this.setFilter}
+              toggleAnsweredFilter={this.toggleAnsweredFilter}
+              toggleUnansweredFilter={this.toggleUnansweredFilter}/>
+            <Row>
+              <QuestionList
+                showingSeries={!this.props.videoUUID}
+                questions={this.state.filteredQuestions}
+                currentQuestion={this.state.currentQuestion}
+                setCurrentQuestion={this.setCurrentQuestion}/>
+              <QuestionDisplay
+                openRegisterModal={this.props.openRegisterModal}
+                showingSeries={!this.props.videoUUID}
+                topicList={this.props.topicList}
+                getCurrentTime={this.props.getCurrentTime}
+                question={this.state.currentQuestion}
+                removeQuestion={this.removeQuestion}
+                pushQuestionEditText={this.pushQuestionEditText}
+                pushQuestionNewText={this.pushQuestionNewText}
+                pushResponse={this.pushResponse}
+                pushResponseText={this.pushResponseText}
+                pushResponseEditText={this.pushResponseEditText}
+                pushResponseNewText={this.pushResponseNewText}
+                removeResponse={this.removeResponse}
+                toggleEndorsedResponse={this.toggleEndorsedResponse}
+                toggleEditQuestion={this.toggleEditQuestion}
+                toggleEditResponse={this.toggleEditResponse}
+                replaceQuestion={this.replaceQuestion}
+                replaceResponse={this.replaceResponse}
+                videoUUID={this.props.videoUUID}
+                currentUser={this.currentUser}/>
+            </Row>
+          </div>
         </Row>
       </div>
     );

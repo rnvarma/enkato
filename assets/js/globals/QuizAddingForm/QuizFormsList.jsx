@@ -1,5 +1,3 @@
-require('css/globals/QuizAddingForm/QuizFormsList.scss');
-
 import React, { Component } from 'react';
 
 import QuizFormNode from 'js/globals/QuizAddingForm/QuizFormNode';

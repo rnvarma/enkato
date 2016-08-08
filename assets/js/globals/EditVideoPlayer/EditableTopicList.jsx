@@ -1,5 +1,3 @@
-require("css/globals/EditVideoPlayer/EditableTopicList")
-
 import React, { Component } from 'react';
 
 import ScrollArea from 'react-scrollbar';

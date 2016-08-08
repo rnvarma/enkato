@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionEditForm.scss');
-
 import React from 'react';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -63,9 +61,9 @@ class QuestionEditForm extends React.Component {
           titleValue={this.props.question.input.title}
           textValue={this.props.question.input.text}
           topicValue={this.props.question.input.topic}/>
-        <Button onClick={this.onSubmit}>Publish</Button>
-        <Button onClick={this.props.toggleEdit}>Cancel</Button>
-        <Button onClick={this.props.delete}>Delete</Button>
+        <Button className="btn-primary" onClick={this.onSubmit}>Publish</Button>
+        <Button className="btn-secondary" onClick={this.props.toggleEdit}>Cancel</Button>
+        <Button className="btn-secondary" onClick={this.props.delete}>Delete</Button>
       </div>
     );
   }

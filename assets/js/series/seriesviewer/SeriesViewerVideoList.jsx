@@ -1,5 +1,3 @@
-require('css/series/seriesviewer/SeriesViewerVideoList.scss');
-
 import React from 'react';
 
 import SeriesViewerSidebarVideoPanel from 'js/series/seriesviewer/SeriesViewerSidebarVideoPanel';

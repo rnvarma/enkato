@@ -1,5 +1,3 @@
-require('css/globals/QuizAddingForm/ScrollButtonNode.scss');
-
 import React, { Component } from 'react';
 
 class ScrollButtonNode extends Component {

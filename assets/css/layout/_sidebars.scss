@@ -1,0 +1,21 @@
+.baseSidebar {
+    display: inline-block;
+    vertical-align: top;
+    width: 20%;
+    background-color: $blank;
+}
+
+.seriesViewerSideBar {
+    @extend .baseSidebar;
+    position: fixed;
+    height: calc(100% - 50px);
+    box-shadow: 0px -1px 5px $main-bg-shadow;
+    z-index: 10001; // lol
+}
+
+.annotateSeriesSideBar {
+    @extend .baseSidebar;
+    height: 100%;
+    overflow: hidden;
+    max-height: 600px;
+}

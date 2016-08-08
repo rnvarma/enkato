@@ -1,5 +1,3 @@
-require('css/series/seriespage/AnnotateVideosForSeries.scss');
-
 import React, { Component } from 'react';
 
 import AnnotateSeriesSideBar from 'js/series/seriespage/AnnotateSeriesSideBar';

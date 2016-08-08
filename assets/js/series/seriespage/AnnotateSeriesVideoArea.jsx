@@ -1,6 +1,3 @@
-
-require("css/series/seriespage/AnnotateSeriesVideoArea.scss");
-
 import React, { Component } from 'react';
 
 import EditVideoPlayer from 'js/globals/EditVideoPlayer/EditVideoPlayer';

@@ -1,0 +1,33 @@
+.qaContent {
+  margin-top: 0;
+}
+
+.questionFilterBar {
+    margin-top: -15px;
+
+    .form-group {
+      margin-bottom: 0;
+    }
+
+    .filterOption {
+      color: $base-dark;
+      padding: 12px 20px;
+      display: inline-block;
+
+      &.selected {
+        font-weight: $boldest-weight;
+      }
+
+      &:hover {
+        background: #efefef;
+      }
+    }
+
+    .filterQuery {
+      margin-top: 5px;
+      margin-right: 5px;
+      width: 50%;
+      float: right;
+      background-color: white;
+    }
+}

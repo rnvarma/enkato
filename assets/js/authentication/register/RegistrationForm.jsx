@@ -1,5 +1,3 @@
-require("css/authentication/register/RegistrationForm.scss")
-
 import React, { Component } from 'react'
 
 import FontAwesome from 'react-fontawesome'

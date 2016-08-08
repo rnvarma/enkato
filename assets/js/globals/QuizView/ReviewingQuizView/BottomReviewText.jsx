@@ -1,6 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/QuizView/ReviewingQuizView/BottomReviewText");
-
 import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';

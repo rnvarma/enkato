@@ -1,0 +1,196 @@
+.homePage {
+    .header {
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding: 150px 0px 100px 0px;
+
+        @include respond-to(xsmall) {
+            padding: 0px;
+        }
+
+        @include respond-to(small) {
+            padding: 0px;
+        }
+
+        .left {
+            color: white;
+            padding: 0px 100px;
+            padding-right: 70px;
+
+            @include respond-to(xsmall) {
+                padding: 40px;
+                text-align: center;
+            }
+
+            @include respond-to(small) {
+                padding: 40px;
+                text-align: center;
+            }
+
+            .logo {
+                font-size: 40px;
+                font-weight: 500;
+                letter-spacing: 0.6px;
+            }
+
+            .sub-logo {
+                font-size: 20px;
+                margin-top: 20px
+            }
+        }
+
+        .right {
+
+            font-size: 16px;
+            padding: 0px 175px;
+
+            @include respond-to(xsmall) {
+                padding: 40px;
+                text-align: center;
+            }
+
+            @include respond-to(small) {
+                padding: 40px;
+                text-align: center;
+            }
+
+            .signUpTitle {
+                margin-bottom: 15px;
+                font-size: 20px;
+                color: white;
+            }
+
+            .form-control {
+                font-size: 16px;
+                height: 35px;
+            }
+
+            .btn {
+                font-size: 16px;
+                padding: 8px 15px 8px 15px;
+                box-shadow: 1px 2px 2px rgba(1, 17, 62, 0.3);
+            }
+        }
+    }
+
+    .curatedContent {
+        padding: 25px;
+    }
+
+    .studentBenefits {
+        font-size: 16px;
+        background-color: white;
+        padding-bottom: 25px;
+
+        @include respond-to(xsmall) {
+            padding-bottom: 40px;
+        }
+
+        @include respond-to(small) {
+            padding-bottom: 40px;
+        }
+
+        .left {
+            .text {
+                font-size: 35px;
+                padding-top: 75px;
+                padding-left: 75px;
+            }
+
+            .imageArea {
+                margin-top: 25px;
+                width: 90%;
+
+                img {
+                    width: 85%;
+                }
+            }
+        }
+
+        .right {
+            padding-top: 75px;
+            
+
+            @include respond-to(xsmall) {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            @include respond-to(small) {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .info {
+                padding-bottom: 50px;
+
+                .icon {
+                    display: inline-block;
+                    vertical-align: top;
+                    background-color: $primary-accent;
+                    text-align: center;
+                    font-size: 25px;
+                    border-radius: 31px;
+                    width: 50px;
+                    height: 50px;
+                    padding-top: 13px;
+                    color: white;
+                }
+
+                .textArea {
+                    display: inline-block;
+                    vertical-align: top;
+                    width: 70%;
+                    margin-left: 20px;
+
+                    .title {
+                        color: $grey-control-bar-bg-color;
+                        font-weight: bold;
+                        font-size: 20px;
+                        padding-bottom: 10px;
+                    }
+
+                    .text {
+                        color: $base-font-color;
+                        line-height: 25px;
+                    }
+                }
+            }
+        }
+    }
+
+    .katoGirl {
+        background-repeat: no-repeat;
+        background-size: cover;
+        font-size: 16px;
+
+        .content {
+            padding: 100px;
+
+            @include respond-to(xsmall) {
+                padding: 40px;
+            }
+
+            @include respond-to(small) {
+                padding: 40px;
+            }
+
+            .title {
+                font-size: 35px;
+                font-weight: 500;
+            }
+
+            .text {
+                margin-top: 20px;
+                line-height: 25px;
+            }
+
+            .button {
+                margin-top: 20px;
+                font-size: 16px;
+                padding: 8px 15px 8px 15px;
+                box-shadow: 1px 2px 2px rgba(1, 17, 62, 0.3);
+            }
+        }
+    }
+}

@@ -1,8 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/base.scss")
-require('css/globals/NavBar.scss')
-require('css/home/homepage/HomePage')
-
 import React, { Component } from 'react'
 
 import Row from 'react-bootstrap/lib/Row';

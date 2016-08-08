@@ -1,9 +1,7 @@
-require('bootstrap-loader');
-require("css/globals/QuizView/QuizForm");
-
 import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';
+import Modal from 'react-bootstrap/lib/Modal';
 
 import QuestionNode from 'js/globals/QuizView/QuestionNode';
 import ReviewingQuizNav from "js/globals/QuizView/ReviewingQuizView/ReviewingQuizNav";
@@ -153,12 +151,13 @@ export default class QuizForm extends Component {
                 )
             }
         }
-        return (
-            <div className="quizForm">
-              <div className="header">
-                Check Your Understanding
-                <FontAwesome className="closeForm" name="close" onClick={this.closeModal}/>
-                    </div>
+      return (
+        <div className="temp">
+          <div className="modal-header">
+            <div className="title-light">Check Your Understanding</div>
+            <FontAwesome className="closeForm" name="close" onClick={this.closeModal}/>
+          </div>
+          <div className="quizForm">
               {navigation}
               {modalBody}
               <QuizNavFooter
@@ -176,7 +175,8 @@ export default class QuizForm extends Component {
                 onFinishButton={this.props.onFinishButton}
                 submitInfo={this.submitInfo}
                 isCorrect={this.props.completedQuizInfo.result[this.state.currentQuestion] ? this.props.completedQuizInfo.result[this.state.currentQuestion].isCorrect : false}/>
-            </div>
+          </div>
+        </div>
         );
     }
 }

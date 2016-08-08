@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionModal.scss');
-
 import React from 'react';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -130,8 +128,8 @@ class QuestionModal extends React.Component {
                     </Modal.Body>
                     <Modal.Footer>
                         {/*<FormControl className="pull-left" type="file" onChange={this.attachFile} />*/}
-                        <Button onClick={this.close}>Cancel</Button>
-                        <Button onClick={this.postQuestion}>Publish</Button>
+                        <Button className="btn-secondary" onClick={this.close}>Cancel</Button>
+                        <Button className="btn-primary" onClick={this.postQuestion}>Publish</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

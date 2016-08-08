@@ -1,0 +1,23 @@
+.bulkImportTopics {
+    padding: 10px 15px;
+
+    .instruction {
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+
+    textarea {
+        width: 100%;
+        border-radius: 5px;
+        padding: 10px;
+
+        &:active {
+            outline: none;
+        }
+    }
+
+    button {
+        width: 100%;
+        margin-top: 10px;
+    }
+}

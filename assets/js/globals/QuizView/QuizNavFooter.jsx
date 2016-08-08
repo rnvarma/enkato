@@ -1,5 +1,3 @@
-require('css/globals/QuizView/QuizNavFooter.scss');
-
 import React from 'react';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -30,7 +28,7 @@ export default class QuizNavFooter extends React.Component {
             rightButton = (
                 <Button
                     disabled={(this.props.currentQuestion == this.props.numQuestions -1) || disableAll}
-                    className="nextButton"
+                    className="btn-primary"
                     onClick={this.props.nextQuestion}>
                     Next
                 </Button>
@@ -43,7 +41,7 @@ export default class QuizNavFooter extends React.Component {
           <span>
             <Button
               disabled={(this.props.currentQuestion == 0 && !this.props.reviewMode) || disableAll}
-              className="backButton"
+              className="btn-secondary"
               onClick={this.props.prevQuestion}
             >
               Back
@@ -55,7 +53,6 @@ export default class QuizNavFooter extends React.Component {
 
       var bottomLeftText = <div></div>
 
-
       if(this.props.numQuestions != 0){
         if(this.props.reviewMode){
             bottomLeftText = (
@@ -64,7 +61,7 @@ export default class QuizNavFooter extends React.Component {
         } else if(!disableAll) {
             if(this.props.numQsAnswered != this.props.numQuestions){
                 bottomLeftText = (
-                    <div className="showNumAnswered">
+                    <div className="showNumAnswered smallTitle">
                         {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
                     </div>
                 )
@@ -72,7 +69,7 @@ export default class QuizNavFooter extends React.Component {
                 bottomLeftText = (
                     <div>
                         <Button
-                            className="quizSubmitAnswerButton"
+                            className="btn-primary"
                             onClick={this.submitInfo}>
                             Submit
                         </Button>
@@ -86,7 +83,7 @@ export default class QuizNavFooter extends React.Component {
         <div className="quizNavFooter">
           {bottomLeftText}
           <Button
-            className="cancelButton"
+            className="btn-secondary"
             onClick={this.props.closeModal}>
             Cancel
           </Button>

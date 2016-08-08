@@ -1,6 +1,3 @@
-
-require("css/series/seriespage/AnnotateSeriesSideBarButton.scss");
-
 import React, { Component } from 'react';
 
 export default class AnnotateSeriesSideBarButton extends Component {

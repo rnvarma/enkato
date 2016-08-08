@@ -1,0 +1,76 @@
+input {
+    &:focus {
+        outline: none !important;
+    }
+}
+
+.question-input{
+    border-bottom: 2px solid $base-bg;
+    font-size: $large-size;
+    padding-bottom: 3px;
+    border-right:none;
+    border-left:none;
+    border-top:none;
+    font-weight: $bold-weight;
+    width: calc(100% - 35px);
+
+    &:focus {
+        border-bottom: 2px solid $base-dark;
+        outline: none;
+        font-weight: $base-weight;
+    }
+}
+
+.choice-input{
+    font-size: $large-size;
+    border: none;
+    width: calc(100% - 65px);
+
+    &:focus {
+        outline: none;
+        border-bottom: 2px solid $base-bg;
+    }
+}
+
+.typeahead {
+    display: inline-flex;
+    width: calc(100% - 150px);
+
+    input {
+        width: 100%;
+        padding: 6px;
+    }
+
+    .typeahead-selector {
+        position: absolute;
+        left: 10px;
+        bottom: 44px;
+        margin-bottom: 0;
+        padding-left: 0;
+        width: calc(100% - 170px);
+        box-shadow: 0px -1px 5px rgba(1, 17, 62, 0.2);
+
+        li {
+            background-color: white;
+            padding: 6px;
+            border: 1px solid #F5F5F5;
+
+            &:hover {
+                cursor: pointer;
+                background-color: #F5F5F5;
+            }
+
+            a {
+                color: initial;
+
+                &:hover {
+                  text-decoration: none;
+                }
+            }
+        }
+    }
+}
+
+.filterInput {
+    padding: 5px 20px;
+}

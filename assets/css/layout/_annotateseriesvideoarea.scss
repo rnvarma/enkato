@@ -1,0 +1,17 @@
+.annotateSeriesVideoArea {
+    display: inline-block;
+    vertical-align: top;
+    width: 80%;
+    height: 100%;
+
+    .name {
+        font-size: 20px;
+        font-weight: 800;
+        color: $structabl-blue;
+        padding-bottom: 15px;
+    }
+
+    .video {
+        height: 100%;
+    }
+}

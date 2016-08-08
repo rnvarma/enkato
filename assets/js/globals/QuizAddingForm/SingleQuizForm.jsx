@@ -1,4 +1,3 @@
-require('css/globals/QuizAddingForm/singlequizaddingform.scss');
 import React, { Component } from 'react';
 
 import QuizQuestion from 'js/globals/QuizAddingForm/QuizQuestion';

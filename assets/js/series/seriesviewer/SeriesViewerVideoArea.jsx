@@ -1,5 +1,3 @@
-require('css/series/seriesviewer/SeriesViewerVideoArea.scss');
-
 import React from 'react';
 
 import VideoPlayer from 'js/globals/VideoPlayer/VideoPlayer';

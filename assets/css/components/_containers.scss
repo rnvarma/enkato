@@ -1,0 +1,129 @@
+.baseContainer {
+    background-color: $blank;
+    padding: $content-padding;
+    margin: 0 0 $content-padding 0;
+    box-shadow: 0px 1px 3px $main-bg-shadow;
+
+    .imageArea {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    .imageInfo {
+        display: inline-block;
+        vertical-align: top;
+        padding-left: 15px;
+        max-width: 70%;
+
+        .title {
+            padding: 7.5px 0 4px 0;
+        }
+
+        .description {
+            padding-bottom: $content-padding;
+        }
+
+        .metadata {
+            display: inline-block;
+            padding-right: $content-padding;
+            padding-bottom: $content-padding / 2;
+        }
+
+        .annotate-box {
+            display: inline-block;
+        }
+    }
+}
+
+.ynVideoPlayer {
+    @extend .baseContainer;
+    padding: 0;
+    overflow: hidden;
+}
+
+.condensed {
+    padding: 0;
+}
+
+.titledContainer {
+    @extend .baseContainer;
+    border-top: $base-border-width solid $base-dark;
+
+    .profileSeriesPanelCol {
+        padding-left: 0;
+    }
+
+    .seriesInfo {
+        padding: 20px;
+        height: 120px;
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+}
+
+// From the video player
+.topicButtonColumn {
+    float: left;
+    height:100%;
+    width:25%;
+}
+
+.videoDiv {
+    float: right;
+    width: 75%;
+    margin:0px;
+    height:100%;
+
+    &.full {
+        width: 100%;
+    }
+}
+
+// From the series viewer
+.seriesViewer {
+    margin-left: 20%;
+}
+
+.questionArea {
+    padding: 15px 35px;
+    margin-bottom: 125px;
+}
+
+.seriesViewerHeader {
+    padding: 20px 20px;
+}
+
+.seriesViewerVideoArea {
+    vertical-align: top;
+    height: 80%;
+    padding: 20px;
+}
+
+.questionView {
+    height: 80%;
+    margin-top: 40px;
+    margin-bottom: 50px;
+}
+
+.unavailable {
+    margin:10%;
+    padding:50px;
+    width: 80%;
+    height: 50%;
+    background-color: white;
+    box-shadow: 2px 2px 2px $bg-grey;
+
+    color: $structabl-blue;
+    font-size: 40px;
+    text-align: center;
+    font-weight:800;
+}   
+
+.defaultMessage {
+    padding: $page-padding;
+    text-align: center;
+
+    .title {
+        padding-bottom: $content-padding;
+    }
+}

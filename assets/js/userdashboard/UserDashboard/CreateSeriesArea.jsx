@@ -1,6 +1,3 @@
-
-require("css/userdashboard/UserDashboard/CreateSeriesArea.scss");
-
 import React, { Component } from 'react';
 
 import Row from 'react-bootstrap/lib/Row';
@@ -14,9 +11,13 @@ class CreateSeriesArea extends Component{
                 <div className="title">
                     {this.props.name}
                 </div>
-                <div className="mainArea">
-                    <div>You have not yet created a series. Try it!</div>
-                    <div><CreateSeriesModal /></div>
+                <div className="titledContainer">
+                    <div className="defaultMessage">
+                        <div className="title">
+                            You have not yet created a series. Try it!
+                        </div>
+                        <div><CreateSeriesModal /></div>
+                    </div>
                 </div>
             </div>
         )

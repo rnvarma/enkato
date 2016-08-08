@@ -1,5 +1,3 @@
-require('css/globals/QuizView/QuizNav.scss');
-
 import React from 'react';
 
 import QuizNavNode from 'js/globals/QuizView/QuizNavNode';
