@@ -48,21 +48,21 @@ class QuizAddingForm extends Component {
 
     componentDidMount() {
         this.loadDataFromServer(this.props.videoUUID);
+        this.props.setOnConfirmSave(() => {
+            if (this.validateData()) {
+                this.saveDataToServer();
+                return true;
+            } else {
+                this.props.cancelSave();
+                return false;
+            }
+        });
         /*$(window).on('unload', this.saveDataToServer); TODO: unloadbefore */
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.videoUUID != nextProps.videoUUID) {
             this.loadDataFromServer(nextProps.videoUUID);
-        }
-
-        if (nextProps.readyToPublish) {
-            if (this.validateData()) {
-                this.saveDataToServer();
-                this.props.closeAnnotationModal();
-            } else {
-                this.props.cancelPublish();
-            }
         }
     }
 

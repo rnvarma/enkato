@@ -16,18 +16,21 @@ export default class UploadAnnotateModal extends Component {
 
         this.state = {
             error: '',
-            readyToPublish: false,
             unsavedTopics: false,
             unsavedQuiz: false,
             showingConfirmSave: false,
-            onConfirmQuit: function() {},
+
+            onConfirmSave: function() {},
+            onConfirmQuit: () => {
+                this.resetUnsaved();
+            },
         };
 
-        this.cancelPublish = this.cancelPublish.bind(this);
         this.setUnsavedTopics = this.setUnsavedTopics.bind(this);
         this.setUnsavedQuiz = this.setUnsavedQuiz.bind(this);
         this.launchUnsaved = this.launchUnsaved.bind(this);
         this.setKeepChanges = this.setKeepChanges.bind(this);
+        this.setOnConfirmSave = this.setOnConfirmSave.bind(this);
         this.resetUnsaved = this.resetUnsaved.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.onBack = this.onBack.bind(this);
@@ -43,12 +46,6 @@ export default class UploadAnnotateModal extends Component {
         }
     }
 
-    cancelPublish() {
-        this.setState({
-            readyToPublish: false,
-        });
-    }
-
     setUnsavedTopics() {
         if (!this.state.unsavedTopics) {
             this.setState({
@@ -58,6 +55,7 @@ export default class UploadAnnotateModal extends Component {
     }
 
     setUnsavedQuiz() {
+        console.log(this.state.unsavedQuiz)
         if (!this.state.unsavedQuiz) {
             this.setState({
                 unsavedQuiz: true,
@@ -72,11 +70,23 @@ export default class UploadAnnotateModal extends Component {
         });
     }
 
-    launchUnsaved(callbackOnConfirm) {
+    setOnConfirmSave(callbackOnContinue) {
+        this.setState({
+            onConfirmSave: () => {
+                const finish = callbackOnContinue();
+                if (typeof finish === 'undefined' || finish) {
+                    this.state.onConfirmQuit();
+                    console.log('closin ddown shop');
+                }
+            }
+        });
+    }
+
+    launchUnsaved(callbackOnQuit) {
         this.setState({
             showingConfirmSave: true,
             onConfirmQuit: () => {
-                callbackOnConfirm();
+                callbackOnQuit();
                 this.resetUnsaved();
             },
         });
@@ -84,7 +94,6 @@ export default class UploadAnnotateModal extends Component {
 
     resetUnsaved() {
         this.setState({
-            readyToPublish: false,
             unsavedTopics: false,
             unsavedQuiz: false,
             showingConfirmSave: false,
@@ -113,15 +122,8 @@ export default class UploadAnnotateModal extends Component {
     }
 
     onNext() {
-        if (this.props.quizMode) {
-            this.setState({
-                readyToPublish: true,
-            });
-        }
         if (this.props.annotateMode) {
-            this.setState({
-                readyToPublish: true,
-            });
+            this.state.onConfirmSave();
         } else {
             if (this.props.urls) {
                 request.post(`/upload/s/${this.props.seriesUUID}`, {
@@ -207,12 +209,11 @@ export default class UploadAnnotateModal extends Component {
                     quizMode={this.props.quizMode}
                     unsavedTopics={this.state.unsavedTopics}
                     unsavedQuiz={this.state.unsavedQuiz}
-                    readyToPublish={this.state.readyToPublish}
                     setUnsavedTopics={this.setUnsavedTopics}
                     setUnsavedQuiz={this.setUnsavedQuiz}
                     launchUnsaved={this.launchUnsaved}
-                    cancelPublish={this.cancelPublish}
-                    closeAnnotationModal={this.props.close}/>
+                    setOnConfirmSave={this.setOnConfirmSave}
+                    cancelSave={this.setKeepChanges}/>
             ),
           }
           nextText = "Save and Publish";
@@ -252,7 +253,8 @@ export default class UploadAnnotateModal extends Component {
                             showing={this.state.showingConfirmSave}
                             description="Are you sure you want to navigate away? Your changes are not saved and will be gone forever."
                             acceptCallback={this.state.onConfirmQuit}
-                            cancelCallback={this.setKeepChanges}/>
+                            cancelCallback={this.setKeepChanges}
+                            buttons={[<Button key={0} onClick={this.state.onConfirmSave}>Save And Continue</Button>]}/>
                         {this.state.error}
                         {modalInfo.body}
                     </Modal.Body>

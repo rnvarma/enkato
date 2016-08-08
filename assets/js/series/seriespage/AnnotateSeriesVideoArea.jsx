@@ -13,20 +13,18 @@ export default class AnnotateSeriesVideoArea extends Component {
             editingBody = (
                 <QuizAddingForm
                     videoUUID={this.props.currentVideo.uuid}
-                    readyToPublish={this.props.readyToPublish}
                     setUnsaved={this.props.setUnsavedQuiz}
-                    cancelPublish={this.props.cancelPublish}
-                    closeAnnotationModal={this.props.closeAnnotationModal}/>
+                    setOnConfirmSave={this.props.setOnConfirmSave}
+                    closeAnnotationModal={this.props.closeAnnotationModal}
+                    cancelSave={this.props.cancelSave}/>
             );
         } else {
             editingBody = (
                 <div className="video">
                     <EditVideoPlayer
                         videoUUID={this.props.currentVideo.uuid}
-                        readyToPublish={this.props.readyToPublish}
                         setUnsaved={this.props.setUnsavedTopics}
-                        cancelPublish={this.props.cancelPublish}
-                        closeAnnotationModal={this.props.closeAnnotationModal}/>
+                        setOnConfirmSave={this.props.setOnConfirmSave}/>
                 </div>
             );
         }

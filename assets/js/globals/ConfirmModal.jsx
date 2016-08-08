@@ -16,6 +16,7 @@ class ConfirmModal extends Component {
                     <Modal.Body>{this.props.description}</Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this.props.cancelCallback}>Cancel</Button>
+                        {this.props.buttons}
                         <Button onClick={this.props.acceptCallback}
                                 bsStyle={this.props.acceptBsStyle}>
                             {this.props.acceptText}
@@ -35,6 +36,7 @@ ConfirmModal.propTypes = {
     acceptBsStyle: PropTypes.string,
     acceptCallback: PropTypes.func.isRequired,
     cancelCallback: PropTypes.func.isRequired,
+    buttons: PropTypes.arrayOf(PropTypes.element),
 };
 
 ConfirmModal.defaultProps = {
