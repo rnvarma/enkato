@@ -65,10 +65,12 @@ class Card extends Component {
     const backgroundColor = isDragging ? '#C0C0C0' : 'white'
 
     return connectDragSource(connectDropTarget(
-      <div style={{border: '1px dashed gray',
-  padding: '0.5rem 1rem',
-  marginBottom: '.5rem',
-  backgroundColor: backgroundColor}}>
+      <div style={{
+        border: '1px dashed gray',
+        padding: '0.5rem 1rem',
+        marginBottom: '.5rem',
+        backgroundColor: backgroundColor
+      }}>
         {item}
       </div>
     ));
