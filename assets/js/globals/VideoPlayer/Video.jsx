@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
 
 import QuizModal from 'js/globals/VideoPlayer/QuizModal';
-import Button from 'react-bootstrap/lib/Button';
-import Modal from 'react-bootstrap/lib/Modal';
-
+import BreakpointDisplay from 'js/globals/VideoPlayer/BreakpointDisplay';
 
 export default class Video extends Component { 
-    render(){
-        var height = this.props.videoDivHeight - this.props.controlBarHeight;
-        var quizModal;
-        quizModal = (
+    render() {
+        let breakpointDisplay;
+        if (this.props.breakpoint) {
+            this.props.pauseVideo();
+
+            breakpointDisplay = (
+                <BreakpointDisplay
+                    breakpoint={this.props.breakpoint}
+                    finish={this.props.finishBreakpoint}/>
+            );
+        }
+
+        const height = this.props.videoDivHeight - this.props.controlBarHeight;
+
+        const quizModal = (
             <QuizModal 
                 onFinishButton={this.props.onFinishButton}
                 showingOverlay={this.props.showingOverlay}
@@ -35,6 +44,7 @@ export default class Video extends Component {
                 className="iframeWrapper">
                 {this.props.renderVideo()}
                 {quizModal}
+                {breakpointDisplay}
             </div>
         )
     }

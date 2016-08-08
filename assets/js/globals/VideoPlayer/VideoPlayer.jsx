@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import getCookie from 'js/globals/GetCookie';
 
 import { styleDuration } from 'js/globals/utility';
 
@@ -88,6 +87,8 @@ export default class VideoPlayer extends Component {
             },
             seriesUUID: this.props.seriesUUID,
             videoTitle: "",
+            breakpoints: [],
+            currentBreakpoint: null,
 
             showingOverlay:false,
             takingQuiz:false,
@@ -124,6 +125,8 @@ export default class VideoPlayer extends Component {
         this.retakeQuiz = this.retakeQuiz.bind(this);
         this.reviewQuiz = this.reviewQuiz.bind(this);
         this.showQuizResultsPage = this.showQuizResultsPage.bind(this);
+        this.finishBreakpoint = this.finishBreakpoint.bind(this);
+        this.pauseVideo = this.pauseVideo.bind(this);
     }
 
     retakeQuiz() {
@@ -161,7 +164,7 @@ export default class VideoPlayer extends Component {
         })
         this.loadDataFromServer(this.props.videoUUID);
 
-        $(window).on('resize', this.setWindowSize);
+        $(window).on('resize', this.setWindowSize); /* todo: debounce this */
     }
 
     componentWillUnmount() {
@@ -176,7 +179,8 @@ export default class VideoPlayer extends Component {
                     this.state.Player.destroy();
                 }
                 this.setState({
-                    Player: vidPlayer
+                    Player: vidPlayer,
+                    breakpoints: data.breakpoints,
                 });
                 /* an optional prop */
                 if (this.props.setTopicList) {
@@ -200,7 +204,7 @@ export default class VideoPlayer extends Component {
                       this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
                 }
 
-                console.log(data.breakpoints);
+                this.seconds = 0;
             }
         })
         this.loadQuizData(v_id)
@@ -309,21 +313,29 @@ export default class VideoPlayer extends Component {
 
     updateCurrentState(){
         //set time
-        var seconds = Math.round(this.state.Player.getCurrentTime())
-        var percentDone = (seconds / this.state.Player.getDuration())*100
+        const previousSeconds = this.seconds;
+        this.seconds = Math.round(this.state.Player.getCurrentTime());
+
+        var percentDone = (this.seconds / this.state.Player.getDuration())*100
         var playing = !this.state.Player.paused() && !this.state.Player.ended();
         if (playing)
             this.state.viewStats.duration += 100
 
+        if (previousSeconds !== this.seconds && this.state.breakpoints[this.seconds]) {
+            console.log('hit breakpoint');
+            this.setState({
+                currentBreakpoint: this.state.breakpoints[this.seconds],
+            });
+        }
+
         this.setState({
             isPlaying: playing,
             percentDone: percentDone,
-            currentTime: styleDuration(seconds),
-            topicObjList: updateCurrentTopicOnTime(seconds, this.state.topicObjList)
+            currentTime: styleDuration(this.seconds),
+            topicObjList: updateCurrentTopicOnTime(this.seconds, this.state.topicObjList)
         }, this.afterTopicListUpdate)
         
         this.setWindowSize()
-
     }
 
     showOverlay(){
@@ -444,6 +456,17 @@ export default class VideoPlayer extends Component {
         this.state.Player.play();
     }
 
+    finishBreakpoint() {
+        this.setState({
+            currentBreakpoint: null,
+        });
+        this.state.Player.play();
+    }
+
+    pauseVideo() {
+        this.state.Player.pause();
+    }
+
     render() {
         if (this.state.Player == null) {
             return (<div className="loading">Loading video player...</div>);
@@ -477,7 +500,10 @@ export default class VideoPlayer extends Component {
                             submitQuizAnswers={this.submitQuiz}
                             retakeQuiz={this.retakeQuiz}
                             reviewQuiz={this.reviewQuiz}
-                            showQuizResultsPage={this.showQuizResultsPage}/>
+                            showQuizResultsPage={this.showQuizResultsPage}
+                            breakpoint={this.state.currentBreakpoint}
+                            finishBreakpoint={this.finishBreakpoint}
+                            pauseVideo={this.pauseVideo}/>
                         <ControlBar 
                             className="ControlBar"
                             isPlaying={this.state.isPlaying}
