@@ -144,3 +144,29 @@
 .fa.fa-envelope {
     font-size: 75%;
 }
+
+// Temporary
+.closeForm {
+    font-size: 21px;
+    color: $blank;
+    float: right;
+}
+
+.progressCircleWrapper {
+    margin-top:25px;
+    width: 75px;
+    height: 75px;
+    position: relative;
+    .percentage {
+        position: absolute;
+        left: 26;
+        bottom: 24;
+    }
+}
+
+.progressLabel {
+    color:$structabl-blue;
+    font-weight:700;
+    margin-top:5px;
+    width: 75px;
+}

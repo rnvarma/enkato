@@ -171,7 +171,7 @@ export default class SeriesMainArea extends Component {
             if (auth.loggedIn() && this.props.is_subscribed) {
                 var annotateVideosButton = (
                     <Button 
-                        className="unsubscribeButton" 
+                        className="btn-secondary" 
                         onClick={this.props.onUnsubscribe}>
                         Unsubscribe
                     </Button>
@@ -179,7 +179,7 @@ export default class SeriesMainArea extends Component {
             } else {
                 var annotateVideosButton = (
                     <Button  
-                        className="btn btn-primary" 
+                        className="btn-primary" 
                         onClick={this.props.onSubscribe}>
                         Subscribe
                     </Button>

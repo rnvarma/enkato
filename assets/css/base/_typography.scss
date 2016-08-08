@@ -17,10 +17,20 @@ a {
     }
 }
 
+.bold {
+    font-weight: $bold-weight;
+}
+
 .title {
     font-size: $large-size;
     color: $base-dark;
     font-weight: $boldest-weight;
+
+    &-light { // Temp solution
+        @extend .title;
+        color: $blank;
+        display: inline-block;
+    }
 }
 
 .headline {

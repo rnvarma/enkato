@@ -61,7 +61,7 @@ class SubscribedSeriesPanel extends Component {
             };
             nextVideo = (
                 <div className="nextVideoBtn">
-                    <div className="text">
+                    <div className="smallTitle">
                         Up Next
                     </div>
                     <div className="link">
@@ -84,7 +84,7 @@ class SubscribedSeriesPanel extends Component {
 
 
         return (
-            <Row className="subscribedSeriesPanelRow">
+            <Row className="subscribedSeriesPanel">
                 <div className="subscribedSeriesPanel">
                     <Link to={`/s/${series.uuid}`}>
                         <Col md={3} lg={3} sm={6} xs={12}>
@@ -93,23 +93,21 @@ class SubscribedSeriesPanel extends Component {
                             </div>
                         </Col>
                     </Link>
-                    <Col md={3} lg={3} sm={6} xs={12}>
-                        <div className="seriesInfo">
-                            <div className="name">
-                                {this.props.series.name}
-                            </div>
-                            <div className="metadata">
-                                <div className="numVideos">
-                                    {numVideosString}
-                                </div>
-                                <div className="totalTime">
-                                    {totalTime}
-                                </div>
-                            </div>
-                            <Dotdotdot className="description" clamp={2}>
-                                {this.props.series.description}
-                            </Dotdotdot>
+                    <Col className="imageInfo" md={3} lg={3} sm={6} xs={12}>
+                        <div className="title">
+                            {this.props.series.name}
                         </div>
+                        <div className="metadata">
+                            <div className="numVideos metaItem bold">
+                                {numVideosString}
+                            </div>
+                            <div className="totalTime metaItem">
+                                {totalTime}
+                            </div>
+                        </div>
+                        <Dotdotdot className="description" clamp={2}>
+                            {this.props.series.description}
+                        </Dotdotdot>
                     </Col>
                     <Col md={2} lg={2} sm={4} xs={12}>
                         <div className="progressCircleWrapper">
@@ -117,7 +115,7 @@ class SubscribedSeriesPanel extends Component {
                                 percent={percentCompleted} 
                                 strokeWidth='10' 
                                 strokeColor={katoGreen}/>
-                            <div className="percentage">
+                            <div className="percentage title">
                                 {percentCompleted}%
                             </div>
                         </div>
@@ -131,7 +129,7 @@ class SubscribedSeriesPanel extends Component {
                                 percent={percentMastery}
                                 strokeWidth='10' 
                                 strokeColor={katoGreen}/>
-                            <div className="percentage">
+                            <div className="percentage title">
                                 {percentMastery}%
                             </div>
                         </div>

@@ -211,3 +211,16 @@
     }
 }
 
+.subscribedSeriesPanel {
+    @extend .listPanel;
+    padding-top: $content-padding;
+    padding-bottom: $content-padding;
+
+    &:first-of-type {
+        padding-top: 0;
+    }
+
+    &:last-of-type {
+        padding-bottom: 0;
+    }
+}
