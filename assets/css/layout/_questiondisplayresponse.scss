@@ -1,14 +1,14 @@
 .questionDisplayResponse {
 
-  color: $structabl-blue;
+  color: $base-dark;
   border-bottom: 10px solid $bg-grey;
 
   &.instructor {
-    border-top: 14px solid $kato-green;
+    border-top: 14px solid $primary-accent;
   }
 
   &.endorsed {
-    border-top: 14px solid $enkato-green;
+    border-top: 14px solid $secondary-accent;
   }
 
   .responseText {
@@ -33,11 +33,11 @@
       padding-bottom: 8px;
 
       &.endorsed {
-        color: $enkato-green;
+        color: $secondary-accent;
       }
 
       &.instructor {
-        color: $kato-green;
+        color: $primary-accent;
       }
     }
   }
