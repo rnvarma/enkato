@@ -17,7 +17,26 @@
 
     .navbar-nav {
         li {
-            a{
+            cursor: pointer;
+            padding: 15px;
+            color: $blank;
+
+            &.active {
+                color: $primary-accent;
+            }
+
+            &:hover {
+                color: $primary-accent;
+            }
+
+            &:active {
+                color: $primary-accent;
+            }
+
+            a {
+                padding: 0px;
+                color: $blank;
+
                 &.active {
                     color: $primary-accent;
                 }
@@ -29,24 +48,6 @@
                 &:active {
                     color: $primary-accent;
                 }
-            }
-        }
-
-        &.modalButtons{
-            cursor: pointer;
-            color: $blank;
-            padding: 15px;
-     
-            &.active {
-                color: $primary-accent;
-            }
-
-            &:hover {
-                color: $primary-accent;
-            }
-
-            &:active {
-                color: $primary-accent;
             }
         }
     }
