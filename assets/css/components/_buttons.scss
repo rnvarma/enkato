@@ -58,6 +58,9 @@
 
     &-plain {
         color: $base-dark;
+        @include respond-to(small) {
+            padding: 8px 5px;
+        }
         padding: 8px 15px;
         display: inline-block;
         font-weight: $bold-weight;
@@ -161,9 +164,14 @@
 
 .filterQuery {
     .btn {
-      padding: 8px 40px;
-      background-color: #f1f1f1;
-      border: 1px solid #f1f1f1;
+        @include respond-to(medium) {
+            padding: 8px 40px;
+        }
+        @include respond-to(small) {
+            padding: 8px 10px;
+        }
+        background-color: #f1f1f1;
+        border: 1px solid #f1f1f1;
     }
 }
 
