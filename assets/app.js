@@ -68,6 +68,8 @@ class App extends Component {
         this.setState({
             loginModalOpen:false,
         })
+        if(window.location.href = '/')
+            window.location.reload();
     }
 
     openSignUpModal(){
@@ -80,6 +82,8 @@ class App extends Component {
         this.setState({
             signUpModalOpen:false,
         })
+        if(window.location.href = '/')
+            window.location.reload();
     }
 
     render() {

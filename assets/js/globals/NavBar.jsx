@@ -98,13 +98,13 @@ class NavBar extends Component {
     render() {
         var active = this.props.active;
         var LoginButton = (
-            <li role="presentation" className = "modalButtons" onClick= {this.props.openLoginModal}>
+            <li role="presentation" className = "nav navbar-nav navbar-right modalButtons" onClick= {this.props.openLoginModal}>
                 Login
             </li>
         )
 
         var RegisterButton = (
-            <li role="presentation" className = "modalButtons" onClick ={this.props.openSignUpModal}>
+            <li role="presentation" className = "nav navbar-nav navbar-right modalButtons" onClick ={this.props.openSignUpModal}>
                 Sign Up
             </li>
         )
