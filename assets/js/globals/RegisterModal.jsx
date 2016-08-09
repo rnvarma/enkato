@@ -16,6 +16,7 @@ class RegisterModal extends Component {
     render() {
         if(!auth.loggedIn()){
             return (
+              <NavBar loggedIn={auth.}/>
                 <li className="createSeriesModal">
                     <Modal 
                         show={this.props.registerModalOpen} 

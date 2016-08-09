@@ -24,6 +24,7 @@ class LoginForm extends Component {
             errorField: '',
         }
 
+        console.log(this.props);
         this.onUserNameChange = this.onUserNameChange.bind(this)
         this.onPasswordChange = this.onPasswordChange.bind(this)
         this.onFormSubmit = this.onFormSubmit.bind(this)
@@ -44,8 +45,12 @@ class LoginForm extends Component {
                 if (this.props.callbackFn) {
                     this.props.callbackFn()
                     this.props.closeRegisterModal()
-                } else {
-                    window.location.href = "/"
+                } 
+                else if(this.props.navBarItem){
+                    this.props.closeLoginModal();
+                }
+                else {
+                    window.location.href = "/";
                 }
             }
         }, (errorMsg) => {

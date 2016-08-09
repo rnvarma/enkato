@@ -19,12 +19,14 @@ class NavBar extends Component {
     constructor(props) {
         super(props)
 
+        console.log(this.props);
+
         this.state = {
             logged_in: false,
             username: '',
             user_id: 0,
             num_notifications: 0,
-            notifications: []
+            notifications: [],
         }
 
         this.getOnClick = this.getOnClick.bind(this)
@@ -96,13 +98,14 @@ class NavBar extends Component {
     render() {
         var active = this.props.active;
         var LoginButton = (
-            <li role="presentation">
-                <Link to="/login" activeClassName="active">Sign In</Link>
+            <li role="presentation" className = "modalButtons" onClick= {this.props.openLoginModal}>
+                Login
             </li>
         )
+
         var RegisterButton = (
-            <li role="presentation">
-                <Link to="/register" activeClassName="active">Sign Up</Link>
+            <li role="presentation" className = "modalButtons" onClick ={this.props.openSignUpModal}>
+                Sign Up
             </li>
         )
         if (this.state.logged_in) {
@@ -146,7 +149,6 @@ class NavBar extends Component {
                 <Navbar.Collapse>
                   {RightBar}
                 </Navbar.Collapse>
-
             </Navbar>
         )
     }

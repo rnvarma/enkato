@@ -81,7 +81,11 @@ class RegistrationForm extends Component {
                             if (this.props.callbackFn) {
                                 this.props.callbackFn()
                                 this.props.closeRegisterModal()
-                            } else {
+                            }
+                            else if(this.props.navBarItem){
+                                this.props.closeSignUpModal();
+                            } 
+                            else {
                                 window.location.href = '/'
                             }
                         } else {
