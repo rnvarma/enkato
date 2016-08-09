@@ -35,7 +35,7 @@ module.exports = {
       {test: /\.jsx$/, loader: "eslint-loader", exclude: /node_modules/}
     ],
     loaders: [
-      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader', query: { presets:['es2015', 'react'] }}, // to transform JSX into JS
+      { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader', query: { presets:['es2015', 'react'], plugins: ['transform-class-properties'] }}, // to transform JSX into JS
       { test: /\.css$/, loaders: ["style", "css", "postcss"]},
       { test: /\.scss$/, loaders: ["style", "css", "postcss", "sass"]},
       //{ test: /\.(jsx|js)$/, loader: 'imports?jQuery=jquery,$=jquery,this=>window'},

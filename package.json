@@ -63,6 +63,7 @@
     "youtube-iframe": "^1.0.2"
   },
   "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.11.5",
     "clean-webpack-plugin": "^0.1.9",
     "fuse.js": "^2.2.0",
     "moment": "^2.14.1",
