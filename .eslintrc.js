@@ -3,6 +3,7 @@ module.exports = {
     "plugins": [
         "react"
     ],
+    "parser": "babel-eslint",
     "rules": {
         "indent": ["error", 4],
         "react/jsx-indent": [2, 4],
@@ -10,6 +11,7 @@ module.exports = {
         "import/no-unresolved": 0,
         "import/no-extraneous-dependencies": 0,
         "no-undef": 0,
+        "max-len": 0,
     },
     "settings": {
         "import/resolve": "webpack"
