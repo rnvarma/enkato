@@ -8,7 +8,8 @@
     "test": "python manage.py test",
     "webpack-dev": "webpack --watch --progress --colors",
     "webpack-prod": "webpack --config webpack-prod.config.js --progress --colors",
-    "webpack-prod-analyze": "webpack --config webpack-prod.config.js --progress --colors --json | webpack-bundle-size-analyzer"
+    "webpack-prod-analyze": "webpack --config webpack-prod.config.js --progress --colors --json | webpack-bundle-size-analyzer",
+    "doc": "esdoc -c .esdoc.json"
   },
   "author": "rohan varma",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "bootstrap-sass": "^3.3.6",
     "css": "^2.2.1",
     "css-loader": "^0.23.1",
+    "esdoc": "^0.4.8",
     "eslint": "^3.2.2",
     "eslint-config-airbnb": "^10.0.0",
     "eslint-import-resolver-webpack": "^0.4.0",

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Col from 'react-bootstrap/lib/Col';
-import Row from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
 
 import SeriesSideBar from 'js/series/seriespage/SeriesSideBar';
 import SeriesMainArea from 'js/series/seriespage/SeriesMainArea';
