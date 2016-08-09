@@ -1,30 +1,41 @@
-require('css/globals/QuizView/QuizNavNode.scss');
+import 'css/globals/QuizView/QuizNavNode.scss';
 
-var React = require('react')
+import React, { PropTypes } from 'react';
 
-export default class QuizNavNode extends React.Component {
+class QuizNavNode extends React.Component {
     constructor(props) {
         super(props);
 
         this.onClicked = this.onClicked.bind(this);
     }
 
-    onClicked(){
-        console.log("wooo");
+    onClicked() {
         this.props.setQuestion(this.props.index);
     }
 
     render() {
-        var className = "quizNavNode"
-        className += this.props.active ? " active" : ""
-        className += this.props.reviewMode ? " review" : ""
-        className += this.props.correct ? " correct" : ""
+        let className = 'quizNavNode';
+        className += this.props.active ? ' active' : '';
+        className += this.props.reviewMode ? ' review' : '';
+        className += this.props.correct ? ' correct' : '';
         return (
             <div
-                className={className} 
-                onClick={this.onClicked}>
+                className={className}
+                onClick={this.onClicked}
+            >
                 {this.props.order}
             </div>
         );
     }
 }
+
+QuizNavNode.propTypes = {
+    setQuestion: PropTypes.func,
+    active: PropTypes.bool,
+    reviewMode: PropTypes.bool,
+    correct: PropTypes.bool,
+    index: PropTypes.number,
+    order: PropTypes.number,
+};
+
+export default QuizNavNode;

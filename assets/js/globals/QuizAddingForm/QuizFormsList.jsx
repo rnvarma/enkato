@@ -2,14 +2,14 @@ require('css/globals/QuizAddingForm/QuizFormsList.scss');
 
 import React, { Component } from 'react';
 
-import QuizFormNode from 'js/globals/QuizAddingForm/QuizFormNode';
+import SingleQuizForm from 'js/globals/QuizAddingForm/SingleQuizForm';
 
 class QuizFormsList extends Component {
     render() {
         const QuizFormNodes = this.props.questions.map((question, index) => {
             const invalid = this.props.invalidQuestion !== null && this.props.invalidChoice === null && question.id === this.props.invalidQuestion.id;
             return (
-                <QuizFormNode
+                <SingleQuizForm
                     key={question.id}
                     handleQuizQuestionChange={this.props.handleQuizQuestionChange}
                     setChoiceList={this.props.setChoiceList}
