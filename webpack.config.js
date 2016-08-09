@@ -32,7 +32,7 @@ module.exports = {
 
   module: {
     preLoaders: [
-      {test: /\.jsx$/, loader: "eslint-loader", exclude: /node_modules/}
+      //{test: /\.jsx$/, loader: "eslint-loader", exclude: /node_modules/}
     ],
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader', query: { presets:['es2015', 'react'], plugins: ['transform-class-properties'] }}, // to transform JSX into JS

@@ -9,7 +9,7 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 
 import CreateSeriesModal from 'js/globals/CreateSeriesModal';
-import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
+import djangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 import request from 'js/globals/HttpRequest';
 import auth from 'auth';
 import Dotdotdot from 'react-dotdotdot';
@@ -138,7 +138,7 @@ class NavBar extends Component {
                 <Navbar.Header>
                   <Navbar.Brand>
                     <Link to="/">
-                        <span className="logo"><img className="headerLogo" src={DjangoImageLinkHandler("enkato_logo.png")} /></span>
+                        <span className="logo"><img className="headerLogo" src={djangoImageLinkHandler("enkato_logo.png")} /></span>
                     </Link>
                   </Navbar.Brand>
                   <Navbar.Toggle />

@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/lib/Col';
 
 import ProfileSeriesList from 'js/userprofile/profile/ProfileSeriesList';
 import CreateSeriesArea from 'js/userdashboard/UserDashboard/CreateSeriesArea.jsx';
-import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler.js';
+import djangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler.js';
 import request from 'js/globals/HttpRequest';
 
 class Profile extends Component {
@@ -63,7 +63,7 @@ class Profile extends Component {
     }
 
     render() {
-        var profile_img = this.state.userdata.image || DjangoImageLinkHandler("blank_avatar.jpg")
+        var profile_img = this.state.userdata.image || djangoImageLinkHandler("blank_avatar.jpg")
         var subscribe_name = this.props.params.userId ? "Series They Subscribe To" : "Series You Subscribe To"
         var subscribed_series = (
             <ProfileSeriesList
