@@ -2,6 +2,7 @@
 *.pyc
 pathtoassets.js
 node_modules/*
+dist/*
 assets/bundles/*
 assets/prod-assets/*
 webpack-stats.json
