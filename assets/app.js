@@ -1,3 +1,6 @@
+require('bootstrap-loader');
+require("css/main.scss");
+
 import React, { Component, cloneElement } from 'react'
 import { render } from 'react-dom'
 import { Router, browserHistory } from 'react-router'

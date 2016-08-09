@@ -1,6 +1,3 @@
-import 'bootstrap-loader';
-import 'css/globals/QuizView/ReviewingQuizView/BottomReviewText';
-
 import React, { PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';

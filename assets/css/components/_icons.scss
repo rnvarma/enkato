@@ -1,0 +1,193 @@
+.topicDot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+
+    background-color: $blank;
+
+    margin-top: 1.75px;
+    margin-left: -3.5px;
+}
+
+// QUIZZING ICONS //
+
+.arrowIcon {
+    font-size: 20px;
+    color: $base-dark;
+    padding-right: $content-padding;
+}
+
+.circle-icon {
+    color: $radio-unchecked;
+    font-size: 20px;
+    margin-right: $content-padding;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &.correct {
+        color: $base-dark;
+    }
+
+    &#selected{
+        color: $base-dark;
+        border-radius: 24px;
+        border: 2px solid $base-dark;
+        padding: 1px 2px;
+        font-size: 15px;
+    }
+}
+
+.timesIcon {
+    cursor: pointer;
+    margin-left: -20px;
+    font-size: 20px;
+}
+
+.undoIcon {
+    font-size: 30px;
+}
+
+.correctness-icon {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+#check-correct {
+    color: $primary-accent;
+}
+
+#check-incorrect {
+    color: $alert-accent;
+}
+
+// VIDEO BAR ICONS //
+
+.videoBarIcon {
+    color: $blank;
+    font-size: 20px;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.playButton {
+    @extend .videoBarIcon;
+    float: left;
+    margin-left: 35px;
+    margin-right: 15px;
+}
+
+.backwardButton {
+    @extend .videoBarIcon;
+    text-align: left;
+    margin-right: 20px;
+}
+
+.forwardButton {
+    @extend .videoBarIcon;
+    text-align: right;
+    margin-left: 20px;
+}
+
+// MISC //
+
+.checkIcon {
+    display: inline-block;
+    vertical-align: top;
+    width: 10%;
+    font-size: 20px;
+}
+
+// ALERT ICON //
+
+.separator {
+    .alertIcon {
+        display: none;
+    }
+
+    &.alertAnnotate {
+        .alertIcon {
+            display: inherit;
+            color: $alert-accent;
+            margin-right: 5px;
+        }
+    }
+}
+
+.questionPreviewUnresolved {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: $alert-accent;
+    float: right;
+    margin-top: -13px;
+}
+
+.addQuestionIcon {
+    float: left;
+    margin: 2px 10px 2px 0;
+}
+
+.searchIcon {
+    font-size: 1.2em;
+}
+
+.deleteIcon {
+    display: none;
+    padding-left: 3px;
+}
+
+.fa.fa-envelope {
+    font-size: 75%;
+}
+
+// Temporary
+.closeForm {
+    font-size: 21px;
+    color: $blank;
+    float: right;
+}
+
+.progressCircleWrapper {
+    margin-top:25px;
+    width: 75px;
+    height: 75px;
+    position: relative;
+    .percentage {
+        position: absolute;
+        left: 26;
+        bottom: 24;
+    }
+}
+
+.progressLabel {
+    color: $base-dark;
+    font-weight:700;
+    margin-top:5px;
+    width: 75px;
+}
+
+.responseBadges {
+    width: 30%;
+    display: inline-block;
+    text-align: right;
+    float: right;
+    vertical-align: top;
+    padding: 15px 20px;
+
+    .fa {
+      padding-right: 6px;
+
+      &.endorsed {
+        color: $secondary-accent;
+      }
+
+      &.instructor {
+        color: $primary-accent;
+      }
+    }
+  }

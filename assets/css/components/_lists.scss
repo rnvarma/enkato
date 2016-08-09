@@ -1,0 +1,35 @@
+.questionList {
+  overflow-y: scroll;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  background-color: white;
+  height: 100%;
+}
+
+.topicList{ 
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.editableTopicList {
+    height: calc(100% - 50px);
+}
+
+.editableTopicNodeContainer {
+    margin-bottom: 0px;
+}
+
+.seriesViewerVideoList {
+    height: calc(100% - 200px);
+    overflow-y: scroll;
+}
+
+.questionDisplayList {
+  background-color: $deep-panel;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 10px;
+  box-shadow: inset 3px 3px 3px darken($deep-panel, 3%);
+}

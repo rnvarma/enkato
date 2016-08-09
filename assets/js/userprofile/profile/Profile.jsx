@@ -1,8 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/NavBar.scss")
-require("css/globals/base.scss")
-require("css/userprofile/profile/Profile")
-
 import React, { Component } from 'react';
 
 import Col from 'react-bootstrap/lib/Col';
@@ -91,12 +86,12 @@ class Profile extends Component {
         }
         return (
             <div className="profile">
-                <div className="header">
+                <div className="baseContainer header">
                     <div className="imageArea">
                         <img src={profile_img} className="image" />
                     </div>
                     <div className="userInfo">
-                        <div className="name">
+                        <div className="title">
                             {this.state.userdata.name}
                         </div>
                         <div className="bio">

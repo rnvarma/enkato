@@ -1,0 +1,74 @@
+.quizAddingForm {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow-y: scroll;
+}
+
+.questionNumberButtons {
+    overflow-y: scroll; /* height set through js */
+    position: fixed;
+    font-size: 20px;
+}
+
+.singleNumberButton {
+    padding: 5px 10px;
+    text-align: center;
+
+    &.active {
+        background-color: $base-dark;
+        color: white;
+    } 
+
+    &:hover {
+        cursor: pointer;
+        background-color: $grey-hover;
+    }
+
+    &:active {
+        background-color: $black-active;
+    }
+}
+
+.addQuestionButton {
+    padding: 5px 7px;
+
+    &:hover {
+        background-color: $base-dark;
+        color: white;
+        cursor: pointer;
+    }
+}
+
+// single quiz adding form
+
+.indi-quiz-form{
+    height: 100%;
+    width: 100%;
+    padding: $page-padding;
+}
+
+.choice-row {
+    height: 30px;
+    margin-left: 90px;
+}
+
+.question-row{ 
+    width:100%;
+    height:30px;
+    padding-left:70px;
+    margin-bottom:50px;
+    padding-top: $content-padding;
+}
+
+.add-option-button{
+    font-size: $large-size;
+    border: none;
+    width:90%;
+    color:#BBBBBB;
+
+    &:hover {
+        cursor: pointer;
+    }
+}

@@ -1,5 +1,3 @@
-require('css/globals/EditVideoPlayer/EditableTopicNode.scss')
-
 import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';
@@ -75,7 +73,7 @@ export default class EditableTopicNode extends Component {
                         onBlur={this.onInputBlur}
                         id={this.props.id}/>
                     <FontAwesome
-                        className="delete"
+                        className="deleteIcon"
                         name='close'
                         onClick={this.deleteTopic}/>
                 </div>

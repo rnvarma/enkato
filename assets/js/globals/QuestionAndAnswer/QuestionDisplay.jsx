@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionDisplay.scss');
-
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
@@ -98,8 +96,10 @@ class QuestionDisplay extends Component {
     render() {
         if (this.props.question == null) {
             return (
-                <Col md={8} className="questionDisplay empty">
-                    No questions to show
+                <Col md={8} className="questionDisplayList">
+                    <div className="defaultMessage title">
+                        No questions to show
+                    </div>
                 </Col>
             );
         }
@@ -133,9 +133,9 @@ class QuestionDisplay extends Component {
 
         const isOwner = this.props.currentUser && this.props.currentUser.id === this.props.question.student.id;
         const isInstructor = this.props.currentUser && this.props.currentUser.id === this.props.question.video.creator;
-        const resolvedText = this.props.question.resolved ? 'unresolved' : 'resolved';
+        const resolvedText = this.props.question.resolved ? 'Unresolved' : 'Resolved';
         return (
-            <Col md={8} className="questionDisplay">
+            <Col md={8} className="questionDisplayList">
                 <ConfirmModal
                     showing={this.state.deleting}
                     description="You're deleting this question. Are you sure you want to continue? This is irreversible."
@@ -143,7 +143,7 @@ class QuestionDisplay extends Component {
                     acceptBsStyle="danger"
                     acceptCallback={this.delete}
                     cancelCallback={this.toggleDelete}/>
-                <Row>
+                <Row className="qaPanel">
                     {this.props.question.editing
                         ? (
                         <QuestionEditForm
@@ -157,35 +157,39 @@ class QuestionDisplay extends Component {
                             delete={this.delete}/>
                     ) : (
                         <div className="questionBox">
-                            <div className="questionHeader">
-                                <span className="questionHeaderTopic">{topic}</span>
-                                {isOwner || isInstructor ? <Button onClick={this.patchAsResolved}>Mark as {resolvedText}</Button> : ''}
+                            <div className="contentArea">
+                                <div className="questionHeader smallTitle">
+                                    <span className="questionHeaderTopic">{topic}</span>
+                                </div>
+                                <div className="questionTitle title">
+                                    {this.props.question.title}
+                                </div>
+                                <div className="questionText">
+                                    {this.props.question.text}
+                                </div>
                             </div>
-                            <div className="questionTitle">
-                                {this.props.question.title}
-                            </div>
-                            <div className="questionText">
-                                {this.props.question.text}
-                            </div>
-                            <div className="questionFooter">
+                            <div className="questionFooter footer">
                                 <Link to={`/userprofile/${this.props.question.student.id}`}><img src={DjangoImageLinkHandler(this.props.question.student.image || 'blank_avatar.jpg')}></img>
                                     <span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span></Link> asked {created.fromNow()}{modified ? ", modified "+modified.fromNow() : ""}
-                                {isOwner || isInstructor ? <div className="plainBtn" onClick={this.toggleDelete}>Delete</div> : ''}
-                                {isOwner && this.props.videoUUID ? <div className="plainBtn" onClick={this.toggleEdit}>Edit Question</div> : ''}
+                                <div className="right">
+                                    {isOwner || isInstructor ? <div className="btn-plain" onClick={this.toggleDelete}>Delete</div> : ''}
+                                    {isOwner && this.props.videoUUID ? <div className="btn-plain" onClick={this.toggleEdit}>Edit Question</div> : ''}
+                                    {isOwner || isInstructor ? <div className="btn-plain" onClick={this.patchAsResolved}>Mark {resolvedText}</div> : ''}
+                                </div>
                             </div>
                         </div>
                     )}
                 </Row>
                 {responses}
-                <Row>
-                    <div className="questionEnterResponse">
+                <Row className="qaPanel">
+                    <div className="questionEnterResponse contentArea">
                         <QuestionResponseForm
                             onSubmit={this.onSubmit}
                             onTextChange={this.onTextChange}
                             textValue={this.props.question.responseInput}
                             key={this.props.question.id}
                         />
-                        <Button className="publishResponse" onClick={this.onSubmit}>Publish</Button>
+                        <Button className="btn-primary" onClick={this.onSubmit}>Publish</Button>
                     </div>
                 </Row>
             </Col>

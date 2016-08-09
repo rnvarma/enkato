@@ -1,5 +1,3 @@
-require('css/series/seriesviewer/SeriesViewerSidebarVideoPanel.scss');
-
 import React from 'react';
 import DotDotDot from 'react-dotdotdot';
 import { browserHistory } from 'react-router'
@@ -24,7 +22,7 @@ class SeriesViewerSidebarVideoPanel extends React.Component {
         let quizQuestionCount;
         if (this.props.video.num_quiz_questions) {
             quizQuestionCount = (
-                <div className="numQuizQuestions">
+                <div className="numQuizQuestions metaItem">
                     {this.props.video.num_quiz_questions} {pluralize("Q", this.props.video.num_quiz_questions)}
                 </div>
             );
@@ -34,7 +32,7 @@ class SeriesViewerSidebarVideoPanel extends React.Component {
                 className={"seriesViewerSidebarVideoPanel" + (this.props.active ? " active" : "")}
                 onClick={this.onClick}
                 id={"panel-" + this.props.video.uuid}>
-                <div className="imageArea">
+                <div className="thumbnailArea">
                     <img src={this.props.video.thumbnail} className="image"/>
                 </div>
                 <div className="info">
@@ -44,7 +42,7 @@ class SeriesViewerSidebarVideoPanel extends React.Component {
                         </DotDotDot>
                     </div>
                     <div className="metadata">
-                        <div className="numTopics">
+                        <div className="numTopics metaItem">
                             {this.props.video.num_views} {pluralize("view", this.props.video.num_views)}
                         </div>
                         {quizQuestionCount}

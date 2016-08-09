@@ -1,5 +1,3 @@
-import 'css/globals/QuizAddingForm/QuizQuestion.scss';
-
 import React, { Component, PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';
@@ -34,7 +32,7 @@ class QuizQuestion extends Component {
         return (
             <Row className={`question-row ${this.props.invalid ? ' invalid' : ''}`}>
                 <FontAwesome
-                    className={'arrow-icon'}
+                    className={'arrow-icon arrowIcon'}
                     name={'arrow-right'}
                 />
                 <input

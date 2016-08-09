@@ -1,6 +1,3 @@
-
-require("css/series/seriespage/SeriesSideBar.scss");
-
 import React, { Component } from 'react';
 
 export default class SeriesSideBar extends Component {

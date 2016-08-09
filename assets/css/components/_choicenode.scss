@@ -1,0 +1,24 @@
+.choiceNode{
+    margin-bottom: 1em;
+    font-size:16px;
+    position: relative;
+    border-radius:5px;
+    width:90%;
+    height:30px;
+
+    .choiceText{
+        position:absolute;
+    }
+} 
+
+#incorrect{
+    background-color:grey;
+    color:white;
+    font-weight:700;
+}
+
+#correct{
+    background-color: $primary-accent;
+    color:white;
+    font-weight:700;
+}

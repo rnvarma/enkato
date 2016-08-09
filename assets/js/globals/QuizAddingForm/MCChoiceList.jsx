@@ -1,5 +1,3 @@
-import 'css/globals/QuizAddingForm/MCChoiceList.scss';
-
 import React, { PropTypes } from 'react';
 
 import MCChoiceNode from 'js/globals/QuizAddingForm/MCChoiceNode';

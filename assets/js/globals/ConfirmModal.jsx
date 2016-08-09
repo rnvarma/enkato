@@ -1,5 +1,3 @@
-require('css/globals/ConfirmModal.scss');
-
 import React, { Component, PropTypes } from 'react';
 
 import Modal from 'react-bootstrap/lib/Modal';

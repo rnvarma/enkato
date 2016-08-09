@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionFilterBar.scss');
-
 import React from 'react';
 
 import FontAwesome from 'react-fontawesome';
@@ -29,7 +27,7 @@ export default class QuestionFilterBar extends React.Component {
     if (!this.props.showingSeries) {
       viewAll = (
         <div
-          className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
+          className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'btn-plain'}
           onClick={this.props.setFilter.bind(null, '', true)}
         >
           View All
@@ -38,7 +36,7 @@ export default class QuestionFilterBar extends React.Component {
     } else {
       viewAll = (
         <div
-          className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
+          className={(!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected ' : '') + 'btn-plain'}
           onClick={this.props.setFilter.bind(null, '', true)}
         >
           View All Series
@@ -49,13 +47,13 @@ export default class QuestionFilterBar extends React.Component {
       <Row className="questionFilterBar">
         {viewAll}
         <div
-          className={(this.props.filterAnswered ? 'selected ' : '') + 'filterOption'}
+          className={(this.props.filterAnswered ? 'selected ' : '') + 'btn-plain'}
           onClick={this.props.toggleAnsweredFilter}
         >
           Resolved
         </div>
         <div
-          className={(this.props.filterUnanswered ? 'selected ' : '') + 'filterOption'}
+          className={(this.props.filterUnanswered ? 'selected ' : '') + 'btn-plain'}
           onClick={this.props.toggleUnansweredFilter}
         >
           Unresolved
@@ -69,7 +67,7 @@ export default class QuestionFilterBar extends React.Component {
               onChange={this.setFilterFromQuery}
               value={this.props.filter}
             />
-            <InputGroup.Button><Button><FontAwesome name="search" /></Button></InputGroup.Button>
+            <InputGroup.Button><Button><FontAwesome name="search searchIcon" /></Button></InputGroup.Button>
           </InputGroup>
         </div>
       </Row>

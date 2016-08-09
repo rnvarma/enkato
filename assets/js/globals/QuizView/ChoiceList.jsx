@@ -1,5 +1,3 @@
-import 'css/globals/QuizView/ChoiceList';
-
 import React, { PropTypes } from 'react';
 
 import ChoiceNode from 'js/globals/QuizView/ChoiceNode';

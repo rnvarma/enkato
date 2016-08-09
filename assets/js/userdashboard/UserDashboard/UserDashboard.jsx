@@ -1,8 +1,4 @@
-require('bootstrap-loader');
-require('css/globals/base.scss');
-require('css/userdashboard/UserDashboard/UserDashboard.scss');
-
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 import request from 'js/globals/HttpRequest';
 import ProfileSeriesList from 'js/userprofile/profile/ProfileSeriesList';

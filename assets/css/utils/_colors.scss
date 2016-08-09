@@ -1,0 +1,44 @@
+// $yn-green: #0D8809;
+
+$bg-grey: #F3F3F3;
+$yn-dark-grey: #3A3A3A;
+$grey-topic-button: #FBFBFB;
+$grey-topic-button-section-bg:#F7F7F7;
+$grey-topic-button-section-bg-hover:#F3F3F3;
+$grey-control-bar-bg-color:#333333;
+
+$form-control-border-color: #acacac;
+
+$structabl-red: #CD000A;
+$grey-hover: #eee;
+
+$black-active: #ccc;
+
+$enkato-bright-green: #2EB73A;
+
+// Highlight Colors
+$blank: #FFFFFF; // Previously "white" lol
+
+// Accent Colors
+$primary-accent: #79B546; // Previously kato-green
+$secondary-accent: #00765A; // Previously enkato-green
+$alert-accent: #FA1400; // Bright red!
+
+// Hover Colors
+$secondary-accent-hover: lighten($secondary-accent, 5%);
+
+// Base Colors
+$base-font-color: #333333; // Previously grey-topic-button-text
+$base-bg: #EEF1F7; // Previously structabl-bg-blue
+$base-dark: #01113E; // Previously structabl-blue
+
+// 50 Shades of Grey
+$radio-unchecked: #DCDCDC;
+$progress-not-watched: #777777; // Previously grey-progress-bar-not-watched
+$control-bar-bg: #333333; // Previously grey-control-bar-bg-color
+$control-bar-font-color: #999999; // Previously grey-progress-bar-text
+$panel-hover-bg: #FBFBFB; // Previously hover-grey
+$panel-active-bg: darken($panel-hover-bg, 2%);
+$deep-panel: darken($panel-active-bg, 1%);
+
+$main-bg-shadow: transparentize($base-dark, 0.8);

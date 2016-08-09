@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionList.scss');
-
 import React, { Component, PropTypes } from 'react';
 
 import Dotdotdot from 'react-dotdotdot';
@@ -29,7 +27,7 @@ class QuestionList extends Component {
           className={(question.id === this.props.currentQuestion.id ? 'selected ' : '') + 'questionPreview'}
           onClick={this.props.setCurrentQuestion.bind(null, question)}
         >
-          <div className="questionPreviewHeader">
+          <div className="questionPreviewHeader smallTitle">
             <Dotdotdot className="questionPreviewHeaderTopic" clamp={1}>
               {header}
             </Dotdotdot>
@@ -42,7 +40,12 @@ class QuestionList extends Component {
             {question.text}
           </Dotdotdot>
           <div className="questionPreviewFooter">
-            {question.modified.fromNow()} | {responseCount} {pluralize('answer', responseCount)}
+            <div className="metaItem">
+              {question.modified.fromNow()}
+            </div>
+            <div className="metaItem">
+              {responseCount} {pluralize('answer', responseCount)}
+            </div>
           </div>
         </div>
       );

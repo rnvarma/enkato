@@ -1,0 +1,31 @@
+body {
+    background-color: $base-bg;
+    overflow-x: hidden;
+}
+
+#page-anchor {
+    margin-top: 50px;
+}
+
+.userDashboard, .profile, .seriesMainArea {
+    padding: 20px $page-padding;
+}
+
+li {
+    list-style-type: none;
+}
+
+.iframeWrapper{
+    height:100%; 
+    position:relative;
+}
+
+.scrollingOverflow {
+    transition: 1.5s margin-left;     
+    transition-timing-function: linear;
+    margin-left: 0px;
+}
+
+.right {
+    float: right;
+}

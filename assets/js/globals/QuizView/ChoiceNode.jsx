@@ -1,5 +1,3 @@
-import 'css/globals/QuizView/ChoiceNode';
-
 import React, { Component, PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';

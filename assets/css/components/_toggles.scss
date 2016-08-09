@@ -1,0 +1,30 @@
+.toggleAnnotating {
+    float: left;
+    color: $base-dark;
+    background-color: $base-bg;
+    font-weight: $base-weight;
+    box-shadow: inset 2px 2px 5px darken($base-bg, 15%);
+    margin: 0 !important;
+    border-radius: 0;
+
+    &:first-of-type {
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+    }
+
+    &:last-of-type {
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+
+    &.active {
+        box-shadow: none;
+        background-color: $base-dark !important;
+        color: $blank !important;
+        font-weight: $bold-weight;
+    }
+
+    &:hover {
+        background-color: darken($base-bg, 5%);
+    }
+}

@@ -1,9 +1,6 @@
-import 'css/globals/QuizAddingForm/MCChoiceNode';
-
 import React, { Component, PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';
-
 import Row from 'react-bootstrap/lib/Row';
 
 class MCChoiceNode extends Component {

@@ -1,5 +1,3 @@
-require("css/globals/VideoPlayer/VideoPlayer")
-
 import React, { Component } from 'react';
 import getCookie from 'js/globals/GetCookie';
 
@@ -450,7 +448,7 @@ export default class VideoPlayer extends Component {
         }
         return (
             <div>
-                <div className="videoTitle">
+                <div className="videoTitle headline">
                     {this.state.videoTitle}
                 </div>
                 <div className="ynVideoPlayer"> 

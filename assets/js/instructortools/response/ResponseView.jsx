@@ -1,7 +1,3 @@
-require('bootstrap-loader');
-require('css/globals/base.scss');
-require('css/instructortools/response/ResponseView.scss');
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 

@@ -1,5 +1,3 @@
-import 'css/globals/QuizView/QuizNavNode.scss';
-
 import React, { PropTypes } from 'react';
 
 class QuizNavNode extends React.Component {

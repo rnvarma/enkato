@@ -1,9 +1,0 @@
-@import 'mixins.scss';
-@import 'colors.scss';
-
-.scrollingOverflow {
-    transition: 1.5s margin-left;     
-    transition-timing-function: linear;
-
-    margin-left: 0px;
-}

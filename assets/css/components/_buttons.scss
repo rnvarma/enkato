@@ -1,0 +1,176 @@
+.btn {
+    border-radius: $base-border-radius;
+    border: 0;
+    font-weight: $bold-weight;
+    letter-spacing: 0.3px;
+    margin-right: $content-padding / 2;
+
+    &:hover {
+        cursor: pointer !important;
+    }
+
+    &:focus, &:active {
+        outline: 0 !important;
+    }
+
+    &-primary {
+        color: $blank;
+        background-color: $primary-accent;
+
+        &:hover {
+        background-color: lighten($primary-accent, 5%);
+        }
+
+        &:active {
+            background-color: darken($primary-accent, 5%);
+        }
+    }
+
+    &-secondary {
+        background-color: $base-bg;
+
+        &:hover {
+            background-color: lighten($base-bg, 2%);
+        }
+
+        &:active {
+            background-color: darken($base-bg, 2%);
+        }
+    }
+
+    &-danger {
+        background-color: darken($alert-accent, 5%);
+
+        &.muted {
+            color: $base-font-color;
+            background-color: $base-bg;
+        }
+
+        &:hover {
+            color: $blank;
+            background-color: darken($alert-accent, 2%);
+        }
+
+        &:active {
+            background-color: darken($alert-accent, 7%);
+        }
+    }
+
+    &-plain {
+        color: $base-dark;
+        padding: 8px 15px;
+        display: inline-block;
+        font-weight: $bold-weight;
+
+        &.selected {
+            font-weight: $boldest-weight;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &.addQuestionBtn {
+        background: $primary-accent;
+        color: $blank;
+        text-align: left;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        margin-right: 0;
+        height: 35px;
+        margin-top: -1px;
+        width: 150px;
+    }
+}
+
+.annotate-box {
+    display: inline-block;
+}
+
+.takeQuizButton{
+    width:100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: $base-dark;
+    padding: 10px 20px;
+    border-bottom: 1px solid $base-bg;
+
+    &#selectedTopicNode {
+        background-color: $secondary-accent;
+        color: white;
+
+        .text {
+            color: white;
+        }
+    }
+
+    &:hover {
+        background-color:$grey-topic-button-section-bg-hover;
+        cursor:pointer;
+    }
+
+    .textWrapper {
+        display: inline-block;
+        width: 90%;
+        padding-left:5px;
+    }
+
+    .text {
+        display: inline-block;
+        vertical-align: top;
+        float: left;
+        font-weight: bold;
+    }
+}
+
+.addTopicButton {
+    background-color: $secondary-accent;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    height: 50px;
+    padding: 12px;
+
+    // @include respond-to(medium) {
+    //     font-size: 18px;
+    // }
+
+    // @include respond-to(small) {
+    //     font-size: 14px;
+    // }
+
+    &:hover {
+        cursor: pointer;
+        background-color: #0f4e3e;
+    }
+ }
+
+ .seriesViewerNextButton {
+    height: 100px;
+    padding: 20px 15px;
+
+    border-top: 1px solid $base-bg;
+
+    .name {
+        font-weight: bold;
+        color: $base-dark;
+    }
+}
+
+.filterQuery {
+    .btn {
+      padding: 8px 40px;
+      background-color: #f1f1f1;
+      border: 1px solid #f1f1f1;
+    }
+}
+
+// Temp
+.createSeriesModal {
+    display: inline-block;
+    .btn {
+        height: 31px;
+    }
+}

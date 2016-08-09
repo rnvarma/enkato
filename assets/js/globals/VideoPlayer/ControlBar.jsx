@@ -1,6 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/VideoPlayer/ControlBar")
-
 import React, { Component } from 'react';
 
 import FontAwesome from 'react-fontawesome';
@@ -57,7 +54,7 @@ export default class ControlBar extends Component {
                     handleTopicClick={this.props.handleTopicClick}
                     topicObjList={this.props.topicObjList}
                     percentDone={this.props.percentDone}/>
-                <Row>
+                <Row className="videoControls">
                     <FontAwesome 
                         className="playButton" 
                         name={this.props.isPlaying ? "pause" : "play"}

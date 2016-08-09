@@ -1,0 +1,88 @@
+body {
+    font-family: $base-font !important;
+    font-size: $base-size;
+    color: $base-font-color;
+    letter-spacing: $base-spacing;
+    font-weight: $base-weight;
+}
+
+a {
+    font-weight: $bold-weight;
+    color: $base-dark;
+    cursor: pointer;
+
+    &:hover, &:active, &:focus {
+        text-decoration: none;
+        outline: 0;
+    }
+}
+
+.bold {
+    font-weight: $bold-weight;
+}
+
+.title {
+    font-size: $large-size;
+    color: $base-dark;
+    font-weight: $boldest-weight;
+
+    &-light { // Temp solution
+        @extend .title;
+        color: $blank;
+        display: inline-block;
+    }
+}
+
+.headline {
+    font-size: $largest-size;
+    font-weight: $boldest-weight;
+    color: $base-dark;
+    padding-bottom: 10px;
+}
+
+.description {
+    font-weight: $base-weight;
+}
+
+.smallTitle {
+    font-size: $small-size;
+    color: $secondary-accent;
+    font-weight: $bold-weight;
+}
+
+.smallDarkTitle {
+    @extend .smallTitle;
+    color: $base-font-color;
+}
+
+/*
+ * metaItem: Used for displaying video metadata, eg. video length, number of
+ * topics, number of views, etc.
+ */
+.metaItem {
+    display: inline-block;
+    padding-right: 10px;
+    padding-left: 10px;
+    border-right: 1px solid $base-dark;
+    font-size: $small-size;
+
+    &:first-of-type {
+        padding-left: 0;
+    }
+
+    &:last-of-type {
+        border-right: none;
+        padding-right: 0;
+    }
+}
+
+/*
+ * defaultMessage: Handles the empty case for situations like no questions to
+ * show, no videos in a series, etc.
+ */
+.noVideosArea {
+    text-align: center;
+    font-size: $large-size;
+    color: $base-dark;
+    font-weight: $boldest-weight;
+}

@@ -1,5 +1,3 @@
-require('css/globals/QuestionAndAnswer/QuestionForm.scss');
-
 import React from 'react';
 
 import Col from 'react-bootstrap/lib/Col';

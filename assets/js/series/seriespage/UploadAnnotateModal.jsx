@@ -1,5 +1,3 @@
-require('css/series/seriespage/UploadAnnotateModal.scss');
-
 import React, { Component } from 'react';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -258,9 +256,9 @@ export default class UploadAnnotateModal extends Component {
                     </Modal.Body>
                     <Modal.Footer>
                         {toggleBtns}
-                        <Button className="structabl-blue" onClick={this.closeModal}>Cancel</Button>
-                        <Button className="structabl-red" onClick={this.onBack}>Back</Button>
-                        <Button className="structabl-red" onClick={this.onNext}>{nextText}</Button>
+                        <Button className="btn-secondary" onClick={this.closeModal}>Cancel</Button>
+                        <Button className="btn-secondary" onClick={this.onBack}>Back</Button>
+                        <Button className="btn-primary" onClick={this.onNext}>{nextText}</Button>
                     </Modal.Footer>
                 </Modal>
             </div>

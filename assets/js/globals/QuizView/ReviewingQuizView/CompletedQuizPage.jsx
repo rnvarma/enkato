@@ -1,6 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/QuizView/ReviewingQuizView/CompletedQuizPage");
-
 import React, { Component } from 'react';
 
 import Button from 'react-bootstrap/lib/Button';

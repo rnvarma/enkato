@@ -1,5 +1,3 @@
-import 'css/globals/QuizAddingForm/AddOptionButton.scss';
-
 import React, { PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';

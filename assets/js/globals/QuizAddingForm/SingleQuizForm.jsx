@@ -1,5 +1,3 @@
-import 'css/globals/QuizAddingForm/singlequizaddingform.scss';
-
 import React, { Component, PropTypes } from 'react';
 
 import QuizQuestion from 'js/globals/QuizAddingForm/QuizQuestion';

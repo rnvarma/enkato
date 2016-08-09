@@ -1,6 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/base.scss")
-
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 

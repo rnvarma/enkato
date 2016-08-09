@@ -1,6 +1,3 @@
-require('bootstrap-loader');
-require('css/singlevideo/singlevideoview/SingleVideoPage.scss');
-
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 

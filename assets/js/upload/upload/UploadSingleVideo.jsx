@@ -1,8 +1,3 @@
-require('bootstrap-loader');
-require("css/globals/NavBar.scss")
-
-require("css/upload/upload/UploadSingleVideo.scss");
-
 var React = require('react')
 var ReactDOM = require('react-dom')
 
