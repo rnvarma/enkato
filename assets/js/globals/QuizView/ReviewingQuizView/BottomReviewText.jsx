@@ -1,25 +1,30 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';
 
-export default class BottomReviewText extends Component {
-    render() {
-        var text = ""
-        if(this.props.correct){
-            text = "You answered this correctly!"
-        } else {
-            text = "You answered this incorrectly."
-        }
-        return(
-            <div className="correctOrNot">
-                <FontAwesome
-                    className="correctness-icon"
-                    name={(this.props.correct)?"check-circle":"times-circle"}
-                    id={(this.props.correct)?"check-correct":"check-incorrect"}/>
-                <span className="correctnessText">
-                    {text}
-                </span>
-            </div>
-        ) 
+const BottomReviewText = ({ correct }) => {
+    let text = '';
+    if (correct) {
+        text = 'You answered this correctly!';
+    } else {
+        text = 'You answered this incorrectly.';
     }
-}
+    return (
+        <div className={'correctOrNot'}>
+            <FontAwesome
+                className={'correctness-icon'}
+                name={(correct) ? 'check-circle' : 'times-circle'}
+                id={(correct) ? 'check-correct' : 'check-incorrect'}
+            />
+            <span className={'correctnessText'}>
+                {text}
+            </span>
+        </div>
+    );
+};
+
+BottomReviewText.propTypes = {
+    correct: PropTypes.bool,
+};
+
+export default BottomReviewText;

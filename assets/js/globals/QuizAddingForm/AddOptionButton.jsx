@@ -1,16 +1,20 @@
-var React = require('react')
-var FontAwesome = require('react-fontawesome');
-var Row = require('react-bootstrap').Row;
+import React, { PropTypes } from 'react';
 
-module.exports = React.createClass({
-    render: function(){
-        return(
-            <Row className="choice-row" onClick={this.props.handleClick}>
-                <FontAwesome
-                    className='circle-icon' 
-                    name='circle-thin'/>
-                <span className="add-option-button">Add Option</span>
-            </Row>
-        )
-    }
-})
+import FontAwesome from 'react-fontawesome';
+import Row from 'react-bootstrap/lib/Row';
+
+const AddOptionButton = ({ handleClick }) => (
+    <Row className={'choice-row'} onClick={handleClick}>
+        <FontAwesome
+            className={'circle-icon'}
+            name={'circle-thin'}
+        />
+        <span className="add-option-button">Add Option</span>
+    </Row>
+);
+
+AddOptionButton.propTypes = {
+    handleClick: PropTypes.func,
+};
+
+export default AddOptionButton;

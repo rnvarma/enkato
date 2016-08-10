@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';
 import Row from 'react-bootstrap/lib/Row';
@@ -12,7 +12,7 @@ class QuizQuestion extends Component {
         this.handleQuestionTextChange = this.handleQuestionTextChange.bind(this);
     }
 
-    onFocus(e) {
+    onFocus() {
         this.props.scrollToQuestion(this.props.questionId, this.props.index, false);
     }
 
@@ -30,26 +30,41 @@ class QuizQuestion extends Component {
 
     render() {
         return (
-            <Row className={'question-row' + (this.props.invalid ? ' invalid' : '')}>
+            <Row className={`question-row ${this.props.invalid ? ' invalid' : ''}`}>
                 <FontAwesome
-                    className='arrow-icon arrowIcon' 
-                    name='arrow-right'/>
+                    className={'arrow-icon arrowIcon'}
+                    name={'arrow-right'}
+                />
                 <input
-                    className={'question-input' + (this.props.invalid ? ' invalid' : '')}
+                    className={`question-input ${this.props.invalid ? ' invalid' : ''}`}
                     id={this.props.questionId}
-                    type="text"
-                    placeholder={`Question ${this.props.index+1}`}
+                    type={'text'}
+                    placeholder={`Question ${this.props.index + 1}`}
                     value={this.props.questionText}
                     onKeyDown={this.onKeyDown}
                     onFocus={this.onFocus}
-                    onChange={this.handleQuestionTextChange}/>
+                    onChange={this.handleQuestionTextChange}
+                />
                 <FontAwesome
-                    className="timesIcon"
-                    name="times"
-                    onClick={this.props.deleteQuestion}/>
+                    className={'timesIcon'}
+                    name={'times'}
+                    onClick={this.props.deleteQuestion}
+                />
             </Row>
         );
     }
 }
+
+QuizQuestion.propTypes = {
+    scrollToQuestion: PropTypes.func,
+    questionId: PropTypes.number,
+    index: PropTypes.number,
+    onQuestionUp: PropTypes.func,
+    onQuestionDown: PropTypes.func,
+    handleQuizQuestionChange: PropTypes.func,
+    invalid: PropTypes.bool,
+    deleteQuestion: PropTypes.func,
+    questionText: PropTypes.string,
+};
 
 export default QuizQuestion;

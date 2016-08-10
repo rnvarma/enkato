@@ -15,7 +15,7 @@ import auth from 'auth';
 import request from 'js/globals/HttpRequest';
 import NoVideosArea from 'js/series/seriespage/NoVideosArea';
 import SeriesVideoList from 'js/series/seriespage/SeriesVideoList';
-import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
+import djangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 
 export default class SeriesMainArea extends Component {
     constructor(props) {
@@ -53,7 +53,7 @@ export default class SeriesMainArea extends Component {
     }
     render() {
         var img_src = (
-            <img src={DjangoImageLinkHandler("blank_thumbnail.png")} className="image"/>
+            <img src={djangoImageLinkHandler("blank_thumbnail.png")} className="image"/>
         )
         if (this.props.thumbnails) {
             img_src = this.props.thumbnails.map((img, index) => {

@@ -12,7 +12,8 @@ class SeriesViewerSideBar extends React.Component {
                 <SeriesViewerHeader 
                     seriesName={this.props.name}
                     seriesCreator={this.props.creator}
-                    currVideo={this.props.currVideo}/>
+                    currVideo={this.props.currVideo}
+                    isCreator = {this.props.is_creator}/>
                 <SeriesViewerVideoList
                     videos={this.props.videos}
                     currUUID={this.props.currUUID}/>

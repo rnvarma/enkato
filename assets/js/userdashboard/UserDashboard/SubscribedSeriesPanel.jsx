@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/lib/Row';
 import { Circle } from 'rc-progress';
 import Dotdotdot from 'react-dotdotdot';
 
-import DjangoImageLinkHandler from "js/globals/DjangoImageLinkHandler";
+import djangoImageLinkHandler from "js/globals/DjangoImageLinkHandler";
 
 import SeriesViewerSidebarVideoPanel from 'js/series/seriesviewer/SeriesViewerSidebarVideoPanel';
 import { pluralize } from 'js/globals/utility';
@@ -35,7 +35,7 @@ class SubscribedSeriesPanel extends Component {
         })
         if (series.thumbnails.length == 0) {
             thumbnails = (
-                <img src={DjangoImageLinkHandler("blank_thumbnail.png")} className="image" />
+                <img src={djangoImageLinkHandler("blank_thumbnail.png")} className="image" />
             )
         }
 

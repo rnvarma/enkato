@@ -12,7 +12,7 @@ import { Link } from 'react-router';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
 
 import request from 'js/globals/HttpRequest';
-import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
+import djangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 import ProfileSeriesList from 'js/userprofile/profile/ProfileSeriesList';
 
 class LandingPageBody extends Component {
@@ -64,10 +64,10 @@ class LandingPageBody extends Component {
 
     render() {
         var headerStyle = {
-            backgroundImage: "url(" + DjangoImageLinkHandler("splash_page.png") + ")"
+            backgroundImage: "url(" + djangoImageLinkHandler("splash_page.png") + ")"
         }
         var katoGirlStyle = {
-            backgroundImage: "url(" + DjangoImageLinkHandler("katogirl.png") + ")"
+            backgroundImage: "url(" + djangoImageLinkHandler("katogirl.png") + ")"
         }
         return (
             <div>
@@ -98,7 +98,7 @@ class LandingPageBody extends Component {
                                     <div className="bold">Learn anything,</div> from anyone.
                                 </div>
                                 <div className="imageArea">
-                                    <img src={DjangoImageLinkHandler("iKato.png")} />
+                                    <img src={djangoImageLinkHandler("iKato.png")} />
                                 </div>
                             </div>
                         </Col>
