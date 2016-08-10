@@ -14,7 +14,7 @@ import QuestionDisplayResponse from 'js/globals/QuestionAndAnswer/QuestionDispla
 import QuestionResponseForm from 'js/globals/QuestionAndAnswer/QuestionResponseForm';
 import QuestionEditForm from 'js/globals/QuestionAndAnswer/QuestionEditForm';
 
-import { default as djangoImageLinkHandler } from 'js/globals/DjangoImageLinkHandler';
+import djangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler';
 
 /**
  * displays a question (may be edited) and its responses
@@ -43,7 +43,7 @@ export default class QuestionDisplay extends Component {
             responseInput: PropTypes.string.isRequired,
             modified: PropTypes.object.isRequired,
             created: PropTypes.object.isRequired,
-        }).isRequired,
+        }),
         videoUUID: PropTypes.string.isRequired,
         currentUser: PropTypes.object.isRequired,
         topicList: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -64,18 +64,11 @@ export default class QuestionDisplay extends Component {
     }
 
     /**
-     * constructor
+     * @type {object}
+     * @property {bool} deleting - whether delete confirm modal is appearing
      */
-    constructor() {
-        super();
-
-        /**
-         * @type {object}
-         * @property {bool} deleting - whether delete confirm modal is appearing
-         */
-        this.state = {
-            deleting: false,
-        };
+    state = {
+        deleting: false,
     }
 
     /**

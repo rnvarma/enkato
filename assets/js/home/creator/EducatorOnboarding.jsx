@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/lib/Col';
 
 import ProfileSeriesList from 'js/userprofile/profile/ProfileSeriesList';
 import CreateSeriesArea from 'js/userdashboard/UserDashboard/CreateSeriesArea.jsx';
-import DjangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler.js';
+import djangoImageLinkHandler from 'js/globals/DjangoImageLinkHandler.js';
 import request from 'js/globals/HttpRequest';
 
 class EducatorOnboarding extends Component {
@@ -16,7 +16,7 @@ class EducatorOnboarding extends Component {
                     <Col md={12} sm={12}>
                         <div className="enkatoImageWrapper">
                             <img 
-                                src={DjangoImageLinkHandler("enkato_logo.png")}
+                                src={djangoImageLinkHandler("enkato_logo.png")}
                                 className="enkatoImage" />
                         </div>
                     </Col>
@@ -37,7 +37,7 @@ class EducatorOnboarding extends Component {
                         <div className="imageWrapper">
                             <img 
                                 className="images"
-                                src={DjangoImageLinkHandler("educatorPage/copyLink.JPG")} />
+                                src={djangoImageLinkHandler("educatorPage/copyLink.JPG")} />
                         </div>
                     </Col>
                 </Row>
@@ -46,7 +46,7 @@ class EducatorOnboarding extends Component {
                         <div className="imageWrapper">
                             <img 
                                 className="images"
-                                src={DjangoImageLinkHandler("educatorPage/AnnotationModal.JPG")} />
+                                src={djangoImageLinkHandler("educatorPage/AnnotationModal.JPG")} />
                         </div>
                     </Col>
                     <Col md={6} sm={12}>
@@ -77,7 +77,7 @@ class EducatorOnboarding extends Component {
                         <div className="imageWrapper">
                             <img 
                                 className="images"
-                                src={DjangoImageLinkHandler("educatorPage/quizMaking.JPG")} />
+                                src={djangoImageLinkHandler("educatorPage/quizMaking.JPG")} />
                         </div>
                     </Col>
                 </Row>
@@ -86,7 +86,7 @@ class EducatorOnboarding extends Component {
                         <div className="imageWrapper">
                             <img 
                                 className="images"
-                                src={DjangoImageLinkHandler("educatorPage/QASectionSeriesPage.JPG")} />
+                                src={djangoImageLinkHandler("educatorPage/QASectionSeriesPage.JPG")} />
                         </div>
                     </Col>
                     <Col md={6} sm={12}>
@@ -121,7 +121,7 @@ class EducatorOnboarding extends Component {
                         <div className="imageWrapper">
                             <img 
                                 className="images"
-                                src={DjangoImageLinkHandler("educatorPage/copyLink.JPG")} />
+                                src={djangoImageLinkHandler("educatorPage/copyLink.JPG")} />
                         </div>
                     </Col>
                 </Row>

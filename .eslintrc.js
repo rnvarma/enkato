@@ -12,6 +12,7 @@ module.exports = {
         "import/no-extraneous-dependencies": 0,
         "no-undef": 0,
         "max-len": 0,
+        "no-param-reassign": 0
     },
     "settings": {
         "import/resolve": "webpack"
