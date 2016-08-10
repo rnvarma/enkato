@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import FontAwesome from 'react-fontawesome'
- 
+import FontAwesome from 'react-fontawesome';
+
 import Form from 'react-bootstrap/lib/Form';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import Col from 'react-bootstrap/lib/Col';
@@ -16,7 +16,7 @@ import request from 'js/globals/HttpRequest';
 
 class RegistrationForm extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             firstname: '',
@@ -27,7 +27,7 @@ class RegistrationForm extends Component {
             password2: '',
             errorField: '',
             errorMsg: '',
-        }
+        };
 
         this.onFirstNameChange = this.onFirstNameChange.bind(this);
         this.onLastNameChange = this.onLastNameChange.bind(this);
@@ -39,86 +39,87 @@ class RegistrationForm extends Component {
     }
 
     onFirstNameChange(e) {
-        this.setState({firstname: e.target.value})
+        this.setState({ firstname: e.target.value });
     }
 
     onLastNameChange(e) {
-        this.setState({lastname: e.target.value})
+        this.setState({ lastname: e.target.value });
     }
 
     onEmailChange(e) {
-        this.setState({email: e.target.value})
+        this.setState({ email: e.target.value });
     }
 
     onUserNameChange(e) {
-        this.setState({username: e.target.value})
+        this.setState({ username: e.target.value });
     }
 
     onPassword1Change(e) {
-        this.setState({password1: e.target.value})
+        this.setState({ password1: e.target.value });
     }
 
     onPassword2Change(e) {
-        this.setState({password2: e.target.value})
+        this.setState({ password2: e.target.value });
     }
 
     onFormSubmit(e) {
         e.preventDefault();
-        var postData = this.state
-        if (postData.password1 != postData.password2) {
+        const postData = this.state;
+        if (postData.password1 !== postData.password2) {
             this.setState({
                 errorField: 'password',
-                errorMsg: 'The passwords did not match.'
-            })
+                errorMsg: 'The passwords did not match.',
+            });
             return;
         }
         request.post('/registeruser', {
             data: postData,
-            success: function(data) {
+            success: function (data) {
                 if (data.status) {
-                    auth.login(postData.username, postData.password1, function(success) {
+                    auth.login(postData.username, postData.password1, function (success) {
                         if (success) {
                             if (this.props.callbackFn) {
-                                this.props.callbackFn()
-                                this.props.closeRegisterModal()
+                                this.props.callbackFn();
+                                this.props.closeRegisterModal();
                             } else {
-                                window.location.href = '/'
+                                window.location.href = '/';
                             }
                         } else {
-                            browserHistory.push('/login')
+                            browserHistory.push('/login');
                         }
-                    }.bind(this))
+                    }.bind(this));
                 } else {
                     this.setState({
                         errorField: data.field,
-                        errorMsg: data.text
-                    })
+                        errorMsg: data.text,
+                    });
                 }
-            }.bind(this)
-        })
+            }.bind(this),
+        });
     }
 
     render() {
-        var disabled = (!this.state.firstname
+        let disabled = (!this.state.firstname
                         || !this.state.lastname
                         || !this.state.email
                         || !this.state.username
                         || !this.state.password1
-                        || !this.state.password2)
-        var errorMsg;
+                        || !this.state.password2);
+        let errorMsg;
         if (this.state.errorMsg) {
             errorMsg = (
                 <Alert bsStyle="danger">
                     {this.state.errorMsg}
                 </Alert>
-            )
+            );
         }
         return (
             <Form horizontal onSubmit={this.onFormSubmit}>
                 {errorMsg}
                 <FormGroup
                     controlId="first-name"
-                    validationState={(this.state.errorField == "firstname") ? "error" : (this.state.firstname ? "success" :"warning")}>
+                    validationState={(this.state.errorField == 'firstname') ? 'error' : (this.state.firstname ? 'success' : 'warning')}
+                >
                     <Col componentClass={ControlLabel} sm={3}>
                         First Name
                     </Col>
@@ -127,16 +128,18 @@ class RegistrationForm extends Component {
                             <FormControl
                                 onChange={this.onFirstNameChange}
                                 type="text"
-                                placeholder="First Name" />
+                                placeholder="First Name"
+                            />
                             <InputGroup.Addon>
-                                <FontAwesome name='pencil' />
+                                <FontAwesome name="pencil" />
                             </InputGroup.Addon>
                         </InputGroup>
                     </Col>
                 </FormGroup>
                 <FormGroup
                     controlId="last-name"
-                    validationState={(this.state.errorField == "lastname") ? "error" : (this.state.lastname ? "success" :"warning")}>
+                    validationState={(this.state.errorField == 'lastname') ? 'error' : (this.state.lastname ? 'success' : 'warning')}
+                >
                     <Col componentClass={ControlLabel} sm={3}>
                         Last Name
                     </Col>
@@ -145,16 +148,18 @@ class RegistrationForm extends Component {
                             <FormControl
                                 onChange={this.onLastNameChange}
                                 type="text"
-                                placeholder="Last Name" />
+                                placeholder="Last Name"
+                            />
                             <InputGroup.Addon>
-                                <FontAwesome name='pencil' />
+                                <FontAwesome name="pencil" />
                             </InputGroup.Addon>
                         </InputGroup>
                     </Col>
                 </FormGroup>
                 <FormGroup
                     controlId="user-name"
-                    validationState={(this.state.errorField == "username") ? "error" : (this.state.username ? "success" :"warning")}>
+                    validationState={(this.state.errorField == 'username') ? 'error' : (this.state.username ? 'success' : 'warning')}
+                >
                     <Col componentClass={ControlLabel} sm={3}>
                         User Name
                     </Col>
@@ -163,16 +168,18 @@ class RegistrationForm extends Component {
                             <FormControl
                                 onChange={this.onUserNameChange}
                                 type="text"
-                                placeholder="User Name" />
+                                placeholder="User Name"
+                            />
                             <InputGroup.Addon>
-                                <FontAwesome name='user' />
+                                <FontAwesome name="user" />
                             </InputGroup.Addon>
                         </InputGroup>
                     </Col>
                 </FormGroup>
                 <FormGroup
                     controlId="email"
-                    validationState={(this.state.errorField == "email") ? "error" : (this.state.email ? "success" :"warning")}>
+                    validationState={(this.state.errorField == 'email') ? 'error' : (this.state.email ? 'success' : 'warning')}
+                >
                     <Col componentClass={ControlLabel} sm={3}>
                         Email
                     </Col>
@@ -181,16 +188,18 @@ class RegistrationForm extends Component {
                             <FormControl
                                 onChange={this.onEmailChange}
                                 type="email"
-                                placeholder="Email" />
+                                placeholder="Email"
+                            />
                             <InputGroup.Addon>
-                                <FontAwesome name='envelope' />
+                                <FontAwesome name="envelope" />
                             </InputGroup.Addon>
                         </InputGroup>
                     </Col>
                 </FormGroup>
                 <FormGroup
                     controlId="password"
-                    validationState={(this.state.errorField == "password") ? "error" : (this.state.password1 ? "success" :"warning")}>
+                    validationState={(this.state.errorField == 'password') ? 'error' : (this.state.password1 ? 'success' : 'warning')}
+                >
                     <Col componentClass={ControlLabel} sm={3}>
                         Password
                     </Col>
@@ -199,16 +208,18 @@ class RegistrationForm extends Component {
                             <FormControl
                                 onChange={this.onPassword1Change}
                                 type="password"
-                                placeholder="Password" />
+                                placeholder="Password"
+                            />
                             <InputGroup.Addon>
-                                <FontAwesome name='lock' />
+                                <FontAwesome name="lock" />
                             </InputGroup.Addon>
                         </InputGroup>
                     </Col>
                 </FormGroup>
                 <FormGroup
                     controlId="password"
-                    validationState={(this.state.errorField == "password") ? "error" : (this.state.password2 ? "success" :"warning")}>
+                    validationState={(this.state.errorField == 'password') ? 'error' : (this.state.password2 ? 'success' : 'warning')}
+                >
                     <Col componentClass={ControlLabel} sm={3}>
                         Re-enter Password
                     </Col>
@@ -217,9 +228,10 @@ class RegistrationForm extends Component {
                             <FormControl
                                 onChange={this.onPassword2Change}
                                 type="password"
-                                placeholder="Re-enter Password" />
+                                placeholder="Re-enter Password"
+                            />
                             <InputGroup.Addon>
-                                <FontAwesome name='lock' />
+                                <FontAwesome name="lock" />
                             </InputGroup.Addon>
                         </InputGroup>
                     </Col>
@@ -230,13 +242,14 @@ class RegistrationForm extends Component {
                         <Button
                             className="structabl-red"
                             type="submit"
-                            disabled={disabled}>
+                            disabled={disabled}
+                        >
                             Register
                         </Button>
                     </Col>
                 </FormGroup>
             </Form>
-        )
+        );
     }
 }
 

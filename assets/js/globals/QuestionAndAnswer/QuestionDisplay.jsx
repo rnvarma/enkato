@@ -63,7 +63,7 @@ export default class QuestionDisplay extends Component {
         pushQuestionEditText: PropTypes.func.isRequired,
     }
 
-    /** 
+    /**
      * @type {object}
      * @property {bool} deleting - whether delete confirm modal is appearing
      */
