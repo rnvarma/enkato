@@ -81,27 +81,27 @@ export default class SeriesMainArea extends Component {
             if(this.props.is_creator) {
                 if(this.props.is_private){
                     privacyButton = (
-                        <div className="privacyButton">
-                            <Button onClick={this.setPublic}>
-                                Private
-                            </Button>
-                        </div>
+                        <Button
+                            className="btn-secondary"
+                            onClick={this.setPublic}>
+                            Private
+                        </Button>
                     );
                 } else {
                     privacyButton = (
-                        <div className="privacyButton">
-                            <Button onClick={this.setPrivate}>
-                                Public
-                            </Button>
-                        </div>
+                        <Button
+                            className="btn-secondary"
+                            onClick={this.setPrivate}>
+                            Public
+                        </Button>
                     );
                 }
                 deleteButton = (
-                    <div className="deleteButton">
-                        <Button onClick={this.toggleDelete}>
-                            Delete
-                        </Button>
-                    </div>
+                    <Button
+                        className="btn-secondary"
+                        onClick={this.toggleDelete}>
+                        Delete
+                    </Button>
                 )
             }
         } else if (this.props.is_creator) {
