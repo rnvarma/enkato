@@ -13,15 +13,18 @@ function getYTID(url) {
     return (match && match[7].length === 11) ? match[7] : false;
 }
 
+function resizePlayer() {
+    const contentWidth = $('#content').width();
+    const playerWidth = $('#player-api').width();
+    const leftMargin = Number($('#content').css('margin-left').replace('px', ''));
+    const playerLeft = (contentWidth - playerWidth) + leftMargin;
+    $('#player-api').css('left', playerLeft);
+}
+
 function putVideoOnPage(videoUUID, seriesUUID) {
-    // $('#movie_player').hide();
-    render((
-        <VideoPlayer
-            videoUUID={videoUUID}
-            seriesUUID={seriesUUID}
-            embed
-        />
-    ), document.getElementById('player'));
+    // $('#page').addClass('watch-wide watch-stage-mode');
+    // resizePlayer();
+    // window.onresize = resizePlayer;
 }
 
 function findInDatabase(ytId, callback) {

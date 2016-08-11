@@ -269,7 +269,3 @@ def parseTopicUploadString(s):
 		name = name.strip()
 		topics.append({'time': time, 'name': name})
 	return topics
-
-
-
-
