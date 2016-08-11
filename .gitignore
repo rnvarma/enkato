@@ -10,8 +10,9 @@ webpack-stats.json
 db.sqlite3
 npm-debug.log
 injectextension/*
-!injectextension/thirdParty/
 !injectextension/manifest.json
+!injectextension/.bootstraprc
+!injectextension/thirdParty/
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
