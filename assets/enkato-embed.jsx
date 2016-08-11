@@ -65,15 +65,6 @@ $(document).ready(() => {
             ), qaBox);
 
             const videoBox = document.createElement('div');
-
-            /*
-            render((
-                <YouTubeVideoWrapper
-                    seriesUUID={data.seriesUUID}
-                    videoUUID={data.videoUUID}
-                />
-            ), videoBox);
-            */
         });
     }
 });
