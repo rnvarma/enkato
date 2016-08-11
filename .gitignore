@@ -9,6 +9,9 @@ injectextension/enkato-embed.js
 webpack-stats.json
 db.sqlite3
 npm-debug.log
+injectextension/*
+!injectextension/thirdParty/
+!injectextension/manifest.json
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

@@ -15,6 +15,7 @@ export default class QuestionModal extends Component {
         getCurrentTime: PropTypes.func,
         pushQuestion: PropTypes.func.isRequired,
         close: PropTypes.func.isRequired,
+        embed: PropTypes.bool,
     }
 
     state = {
@@ -32,12 +33,11 @@ export default class QuestionModal extends Component {
         });
 
         if (!this.props.showing && nextProps.showing) {
-            this.questionTime = this.props.getCurrentTime();
+            this.questionTime = 0 || this.props.getCurrentTime();
 
             if (!this.state.topic) { /* auto-select topic */
-                const topicsBeforeTime = this.props.topicList.filter((topic) => {
-                    return topic.time < this.questionTime;
-                });
+                const topicsBeforeTime = this.props.topicList.filter(topic => topic.time < this.questionTime);
+
                 if (topicsBeforeTime.length > 0) {
                     this.setState({
                         topic: topicsBeforeTime[topicsBeforeTime.length - 1].real_id,
@@ -88,7 +88,7 @@ export default class QuestionModal extends Component {
                         topic: '',
                     });
                 },
-            });
+            }, this.props.embed);
         }
     }
 

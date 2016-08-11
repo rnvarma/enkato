@@ -39,6 +39,7 @@ export default class QuestionDisplayResponse extends Component {
         removeResponse: PropTypes.func.isRequired,
         replaceResponse: PropTypes.func.isRequired,
         pushResponseEditText: PropTypes.func.isRequired,
+        embed: PropTypes.bool.isRequired,
     }
 
     state = {
@@ -60,7 +61,7 @@ export default class QuestionDisplayResponse extends Component {
                 this.props.removeResponse(this.props.question.id, this.props.response.id);
                 this.toggleDelete();
             },
-        });
+        }, this.props.embed);
     }
 
     toggleEndorse = () => {
@@ -73,7 +74,7 @@ export default class QuestionDisplayResponse extends Component {
             success: (data) => {
                 this.props.replaceResponse(this.props.question.id, data.id, data);
             },
-        });
+        }, this.props.embed);
     }
 
     render() {
@@ -88,6 +89,7 @@ export default class QuestionDisplayResponse extends Component {
                         removeResponse={this.props.removeResponse}
                         pushResponseEditText={this.props.pushResponseEditText}
                         replaceResponse={this.props.replaceResponse}
+                        embed={this.props.embed}
                     />
                 </Row>
             );
@@ -120,6 +122,19 @@ export default class QuestionDisplayResponse extends Component {
         }
         responseClass += 'response';
 
+        let link;
+        const innerLink = (
+            <div>
+                <img role="presentation" src={djangoImageLinkHandler(response.user.image || 'blank_avatar.jpg')} />
+                <span className="studentName">{response.user.first_name} {response.user.last_name}</span>
+            </div>
+        );
+        if (this.props.embed) {
+            link = <a href={`localhost:8000/userprofile/${response.user.id}`}>{innerLink}</a>;
+        } else {
+            link = <Link to={`/userprofile/${response.user.id}`}>{innerLink}</Link>;
+        }
+
         return (
             <Row className="qaPanel">
                 <ConfirmModal
@@ -136,10 +151,7 @@ export default class QuestionDisplayResponse extends Component {
                         {response.text}
                     </div>
                     <div className="responseFooter footer">
-                        <Link to={`/userprofile/${response.user.id}`}>
-                            <img role="presentation" src={djangoImageLinkHandler(response.user.image || 'blank_avatar.jpg')} />
-                            <span className="studentName">{response.user.first_name} {response.user.last_name}</span>
-                        </Link> answered {created.fromNow()}{modified ? `, modified ${modified.fromNow()}` : ''}
+                        {link} answered {created.fromNow()}{modified ? `, modified ${modified.fromNow()}` : ''}
                         <div className="right">
                             {isOwner || isInstructor ? <div onClick={this.toggleDelete} className="btn-plain">Delete</div> : '' }
                             {isOwner ? <div onClick={this.toggleEdit} className="btn-plain">Edit Answer</div> : '' }
