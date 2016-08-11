@@ -1,26 +1,27 @@
-var React = require('react')
-var ReactDOM = require('react-dom')
+let React = require('react');
+const ReactDOM = require('react-dom');
 
-var NavBar = require('js/globals/NavBar');
+let NavBar = require('js/globals/NavBar');
 
-var ActivationComplete = React.createClass({
-    componentDidMount: function(){
+let ActivationComplete = React.es6({
+    componentDidMount() {
         this.timer = setInterval(this.tick, 3000);
     },
-    componentWillUnmount: function(){
+    componentWillUnmount() {
         clearInterval(this.timer);
     },
-    tick: function(){
-        window.location.href = "/login";
+    tick() {
+        window.location.href = '/login';
     },
-    render: function() {
+    render() {
         return (
             <div>
-                <NavBar active="activationComplete"/>
-                <div className = "popup">Your account is now active</div>
+                <NavBar active="activationComplete" />
+                <div className="popup">Your account is now active</div>
             </div>
-        )
-    }
-})
+        );
+    },
+});
 
-ReactDOM.render(<ActivationComplete/>, document.getElementById('page-anchor'))
+ReactDOM.render(<ActivationComplete />, document.getElementById('page-anchor'))
+;
