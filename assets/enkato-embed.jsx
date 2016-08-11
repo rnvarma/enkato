@@ -1,6 +1,5 @@
 import 'css/main.scss';
 
-import 'bootstrap-loader';
 import 'react-fontawesome';
 
 import React from 'react';

@@ -8,7 +8,10 @@ module.exports = {
     context: __dirname,
 
     entry: {
-        'enkato-embed': './assets/enkato-embed.jsx',
+        'enkato-embed': [
+            `bootstrap-loader/lib/bootstrap.loader?configFilePath=${__dirname}/injectextension/.bootstraprc!bootstrap-loader/no-op.js`,
+            './assets/enkato-embed.jsx',
+        ],
     },
 
     output: {
