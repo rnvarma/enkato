@@ -1,12 +1,18 @@
-import "css/main.scss";
+import 'css/main.scss';
+
+import 'bootstrap-loader';
+import 'react-fontawesome';
 
 import React from 'react';
 import { render } from 'react-dom';
 
-// import RegisterModal from 'js/globals/RegisterModal';
-import VideoPlayer from 'js/globals/VideoPlayer/VideoPlayer';
-// import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
+import YouTubeQuestionWrapper from 'js/extension/YouTubeQuestionWrapper';
+import YouTubeVideoWrapper from 'js/extension/YouTubeQuestionWrapper';
 
+/**
+ * obtains video id from YouTube url, provided that there is one
+ * @return {Number|Boolean} Video id or false if it could not be parsed
+ */
 function getYTID(url) {
     const regex = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
     const match = url.match(regex);
@@ -42,7 +48,29 @@ function findInDatabase(ytId, callback) {
 
 $(document).ready(() => {
     const ytId = getYTID(`${window.location.href}`);
-    findInDatabase(ytId, (data) => {
-        putVideoOnPage(data.videoUUID, data.seriesUUID);
-    });
+    if (ytId) {
+        findInDatabase(ytId, (data) => {
+            const qaBox = document.createElement('div');
+            qaBox.setAttribute('id', 'qaWrapper');
+            $(qaBox).insertBefore('#watch-discussion');
+
+            render((
+                <YouTubeQuestionWrapper
+                    videoUUID={data.videoUUID}
+                    topicList={[]}
+                />
+            ), qaBox);
+
+            const videoBox = document.createElement('div');
+
+            /*
+            render((
+                <YouTubeVideoWrapper
+                    seriesUUID={data.seriesUUID}
+                    videoUUID={data.videoUUID}
+                />
+            ), videoBox);
+            */
+        });
+    }
 });

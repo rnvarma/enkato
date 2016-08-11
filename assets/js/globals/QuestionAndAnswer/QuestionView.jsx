@@ -18,9 +18,10 @@ export default class QuestionView extends Component {
     static propTypes = {
         videoUUID: PropTypes.string.isRequired,
         topicList: PropTypes.array.isRequired,
-        getCurrentTime: PropTypes.func.isRequired,
+        getCurrentTime: PropTypes.func,
         loadQuestionData: PropTypes.func,
         openRegisterModal: PropTypes.func.isRequired,
+        embed: PropTypes.bool,
     }
 
     state = {
@@ -62,7 +63,7 @@ export default class QuestionView extends Component {
         }
         request.get(`/1/questions?video_uuid=${videoUUID}`, {
             success: onSuccess,
-        });
+        }, this.props.embed);
     }
 
     setCurrentQuestion = (question) => {
@@ -308,7 +309,7 @@ export default class QuestionView extends Component {
                 success: (data) => {
                     this.currentUser = data;
                 },
-            });
+            }, this.props.embed);
         }
     }
 
