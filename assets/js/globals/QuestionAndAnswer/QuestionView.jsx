@@ -347,6 +347,7 @@ export default class QuestionView extends Component {
                     close={this.closeModal}
                     pushQuestion={this.pushQuestion}
                     askQuestionText={this.state.askQuestionText}
+                    embed={this.props.embed}
                 />
             );
             const questionOptions = this.state.questions.map(q => q.title);
@@ -415,6 +416,7 @@ export default class QuestionView extends Component {
                                 replaceResponse={this.replaceResponse}
                                 videoUUID={this.props.videoUUID}
                                 currentUser={this.currentUser}
+                                embed={this.props.embed}
                             />
                         </Row>
                     </div>

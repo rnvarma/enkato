@@ -20,6 +20,7 @@ class QuestionResponseEditForm extends Component {
         toggleEdit: PropTypes.func.isRequired,
         replaceResponse: PropTypes.func.isRequired,
         delete: PropTypes.func.isRequired,
+        embed: PropTypes.bool,
     }
 
     onSubmit = (e) => {
@@ -42,7 +43,7 @@ class QuestionResponseEditForm extends Component {
                     this.props.toggleEdit();
                     this.props.replaceResponse(this.props.question.id, data.id, data);
                 },
-            });
+            }, this.props.embed);
         }
     }
 

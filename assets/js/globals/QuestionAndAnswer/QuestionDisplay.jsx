@@ -29,7 +29,7 @@ export default class QuestionDisplay extends Component {
             text: PropTypes.string.isRequired,
             topic: PropTypes.shape({
                 name: PropTypes.string.isRequired,
-            }).isRequired,
+            }),
             student: PropTypes.shape({
                 id: PropTypes.number.isRequired,
                 first_name: PropTypes.string.isRequired,
@@ -45,7 +45,7 @@ export default class QuestionDisplay extends Component {
             created: PropTypes.object.isRequired,
         }),
         videoUUID: PropTypes.string.isRequired,
-        currentUser: PropTypes.object.isRequired,
+        currentUser: PropTypes.object,
         topicList: PropTypes.arrayOf(PropTypes.object).isRequired,
         pushResponse: PropTypes.func.isRequired,
         pushResponseText: PropTypes.func.isRequired,
@@ -61,6 +61,7 @@ export default class QuestionDisplay extends Component {
         replaceResponse: PropTypes.func.isRequired,
         pushQuestionNewText: PropTypes.func.isRequired,
         pushQuestionEditText: PropTypes.func.isRequired,
+        embed: PropTypes.bool.isRequired,
     }
 
     /**
@@ -99,7 +100,7 @@ export default class QuestionDisplay extends Component {
             success: (data) => {
                 this.props.replaceQuestion(data.id, data);
             },
-        });
+        }, this.props.embed);
     }
 
     delete = () => {
@@ -108,7 +109,7 @@ export default class QuestionDisplay extends Component {
                 this.props.removeQuestion(this.props.question.id);
                 this.toggleDelete();
             },
-        });
+        }, this.props.embed);
     }
 
     toggleEdit = () => {
@@ -131,7 +132,7 @@ export default class QuestionDisplay extends Component {
                     this.props.pushResponse(this.props.question.id, data);
                     this.props.pushResponseText(this.props.question.id, '');
                 },
-            });
+            }, this.props.embed);
         }
     }
 
@@ -161,6 +162,7 @@ export default class QuestionDisplay extends Component {
                     toggleEditResponse={this.props.toggleEditResponse}
                     currentUser={this.props.currentUser}
                     replaceResponse={this.props.replaceResponse}
+                    embed={this.props.embed}
                 />
             ));
         }
@@ -175,6 +177,20 @@ export default class QuestionDisplay extends Component {
         const isOwner = this.props.currentUser && this.props.currentUser.id === this.props.question.student.id;
         const isInstructor = this.props.currentUser && this.props.currentUser.id === this.props.question.video.creator;
         const resolvedText = this.props.question.resolved ? 'Unresolved' : 'Resolved';
+
+        let link;
+        const innerLink = (
+            <div>
+                <img role="presentation" src={djangoImageLinkHandler(this.props.question.student.image || 'blank_avatar.jpg') } />
+                <span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span>
+            </div>
+        );
+        if (this.props.embed) {
+            link = <a href={`localhost:8000/userprofile/${this.props.question.student.id}`}>{innerLink}</a>;
+        } else {
+            link = <Link to={`/userprofile/${this.props.question.student.id}`}>{innerLink}</Link>;
+        }
+
         return (
             <Col md={8} className="questionDisplayList">
                 <ConfirmModal
@@ -197,6 +213,7 @@ export default class QuestionDisplay extends Component {
                             replaceQuestion={this.props.replaceQuestion}
                             toggleEdit={this.toggleEdit}
                             delete={this.delete}
+                            embed={this.props.embed}
                         />
                     ) : (
                         <div className="questionBox">
@@ -212,10 +229,7 @@ export default class QuestionDisplay extends Component {
                                 </div>
                             </div>
                             <div className="questionFooter footer">
-                                <Link to={`/userprofile/${this.props.question.student.id}`}>
-                                    <img role="presentation" src={djangoImageLinkHandler(this.props.question.student.image || 'blank_avatar.jpg')} />
-                                    <span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span>
-                                </Link> asked {created.fromNow()}{modified ? `, modified ${modified.fromNow()}` : ''}
+                                {link} asked {created.fromNow()}{modified ? `, modified ${modified.fromNow()}` : ''}
                                 <div className="right">
                                     {isOwner || isInstructor ? <div className="btn-plain" onClick={this.toggleDelete}>Delete</div> : ''}
                                     {isOwner && this.props.videoUUID ? <div className="btn-plain" onClick={this.toggleEdit}>Edit Question</div> : ''}

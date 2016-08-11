@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';
 
@@ -15,54 +15,48 @@ import auth from 'auth';
 import request from 'js/globals/HttpRequest';
 
 class RegistrationForm extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            firstname: '',
-            lastname: '',
-            email: '',
-            username: '',
-            password1: '',
-            password2: '',
-            errorField: '',
-            errorMsg: '',
-        };
-
-        this.onFirstNameChange = this.onFirstNameChange.bind(this);
-        this.onLastNameChange = this.onLastNameChange.bind(this);
-        this.onEmailChange = this.onEmailChange.bind(this);
-        this.onUserNameChange = this.onUserNameChange.bind(this);
-        this.onPassword1Change = this.onPassword1Change.bind(this);
-        this.onPassword2Change = this.onPassword2Change.bind(this);
-        this.onFormSubmit = this.onFormSubmit.bind(this);
+    static propTypes = {
+        callbackFn: PropTypes.func.isRequired,
+        closeRegisterModal: PropTypes.func.isRequired,
+        embed: PropTypes.bool,
     }
 
-    onFirstNameChange(e) {
+    state = {
+        firstname: '',
+        lastname: '',
+        email: '',
+        username: '',
+        password1: '',
+        password2: '',
+        errorField: '',
+        errorMsg: '',
+    }
+
+    onFirstNameChange = (e) => {
         this.setState({ firstname: e.target.value });
     }
 
-    onLastNameChange(e) {
+    onLastNameChange = (e) => {
         this.setState({ lastname: e.target.value });
     }
 
-    onEmailChange(e) {
+    onEmailChange = (e) => {
         this.setState({ email: e.target.value });
     }
 
-    onUserNameChange(e) {
+    onUserNameChange = (e) => {
         this.setState({ username: e.target.value });
     }
 
-    onPassword1Change(e) {
+    onPassword1Change = (e) => {
         this.setState({ password1: e.target.value });
     }
 
-    onPassword2Change(e) {
+    onPassword2Change = (e) => {
         this.setState({ password2: e.target.value });
     }
 
-    onFormSubmit(e) {
+    onFormSubmit = (e) => {
         e.preventDefault();
         const postData = this.state;
         if (postData.password1 !== postData.password2) {
@@ -74,9 +68,9 @@ class RegistrationForm extends Component {
         }
         request.post('/registeruser', {
             data: postData,
-            success: function (data) {
+            success: (data) => {
                 if (data.status) {
-                    auth.login(postData.username, postData.password1, function (success) {
+                    auth.login(postData.username, postData.password1, (success) => {
                         if (success) {
                             if (this.props.callbackFn) {
                                 this.props.callbackFn();
@@ -87,15 +81,15 @@ class RegistrationForm extends Component {
                         } else {
                             browserHistory.push('/login');
                         }
-                    }.bind(this));
+                    }, this.props.embed);
                 } else {
                     this.setState({
                         errorField: data.field,
                         errorMsg: data.text,
                     });
                 }
-            }.bind(this),
-        });
+            },
+        }, this.props.embed);
     }
 
     render() {
@@ -118,7 +112,7 @@ class RegistrationForm extends Component {
                 {errorMsg}
                 <FormGroup
                     controlId="first-name"
-                    validationState={(this.state.errorField == 'firstname') ? 'error' : (this.state.firstname ? 'success' : 'warning')}
+                    validationState={(this.state.errorField === 'firstname') ? 'error' : (this.state.firstname ? 'success' : 'warning')}
                 >
                     <Col componentClass={ControlLabel} sm={3}>
                         First Name
@@ -138,7 +132,7 @@ class RegistrationForm extends Component {
                 </FormGroup>
                 <FormGroup
                     controlId="last-name"
-                    validationState={(this.state.errorField == 'lastname') ? 'error' : (this.state.lastname ? 'success' : 'warning')}
+                    validationState={(this.state.errorField === 'lastname') ? 'error' : (this.state.lastname ? 'success' : 'warning')}
                 >
                     <Col componentClass={ControlLabel} sm={3}>
                         Last Name
@@ -158,10 +152,10 @@ class RegistrationForm extends Component {
                 </FormGroup>
                 <FormGroup
                     controlId="user-name"
-                    validationState={(this.state.errorField == 'username') ? 'error' : (this.state.username ? 'success' : 'warning')}
+                    validationState={(this.state.errorField === 'username') ? 'error' : (this.state.username ? 'success' : 'warning')}
                 >
                     <Col componentClass={ControlLabel} sm={3}>
-                        User Name
+                        Username
                     </Col>
                     <Col sm={9}>
                         <InputGroup>
@@ -178,7 +172,7 @@ class RegistrationForm extends Component {
                 </FormGroup>
                 <FormGroup
                     controlId="email"
-                    validationState={(this.state.errorField == 'email') ? 'error' : (this.state.email ? 'success' : 'warning')}
+                    validationState={(this.state.errorField === 'email') ? 'error' : (this.state.email ? 'success' : 'warning')}
                 >
                     <Col componentClass={ControlLabel} sm={3}>
                         Email
@@ -198,7 +192,7 @@ class RegistrationForm extends Component {
                 </FormGroup>
                 <FormGroup
                     controlId="password"
-                    validationState={(this.state.errorField == 'password') ? 'error' : (this.state.password1 ? 'success' : 'warning')}
+                    validationState={(this.state.errorField === 'password') ? 'error' : (this.state.password1 ? 'success' : 'warning')}
                 >
                     <Col componentClass={ControlLabel} sm={3}>
                         Password
@@ -218,7 +212,7 @@ class RegistrationForm extends Component {
                 </FormGroup>
                 <FormGroup
                     controlId="password"
-                    validationState={(this.state.errorField == 'password') ? 'error' : (this.state.password2 ? 'success' : 'warning')}
+                    validationState={(this.state.errorField === 'password') ? 'error' : (this.state.password2 ? 'success' : 'warning')}
                 >
                     <Col componentClass={ControlLabel} sm={3}>
                         Re-enter Password

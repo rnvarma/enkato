@@ -34,6 +34,7 @@ export default class YouTubeQuestionWrapper extends Component {
                     registerModalOpen={this.state.registerOpen}
                     closeRegisterModal={this.closeRegister}
                     callbackFn={this.state.registerCallback}
+                    embed
                 />
                 <QuestionView
                     videoUUID={this.props.videoUUID}
