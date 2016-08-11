@@ -9,7 +9,7 @@
     "content_scripts": [
         {
             "matches": ["https://www.youtube.com/*"],
-            "js": ["thirdParty/jquery.js", "content.js"]
+            "js": ["thirdParty/jquery.js", "enkato-embed.js"]
         }
     ],
 
@@ -17,6 +17,7 @@
         "tabs",
         "activeTab",
         "http://www.enkato.com/",
-        "http://127.0.0.1:8000/"
+        "http://127.0.0.1:8000/",
+        "http://127.0.0.1:8000/static/bundles/"
     ]
 }

@@ -12,7 +12,7 @@ module.exports = {
     },
 
     output: {
-        path: path.resolve(pathtoassets + '/assets/bundles/'),
+        path: path.resolve(pathtoassets + '/injectextension/'),
         filename: "[name].js",
         publicPath: '/static/bundles/'
     },
