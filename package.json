@@ -7,7 +7,7 @@
     "django": "python manage.py runserver",
     "test": "python manage.py test",
     "webpack-dev": "webpack --watch --progress --colors",
-    "webpack-dev-embed": "webpack --config webpack-embed.config.js --progress --colors",
+    "webpack-dev-embed": "webpack --config webpack-embed.config.js --progress --colors --watch",
     "webpack-prod": "webpack --config webpack-prod.config.js --progress --colors",
     "webpack-prod-analyze": "webpack --config webpack-prod.config.js --progress --colors --json | webpack-bundle-size-analyzer",
     "doc": "esdoc -c .esdoc.json"

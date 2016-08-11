@@ -8,7 +8,7 @@ module.exports = {
     context: __dirname,
 
     entry: {
-        'enkato-embed': './assets/enkato-embed.js',
+        'enkato-embed': './assets/enkato-embed.jsx',
     },
 
     output: {
