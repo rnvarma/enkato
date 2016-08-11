@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import moment from 'moment';
 
 import Col from 'react-bootstrap/lib/Col';
-import Row from 'react-bootstrap/lib/Row';
+import Row from 'react-bootstrap/lib/Row'; 
 import Button from 'react-bootstrap/lib/Button';
 
 import auth from 'auth';
