@@ -1,35 +1,31 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import QuestionForm from 'js/globals/QuestionAndAnswer/QuestionForm';
 import request from 'js/globals/HttpRequest';
+import QuestionForm from 'js/globals/QuestionAndAnswer/QuestionForm';
 
-class QuestionModal extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            topic: null,
-            title: this.props.askQuestionText,
-            text: '',
-            generalError: '',
-            titleError: '',
-            textError: '',
-        };
-
-        this.attachFile = this.attachFile.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-        this.postQuestion = this.postQuestion.bind(this);
-        this.onTopicChange = this.onTopicChange.bind(this);
-        this.onTitleChange = this.onTitleChange.bind(this);
-        this.onTextChange = this.onTextChange.bind(this);
-        this.close = this.close.bind(this);
+export default class QuestionModal extends Component {
+    static propTypes = {
+        showing: PropTypes.bool.isRequired,
+        topicList: PropTypes.array.isRequired,
+        videoUUID: PropTypes.string.isRequired,
+        askQuestionText: PropTypes.string.isRequired,
+        getCurrentTime: PropTypes.func,
+        pushQuestion: PropTypes.func.isRequired,
+        close: PropTypes.func.isRequired,
+        embed: PropTypes.bool,
     }
 
-    componentDidMount() {
-    }
+    state = {
+        topic: null,
+        title: this.props.askQuestionText,
+        text: '',
+        generalError: '',
+        titleError: '',
+        textError: '',
+    };
 
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -37,12 +33,11 @@ class QuestionModal extends React.Component {
         });
 
         if (!this.props.showing && nextProps.showing) {
-            this.questionTime = this.props.getCurrentTime();
+            this.questionTime = this.props.getCurrentTime ? this.props.getCurrentTime() : 0;
 
             if (!this.state.topic) { /* auto-select topic */
-                const topicsBeforeTime = this.props.topicList.filter((topic) => {
-                    return topic.time < this.questionTime;
-                });
+                const topicsBeforeTime = this.props.topicList.filter(topic => topic.time < this.questionTime);
+
                 if (topicsBeforeTime.length > 0) {
                     this.setState({
                         topic: topicsBeforeTime[topicsBeforeTime.length - 1].real_id,
@@ -52,16 +47,28 @@ class QuestionModal extends React.Component {
         }
     }
 
-    attachFile(event) {
-        console.log("FILE", event.target.files[0]);
+    onTopicChange = (e) => {
+        this.setState({ topic: e.target.value });
     }
 
-    onSubmit(event) {
-        event.preventDefault();
+    onTitleChange = (e) => {
+        this.setState({ title: e.target.value });
+    }
+
+    onTextChange = (e) => {
+        this.setState({ text: e.target.value });
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
         this.postQuestion();
     }
 
-    postQuestion() {
+    attachFile = (e) => {
+        console.log('FILE', e.target.files[0]);
+    }
+
+    postQuestion = () => {
         if (this.state.title && this.state.text) {
             const payload = {
                 video_uuid: this.props.videoUUID,
@@ -81,25 +88,12 @@ class QuestionModal extends React.Component {
                         topic: '',
                     });
                 },
-            })
+            }, this.props.embed);
         }
     }
 
-    onTopicChange(event) {
-        this.setState({ topic: event.target.value });
-    }
 
-    onTitleChange(event) {
-        // TODO: validation
-        this.setState({ title: event.target.value });
-    }
-
-    onTextChange(event) {
-        // TODO: validation
-        this.setState({ text: event.target.value });
-    }
-
-    close() {
+    close = () => {
         this.setState({
             text: '',
             title: '',
@@ -124,10 +118,11 @@ class QuestionModal extends React.Component {
                             onTextChange={this.onTextChange}
                             titleValue={this.state.title}
                             textValue={this.state.text}
-                            topicValue={this.state.topic}/>
+                            topicValue={this.state.topic}
+                        />
                     </Modal.Body>
                     <Modal.Footer>
-                        {/*<FormControl className="pull-left" type="file" onChange={this.attachFile} />*/}
+                        {/* <FormControl className="pull-left" type="file" onChange={this.attachFile} />*/}
                         <Button className="btn-secondary" onClick={this.close}>Cancel</Button>
                         <Button className="btn-primary" onClick={this.postQuestion}>Publish</Button>
                     </Modal.Footer>
@@ -136,5 +131,3 @@ class QuestionModal extends React.Component {
         );
     }
 }
-
-export default QuestionModal;

@@ -9,7 +9,9 @@ module.exports = function (videoId, onPlayerStateChange, onPlayerReady) {
     this.onPlayerReady = onPlayerReady;
 
     this.init = function(videoId) {
+        console.log(videoId);
         const loadPlayer = (YT) => {
+            console.log("loading player");
             this.player = new YT.Player('player', {
                 height: '100%',
                 width: '100%',
@@ -161,7 +163,7 @@ module.exports = function (videoId, onPlayerStateChange, onPlayerReady) {
     * Renders Video Frame
     */
     this.renderVideo = function(){
-        return(
+        return (
             <div id="player" data-vid={this.videoId}></div>
         )
     }

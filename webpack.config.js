@@ -8,7 +8,9 @@ var entrypoints = require('./entrypoints')
 module.exports = {
     context: __dirname,
 
-    entry: './assets/app.js',
+    entry: {
+        main: './assets/app.js',
+    },
 
     output: {
         path: path.resolve(pathtoassets + '/assets/bundles/'),
@@ -32,7 +34,7 @@ module.exports = {
 
   module: {
     preLoaders: [
-      //{test: /\.jsx$/, loader: "eslint-loader", exclude: /node_modules/}
+      // {test: /\.jsx$/, loader: "eslint-loader", exclude: /node_modules/}
     ],
     loaders: [
       { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel-loader', query: { presets:['es2015', 'react'], plugins: ['transform-class-properties'] }}, // to transform JSX into JS

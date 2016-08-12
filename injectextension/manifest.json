@@ -1,0 +1,23 @@
+{
+    "manifest_version": 2,
+
+    "name": "Enkato Education",
+
+    "description": "This Chrome extension allows you to enhance your Youtube watching experience so that you can learn better from educational content you currently are watching on Youtube.",
+    "version": "1.0",
+
+    "content_scripts": [
+        {
+            "matches": ["https://www.youtube.com/*"],
+            "js": ["thirdParty/jquery.js", "enkato-embed.js"]
+        }
+    ],
+
+    "permissions": [
+        "tabs",
+        "activeTab",
+        "http://www.enkato.com/",
+        "http://127.0.0.1:8000/",
+        "http://127.0.0.1:8000/static/bundles/"
+    ]
+}

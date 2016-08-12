@@ -17,7 +17,24 @@
 
     .navbar-nav {
         li {
+            cursor: pointer;
+            padding: 15px;
+            color: $blank;
+
+            &.active {
+                color: $primary-accent;
+            }
+
+            &:hover {
+                color: $primary-accent;
+            }
+
+            &:active {
+                color: $primary-accent;
+            }
+
             a {
+                padding: 0px;
                 color: $blank;
 
                 &.active {

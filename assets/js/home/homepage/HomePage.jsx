@@ -28,7 +28,6 @@ class HomePage extends Component {
 
     render() {
         var HomepageBody = "";
-        console.log(this.state.logged_in)
         if(this.state.logged_in){
             HomepageBody=<UserDashboard />
         } else {

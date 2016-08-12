@@ -200,7 +200,7 @@ export default class VideoPlayer extends Component {
                       this.props.setGetCurrentTime(() => { return Math.round(this.state.Player.getCurrentTime()) });
                 }
             }
-        })
+        }, this.props.embed)
         this.loadQuizData(v_id)
     }
 
@@ -240,7 +240,7 @@ export default class VideoPlayer extends Component {
                     console.log("sad face");
                 }
             }
-        })
+        }, this.props.embed)
     }
 
     onVideoEnd() {
@@ -287,7 +287,7 @@ export default class VideoPlayer extends Component {
                         this.setState({resultsPage: true})
                     this.setState({quizDataLoaded: true})
                 }
-            })
+            }, this.props.embed)
         }
     }
 
@@ -302,7 +302,7 @@ export default class VideoPlayer extends Component {
                     resultsPage: true,
                 });
             }
-        })
+        }, this.props.embed)
     }
 
     updateCurrentState(){
