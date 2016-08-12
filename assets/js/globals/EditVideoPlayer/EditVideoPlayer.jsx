@@ -74,6 +74,11 @@ export default class EditVideoPlayer extends Component {
             percentDone: 0,
             pollInterval: setInterval(this.updateCurrentState, pollInterval),
         });
+
+        this.props.setOnConfirmSave(() => {
+            this.syncTopics();
+        });
+
         /*$(window).on('unload', this.syncTopics);*/
         $(window).on('resize', this.setWindowSize);
     }
@@ -93,12 +98,6 @@ export default class EditVideoPlayer extends Component {
         if (this.state.videoUUID != nextProps.videoUUID) {
             this.setState({videoUUID: nextProps.videoUUID});
             this.loadDataFromServer(nextProps.videoUUID);
-        }
-
-        /* save and publish button was hit */
-        if (nextProps.readyToPublish) {
-            this.syncTopics();
-            this.props.closeAnnotationModal();
         }
     }
 
