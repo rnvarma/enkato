@@ -16,7 +16,7 @@ import QuestionDisplay from 'js/globals/QuestionAndAnswer/QuestionDisplay';
 
 export default class QuestionView extends Component {
     static propTypes = {
-        videoUUID: PropTypes.string.isRequired,
+        videoUUID: PropTypes.string,
         topicList: PropTypes.array.isRequired,
         getCurrentTime: PropTypes.func,
         loadQuestionData: PropTypes.func,

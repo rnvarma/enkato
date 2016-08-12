@@ -17,7 +17,7 @@ const QuestionResponseForm = ({ onSubmit, onTextChange, textValue }) => (
 );
 
 QuestionResponseForm.propTypes = {
-    textValue: PropTypes.string.isRequired,
+    textValue: PropTypes.string,
     onSubmit: PropTypes.func.isRequired,
     onTextChange: PropTypes.func.isRequired,
 };
