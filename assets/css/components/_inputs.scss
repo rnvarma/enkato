@@ -4,13 +4,13 @@ input {
     }
 }
 
-.question-input{
+.question-input {
     border-bottom: 2px solid $base-bg;
     font-size: $large-size;
     padding-bottom: 3px;
-    border-right:none;
-    border-left:none;
-    border-top:none;
+    border-right: none;
+    border-left: none;
+    border-top: none;
     font-weight: $bold-weight;
     width: calc(100% - 35px);
 
@@ -19,9 +19,13 @@ input {
         outline: none;
         font-weight: $base-weight;
     }
+
+    &.invalid {
+        background: #ffdcdc;
+    }
 }
 
-.choice-input{
+.choice-input {
     font-size: $large-size;
     border: none;
     width: calc(100% - 65px);
@@ -29,6 +33,10 @@ input {
     &:focus {
         outline: none;
         border-bottom: 2px solid $base-bg;
+    }
+
+    &.invalid {
+        background: #ffdcdc;
     }
 }
 
