@@ -1,7 +1,5 @@
 import 'css/main.scss';
 
-import 'react-fontawesome';
-
 import React from 'react';
 import { render } from 'react-dom';
 
@@ -50,7 +48,14 @@ function getVideoData(videoUUID, callback) {
     });
 }
 
+
 $(document).ready(() => {
+    const style = document.createElement('link');
+    style.rel = 'stylesheet';
+    style.type = 'text/css';
+    style.href = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css';
+    (document.head || document.documentElement).appendChild(style);
+
     const ytId = getYTID(`${window.location.href}`);
     if (ytId) {
         findInDatabase(ytId, ({ videoUUID }) => {

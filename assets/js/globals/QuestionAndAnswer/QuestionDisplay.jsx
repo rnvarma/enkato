@@ -212,7 +212,7 @@ export default class QuestionDisplay extends Component {
                             pushQuestionEditText={this.props.pushQuestionEditText}
                             replaceQuestion={this.props.replaceQuestion}
                             toggleEdit={this.toggleEdit}
-                            delete={this.delete}
+                            delete={this.toggleDelete}
                             embed={this.props.embed}
                         />
                     ) : (
