@@ -33,7 +33,7 @@ export default class QuestionModal extends Component {
         });
 
         if (!this.props.showing && nextProps.showing) {
-            this.questionTime = 0 || this.props.getCurrentTime();
+            this.questionTime = this.props.getCurrentTime ? this.props.getCurrentTime() : 0;
 
             if (!this.state.topic) { /* auto-select topic */
                 const topicsBeforeTime = this.props.topicList.filter(topic => topic.time < this.questionTime);

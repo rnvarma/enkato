@@ -12,3 +12,53 @@
     margin-left: 0;
     left: 0;
 }
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.askQuestionBar {
+    width: 100%;
+}
+
+.questionView {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#topicWrapper {
+    position: fixed;
+    left: -24%;
+    top: 59px;
+    width: 24%;
+    z-index: 6;
+
+    &.active {
+        left: 0;
+    }
+}
+
+body {
+    &.topiclist-active {
+        margin-left: 25%;
+    }
+}
+
+.openCloseBtn {
+    width: 100px;
+    text-align: center;
+    padding: 8px;
+    background-color: $base-dark;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    color: white;
+    font-weight: bold;
+    opacity: 0.8;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 1;
+    }
+}

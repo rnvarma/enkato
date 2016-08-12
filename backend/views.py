@@ -269,6 +269,7 @@ class VideoData(APIView):
         quizQs = video.quiz_questions.all()
         questions = map(Serializer.serialize_quiz_question, quizQs)
         return Response({
+            'status': True,
             'videoID': video.vid_id,
             'topicList': frontendTList,
             'videoData': Serializer.serialize_video(video),

@@ -1,6 +1,6 @@
 
 module.exports = function () {
-    this.player = yt.player.getPlayerByElement('player-api');
+    this.player = window.yt.player.getPlayerByElement('player-api');
     this.videoId = videoId;
 
     /*
