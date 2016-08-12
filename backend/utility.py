@@ -1,14 +1,36 @@
 from backend.models import *
+from apiclient.discovery import build
+from apiclient.errors import HttpError
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.file import Storage
+from oauth2client.tools import argparser, run_flow
+
+import httplib2
+import os
+import sys
 import urllib
 import json
 import string
 import re
+import unicodedata
 
 # API docs: https://developers.google.com/youtube/v3/docs/videos
 API_KEY = "AIzaSyCy8238lONTrmV2DdyDpBViFoqke3wuk7A"
 VIDEO_URL = "https://www.googleapis.com/youtube/v3/videos?"
 PLAYLIST_URL = "https://www.googleapis.com/youtube/v3/playlistItems?"
+YOUTUBE_READ_WRITE_SCOPE = "https://www.googleapis.com/auth/youtube"
+YOUTUBE_API_SERVICE_NAME = "youtube"
+YOUTUBE_API_VERSION = "v3"
 
+def youtubeSearch(channelId):
+  	youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
+    developerKey=API_KEY)
+	
+	searchResponse = youtube.channels().list(
+		part="snippet",
+		id = channelId,
+	).execute()
+  	return searchResponse
 
 def capitalize(s):
 	if not len(s): return ""
@@ -270,6 +292,15 @@ def parseTopicUploadString(s):
 		topics.append({'time': time, 'name': name})
 	return topics
 
-
-
-
+def youtubeData():
+	params = {
+		'id': 'y78GuOxNz84',
+		'part': "snippet",
+		'key': API_KEY
+	}
+	data = getDataFromURL(VIDEO_URL, params)
+	items = data['items'][0]
+	snippet = items['snippet']
+	channelId = snippet['channelId'].encode('ascii', 'ignore')
+	channelSearches = youtubeSearch(channelId)
+	return channelSearches

@@ -13,6 +13,22 @@ import Alert from 'react-bootstrap/lib/Alert';
 
 import auth from 'auth';
 
+<<<<<<< HEAD
+class LoginForm extends Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            username: '',
+            password: '',
+            errorMsg: '',
+            errorField: '',
+        }
+        
+        this.onUserNameChange = this.onUserNameChange.bind(this)
+        this.onPasswordChange = this.onPasswordChange.bind(this)
+        this.onFormSubmit = this.onFormSubmit.bind(this)
+=======
 export default class LoginForm extends Component {
     static propTypes = {
         callbackFn: PropTypes.func.isRequired,
@@ -25,6 +41,7 @@ export default class LoginForm extends Component {
         password: '',
         errorMsg: '',
         errorField: '',
+>>>>>>> master
     }
 
     onUserNameChange = (e) => {
@@ -40,8 +57,11 @@ export default class LoginForm extends Component {
         auth.login(this.state.username, this.state.password, (success) => {
             if (success) {
                 if (this.props.callbackFn) {
-                    this.props.callbackFn();
-                    this.props.closeRegisterModal();
+                    this.props.callbackFn()
+                    this.props.closeRegisterModal()
+                } 
+                else if(this.props.navBarItem){
+                    this.props.closeLoginModal();
                 } else {
                     window.location.href = '/';
                 }

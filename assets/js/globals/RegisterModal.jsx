@@ -7,6 +7,18 @@ import RegistrationForm from 'js/authentication/register/RegistrationForm';
 import LoginForm from 'js/authentication/login/LoginForm';
 
 import auth from 'auth';
+import request from 'js/globals/HttpRequest';
+
+class RegisterModal extends Component {
+    render() {
+        
+        if(!auth.loggedIn()){
+            return (
+                <li className="createSeriesModal">
+                    <Modal 
+                        show={this.props.registerModalOpen} 
+                        onHide={this.props.closeRegisterModal}>
+                      <Modal.Header closeButton>
 
 const RegisterModal = ({ registerModalOpen, closeRegisterModal, callbackFn, embed }) => {
     if (!auth.loggedIn()) {
