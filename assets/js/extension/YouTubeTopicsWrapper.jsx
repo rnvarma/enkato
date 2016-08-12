@@ -56,7 +56,7 @@ export default class YouTubeTopicsWrapper extends Component {
 
 
     render = () => {
-        const openCloseText = this.state.topicListOpen ? "Close Topics" : "Open Topics"
+        const openCloseText = this.state.topicListOpen ? "X" : "Open Topics"
         return (
             <div className="youtubeTopicsWrapper">
                 <div className="openCloseBtn" onClick={this.clickOpenCloseBtn}>{openCloseText}</div>
