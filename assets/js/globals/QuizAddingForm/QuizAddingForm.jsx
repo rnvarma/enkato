@@ -12,10 +12,10 @@ import ScrollButtonList from 'js/globals/QuizAddingForm/ScrollButtonList';
 export default class QuizAddingForm extends Component {
     static propTypes = {
         videoUUID: PropTypes.string.isRequired,
-        readyToPublish: PropTypes.bool,
         setUnsaved: PropTypes.func.isRequired,
-        cancelPublish: PropTypes.func,
+        cancelSave: PropTypes.func.isRequired,
         closeAnnotationModal: PropTypes.func,
+        setOnConfirmSave: PropTypes.func.isRequired,
     }
 
     /**
@@ -38,6 +38,17 @@ export default class QuizAddingForm extends Component {
 
     componentDidMount() {
         this.loadDataFromServer(this.props.videoUUID);
+
+        this.props.setOnConfirmSave(() => {
+            if (this.validateData()) {
+                this.saveDataToServer();
+                return true;
+            }
+
+            this.props.cancelSave();
+            return false;
+        });
+
         /* $(window).on('unload', this.saveDataToServer); TODO: unloadbefore */
     }
 
@@ -45,19 +56,6 @@ export default class QuizAddingForm extends Component {
         if (this.props.videoUUID !== nextProps.videoUUID) {
             this.loadDataFromServer(nextProps.videoUUID);
         }
-
-        if (nextProps.readyToPublish) {
-            if (this.validateData()) {
-                this.saveDataToServer();
-                this.props.closeAnnotationModal();
-            } else {
-                this.props.cancelPublish();
-            }
-        }
-    }
-
-    componentWillUnmount() {
-        /* $(window).off('unload'); */
     }
 
     setChoiceList = (choiceList, questionNumber) => {
@@ -100,7 +98,7 @@ export default class QuizAddingForm extends Component {
 
     /**
      * determines whether the quiz is valid to submit
-     * @return true if the quiz is valid, false if invalid
+     * @return {Boolean} true if the quiz is valid, false if invalid
      */
     validateData = () => {
         let questionIndex = 0;

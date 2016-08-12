@@ -36,10 +36,7 @@ const MCChoiceList = ({ choiceList, handleChoiceTextChange, addNewChoice,
 };
 
 MCChoiceList.propTypes = {
-    choiceList: PropTypes.arrayOf(PropTypes.shape({
-        length: PropTypes.number,
-        map: PropTypes.func,
-    })).isRequired,
+    choiceList: PropTypes.array.isRequired,
     invalidChoice: PropTypes.shape({
         id: PropTypes.number.isRequired,
     }),

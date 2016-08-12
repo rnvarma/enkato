@@ -77,6 +77,7 @@ export default class EditVideoPlayer extends Component {
 
         this.props.setOnConfirmSave(() => {
             this.syncTopics();
+            return true;
         });
 
         /*$(window).on('unload', this.syncTopics);*/

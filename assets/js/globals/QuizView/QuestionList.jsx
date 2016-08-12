@@ -1,21 +1,24 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 
 import QuestionNode from 'js/globals/QuizView/QuestionNode';
 
-export default class QuestionList extends Component {
-    render() {
-        var QuestionNodes = this.props.questions.map(function(question, index){
-            
-            return (
-                <QuestionNode
-                    key={question.id}
-                    question={question}/>
-            )
-        }.bind(this))
-        return(
-            <div className="quizQuestionList">
-                {QuestionNodes}
-            </div>
-        )
-    }
-}
+const QuestionList = ({ questions }) => {
+    const nodes = questions.map(question => (
+        <QuestionNode
+            key={question.id}
+            question={question}
+        />
+    ));
+
+    return (
+        <div className="quizQuestionList">
+            {nodes}
+        </div>
+    );
+};
+
+QuestionList.propTypes = {
+    questions: PropTypes.array.isRequired,
+};
+
+export default QuestionList;

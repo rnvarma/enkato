@@ -384,6 +384,7 @@ export default class QuestionView extends Component {
                             filter={this.state.filter}
                             filterAnswered={this.state.filterAnswered}
                             filterUnanswered={this.state.filterUnanswered}
+                            topicList={this.props.topicList}                            
                             setFilter={this.setFilter}
                             toggleAnsweredFilter={this.toggleAnsweredFilter}
                             toggleUnansweredFilter={this.toggleUnansweredFilter}

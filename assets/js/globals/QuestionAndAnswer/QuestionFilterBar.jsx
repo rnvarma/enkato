@@ -14,6 +14,7 @@ export default class QuestionFilterBar extends Component {
         setFilter: PropTypes.func.isRequired,
         filterAnswered: PropTypes.bool.isRequired,
         filterUnanswered: PropTypes.bool.isRequired,
+        topicList: PropTypes.array.isRequired,
         toggleAnsweredFilter: PropTypes.func.isRequired,
         toggleUnansweredFilter: PropTypes.func.isRequired,
     }
@@ -56,16 +57,16 @@ export default class QuestionFilterBar extends Component {
             <Row className="questionFilterBar">
                 {viewAll}
                 <div
-                    className={this.props.filterAnswered ? 'selected btn-plain' : 'btn-plain'}
+                    className={`${this.props.filterAnswered ? 'selected ' : ''}btn-plain`}
                     onClick={this.props.toggleAnsweredFilter}
                 >
                     Resolved
                 </div>
                 <div
-                    className={this.props.filterUnanswered ? 'selected btn-plain' : 'btn-plain'}
+                    className={`${this.props.filterUnanswered ? 'selected ' : ''}btn-plain`}
                     onClick={this.props.toggleUnansweredFilter}
                 >
-                Unresolved
+                    Unresolved
                 </div>
                 <div className="filterQuery">
                     <InputGroup>
