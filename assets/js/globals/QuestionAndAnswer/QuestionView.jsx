@@ -31,6 +31,7 @@ export default class QuestionView extends Component {
         filter: '',
         filterAnswered: false,
         filterUnanswered: false,
+        filterTopic: null,
         addingQuestion: false,
         askQuestionText: '',
     };
@@ -72,16 +73,25 @@ export default class QuestionView extends Component {
         });
     }
 
-    setFilter = (filter, reset = false) => {
+    setFilter = (filter, reset = false, filterTopic = null) => {
         if (reset) {
             this.setState({
                 filter,
                 filterAnswered: false,
                 filterUnanswered: false,
+                filterTopic: null,
             }, this.filterQuestions);
         } else {
-            this.setState({ filter }, this.filterQuestions);
+            this.setState({ filter, filterTopic }, this.filterQuestions);
         }
+    }
+
+    onTopicChange = (e) => {
+        let topicId = parseInt(e.target.value, 10);
+        if (isNaN(topicId)) {
+            topicId = null;
+        }
+        this.setFilter(this.state.filter, false, topicId);
     }
 
     getQuestion = questionId =>
@@ -139,6 +149,13 @@ export default class QuestionView extends Component {
             }
             if (this.state.filterUnanswered) {
                 valid = valid && !question.resolved;
+            }
+            if (this.state.filterTopic !== null) {
+                if (this.state.filterTopic === 0) { /* general topic */
+                    valid = valid && question.topic === null;
+                } else { /* on of the specific ones */
+                    valid = valid && question.topic !== null && question.topic.id === this.state.filterTopic;
+                }
             }
 
             return valid;
@@ -384,7 +401,9 @@ export default class QuestionView extends Component {
                             filter={this.state.filter}
                             filterAnswered={this.state.filterAnswered}
                             filterUnanswered={this.state.filterUnanswered}
-                            topicList={this.props.topicList}                            
+                            filterTopic={this.state.filterTopic}
+                            topicList={this.props.topicList}
+                            onTopicChange={this.onTopicChange}
                             setFilter={this.setFilter}
                             toggleAnsweredFilter={this.toggleAnsweredFilter}
                             toggleUnansweredFilter={this.toggleUnansweredFilter}

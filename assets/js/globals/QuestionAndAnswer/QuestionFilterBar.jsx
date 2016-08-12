@@ -14,7 +14,9 @@ export default class QuestionFilterBar extends Component {
         setFilter: PropTypes.func.isRequired,
         filterAnswered: PropTypes.bool.isRequired,
         filterUnanswered: PropTypes.bool.isRequired,
+        filterTopic: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
         topicList: PropTypes.array.isRequired,
+        onTopicChange: PropTypes.func.isRequired,
         toggleAnsweredFilter: PropTypes.func.isRequired,
         toggleUnansweredFilter: PropTypes.func.isRequired,
     }
@@ -49,12 +51,15 @@ export default class QuestionFilterBar extends Component {
                     className={!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected btn-plain' : 'btn-plain'}
                     onClick={this.resetFilter}
                 >
-                View All Series
+                    View All Series
                 </div>
             );
         }
+
+        const options = this.props.topicList.map(topic => <option key={topic.real_id} value={topic.real_id}>{topic.name}</option>);
+
         return (
-            <Row className="questionFilterBar">
+            <Row className="questionFilterBar form-inline">
                 {viewAll}
                 <div
                     className={`${this.props.filterAnswered ? 'selected ' : ''}btn-plain`}
@@ -68,6 +73,11 @@ export default class QuestionFilterBar extends Component {
                 >
                     Unresolved
                 </div>
+                <FormControl onChange={this.props.onTopicChange} componentClass="select">
+                    <option>All Topics</option>
+                    <option value="0">General</option>
+                    {options}
+                </FormControl>
                 <div className="filterQuery">
                     <InputGroup>
                         <FormControl
