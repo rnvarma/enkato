@@ -76,7 +76,7 @@ class App extends Component {
         this.setState({
             loginModalOpen:false,
         })
-        if(window.location.pathname == '/')
+        if(window.location.pathname === '/')
             window.location.reload();
     }
 
@@ -97,7 +97,7 @@ class App extends Component {
         this.setState({
             signUpModalOpen:false,
         })
-        if(window.location.pathname == '/')
+        if(window.location.pathname === '/')
             window.location.reload();
     }
 
