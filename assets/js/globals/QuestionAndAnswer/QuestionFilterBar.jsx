@@ -19,6 +19,7 @@ export default class QuestionFilterBar extends Component {
         onTopicChange: PropTypes.func.isRequired,
         toggleAnsweredFilter: PropTypes.func.isRequired,
         toggleUnansweredFilter: PropTypes.func.isRequired,
+        makeQuestionFromFilter: PropTypes.func.isRequired,
     }
 
     setFilterFromQuery = (event) => {
@@ -87,7 +88,7 @@ export default class QuestionFilterBar extends Component {
                             onChange={this.setFilterFromQuery}
                             value={this.props.filter}
                         />
-                        <InputGroup.Button><Button><FontAwesome name="search searchIcon" /></Button></InputGroup.Button>
+                        <InputGroup.Button><Button onClick={this.props.makeQuestionFromFilter}>Ask</Button></InputGroup.Button>
                     </InputGroup>
                 </div>
             </Row>

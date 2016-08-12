@@ -351,6 +351,12 @@ export default class QuestionView extends Component {
         }
     }
 
+    makeQuestionFromFilter = () => {
+        this.setState({
+            askQuestionText: this.state.filter,
+        }, this.addQuestion);
+    }
+
     render() {
         let askModal;
         let askQuestionBar;
@@ -407,6 +413,7 @@ export default class QuestionView extends Component {
                             setFilter={this.setFilter}
                             toggleAnsweredFilter={this.toggleAnsweredFilter}
                             toggleUnansweredFilter={this.toggleUnansweredFilter}
+                            makeQuestionFromFilter={this.makeQuestionFromFilter}
                         />
                         <Row className="qaContent">
                             <QuestionList
