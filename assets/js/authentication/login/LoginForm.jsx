@@ -13,7 +13,6 @@ import Alert from 'react-bootstrap/lib/Alert';
 
 import auth from 'auth';
 
-<<<<<<< HEAD
 class LoginForm extends Component {
     constructor(props) {
         super(props)
