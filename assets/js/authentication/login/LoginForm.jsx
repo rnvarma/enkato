@@ -13,20 +13,6 @@ import Alert from 'react-bootstrap/lib/Alert';
 
 import auth from 'auth';
 
-class LoginForm extends Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            username: '',
-            password: '',
-            errorMsg: '',
-            errorField: '',
-        }
-        
-        this.onUserNameChange = this.onUserNameChange.bind(this)
-        this.onPasswordChange = this.onPasswordChange.bind(this)
-        this.onFormSubmit = this.onFormSubmit.bind(this)
 export default class LoginForm extends Component {
     static propTypes = {
         callbackFn: PropTypes.func.isRequired,
