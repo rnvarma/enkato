@@ -18,20 +18,6 @@ function getYTID(url) {
     return (match && match[7].length === 11) ? match[7] : false;
 }
 
-function resizePlayer() {
-    const contentWidth = $('#content').width();
-    const playerWidth = $('#player-api').width();
-    const leftMargin = Number($('#content').css('margin-left').replace('px', ''));
-    const playerLeft = (contentWidth - playerWidth) + leftMargin;
-    $('#player-api').css('left', playerLeft);
-}
-
-function putVideoOnPage(videoUUID, seriesUUID) {
-    // $('#page').addClass('watch-wide watch-stage-mode');
-    // resizePlayer();
-    // window.onresize = resizePlayer;
-}
-
 function findInDatabase(ytId, callback) {
     $.ajax({
         url: `http://127.0.0.1:8000/1/ytvalidatevideo/${ytId}`,
@@ -67,20 +53,19 @@ function getVideoData(videoUUID, callback) {
 $(document).ready(() => {
     const ytId = getYTID(`${window.location.href}`);
     if (ytId) {
-        findInDatabase(ytId, (data) => {
-            const qaBox = document.createElement('div');
-            qaBox.setAttribute('id', 'qaWrapper');
-            $(qaBox).insertBefore('#watch-discussion');
+        findInDatabase(ytId, ({ videoUUID }) => {
+            getVideoData(videoUUID, (data) => {
+                const qaBox = document.createElement('div');
+                qaBox.setAttribute('id', 'qaWrapper');
+                $(qaBox).insertBefore('#watch-discussion');
 
-            render((
-                <YouTubeQuestionWrapper
-                    videoUUID={data.videoUUID}
-                    topicList={[]}
-                />
-            ), qaBox);
+                render((
+                    <YouTubeQuestionWrapper
+                        videoUUID={videoUUID}
+                        topicList={data.topicList}
+                    />
+                ), qaBox);
 
-            getVideoData(data.videoUUID, (data) => {
-                console.log('wooo');
                 const topicBox = document.createElement('div');
                 topicBox.setAttribute('id', 'topicWrapper');
                 $(topicBox).insertBefore('#qaWrapper');
