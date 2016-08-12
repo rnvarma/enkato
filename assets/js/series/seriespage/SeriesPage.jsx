@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Col from 'react-bootstrap/lib/Col';
-import Row from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
 
 import SeriesSideBar from 'js/series/seriespage/SeriesSideBar';
 import SeriesMainArea from 'js/series/seriespage/SeriesMainArea';
@@ -11,8 +11,8 @@ import request from 'js/globals/HttpRequest';
 
 
 function changeVideoListPrivacy(videos, videoUUID, is_private) {
-    for (var i = videos.length - 1; i >= 0; i--) {
-        if(videos[i].uuid == videoUUID){
+    for (let i = videos.length - 1; i >= 0; i--) {
+        if (videos[i].uuid == videoUUID) {
             videos[i].is_private = is_private;
         }
     }
@@ -21,7 +21,7 @@ function changeVideoListPrivacy(videos, videoUUID, is_private) {
 
 class SeriesPage extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             seriesUUID: this.props.params.seriesUUID,
@@ -32,7 +32,7 @@ class SeriesPage extends Component {
             creator: {},
             num_videos: 0,
             total_len: 0,
-            urls: "",
+            urls: '',
             show: false,
             annotateMode: false,
             quizMode: false,
@@ -57,7 +57,6 @@ class SeriesPage extends Component {
         this.makeVideoPrivate = this.makeVideoPrivate.bind(this);
         this.makeVideoPublic = this.makeVideoPublic.bind(this);
         this.setIsPrivate = this.setIsPrivate.bind(this);
-
     }
 
     componentDidMount() {
@@ -68,20 +67,20 @@ class SeriesPage extends Component {
         request.get(`/1/s/${seriesUUID || this.state.seriesUUID}`, {
             cache: true,
             success: (data) => {
-                var stateData = this.state;
+                const stateData = this.state;
                 /* update state.data */
                 $.extend(true, stateData, data);
                 this.setState(stateData);
             },
-        })
+        });
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.params.seriesUUID != this.state.seriesUUID) {
             this.loadPageData(nextProps.params.seriesUUID);
             this.setState({
-                seriesUUID: nextProps.params.seriesUUID
-            })
+                seriesUUID: nextProps.params.seriesUUID,
+            });
         }
     }
 
@@ -89,27 +88,27 @@ class SeriesPage extends Component {
         request.post(`/s/${this.state.seriesUUID}/${prefix}subscribe`, {
             success: (data) => {
                 if (data.status) {
-                    this.setState({is_subscribed: is_subscribed})
+                    this.setState({ is_subscribed });
                 } else {
-                    console.log("sad face");
+                    console.log('sad face');
                 }
             },
         });
     }
 
     setIsPrivate(is_private) {
-        let data = {
-            is_private: is_private,
+        const data = {
+            is_private,
             seriesUUID: this.state.seriesUUID,
-        }
+        };
 
         request.post('/setseriesprivacy', {
-            data: data,
+            data,
             success: (data) => {
                 if (data.status) {
-                    this.setState({is_private: data.is_private})
+                    this.setState({ is_private: data.is_private });
                 } else {
-                    console.log("sad face");
+                    console.log('sad face');
                 }
             },
         });
@@ -117,20 +116,20 @@ class SeriesPage extends Component {
 
     onSubscribe() {
         if (auth.loggedIn()) {
-            this.subscribeOrUnsubscribe(true,'')
+            this.subscribeOrUnsubscribe(true, '');
         } else {
             this.props.openRegisterModal(() => {
-                this.subscribeOrUnsubscribe(true,'')
+                this.subscribeOrUnsubscribe(true, '');
             });
         }
     }
 
     onUnsubscribe() {
         if (auth.loggedIn()) {
-            this.subscribeOrUnsubscribe(false,'un')
+            this.subscribeOrUnsubscribe(false, 'un');
         } else {
             this.props.openRegisterModal(() => {
-                this.subscribeOrUnsubscribe(false,'un')
+                this.subscribeOrUnsubscribe(false, 'un');
             });
         }
     }
@@ -138,7 +137,7 @@ class SeriesPage extends Component {
     openModal(annotating) {
         this.setState({
             show: true,
-            annotateMode: annotating
+            annotateMode: annotating,
         });
     }
 
@@ -146,91 +145,91 @@ class SeriesPage extends Component {
         this.setState({
             show: false,
             annotateMode: false,
-            quizMode: false
+            quizMode: false,
         });
         this.loadPageData();
     }
 
     onURLImport(event) {
         this.setState({
-            urls: event.target.value
+            urls: event.target.value,
         });
     }
 
     setUploadMode() {
         this.setState({
-            annotateMode: false
+            annotateMode: false,
         });
     }
 
     setAnnotateMode() {
         this.setState({
-            annotateMode: true
+            annotateMode: true,
         });
     }
 
     setTopicMode() {
         this.setState({
-            quizMode: false
+            quizMode: false,
         });
     }
 
     setQuizMode() {
         this.setState({
-            quizMode: true
+            quizMode: true,
         });
     }
 
     setUrls(newUrls) {
         this.setState({
-            urls: newUrls
+            urls: newUrls,
         });
     }
 
     makeVideoPublic(videoUUID) {
-        var data = {
-            videoUUID: videoUUID,
-            is_private:false,
-        }
+        const data = {
+            videoUUID,
+            is_private: false,
+        };
 
         request.post('/changePrivacy', {
-            data:data,
+            data,
             success: (data) => {
                 if (data.status) {
-                    var tempVideos = this.state.videos;
+                    const tempVideos = this.state.videos;
                     this.setState({
-                        videos: changeVideoListPrivacy(tempVideos, videoUUID, false)
-                    })
+                        videos: changeVideoListPrivacy(tempVideos, videoUUID, false),
+                    });
                 } else {
-                    console.log("sad face");
+                    console.log('sad face');
                 }
             },
-        })
+        });
     }
 
     makeVideoPrivate(videoUUID) {
-        var data = {
-            videoUUID: videoUUID,
-            is_private:true,
-        }
+        const data = {
+            videoUUID,
+            is_private: true,
+        };
 
         request.post('/changePrivacy', {
-            data:data,
+            data,
             success: (data) => {
                 if (data.status) {
-                    var tempVideos = this.state.videos;
+                    const tempVideos = this.state.videos;
                     this.setState({
-                        videos: changeVideoListPrivacy(tempVideos, videoUUID, true)
-                    })
+                        videos: changeVideoListPrivacy(tempVideos, videoUUID, true),
+                    });
                 } else {
-                    console.log("sad face");
+                    console.log('sad face');
                 }
             },
-        })
+        });
     }
 
     render() {
-        if(this.state.hide_series) {
+        if (this.state.hide_series) {
             return (
                 <div className="seriesPage">
                     <Col md={12}>
@@ -253,15 +252,16 @@ class SeriesPage extends Component {
                     setUploadMode={this.setUploadMode}
                     setUrls={this.setUrls}
                     onURLImport={this.onURLImport}
-                    reloadPageData={this.loadPageData}/>
-            )
+                    reloadPageData={this.loadPageData}
+                />
+            );
         } else {
-            var uploadModal = ""
+            var uploadModal = '';
         }
         return (
             <div className="seriesPage">
                 <Row>
-                    <Col style={{display:"none"}}>
+                    <Col style={{ display: 'none' }}>
                         <SeriesSideBar />
                     </Col>
                     <Col md={12}>
@@ -273,7 +273,8 @@ class SeriesPage extends Component {
                             makeVideoPrivate={this.makeVideoPrivate}
                             setIsPrivate={this.setIsPrivate}
                             loadPageData={this.loadPageData}
-                            {...this.state}/>
+                            {...this.state}
+                        />
                     </Col>
                 </Row>
                 {uploadModal}

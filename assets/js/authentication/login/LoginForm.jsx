@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react';
 
-import FontAwesome from 'react-fontawesome'
+import FontAwesome from 'react-fontawesome';
 
 import Form from 'react-bootstrap/lib/Form';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
@@ -13,6 +13,7 @@ import Alert from 'react-bootstrap/lib/Alert';
 
 import auth from 'auth';
 
+<<<<<<< HEAD
 class LoginForm extends Component {
     constructor(props) {
         super(props)
@@ -27,17 +28,31 @@ class LoginForm extends Component {
         this.onUserNameChange = this.onUserNameChange.bind(this)
         this.onPasswordChange = this.onPasswordChange.bind(this)
         this.onFormSubmit = this.onFormSubmit.bind(this)
+=======
+export default class LoginForm extends Component {
+    static propTypes = {
+        callbackFn: PropTypes.func.isRequired,
+        closeRegisterModal: PropTypes.func.isRequired,
+        embed: PropTypes.bool,
     }
 
-    onUserNameChange(e) {
-        this.setState({username: e.target.value})
+    state = {
+        username: '',
+        password: '',
+        errorMsg: '',
+        errorField: '',
+>>>>>>> master
     }
 
-    onPasswordChange(e) {
-        this.setState({password: e.target.value})
+    onUserNameChange = (e) => {
+        this.setState({ username: e.target.value });
     }
 
-    onFormSubmit(e) {
+    onPasswordChange = (e) => {
+        this.setState({ password: e.target.value });
+    }
+
+    onFormSubmit = (e) => {
         e.preventDefault();
         auth.login(this.state.username, this.state.password, (success) => {
             if (success) {
@@ -47,42 +62,41 @@ class LoginForm extends Component {
                 } 
                 else if(this.props.navBarItem){
                     this.props.closeLoginModal();
-                }
-                else {
-                    window.location.href = "/";
+                } else {
+                    window.location.href = '/';
                 }
             }
-        }, (errorMsg) => {
+        }, (error) => {
             this.setState({
-                errorMsg: errorMsg
-            })
-        })
+                errorMsg: error,
+            });
+        }, this.props.embed);
     }
 
     render() {
-        var disabled = (!this.state.username
-                        || !this.state.password)
-        var errorMsg;
+        const disabled = !this.state.username || !this.state.password;
+
+        let errorMsg;
         if (this.state.errorMsg) {
             errorMsg = (
                 <Alert bsStyle="danger">
                     {this.state.errorMsg}
                 </Alert>
-            )
+            );
         }
+
         return (
             <Form horizontal onSubmit={this.onFormSubmit}>
                 {errorMsg}
-                <FormGroup
-                    controlId="user-name">
+                <FormGroup controlId="user-name">
                     <Col componentClass={ControlLabel} sm={3}>
-                        User Name
+                        Username
                     </Col>
                     <Col sm={9}>
                         <InputGroup>
                             <FormControl onChange={this.onUserNameChange} type="text" placeholder="User Name" />
                             <InputGroup.Addon>
-                                <FontAwesome name='user' />
+                                <FontAwesome name={'user'} />
                             </InputGroup.Addon>
                         </InputGroup>
                     </Col>
@@ -95,7 +109,7 @@ class LoginForm extends Component {
                         <InputGroup>
                             <FormControl onChange={this.onPasswordChange} type="password" placeholder="Password" />
                             <InputGroup.Addon>
-                                <FontAwesome name='lock' />
+                                <FontAwesome name={'lock'} />
                             </InputGroup.Addon>
                         </InputGroup>
                     </Col>
@@ -109,8 +123,6 @@ class LoginForm extends Component {
                     </Col>
                 </FormGroup>
             </Form>
-        )
+        );
     }
 }
-
-export default LoginForm;

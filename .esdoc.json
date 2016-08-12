@@ -1,0 +1,5 @@
+{
+  "source": "./assets/js",
+  "destination": "./dist/esdoc",
+  "includes": ["\\.(js|jsx|es6)$"]
+}

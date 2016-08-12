@@ -1,0 +1,28 @@
+{
+    "bootstrapVersion": 3,
+
+    "styleLoaders": ["style", "css", "sass"],
+
+    "styles": {
+
+        "mixins": true,
+
+        //"normalize": false,
+
+        // core
+        "scaffolding": true,
+        "grid": true,
+        "tables": true,
+        "forms": true,
+        "buttons": true,
+
+        // components
+        "button-groups": true,
+        "input-groups": true,
+        "progress-bars": true,
+
+        // components with js
+        "modals": true,
+        "popovers": true
+    }
+}

@@ -1,51 +1,45 @@
-import getCookie from 'js/globals/GetCookie'
+import request from 'js/globals/HttpRequest';
 
 module.exports = {
-    login: function(username, pass, cb, failCB) {
+    login (username, pass, cb, failCB, embed) {
         if (localStorage.token) {
-            if (cb) cb(true)
-            return
+            if (cb) cb(true);
+            return;
         }
         this.getToken(username, pass, (res) => {
             if (res.authenticated) {
-                localStorage.token = res.token
-                if (cb) cb(true)
+                localStorage.token = res.token;
+                if (cb) cb(true);
             } else {
-                if (cb) cb(false)
+                if (cb) cb(false);
             }
-        }, failCB)
+        }, failCB, embed);
     },
 
-    logout: function(cb) {
-        delete localStorage.token
-        if (cb) cb()
+    logout (cb) {
+        delete localStorage.token;
+        if (cb) cb();
     },
 
-    loggedIn: function() {
-        return !!localStorage.token
+    loggedIn () {
+        return !!localStorage.token;
     },
 
-    getToken: function(username, pass, cb, failCB) {
-        $.ajax({
-            type: 'POST',
-            url: '/obtain-auth-token/',
+    getToken (username, pass, cb, failCB, embed) {
+        request.post('/obtain-auth-token/', {
             data: {
-                username: username,
-                password: pass
+                username,
+                password: pass,
             },
-            beforeSend: function (xhr) {
-                xhr.withCredentials = true;
-                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-            },
-            success: function(res){
+            success(res) {
                 cb({
                     authenticated: true,
-                    token: res.token
-                })
+                    token: res.token,
+                });
             },
-            error: function(res) {
-                failCB(res.responseJSON.non_field_errors)
-            }
-        })
-    }, 
-}
+            error(res) {
+                failCB(res.responseJSON.non_field_errors);                
+            },
+        }, embed);
+    },
+};

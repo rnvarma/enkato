@@ -24,7 +24,8 @@
   ],
 
   "web_accessible_resources": [
-    "images/main.gif"
+    "images/whitelogo.png",
+    "images/enkato.png"
   ],
 
   "permissions": [

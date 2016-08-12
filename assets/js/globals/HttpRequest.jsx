@@ -1,9 +1,9 @@
 import getCookie from 'js/globals/GetCookie';
 
 module.exports = {
-    get: function(url, opt) {
+    get: function(url, opt, embed) {
         $.ajax({
-            url: url,
+            url: `${embed ? 'http://127.0.0.1:8000' : ''}${url}`,
             dataType: 'json',
             cache: opt.cache || false,
             headers: localStorage.token ? {
@@ -18,10 +18,10 @@ module.exports = {
             }
         });
     },
-    post: function(url, opt) {
+    post: function(url, opt, embed) {
         $.ajax({
             type: 'POST',
-            url: url,
+            url: `${embed ? 'http://127.0.0.1:8000' : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
                 'Authorization': 'Token ' + localStorage.token
@@ -39,10 +39,10 @@ module.exports = {
             }
         })
     },
-    patch: function(url, opt) {
+    patch: function(url, opt, embed) {
         $.ajax({
             type: 'PATCH',
-            url: url,
+            url: `${embed ? 'http://127.0.0.1:8000' : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
                 'Authorization': 'Token ' + localStorage.token
@@ -60,10 +60,10 @@ module.exports = {
             }
         })
     },
-    delete: function(url, opt) {
+    delete: function(url, opt, embed) {
         $.ajax({
             type: 'DELETE',
-            url: url,
+            url: `${embed ? 'http://127.0.0.1:8000' : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
                 'Authorization': 'Token ' + localStorage.token
@@ -81,10 +81,10 @@ module.exports = {
             }
         })
     },
-    patch: function(url, opt) {
+    patch: function(url, opt, embed) {
         $.ajax({
             type: 'PATCH',
-            url: url,
+            url: `${embed ? 'http://127.0.0.1:8000' : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
                 'Authorization': 'Token ' + localStorage.token

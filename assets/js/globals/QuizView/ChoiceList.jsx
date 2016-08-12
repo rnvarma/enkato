@@ -1,51 +1,56 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
 import ChoiceNode from 'js/globals/QuizView/ChoiceNode';
 
-export default class ChoiceList extends Component {
-    render() {
-        const { reviewing } = this.props;
+const ChoiceList = ({ reviewing, choiceList, currentQuestionResults,
+    selectedAnswer, selectChoice }) => {
+    let correctness = '';
 
-        var correctness = ""
-
-        let isSelected;
-        const ChoiceNodes = this.props.choiceList.map((choice, index) => {
-            isSelected = false;
-            correctness = ""
-            if (reviewing) {
-                if (this.props.currentQuestionResults.studentAnswer === index
-                    && !this.props.currentQuestionResults.isCorrect) {
-                    correctness="incorrect"
-                    isSelected = true;
-                } else if (this.props.currentQuestionResults.correctAnswer === index) {
-                    correctness="correct"
-                    isSelected = true;
-                }
-            } else {
-                if (index === this.props.selectedAnswer) {
-                    isSelected = true;
-                }
+    let isSelected;
+    const ChoiceNodes = choiceList.map((choice, index) => {
+        isSelected = false;
+        correctness = '';
+        if (reviewing) {
+            if (currentQuestionResults.studentAnswer === index
+                && !currentQuestionResults.isCorrect) {
+                correctness = 'incorrect';
+                isSelected = true;
+            } else if (currentQuestionResults.correctAnswer === index) {
+                correctness = 'correct';
+                isSelected = true;
             }
-
-            return (
-                <ChoiceNode
-                    key={index}
-                    index={index}
-                    choiceText={choice.text}
-                    selectChoice={this.props.selectChoice}
-                    isSelected={isSelected}
-                    correctness={correctness}/>
-            );
-        });
+        } else if (index === selectedAnswer) {
+            isSelected = true;
+        }
 
         return (
-            <div className="choiceList">
-                {ChoiceNodes}
-            </div>
+            <ChoiceNode
+                key={index}
+                index={index}
+                choiceText={choice.text}
+                selectChoice={selectChoice}
+                isSelected={isSelected}
+                correctness={correctness}
+            />
         );
-    }
-}
+    });
+
+    return (
+        <div className="choiceList">
+            {ChoiceNodes}
+        </div>
+    );
+};
 
 ChoiceList.propTypes = {
     reviewing: PropTypes.bool.isRequired,
+    choiceList: PropTypes.array,
+    selectChoice: PropTypes.func,
+    currentQuestionResults: PropTypes.shape({
+        isCorrect: PropTypes.bool,
+        correctAnswer: PropTypes.number,
+    }),
+    selectedAnswer: PropTypes.number,
 };
+
+export default ChoiceList;

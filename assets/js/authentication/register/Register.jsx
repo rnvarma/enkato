@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
-import { browserHistory } from 'react-router';
+import React, { Component } from 'react';
 
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 
 import RegistrationForm from 'js/authentication/register/RegistrationForm';
-import getCookie from 'js/globals/GetCookie'
 
 class Register extends Component {
     render() {
@@ -16,7 +14,7 @@ class Register extends Component {
                     <RegistrationForm />
                 </Col>
             </Row>
-        )
+        );
     }
 }
 

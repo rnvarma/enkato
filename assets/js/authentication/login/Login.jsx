@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
 
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
 
-import LoginForm from 'js/authentication/login/LoginForm'
+import LoginForm from 'js/authentication/login/LoginForm';
 
 class Login extends Component {
     render() {
@@ -15,7 +14,7 @@ class Login extends Component {
                     <LoginForm />
                 </Col>
             </Row>
-        )
+        );
     }
 }
 

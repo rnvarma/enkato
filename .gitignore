@@ -2,11 +2,17 @@
 *.pyc
 pathtoassets.js
 node_modules/*
+dist/*
 assets/bundles/*
 assets/prod-assets/*
+injectextension/enkato-embed.js
 webpack-stats.json
 db.sqlite3
 npm-debug.log
+injectextension/*
+!injectextension/manifest.json
+!injectextension/.bootstraprc
+!injectextension/thirdParty/
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

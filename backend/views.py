@@ -301,6 +301,24 @@ class VideoIdData(APIView):
                 'inDatabase': False
             })
 
+class YTValidateVideo(APIView):
+    def get(self, request, yt_id):
+        video_search = Video.objects.filter(vid_id=yt_id)
+        if (video_search.count() == 0):
+            return Response({'status': False})
+        video = video_search.first()
+        videoUUID = video.uuid
+        seriesvideo_search = SeriesVideo.objects.filter(video=video)
+        seriesUUID = None
+        if (seriesvideo_search.count() > 0):
+            series = seriesvideo_search.first().series
+            seriesUUID = series.uuid
+        return Response({
+            'status': True,
+            'videoUUID': videoUUID,
+            'seriesUUID': seriesUUID
+        })
+
 class QuizData(APIView):
     def get(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
