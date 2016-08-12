@@ -23,8 +23,7 @@ class LoginForm extends Component {
             errorMsg: '',
             errorField: '',
         }
-
-        console.log(this.props);
+        
         this.onUserNameChange = this.onUserNameChange.bind(this)
         this.onPasswordChange = this.onPasswordChange.bind(this)
         this.onFormSubmit = this.onFormSubmit.bind(this)

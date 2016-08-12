@@ -37,6 +37,7 @@ class App extends Component {
         this.openLoginModal = this.openLoginModal.bind(this)
         this.closeSignUpModal = this.closeSignUpModal.bind(this)
         this.openSignUpModal = this.openSignUpModal.bind(this)
+        this.onSignIn = this.onSignIn.bind(this)
     }
 
     openRegisterModal(callBackFn) {
@@ -59,34 +60,80 @@ class App extends Component {
     }
 
     openLoginModal(){
-        this.setState({
-            loginModalOpen: true
-        })
+        const pathname = window.location.pathname;
+        if((pathname != "/") && (pathname != "/register") && (pathname != '/login')){
+            console.log(window.location.href);
+            this.setState({
+                loginModalOpen: true
+            })
+        }
+        else{
+            console.log(window.location.href);
+            window.location.href = '/login';
+        }
     }
 
     closeLoginModal(){
         this.setState({
             loginModalOpen:false,
         })
-        if(window.location.href = '/')
+        if(window.location.pathname = '/')
             window.location.reload();
     }
 
     openSignUpModal(){
-        this.setState({
-            signUpModalOpen:true,
-        })
+        const pathname = window.location.pathname;
+        if((pathname != "/") && (pathname != "/register") && (pathname != '/login')){
+            this.setState({
+                signUpModalOpen: true
+            })
+        }
+        else{
+            console.log(window.location.href);
+            window.location.href = '/register';
+        }
     }
 
     closeSignUpModal(){
         this.setState({
             signUpModalOpen:false,
         })
-        if(window.location.href = '/')
+        if(window.location.pathname = '/')
             window.location.reload();
     }
 
+    signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+        console.log('User signed out.');
+        });
+    }
+
+    onSignIn(googleUser) {
+        console.log("onSignIn was called");
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+    }
+
     render() {
+
+        var googleSignIn = (
+            <div class = "google button">
+                <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+                <script> {this.onSignIn} </script>
+            </div>
+        );
+
         return (
             <div>
                 <NavBar 
@@ -97,6 +144,7 @@ class App extends Component {
                     closeRegisterModal={this.closeRegisterModal} 
                     setLoggedIn={this.setLoggedIn}
                     registerModalOpen={this.state.registerModalOpen}
+                    googleSignIn = {googleSignIn}
                     callbackFn={this.state.registerModalCallBackFn}/>
                 <LoginModal 
                     loginModalOpen={this.state.loginModalOpen}
