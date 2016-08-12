@@ -39,12 +39,12 @@ export default class QuestionDisplay extends Component {
             video: PropTypes.shape({
                 creator: PropTypes.number.isRequired,
             }).isRequired,
-            editing: PropTypes.bool.isRequired,
-            responseInput: PropTypes.string.isRequired,
-            modified: PropTypes.object.isRequired,
-            created: PropTypes.object.isRequired,
+            editing: PropTypes.bool,
+            responseInput: PropTypes.string,
+            modified: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+            created: PropTypes.string.isRequired,
         }),
-        videoUUID: PropTypes.string.isRequired,
+        videoUUID: PropTypes.string,
         currentUser: PropTypes.object,
         topicList: PropTypes.arrayOf(PropTypes.object).isRequired,
         pushResponse: PropTypes.func.isRequired,
@@ -61,7 +61,7 @@ export default class QuestionDisplay extends Component {
         replaceResponse: PropTypes.func.isRequired,
         pushQuestionNewText: PropTypes.func.isRequired,
         pushQuestionEditText: PropTypes.func.isRequired,
-        embed: PropTypes.bool.isRequired,
+        embed: PropTypes.bool,
     }
 
     /**

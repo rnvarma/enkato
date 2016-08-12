@@ -57,7 +57,7 @@ QuestionForm.propTypes = {
     onTextChange: PropTypes.func.isRequired,
     titleValue: PropTypes.string.isRequired,
     textValue: PropTypes.string.isRequired,
-    topicValue: PropTypes.string.isRequired,
+    topicValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 export default QuestionForm;

@@ -29,7 +29,7 @@ const QuestionList = ({ questions, currentQuestion, showingSeries, setCurrentQue
         return (
             <div
                 key={index}
-                className={question.id === currentQuestion.id ? 'selected quesitonPreview' : 'questionPreview'}
+                className={`${question.id === currentQuestion.id ? 'selected ' : ''}questionPreview`}
                 onClick={setQuestion}
             >
                 <div className="questionPreviewHeader smallTitle">
@@ -67,7 +67,7 @@ QuestionList.propTypes = {
     questions: PropTypes.array.isRequired,
     currentQuestion: PropTypes.shape({
         id: PropTypes.number.isRequired,
-    }).isRequired,
+    }),
     showingSeries: PropTypes.bool.isRequired,
     setCurrentQuestion: PropTypes.func.isRequired,
 };

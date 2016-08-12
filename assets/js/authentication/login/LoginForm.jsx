@@ -40,8 +40,11 @@ export default class LoginForm extends Component {
         auth.login(this.state.username, this.state.password, (success) => {
             if (success) {
                 if (this.props.callbackFn) {
-                    this.props.callbackFn();
-                    this.props.closeRegisterModal();
+                    this.props.callbackFn()
+                    this.props.closeRegisterModal()
+                } 
+                else if(this.props.navBarItem){
+                    this.props.closeLoginModal();
                 } else {
                     window.location.href = '/';
                 }

@@ -7,7 +7,7 @@ import RegistrationForm from 'js/authentication/register/RegistrationForm';
 import LoginForm from 'js/authentication/login/LoginForm';
 
 import auth from 'auth';
-
+import request from 'js/globals/HttpRequest';   
 const RegisterModal = ({ registerModalOpen, closeRegisterModal, callbackFn, embed }) => {
     if (!auth.loggedIn()) {
         return (

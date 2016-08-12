@@ -73,8 +73,11 @@ class RegistrationForm extends Component {
                     auth.login(postData.username, postData.password1, (success) => {
                         if (success) {
                             if (this.props.callbackFn) {
-                                this.props.callbackFn();
-                                this.props.closeRegisterModal();
+                                this.props.callbackFn()
+                                this.props.closeRegisterModal()
+                            }
+                            else if(this.props.navBarItem){
+                                this.props.closeSignUpModal();
                             } else {
                                 window.location.href = '/';
                             }

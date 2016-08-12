@@ -12,8 +12,8 @@ export default class QuestionFilterBar extends Component {
         showingSeries: PropTypes.bool.isRequired,
         filter: PropTypes.string.isRequired,
         setFilter: PropTypes.func.isRequired,
-        filterAnswered: PropTypes.func.isRequired,
-        filterUnanswered: PropTypes.func.isRequired,
+        filterAnswered: PropTypes.bool.isRequired,
+        filterUnanswered: PropTypes.bool.isRequired,
         toggleAnsweredFilter: PropTypes.func.isRequired,
         toggleUnansweredFilter: PropTypes.func.isRequired,
     }

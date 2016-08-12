@@ -21,7 +21,7 @@ export default class QuestionDisplayResponse extends Component {
         response: PropTypes.shape({
             id: PropTypes.number.isRequired,
             endorsed: PropTypes.bool.isRequired,
-            editing: PropTypes.bool.isRequired,
+            editing: PropTypes.bool,
             is_instructor: PropTypes.bool.isRequired,
             user: PropTypes.shape({
                 id: PropTypes.number.isRequired,
@@ -29,8 +29,8 @@ export default class QuestionDisplayResponse extends Component {
                 last_name: PropTypes.string.isRequired,
                 image: PropTypes.string.isRequired,
             }).isRequired,
-            modified: PropTypes.object.isRequired,
-            created: PropTypes.object.isRequired,
+            modified: PropTypes.string.isRequired,
+            created: PropTypes.string.isRequired,
         }).isRequired,
         currentUser: PropTypes.shape({
             id: PropTypes.number.isRequired,
@@ -39,7 +39,7 @@ export default class QuestionDisplayResponse extends Component {
         removeResponse: PropTypes.func.isRequired,
         replaceResponse: PropTypes.func.isRequired,
         pushResponseEditText: PropTypes.func.isRequired,
-        embed: PropTypes.bool.isRequired,
+        embed: PropTypes.bool,
     }
 
     state = {
