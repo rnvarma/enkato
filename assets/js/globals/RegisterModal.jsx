@@ -10,8 +10,7 @@ import auth from 'auth';
 import request from 'js/globals/HttpRequest';
 
 class RegisterModal extends Component {
-    render() {
-        
+    render() {     
         if(!auth.loggedIn()){
             return (
                 <li className="createSeriesModal">
@@ -19,16 +18,6 @@ class RegisterModal extends Component {
                         show={this.props.registerModalOpen} 
                         onHide={this.props.closeRegisterModal}>
                       <Modal.Header closeButton>
-
-const RegisterModal = ({ registerModalOpen, closeRegisterModal, callbackFn, embed }) => {
-    if (!auth.loggedIn()) {
-        return (
-            <li className="createSeriesModal">
-                <Modal
-                    show={registerModalOpen}
-                    onHide={closeRegisterModal}
-                >
-                    <Modal.Header closeButton>
                         <Modal.Title>Login or Register to use this feature!</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>

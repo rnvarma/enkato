@@ -27,7 +27,6 @@ class LoginForm extends Component {
         this.onUserNameChange = this.onUserNameChange.bind(this)
         this.onPasswordChange = this.onPasswordChange.bind(this)
         this.onFormSubmit = this.onFormSubmit.bind(this)
-=======
 export default class LoginForm extends Component {
     static propTypes = {
         callbackFn: PropTypes.func.isRequired,
@@ -40,7 +39,6 @@ export default class LoginForm extends Component {
         password: '',
         errorMsg: '',
         errorField: '',
->>>>>>> master
     }
 
     onUserNameChange = (e) => {
