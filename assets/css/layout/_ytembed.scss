@@ -7,6 +7,34 @@ body {
 
 
 #qaWrapper {
+    .qaTitle {
+        display: none;
+    }
+
+    .authorName{
+        display: inline-block;
+    }
+
+    .qaPanel {
+        .footer {
+            font-size: $small-size;
+        }
+
+        img {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .titledContainer {
+        padding: 0;
+        margin-bottom: 40px;
+    }
+
+    .questionFilterBar {
+        margin-top: 0;
+    }
+    
     .row {
         margin-left: 0;
         margin-right: 0;
