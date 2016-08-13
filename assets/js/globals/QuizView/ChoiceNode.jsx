@@ -2,13 +2,16 @@ import React, { Component, PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';
 
-class ChoiceNode extends Component {
-    constructor(props) {
-        super(props);
+export default class ChoiceNode extends Component {
+    static propTypes = {
+        selectChoice: PropTypes.func,
+        correctness: PropTypes.string,
+        choiceText: PropTypes.string,
+        isSelected: PropTypes.bool,
+        index: PropTypes.number,
+    };
 
-        this.selectChoice = this.selectChoice.bind(this);
-    }
-    selectChoice() {
+    selectChoice = () => {
         this.props.selectChoice(this.props.index);
     }
 
@@ -28,13 +31,3 @@ class ChoiceNode extends Component {
         );
     }
 }
-
-ChoiceNode.propTypes = {
-    selectChoice: PropTypes.func,
-    correctness: PropTypes.string,
-    choiceText: PropTypes.string,
-    isSelected: PropTypes.bool,
-    index: PropTypes.number,
-};
-
-export default ChoiceNode;

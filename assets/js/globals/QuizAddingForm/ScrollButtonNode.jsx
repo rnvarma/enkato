@@ -1,12 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 
-class ScrollButtonNode extends Component {
-    constructor() {
-        super();
-        this.onClick = this.onClick.bind(this);
+/**
+ * displays a scroll button node
+ */
+export default class ScrollButtonNode extends Component {
+    static propTypes = {
+        questionId: PropTypes.string.isRequired,
+        index: PropTypes.number.isRequired,
+        active: PropTypes.bool,
+        order: PropTypes.number.isRequired,
+        scrollToQuestion: PropTypes.func.isRequired,
     }
-
-    onClick() {
+    /**
+     * handles a click
+     */
+    onClick = () => {
         this.props.scrollToQuestion(this.props.questionId, this.props.index);
     }
 
@@ -21,13 +29,3 @@ class ScrollButtonNode extends Component {
         );
     }
 }
-
-ScrollButtonNode.propTypes = {
-    questionId: PropTypes.number,
-    index: PropTypes.number,
-    active: PropTypes.bool,
-    order: PropTypes.number,
-    scrollToQuestion: PropTypes.func,
-};
-
-export default ScrollButtonNode;

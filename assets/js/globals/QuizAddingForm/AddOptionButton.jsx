@@ -3,6 +3,9 @@ import React, { PropTypes } from 'react';
 import FontAwesome from 'react-fontawesome';
 import Row from 'react-bootstrap/lib/Row';
 
+/**
+ * Displays an option button
+ */
 const AddOptionButton = ({ handleClick }) => (
     <Row className={'choice-row'} onClick={handleClick}>
         <FontAwesome
@@ -14,7 +17,7 @@ const AddOptionButton = ({ handleClick }) => (
 );
 
 AddOptionButton.propTypes = {
-    handleClick: PropTypes.func,
+    handleClick: PropTypes.func.isRequired,
 };
 
 export default AddOptionButton;
