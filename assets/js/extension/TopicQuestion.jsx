@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 
-export default class QuestionNode extends Component {
+import DotDotDot from 'react-dotdotdot';
+
+export default class TopicQuestion extends Component {
     static propTypes = {
         question: PropTypes.object.isRequired,
         selectQuestion: PropTypes.func.isRequired,
@@ -14,8 +16,11 @@ export default class QuestionNode extends Component {
         const { question } = this.props;
 
         return (
-            <div onClick={this.onClick}>
-                {question.title} - {question.text}
+            <div className="topicQuestion" onClick={this.onClick}>
+                <DotDotDot clamp={2}>
+                    <span className="topicQuesitonTitle">{question.title}</span>
+                    <span className="topicQuestionText">{question.text}</span>
+                </DotDotDot>
             </div>
         );
     }
