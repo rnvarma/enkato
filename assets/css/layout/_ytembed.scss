@@ -1,4 +1,3 @@
-
 body {
     &.topiclist-active {
         margin-left: 25%;
@@ -7,8 +6,35 @@ body {
 
 
 #qaWrapper {
+    .questionBox, .questionEnterResponse {
+        &:hover {
+            background-color: $blank;
+            cursor: default;
+        }
+    }
+    .col-md-12 {
+        padding: 0;
+    }
+
     .qaTitle {
+        padding: 7px $content-padding 3px $content-padding;
+        color: $blank;
+        background-color: $base-dark;
+        font-size: 16px;
+        font-weight: $bold-weight;
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+    }
+
+    .btn-plain {
         display: none;
+    }
+
+    .filterQuery {
+        width: auto;
+        .btn {
+            padding: 6px 12px;
+        }
     }
 
     .authorName{
@@ -50,11 +76,11 @@ body {
     }
 
     .qaContent {
-        height: 500px;
+        max-height: 500px;
     }
 
     .questionList {
-        height: 480px;
+        max-height: 480px;
     }
 
     .questionDisplayList {
@@ -63,6 +89,27 @@ body {
 
     .contentArea {
         padding: 20px;
+
+        .questionTitle {
+            font-size: 16px;
+        }
+    }
+
+    .questionPreview {
+        font-size: $small-size;
+        padding: 15px 18px;
+
+        .smallTitle, .metaItem {
+            font-size: 12px;
+        }
+
+        .questionPreviewTitle {
+            padding-top: 0;
+        }
+
+        .questionPreviewFooter {
+            padding-top: 5px;
+        }
     }
 }
 
@@ -97,12 +144,14 @@ body {
         left: 100%;
         top: 0;
         color: white;
-        font-weight: bold;
+        font-weight: $bold-weight;
         opacity: 0.8;
+        border-top-right-radius: 2px;
+        border-bottom-right-radius: 2px;
 
         &:hover {
             cursor: pointer;
-            opacity: 1;
+            background-color: lighten($base-dark, 10%);
         }
     }
 
