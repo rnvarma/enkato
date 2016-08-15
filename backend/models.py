@@ -251,7 +251,7 @@ class Question(DatedModel):
     topic = models.ForeignKey(Topic, related_name="questions", blank=True, null=True)
     time = models.IntegerField(default=0)
     title = models.TextField(max_length=200)
-    text = models.TextField()
+    text = models.TextField(blank=True)
     resolved = models.BooleanField(default=False, blank=True)
 
     def __str__(self):

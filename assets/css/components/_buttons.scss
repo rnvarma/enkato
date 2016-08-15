@@ -171,6 +171,8 @@
 .createSeriesModal {
     display: inline-block;
     .btn {
-        height: 31px;
+        height: inherit;
+        padding: 0px;
+        background-color: transparent;
     }
 }
