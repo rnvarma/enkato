@@ -6,6 +6,10 @@ from django.http import JsonResponse
 
 from backend.models import *
 
+class JobsPage(View):
+    def get(self, request):
+        return render(request, 'jobs.html')
+
 class HomePage(View):
     def get(self, request):
         return render(request, 'index.html')
