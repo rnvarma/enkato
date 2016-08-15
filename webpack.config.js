@@ -8,9 +8,7 @@ var entrypoints = require('./entrypoints')
 module.exports = {
     context: __dirname,
 
-    entry: {
-        main: './assets/app.js',
-    },
+    entry: './assets/app.js',
 
     output: {
         path: path.resolve(pathtoassets + '/assets/bundles/'),

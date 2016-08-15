@@ -155,4 +155,11 @@ body {
         }
     }
 
+    .topicList {
+        a {
+            .topicNode {
+                border-bottom: 1px solid #EEF1F7;
+            }
+        }
+    }
 }

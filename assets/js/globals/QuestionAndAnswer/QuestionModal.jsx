@@ -69,7 +69,7 @@ export default class QuestionModal extends Component {
     }
 
     postQuestion = () => {
-        if (this.state.title && this.state.text) {
+        if (this.state.title) {
             const payload = {
                 video_uuid: this.props.videoUUID,
                 title: this.state.title,
