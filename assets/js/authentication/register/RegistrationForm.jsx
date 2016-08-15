@@ -32,6 +32,12 @@ class RegistrationForm extends Component {
         errorMsg: '',
     }
 
+    componentDidMount = () => {
+        const script = document.createElement('script');
+        script.setAttribute('src',  "https://apis.google.com/js/platform.js");
+        $('head').append(script);
+    }
+
     onFirstNameChange = (e) => {
         this.setState({ firstname: e.target.value });
     }
@@ -243,6 +249,11 @@ class RegistrationForm extends Component {
                         >
                             Register
                         </Button>
+                    </Col>
+                </FormGroup>
+                <FormGroup>
+                    <Col sm = {9} smOffset = {3}>
+                        <div className="g-signin2" data-onsuccess="onSuccess"></div>
                     </Col>
                 </FormGroup>
             </Form>

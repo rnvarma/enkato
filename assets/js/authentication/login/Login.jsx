@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/lib/Row';
 import LoginForm from 'js/authentication/login/LoginForm';
 
 class Login extends Component {
+
     render() {
         return (
             <Row>

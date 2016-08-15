@@ -5,14 +5,14 @@
         <title>{% block title %}Enkato{% endblock %}</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
-        <meta name="google-signin-scope" content="profile email">
-        <meta name="google-signin-client_id" content="AIzaSyCy8238lONTrmV2DdyDpBViFoqke3wuk7A.apps.googleusercontent.com">
+        <meta name="google-signin-scope" content="profile email ">
+        <meta name="google-signin-client_id" content="319492474629-1tkcmu2m5lfcbi9iekd5aojjs631grfv.apps.googleusercontent.com">
+
 
         <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,500,600" rel="stylesheet" type="text/css">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
         <link rel="shortcut icon" href="{% static 'favico.ico' %}" type="image/x-icon" />
-
         <script src="https://apis.google.com/js/platform.js" async defer></script>
 
         {% block css %}{% endblock %}
@@ -34,8 +34,6 @@
               ga('create', 'UA-81239487-1', 'auto');
               ga('send', 'pageview');
             </script>
-
-            
         {% endif %}
     </body>
 </html>

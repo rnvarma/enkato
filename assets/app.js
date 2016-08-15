@@ -1,140 +1,144 @@
-require('bootstrap-loader');
-require("css/main.scss");
-
 import React, { Component, cloneElement } from 'react';
 import { render } from 'react-dom';
 import { Router, browserHistory } from 'react-router';
 
 import NavBar from 'js/globals/NavBar';
 import HomePage from 'js/home/homepage/HomePage';
-import RegisterModal from "js/globals/RegisterModal";
+import RegisterModal from 'js/globals/RegisterModal';
 import LoginModal from 'js/globals/LoginModal';
 import SignUpModal from 'js/globals/SignUpModal';
 
 import auth from 'auth';
 
-function helloWorld(){
-    console.log("hello worlddddddddddddddddddddd")
+require('bootstrap-loader');
+require('css/main.scss');
+
+function helloWorld() {
+    console.log('hello worlddddddddddddddddddddd');
 }
 
 
 class App extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
-            registerModalCallBackFn:helloWorld,
-            registerModalOpen:false,
-            loggedIn:auth.loggedIn(),
+            registerModalCallBackFn: helloWorld,
+            registerModalOpen: false,
+            loggedIn: auth.loggedIn(),
             loginModalOpen: false,
             signUpModalOpen: false,
-        }
+        };
 
-        this.openRegisterModal = this.openRegisterModal.bind(this)
-        this.closeRegisterModal = this.closeRegisterModal.bind(this)
-        this.setLoggedIn = this.setLoggedIn.bind(this)
-        this.closeLoginModal = this.closeLoginModal.bind(this)
-        this.openLoginModal = this.openLoginModal.bind(this)
-        this.closeSignUpModal = this.closeSignUpModal.bind(this)
-        this.openSignUpModal = this.openSignUpModal.bind(this)
-    }
-
-    openRegisterModal(callBackFn) {
-        this.setState({
-            registerModalCallBackFn:callBackFn,
-            registerModalOpen:true,
-        })
-    }
-
-    closeRegisterModal() {
-        this.setState({
-            registerModalOpen:false
-        })
+        this.openRegisterModal = this.openRegisterModal.bind(this);
+        this.closeRegisterModal = this.closeRegisterModal.bind(this);
+        this.setLoggedIn = this.setLoggedIn.bind(this);
+        this.closeLoginModal = this.closeLoginModal.bind(this);
+        this.openLoginModal = this.openLoginModal.bind(this);
+        this.closeSignUpModal = this.closeSignUpModal.bind(this);
+        this.openSignUpModal = this.openSignUpModal.bind(this);
     }
 
     setLoggedIn(loggedIn) {
         this.setState({
-            loggedIn:loggedIn
-        })
+            loggedIn,
+        });
     }
 
-    openLoginModal(){
+    openRegisterModal(callBackFn) {
+        this.setState({
+            registerModalCallBackFn: callBackFn,
+            registerModalOpen: true,
+        });
+    }
+
+    closeRegisterModal() {
+        this.setState({
+            registerModalOpen: false,
+        });
+    }
+
+    openLoginModal() {
         const pathname = window.location.pathname;
-        if((pathname != "/") && (pathname != "/register") && (pathname != '/login')){
+        if ((pathname !== '/') && (pathname !== '/register') && (pathname !== '/login')) {
             console.log(window.location.href);
             this.setState({
-                loginModalOpen: true
-            })
-        }
-        else{
+                loginModalOpen: true,
+            });
+        } else {
             console.log(window.location.href);
             window.location.href = '/login';
         }
     }
 
-    closeLoginModal(){
+    closeLoginModal() {
         this.setState({
-            loginModalOpen:false,
-        })
-        if(window.location.pathname === '/')
+            loginModalOpen: false,
+        });
+        if (window.location.pathname === '/') {
             window.location.reload();
+        }
     }
 
-    openSignUpModal(){
+    openSignUpModal() {
         const pathname = window.location.pathname;
-        if((pathname != "/") && (pathname != "/register") && (pathname != '/login')){
+        if ((pathname !== '/') && (pathname !== '/register') && (pathname !== '/login')) {
             this.setState({
-                signUpModalOpen: true
-            })
-        }
-        else{
+                signUpModalOpen: true,
+            });
+        } else {
             console.log(window.location.href);
             window.location.href = '/register';
         }
     }
 
-    closeSignUpModal(){
+    closeSignUpModal() {
         this.setState({
-            signUpModalOpen:false,
-        })
-        if(window.location.pathname === '/')
+            signUpModalOpen: false,
+        });
+        if (window.location.pathname === '/') {
             window.location.reload();
+        }
     }
 
     render() {
         return (
             <div>
-                <NavBar 
-                    loggedIn={this.state.loggedIn} 
+                <NavBar
+                    loggedIn={this.state.loggedIn}
                     openLoginModal={this.openLoginModal}
-                    openSignUpModal={this.openSignUpModal}/>
-                <RegisterModal 
-                    closeRegisterModal={this.closeRegisterModal} 
+                    openSignUpModal={this.openSignUpModal}
+                />
+                <RegisterModal
+                    closeRegisterModal={this.closeRegisterModal}
                     setLoggedIn={this.setLoggedIn}
                     registerModalOpen={this.state.registerModalOpen}
-                    callbackFn={this.state.registerModalCallBackFn}/>
-                <LoginModal 
+                    callbackFn={this.state.registerModalCallBackFn}
+                />
+                <LoginModal
                     loginModalOpen={this.state.loginModalOpen}
                     closeLoginModal={this.closeLoginModal}
-                    navBarItem = {true}/>
-                <SignUpModal 
+                    navBarItem
+                />
+                <SignUpModal
                     signUpModalOpen={this.state.signUpModalOpen}
                     closeSignUpModal={this.closeSignUpModal}
-                    navBarItem = {true}/>
+                    navBarItem
+                />
                 <div className="contentArea">
                     {(this.props.children && cloneElement(this.props.children, {
                         openRegisterModal: this.openRegisterModal,
                         loggedIn: this.state.loggedIn,
-                    })) || <HomePage loggedIn={this.state.loggedIn}/>}
+                    })) || <HomePage loggedIn={this.state.loggedIn} />}
                 </div>
             </div>
-        )
+        );
     }
 }
 
 const rootRoute = {
-    childRoutes: [ {
-        path: "/",
+    childRoutes: [{
+        path: '/',
         component: App,
         indexRoute: HomePage,
         childRoutes: [
@@ -145,12 +149,14 @@ const rootRoute = {
             require('js/userprofile/profile/routes'),
             require('js/singlevideo/singlevideoview/routes'),
             require('js/home/creator/routes'),
-        ]
-    } ]    
-}
+        ],
+    }],
+};
 
 render((
     <Router
         history={browserHistory}
-        routes={rootRoute}/>
+        routes={rootRoute}
+    />
 ), document.getElementById('page-anchor'))
+;
