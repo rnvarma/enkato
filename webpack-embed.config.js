@@ -9,7 +9,7 @@ module.exports = {
 
     entry: {
         'enkato-embed': [
-            `bootstrap-loader/lib/bootstrap.loader?configFilePath=${__dirname}/injectextension/.bootstraprc!bootstrap-loader/no-op.js`,
+            'bootstrap-loader/lib/bootstrap.loader?configFilePath=' + __dirname + '/injectextension/.bootstraprc!bootstrap-loader/no-op.js',
             './assets/js/extension/enkato-embed.jsx',
         ],
     },

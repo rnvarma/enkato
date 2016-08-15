@@ -1,38 +1,47 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';
-import Button from 'react-bootstrap/lib/Button';
 
 import ChoiceList from 'js/globals/QuizView/ChoiceList';
-import BottomReviewText from 'js/globals/QuizView/ReviewingQuizView/BottomReviewText';
 
-export default class QuestionNode extends Component {
-    render() {
-        if (!this.props.question) {
-            return (
-                <div className="questionNode noQuiz">
-                    The instructor has not created a quiz for this video.
-                </div>
-            )
-        }
-
-        return(
-            <div className="questionNode">
-                <div className="title"> 
-                    <FontAwesome className='arrowIcon' name='arrow-right'/>
-                    <span className="titleText">
-                        {this.props.question.quizQuestionText} 
-                    </span>
-                </div>
-                <ChoiceList 
-                    selectChoice={this.props.selectChoice}
-                    className="choiceList"
-                    choiceList={this.props.question.choiceList}
-                    selectedAnswer={this.props.selectedAnswer}
-                    currentQuestionResults={this.props.currentQuestionResults} 
-                    reviewing={this.props.reviewMode}
-                />
+const QuestionNode = ({ question, selectChoice, selectedAnswer, currentQuestionResults, reviewMode }) => {
+    if (!question) {
+        return (
+            <div className="questionNode noQuiz">
+                The instructor has not created a quiz for this video.
             </div>
-        )
+        );
     }
-}
+
+    return (
+        <div className="questionNode">
+            <div className="title">
+                <FontAwesome className="arrowIcon" name="arrow-right" />
+                <span className="titleText">
+                    {question.quizQuestionText}
+                </span>
+            </div>
+            <ChoiceList
+                selectChoice={selectChoice}
+                className="choiceList"
+                choiceList={question.choiceList}
+                selectedAnswer={selectedAnswer}
+                currentQuestionResults={currentQuestionResults}
+                reviewing={reviewMode}
+            />
+        </div>
+    );
+};
+
+QuestionNode.propTypes = {
+    question: PropTypes.shape({
+        quizQuestionText: PropTypes.string.isRequired,
+        choiceList: PropTypes.array.isRequired,
+    }).isRequired,
+    selectChoice: PropTypes.func.isRequired,
+    selectedAnswer: PropTypes.object.isRequired,
+    currentQuestionResults: PropTypes.object.isRequired,
+    reviewMode: PropTypes.bool.isRequired,
+};
+
+export default QuestionNode;

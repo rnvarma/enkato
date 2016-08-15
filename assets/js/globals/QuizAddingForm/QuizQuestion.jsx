@@ -3,20 +3,33 @@ import React, { Component, PropTypes } from 'react';
 import FontAwesome from 'react-fontawesome';
 import Row from 'react-bootstrap/lib/Row';
 
-class QuizQuestion extends Component {
-    constructor() {
-        super();
-
-        this.onFocus = this.onFocus.bind(this);
-        this.onKeyDown = this.onKeyDown.bind(this);
-        this.handleQuestionTextChange = this.handleQuestionTextChange.bind(this);
-    }
-
-    onFocus() {
+/**
+ * Displays a quiz question
+ */
+export default class QuizQuestion extends Component {
+    static propTypes = {
+        scrollToQuestion: PropTypes.func.isRequired,
+        questionId: PropTypes.string.isRequired,
+        index: PropTypes.number.isRequired,
+        onQuestionUp: PropTypes.func.isRequired,
+        onQuestionDown: PropTypes.func.isRequired,
+        handleQuizQuestionChange: PropTypes.func.isRequired,
+        invalid: PropTypes.bool.isRequired,
+        deleteQuestion: PropTypes.func.isRequired,
+        questionText: PropTypes.string.isRequired,
+    };
+    /**
+     * scrolls to this question
+     */
+    onFocus = () => {
         this.props.scrollToQuestion(this.props.questionId, this.props.index, false);
     }
 
-    onKeyDown(e) {
+    /**
+     * handles keyboard based question navigation
+     * @param {SyntheticEvent} e - the event
+     */
+    onKeyDown = (e) => {
         if (e.keyCode === 38) { // up
             this.props.onQuestionUp(this.props.index);
         } else if (e.keyCode === 40) { // down
@@ -24,7 +37,11 @@ class QuizQuestion extends Component {
         }
     }
 
-    handleQuestionTextChange(e) {
+    /**
+     * handles changes to the question's text
+     * @param {SyntheticEvent} e - the event
+     */
+    handleQuestionTextChange = (e) => {
         this.props.handleQuizQuestionChange(e.target.value);
     }
 
@@ -54,17 +71,3 @@ class QuizQuestion extends Component {
         );
     }
 }
-
-QuizQuestion.propTypes = {
-    scrollToQuestion: PropTypes.func,
-    questionId: PropTypes.number,
-    index: PropTypes.number,
-    onQuestionUp: PropTypes.func,
-    onQuestionDown: PropTypes.func,
-    handleQuizQuestionChange: PropTypes.func,
-    invalid: PropTypes.bool,
-    deleteQuestion: PropTypes.func,
-    questionText: PropTypes.string,
-};
-
-export default QuizQuestion;

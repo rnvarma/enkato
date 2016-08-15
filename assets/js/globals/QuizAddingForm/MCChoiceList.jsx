@@ -2,6 +2,9 @@ import React, { PropTypes } from 'react';
 
 import MCChoiceNode from 'js/globals/QuizAddingForm/MCChoiceNode';
 
+/**
+ * Displays a list of multiple choice questions
+ */
 const MCChoiceList = ({ choiceList, handleChoiceTextChange, addNewChoice,
     deleteChoice, makeChoiceIsCorrect, invalidChoice, moveFocusUp,
     moveFocusDownOrAddNewChoice }) => {
@@ -33,19 +36,16 @@ const MCChoiceList = ({ choiceList, handleChoiceTextChange, addNewChoice,
 };
 
 MCChoiceList.propTypes = {
-    choiceList: PropTypes.shape({
-        length: PropTypes.number,
-        map: PropTypes.func,
-    }),
+    choiceList: PropTypes.array.isRequired,
     invalidChoice: PropTypes.shape({
-        id: PropTypes.number,
+        id: PropTypes.number.isRequired,
     }),
-    handleChoiceTextChange: PropTypes.func,
-    addNewChoice: PropTypes.func,
-    deleteChoice: PropTypes.func,
-    makeChoiceIsCorrect: PropTypes.func,
-    moveFocusUp: PropTypes.func,
-    moveFocusDownOrAddNewChoice: PropTypes.func,
+    handleChoiceTextChange: PropTypes.func.isRequired,
+    addNewChoice: PropTypes.func.isRequired,
+    deleteChoice: PropTypes.func.isRequired,
+    makeChoiceIsCorrect: PropTypes.func.isRequired,
+    moveFocusUp: PropTypes.func.isRequired,
+    moveFocusDownOrAddNewChoice: PropTypes.func.isRequired,
 };
 
 export default MCChoiceList;

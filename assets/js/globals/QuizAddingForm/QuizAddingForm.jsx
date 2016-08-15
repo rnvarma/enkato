@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import FontAwesome from 'react-fontawesome';
 
@@ -6,78 +6,85 @@ import request from 'js/globals/HttpRequest';
 import QuizFormsList from 'js/globals/QuizAddingForm/QuizFormsList';
 import ScrollButtonList from 'js/globals/QuizAddingForm/ScrollButtonList';
 
-/*
- * takes in a JSON object with questions
- * returns a list of those questions
- * param: {0: "one", 1: "two", 2: "three"}
- * result: ["one, "two", "three"]
-*/
-function listify(dict){
-  var arr = $.map(dict, function(el) { return el });
-  return arr;
-}
-
-class QuizAddingForm extends Component {
-    constructor() {
-        super();
-
-        this.state = {
-            questions: [],
-            removedQuestions: [],
-            removedChoices: [],
-            invalidQuestion: null,
-            invalidChoice: null,
-            numQuestions: 1,
-        };
-
-        this.loadDataFromServer = this.loadDataFromServer.bind(this);
-        this.validateData = this.validateData.bind(this);
-        this.markInvalidInput = this.markInvalidInput.bind(this);
-        this.saveDataToServer = this.saveDataToServer.bind(this);
-        this.setChoiceList = this.setChoiceList.bind(this);
-        this.handleQuizQuestionChange = this.handleQuizQuestionChange.bind(this);
-        this.scrollToFromButton = this.scrollToFromButton.bind(this);
-        this.addNewChoice = this.addNewChoice.bind(this);
-        this.addQuestion = this.addQuestion.bind(this);
-        this.makeChoiceIsCorrect = this.makeChoiceIsCorrect.bind(this);
-        this.deleteQuestion = this.deleteQuestion.bind(this);
-        this.deleteChoice = this.deleteChoice.bind(this);
+/**
+ * Form for adding a quiz to a video
+ */
+export default class QuizAddingForm extends Component {
+    static propTypes = {
+        videoUUID: PropTypes.string.isRequired,
+        setUnsaved: PropTypes.func.isRequired,
+        cancelSave: PropTypes.func.isRequired,
+        closeAnnotationModal: PropTypes.func,
+        setOnConfirmSave: PropTypes.func.isRequired,
     }
+
+    /**
+     * @type {object}
+     * @property {array} questions - the questions of the quiz
+     * @property {array} removedQuestions - the questions removed from the quiz in this session
+     * @property {array} removedChoices - the choices removed from the quiz in this session
+     * @property {object} invalidQuestion - a question that was marked as invalid when the user attempted to submit the quiz
+     * @property {object} invalidChoice - a choice that was marked as invalid when the user attempted to submit the quiz
+     * @property {number} numQuestions - the number of questions in the quiz
+     */
+    state = {
+        questions: [],
+        removedQuestions: [],
+        removedChoices: [],
+        invalidQuestion: null,
+        invalidChoice: null,
+        numQuestions: 1,
+    };
 
     componentDidMount() {
         this.loadDataFromServer(this.props.videoUUID);
+
         this.props.setOnConfirmSave(() => {
             if (this.validateData()) {
                 this.saveDataToServer();
                 return true;
-            } else {
-                this.props.cancelSave();
-                return false;
             }
+
+            this.props.cancelSave();
+            return false;
         });
-        /*$(window).on('unload', this.saveDataToServer); TODO: unloadbefore */
+
+        /* $(window).on('unload', this.saveDataToServer); TODO: unloadbefore */
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.videoUUID != nextProps.videoUUID) {
+        if (this.props.videoUUID !== nextProps.videoUUID) {
             this.loadDataFromServer(nextProps.videoUUID);
         }
     }
 
-    componentWillUnmount() {
-        /*$(window).off('unload');*/
+    setChoiceList = (choiceList, questionNumber) => {
+        const newQuestions = $.extend(true, [], this.state.questions);
+
+        newQuestions[questionNumber].choiceList = choiceList;
+
+        this.setState({
+            questions: newQuestions,
+        });
+
+        this.props.setUnsaved();
     }
 
-    loadDataFromServer(vuuid) {
+    /**
+     * loads data from server
+     * @param {string} vuuid - The uuid of the video to load the data from
+     */
+    loadDataFromServer = (vuuid) => {
         request.get(`/1/quizdata/${vuuid}`, {
             success: (data) => {
-                if (data.questions.length > 0) {
-                    data.questions[0].active = true;
+                const response = data;
+                if (response.questions.length > 0) {
+                    response.questions[0].active = true;
                     this.setState({
-                        questions: data.questions,
+                        questions: response.questions,
                     }, () => {
-                        $('.quizAddingForm').animate({scrollTop: 0}, 400);
-                        $(`#${data.questions[0].id}.question-input`).focus();
+                        $('.quizAddingForm').animate({ scrollTop: 0 }, 400);
+                        $(`#${response.questions[0].id}.question-input`).focus();
                     });
                 } else { /* add blank question */
                     this.setState({
@@ -85,11 +92,15 @@ class QuizAddingForm extends Component {
                     });
                     this.addQuestion();
                 }
-            }
+            },
         });
     }
 
-    validateData() {
+    /**
+     * determines whether the quiz is valid to submit
+     * @return {Boolean} true if the quiz is valid, false if invalid
+     */
+    validateData = () => {
         let questionIndex = 0;
         for (const question of this.state.questions) {
             if (!question.quizQuestionText) {
@@ -111,14 +122,22 @@ class QuizAddingForm extends Component {
         return true;
     }
 
-    markInvalidInput(question, choice = null) {
+    /**
+     * marks a question and optionally a choice as invalid
+     * @param {object} question - the question to mark as invalid
+     * @param {object} choice - the choice to mark as invalid, defaults to null
+     */
+    markInvalidInput = (question, choice = null) => {
         this.setState({
-                invalidQuestion: question,
-                invalidChoice: choice,
+            invalidQuestion: question,
+            invalidChoice: choice,
         });
     }
 
-    saveDataToServer() {
+    /**
+     * saves the quiz to the backend
+     */
+    saveDataToServer = () => {
         const payload = {
             questions: JSON.stringify(this.state.questions),
             removedQuestions: JSON.stringify(this.state.removedQuestions),
@@ -128,31 +147,31 @@ class QuizAddingForm extends Component {
             data: payload,
             error: () => {
                 console.error('something went wrong');
-            }
+            },
         });
     }
 
-    setChoiceList(choiceList, questionNumber) {
-        const newQuestions = $.extend(true, [], this.state.questions);
-
-        newQuestions[questionNumber].choiceList = choiceList;
-
-        this.setState({
-            questions: newQuestions,
-        });
-
-        this.props.setUnsaved();
-    }
-
-    handleQuizQuestionChange(questionText, index) {
-        var tempQuestionList = this.state.questions;
+    /**
+     * changes the text of a question
+     * @param {string} questionText - the new text of the question
+     * @param {number} index - the index of the question to change
+     */
+    handleQuizQuestionChange = (questionText, index) => {
+        const tempQuestionList = this.state.questions;
         tempQuestionList[index].quizQuestionText = questionText;
-        this.setState({questions: tempQuestionList})
+        this.setState({ questions: tempQuestionList });
 
         this.props.setUnsaved();
     }
 
-    scrollToFromButton(questionId, index, refocus = true, choiceId = null) {
+    /**
+     * scrolls to a certain question
+     * @param {string} questionid - id of the question being scrolled to
+     * @param {number} index - the index of the question being scrolled to
+     * @param {boolean} refocus - whether or not to refocus
+     * @param {string} choiceId - an optional id of a choice to scroll to
+     */
+    scrollToFromButton = (questionId, index, refocus = true, choiceId = null) => {
         const refocusFunc = () => {
             if (refocus) {
                 if (choiceId !== null) {
@@ -165,15 +184,15 @@ class QuizAddingForm extends Component {
         const distanceToScroll = $(`#${questionId}q`).position().top;
         if (distanceToScroll !== 0) {
             const $quizForm = $('.quizAddingForm'); /* TODO: cache */
-            $quizForm.animate({scrollTop: $quizForm.scrollTop() + distanceToScroll}, 400);
+            $quizForm.animate({ scrollTop: $quizForm.scrollTop() + distanceToScroll }, 400);
 
-            let questions = $.extend(true, [], this.state.questions);
+            const questions = $.extend(true, [], this.state.questions);
             for (let i = 0; i < questions.length; i++) {
                 questions[i].active = false;
             }
             questions[index].active = true;
             this.setState({
-                questions: questions,
+                questions,
             }, refocusFunc);
         } else {
             /* this works because state updates are batched, the problem here
@@ -182,27 +201,35 @@ class QuizAddingForm extends Component {
         }
     }
 
-    makeChoice(isCorrect = false) {
-        return {
+    /**
+     * makes a choice for a quiz question
+     * @param {boolean} isCorrect - whether or not the choice is the correct one, defaults to false
+     * @return {object} a new choice
+     */
+    makeChoice = (isCorrect = false) =>
+        ({
             id: `fake_${Date.now()}`,
             text: '',
             is_correct: isCorrect,
             new: true,
-        }
-    }
+        })
 
-    addNewChoice(questionId) {
+    /**
+     * adds a new choice to a question
+     * @param {string} questionId - the id of the question to add a new choice to
+     */
+    addNewChoice = (questionId) => {
         const questions = $.extend(true, [], this.state.questions);
 
-        const question = questions.find(question => {
-            return questionId === question.id;
-        });
+        const question = questions.find((q) =>
+            questionId === q.id
+        );
 
         const choice = this.makeChoice();
         question.choiceList.push(choice);
 
         this.setState({
-            questions: questions,
+            questions,
         }, () => {
             $(`#${choice.id}`).focus();
         });
@@ -210,16 +237,24 @@ class QuizAddingForm extends Component {
         this.props.setUnsaved();
     }
 
-    deleteChoice(questionId, choiceId, qIndex, cIndex) {
+    /**
+     * deletes a choice from a question
+     * @param {string} questionId - id of the question to delete a choice from
+     * @param {string} choiceId - id of the choice to delete
+     * @param {number} qIndex - index of the question to delete a choice from
+     * @param {number} cIndex - index of the choice to delete
+     */
+    deleteChoice = (questionId, choiceId, qIndex, cIndex) => {
         const newQuestions = $.extend(true, [], this.state.questions);
-        const question = newQuestions.find((question) => {
-            return question.id === questionId;
-        });
+        const question = newQuestions.find((q) =>
+            q.id === questionId
+        );
 
         if (question.choiceList.length > 1) {
             const newRemovedChoices = [...this.state.removedChoices];
 
-            let needNewAnswer, needNewFocus;
+            let needNewAnswer;
+            let needNewFocus;
             let choiceIndex;
             const newChoiceList = question.choiceList.filter((choice, index) => {
                 if (choice.id !== choiceId) {
@@ -258,7 +293,7 @@ class QuizAddingForm extends Component {
             this.setState({
                 questions: newQuestions,
                 removedChoices: newRemovedChoices,
-            }, function() {
+            }, () => {
                 if (newChoice.focus) {
                     $(`#${newChoice.id}.choice-input`).focus();
                 }
@@ -268,21 +303,29 @@ class QuizAddingForm extends Component {
         }
     }
 
-    makeChoiceIsCorrect(cid, qIndex) {
-        var tempQuestionList = this.state.questions;
-        for (var i = 0; i < tempQuestionList[qIndex].choiceList.length; i++) {
-            if (tempQuestionList[qIndex].choiceList[i].id == cid) {
+    /**
+     * sets a certain choice in a question to be the correct one
+     * @param {string} cid - id of the choice to set as the correct error
+     * @param {number} qIndex - index of the question the choice belongs to
+     */
+    makeChoiceIsCorrect = (cid, qIndex) => {
+        const tempQuestionList = this.state.questions;
+        for (let i = 0; i < tempQuestionList[qIndex].choiceList.length; i++) {
+            if (tempQuestionList[qIndex].choiceList[i].id === cid) {
                 tempQuestionList[qIndex].choiceList[i].is_correct = true;
             } else {
                 tempQuestionList[qIndex].choiceList[i].is_correct = false;
             }
         }
-        this.setState({questions: tempQuestionList})
+        this.setState({ questions: tempQuestionList });
 
         this.props.setUnsaved();
     }
 
-    addQuestion() {
+    /**
+     * adds a question to the quiz
+     */
+    addQuestion = () => {
         const newQuestion = {
             id: `fake_${Date.now()}`, /* fake ID, not in DB yet */
             quizQuestionText: '',
@@ -302,7 +345,12 @@ class QuizAddingForm extends Component {
         this.props.setUnsaved();
     }
 
-    deleteQuestion(questionId, questionIndex) {
+    /**
+     * deletes a question from the quiz
+     * @param {string} questionid - id of the question to delete
+     * @param {number} questionIndex - index of the question to delete
+     */
+    deleteQuestion = (questionId, questionIndex) => {
         const newRemovedQuestion = [...this.state.removedQuestions];
         const newQuestions = this.state.questions.filter((question) => {
             if (question.id !== questionId) {
@@ -335,14 +383,16 @@ class QuizAddingForm extends Component {
         }
         return (
             <div className="quizAddingForm">
-                <div className="questionNumberButtons" style={{height}}>
-                    <ScrollButtonList 
+                <div className="questionNumberButtons" style={{ height }}>
+                    <ScrollButtonList
                         scrollToFromButton={this.scrollToFromButton}
-                        questions={this.state.questions}/>
+                        questions={this.state.questions}
+                    />
                     <FontAwesome
                         className="addQuestionButton"
                         onClick={this.addQuestion}
-                        name='plus'/>
+                        name="plus"
+                    />
                 </div>
                 <QuizFormsList
                     setChoiceList={this.setChoiceList}
@@ -354,10 +404,9 @@ class QuizAddingForm extends Component {
                     scrollToQuestion={this.scrollToFromButton}
                     questions={this.state.questions}
                     invalidQuestion={this.state.invalidQuestion}
-                    invalidChoice={this.state.invalidChoice}/>
+                    invalidChoice={this.state.invalidChoice}
+                />
             </div>
-        )
+        );
     }
 }
-
-export default QuizAddingForm;

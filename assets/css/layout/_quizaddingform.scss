@@ -52,6 +52,10 @@
 .choice-row {
     height: 30px;
     margin-left: 90px;
+
+    &.invalid {
+        background-color: #ffe4e4;
+    }
 }
 
 .question-row{ 
