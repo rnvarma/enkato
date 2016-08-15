@@ -180,7 +180,7 @@ export default class QuestionDisplay extends Component {
 
         let link;
         const innerLink = (
-            <div>
+            <div className="authorName">
                 <img role="presentation" src={djangoImageLinkHandler(this.props.question.student.image || 'blank_avatar.jpg') } />
                 <span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span>
             </div>

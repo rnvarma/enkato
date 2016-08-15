@@ -397,7 +397,7 @@ export default class QuestionView extends Component {
                 <Row>
                     {askModal}
                     <Row>
-                        <Col md={5}>
+                        <Col md={12}>
                             <div className="qaTitle headline">Question & Answer</div>
                         </Col>
                     </Row>
