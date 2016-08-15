@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 
-import FontAwesome from 'react-fontawesome';
-
 import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 import InputGroup from 'react-bootstrap/lib/InputGroup';

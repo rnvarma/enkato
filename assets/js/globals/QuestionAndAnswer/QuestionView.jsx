@@ -21,6 +21,7 @@ export default class QuestionView extends Component {
         getCurrentTime: PropTypes.func,
         loadQuestionData: PropTypes.func,
         openRegisterModal: PropTypes.func.isRequired,
+        passQuestions: PropTypes.func,
         embed: PropTypes.bool,
     }
 
@@ -47,6 +48,30 @@ export default class QuestionView extends Component {
         }
     }
 
+    onTopicChange = (e) => {
+        let topicId = parseInt(e.target.value, 10);
+        if (isNaN(topicId)) {
+            topicId = null;
+        }
+        this.setFilter(this.state.filter, false, topicId);
+    }
+
+    onQuestionFilterSelect = (questionTitle) => {
+        const question = this.filterQuestionByTitle(questionTitle);
+        this.setCurrentQuestion(question);
+        this.scrollToQuestionArea();
+    }
+
+    onAskQuestionChange = (e) => {
+        if (e.key === 'Enter') {
+            this.addQuestion();
+        } else {
+            this.setState({
+                askQuestionText: e.target.value,
+            });
+        }
+    }
+
     getQuestionData = (videoUUID) => {
         if (!videoUUID && !this.props.loadQuestionData) return;
         const onSuccess = (data) => {
@@ -57,6 +82,9 @@ export default class QuestionView extends Component {
                 filteredQuestions: this.questionData,
                 currentQuestion: this.questionData[0],
             });
+            if (this.props.passQuestions) {
+                this.props.passQuestions(this.questionData);
+            }
         };
         if (this.props.loadQuestionData) {
             this.props.loadQuestionData(onSuccess);
@@ -86,22 +114,8 @@ export default class QuestionView extends Component {
         }
     }
 
-    onTopicChange = (e) => {
-        let topicId = parseInt(e.target.value, 10);
-        if (isNaN(topicId)) {
-            topicId = null;
-        }
-        this.setFilter(this.state.filter, false, topicId);
-    }
-
     getQuestion = questionId =>
         this.questionData.find(question => questionId === question.id);
-
-    onQuestionFilterSelect = (questionTitle) => {
-        const question = this.filterQuestionByTitle(questionTitle);
-        this.setCurrentQuestion(question);
-        this.scrollToQuestionArea();
-    }
 
     getResponse = (questionId, responseId) =>
         this.getQuestion(questionId).responses.find(response => responseId === response.id);
@@ -133,6 +147,9 @@ export default class QuestionView extends Component {
             questions: this.questionData,
             currentQuestion: newQuestion,
         }, this.filterQuestions);
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     closeModal = () => {
@@ -195,6 +212,9 @@ export default class QuestionView extends Component {
             question: this.questionData,
             currentQuestion: this.questionData[0],
         }, this.filterQuestions);
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     processQuestionData = (data) => {
@@ -225,6 +245,9 @@ export default class QuestionView extends Component {
             text: questionEditText,
         };
         this.setState({ question: this.questionData });
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     pushQuestionNewText = (questionId, questionNewTopic, questionNewTitle, questionNewText) => {
@@ -237,6 +260,9 @@ export default class QuestionView extends Component {
             text: questionNewText,
         };
         this.setState({ question: this.questionData });
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     pushResponse = (questionId, newResponse) => {
@@ -247,6 +273,9 @@ export default class QuestionView extends Component {
         newResponse.input = newResponse.text;
         questionToAppend.responses.push(newResponse);
         this.setState({ questions: this.questionData }, this.filterQuestions);
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     /* stores to response input, unique for each question */
@@ -254,6 +283,9 @@ export default class QuestionView extends Component {
         const question = this.getQuestion(questionId);
         question.responseInput = responseText;
         this.setState({ questions: this.questionData });
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     /* similar to above, but for the case in which you are editing responses */
@@ -262,6 +294,9 @@ export default class QuestionView extends Component {
         const response = this.getResponse(questionId, responseId);
         response.input = responseEditText;
         this.setState({ questions: this.questionData });
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     pushResponseNewText = (questionId, responseId, newText) => {
@@ -269,6 +304,9 @@ export default class QuestionView extends Component {
         response.text = newText;
         response.input = response.text;
         this.setState({ questions: this.questionData });
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     removeResponse = (questionId, responseId) => {
@@ -277,6 +315,9 @@ export default class QuestionView extends Component {
         const index = question.responses.indexOf(response);
         question.responses.splice(index, 1);
         this.setState({ questions: this.questionData });
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     toggleEndorsedResponse = (questionId, responseId) => {
@@ -284,6 +325,9 @@ export default class QuestionView extends Component {
         const response = question.responses.find(r => responseId === r.id);
         response.endorsed = !response.endorsed;
         this.setState({ questions: this.questionData });
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     toggleEditQuestion = questionId => {
@@ -294,6 +338,9 @@ export default class QuestionView extends Component {
             question.editing = true;
         }
         this.setState({ questions: this.questionData });
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     toggleEditResponse = (questionId, responseId) => {
@@ -305,18 +352,27 @@ export default class QuestionView extends Component {
             response.editing = true;
         }
         this.setState({ questions: this.questionData });
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     replaceQuestion = (questionId, newQuestion) => {
         const question = this.getQuestion(questionId);
         $.extend(question, newQuestion);
         this.setState({ questions: this.questionData }, this.filterQuestions);
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     replaceResponse = (questionId, responseId, newResponse) => {
         const response = this.getResponse(questionId, responseId);
         $.extend(response, newResponse);
         this.setState({ questions: this.questionData });
+        if (this.props.passQuestions) {
+            this.props.passQuestions(this.questionData);
+        }
     }
 
     /* query user data for validation purposes */
@@ -339,16 +395,6 @@ export default class QuestionView extends Component {
     scrollToQuestionArea = () => {
         const top = $('.questionArea').offset().top;
         $('html, body').animate({ scrollTop: top }, 500);
-    }
-
-    onAskQuestionChange = (e) => {
-        if (e.key === 'Enter') {
-            this.addQuestion();
-        } else {
-            this.setState({
-                askQuestionText: e.target.value,
-            });
-        }
     }
 
     makeQuestionFromFilter = () => {

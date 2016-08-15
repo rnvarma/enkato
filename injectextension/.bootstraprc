@@ -1,4 +1,6 @@
 {
+    // See https://github.com/shakacode/bootstrap-loader/blob/master/examples/basic/.bootstraprc-3-example
+
     "bootstrapVersion": 3,
 
     "styleLoaders": ["style", "css", "sass"],
@@ -7,7 +9,8 @@
 
         "mixins": true,
 
-        //"normalize": false,
+        "normalize": false,
+        "print": true,
 
         // core
         "scaffolding": true,
@@ -17,12 +20,53 @@
         "buttons": true,
 
         // components
+        "component-animations": true,
         "button-groups": true,
         "input-groups": true,
         "progress-bars": true,
 
+        // unsure about these
+        "dropdowns": true,
+        "navs": true,
+        "navbar": true,
+        "breadcrumbs": true,
+        "pagination": true,
+        "pager": true,
+        "labels": true,
+        "badges": true,
+        "jumbotron": true,
+        "thumbnails": true,
+        "alerts": true,
+        "media": true,
+        "list-group": true,
+        "panels": true,
+        "wells": true,
+        "responsive-embed": true,
+        "close": true,
+        "utilities": true,
+        "responsive-utilities": true,
+
         // components with js
         "modals": true,
-        "popovers": true
+        "popovers": true,
+
+        "tooltip": true,
+        "carousel": true
+    },
+
+    "scripts": {
+        "transition": true,
+        "collapse": true,
+        "modal": true,
+        "tab": true,
+
+        "alert": true,
+        "button": true,
+        "carousel": true,
+        "dropdown": true,
+        "tooltip": true,
+        "popover": true,
+        "scrollspy": true,
+        "affix": true,
     }
 }

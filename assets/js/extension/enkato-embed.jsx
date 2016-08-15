@@ -4,7 +4,6 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import YouTubeQuestionWrapper from 'js/extension/YouTubeQuestionWrapper';
-import YouTubeTopicsWrapper from 'js/extension/YouTubeTopicsWrapper';
 
 /**
  * obtains video id from YouTube url, provided that there is one
@@ -48,6 +47,11 @@ function getVideoData(videoUUID, callback) {
     });
 }
 
+const loadQuestionData = (onSuccess) => {
+    request.get(`/1/questions?video_uuid=${videoUUID}`, {
+        success: onSuccess,
+    }, this.props.embed);
+};
 
 $(document).ready(() => {
     const style = document.createElement('link');
@@ -70,16 +74,6 @@ $(document).ready(() => {
                         topicList={data.topicList}
                     />
                 ), qaBox);
-
-                const topicBox = document.createElement('div');
-                topicBox.setAttribute('id', 'topicWrapper');
-                $(topicBox).insertBefore('#qaWrapper');
-
-                render((
-                    <YouTubeTopicsWrapper
-                        data={data}
-                    />
-                ), topicBox);
             });
         });
     }
