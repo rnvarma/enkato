@@ -47,12 +47,6 @@ function getVideoData(videoUUID, callback) {
     });
 }
 
-const loadQuestionData = (onSuccess) => {
-    request.get(`/1/questions?video_uuid=${videoUUID}`, {
-        success: onSuccess,
-    }, this.props.embed);
-};
-
 $(document).ready(() => {
     const style = document.createElement('link');
     style.rel = 'stylesheet';
@@ -66,6 +60,7 @@ $(document).ready(() => {
             getVideoData(videoUUID, (data) => {
                 const qaBox = document.createElement('div');
                 qaBox.setAttribute('id', 'qaWrapper');
+                qaBox.setAttribute('class', 'questionArea');
                 $(qaBox).insertBefore('#watch-discussion');
 
                 render((

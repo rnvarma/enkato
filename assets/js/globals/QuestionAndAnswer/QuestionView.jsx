@@ -22,6 +22,7 @@ export default class QuestionView extends Component {
         loadQuestionData: PropTypes.func,
         openRegisterModal: PropTypes.func.isRequired,
         passQuestions: PropTypes.func,
+        currentQuestion: PropTypes.object,
         embed: PropTypes.bool,
     }
 
@@ -46,6 +47,10 @@ export default class QuestionView extends Component {
         if (this.props.videoUUID !== nextProps.videoUUID) {
             this.getQuestionData(nextProps.videoUUID);
         }
+
+        if (this.props.currentQuestion !== nextProps.currentQuestion) {
+            this.setCurrentQuestion(nextProps.currentQuestion, true);
+        }
     }
 
     onTopicChange = (e) => {
@@ -58,8 +63,7 @@ export default class QuestionView extends Component {
 
     onQuestionFilterSelect = (questionTitle) => {
         const question = this.filterQuestionByTitle(questionTitle);
-        this.setCurrentQuestion(question);
-        this.scrollToQuestionArea();
+        this.setCurrentQuestion(question, true);
     }
 
     onAskQuestionChange = (e) => {
@@ -95,10 +99,16 @@ export default class QuestionView extends Component {
         }, this.props.embed);
     }
 
-    setCurrentQuestion = (question) => {
-        this.setState({
-            currentQuestion: question,
-        });
+    setCurrentQuestion = (question, scroll = false) => {
+        if (scroll) {
+            this.setState({
+                currentQuestion: question,
+            }, this.scrollToQuestionArea);
+        } else {
+            this.setState({
+                currentQuestion: question,
+            });
+        }
     }
 
     setFilter = (filter, reset = false, filterTopic = null) => {
@@ -393,8 +403,12 @@ export default class QuestionView extends Component {
     }
 
     scrollToQuestionArea = () => {
-        const top = $('.questionArea').offset().top;
+        const $questionArea = $('.questionArea');
+        const top = $questionArea.offset().top;
         $('html, body').animate({ scrollTop: top }, 500);
+        const $questionList = $questionArea.find('.questionList');
+        const distanceToScroll = $questionList.children('.selected').offset().top - $questionList.offset().top;
+        $questionList.animate({ scrollTop: $questionList.scrollTop() + distanceToScroll }, 'slow');
     }
 
     makeQuestionFromFilter = () => {

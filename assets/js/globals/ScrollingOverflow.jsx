@@ -37,6 +37,10 @@ export default class TopicNode extends React.Component {
         $(window).off('resize')
     }
 
+    componentDidUpdate() {
+        //this.getDimensions();
+    }
+
     onHoverOn() {
         if (this.state.overflow) {
             $(this.refs.dom).css("margin-left", this.state.parentWidth - this.state.totalWidth)
