@@ -1,27 +1,68 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import ScrollArea from 'react-scrollbar';
+import Collapse from 'react-bootstrap/lib/Collapse';
+import Button from 'react-bootstrap/lib/Button';
+
 import TakeQuizButton from 'js/globals/videoPlayer/TakeQuizButton';
 import ScrollingOverflow from 'js/globals/ScrollingOverflow';
 
-class TopicNode extends React.Component {
+const QuestionNode = ({ question }) => {
+    return (
+        <div>
+            {question.title} - {question.text}
+        </div>
+    );
+};
+
+QuestionNode.propTypes = {
+    question: PropTypes.object.isRequired,
+};
+
+class TopicNode extends Component {
+    static propTypes = {
+        topic: PropTypes.object.isRequired,
+        showingQuiz: PropTypes.bool,
+    }
+
+    state = {
+        showQuestions: false,
+    }
+
+    onToggleQuestions = () => {
+        this.setState({
+            showQuestions: !this.state.showQuestions,
+        });
+    }
+
     render() {
+        const { topic } = this.props;
+        let questions;
+        if (topic.questions) {
+            questions = topic.questions.map(question => <QuestionNode key={question.id} question={question} />);
+        }
         return (
-            <a href={`javascript: yt.www.watch.player.seekTo(${this.props.topic.time});`}>
                 <div
                     className="topicNode"
-                    id={((this.props.topic.isCurrentTopic&&!this.props.showingQuiz) ? "selectedTopicNode" : "")}
+                    id={((topic.isCurrentTopic && !this.props.showingQuiz) ? 'selectedTopicNode' : '')}
                 >
+                    <a href={`javascript: yt.www.watch.player.seekTo(${topic.time});`}>
+                    
                     <div className="time">
-                        {this.props.topic.time_clean}
+                        {topic.time_clean}
                     </div>
                     <div className="name">
                         <ScrollingOverflow
-                            text={this.props.topic.name}
-                            elementSize={"80%"}/>
+                            text={topic.name}
+                            elementSize={"80%"}
+                        />
                     </div>
+            </a>                    
+                    <Button onClick={this.onToggleQuestions}>Questions</Button>
+                    <Collapse in={this.state.showQuestions}>
+                        <div>{questions}</div>
+                    </Collapse>
                 </div>
-            </a>
         );
     }
 }
