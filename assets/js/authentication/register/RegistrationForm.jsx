@@ -13,6 +13,7 @@ import Alert from 'react-bootstrap/lib/Alert';
 
 import auth from 'auth';
 import request from 'js/globals/HttpRequest';
+import GoogleAuth from 'js/globals/GoogleAuth';
 
 class RegistrationForm extends Component {
     static propTypes = {
@@ -34,7 +35,7 @@ class RegistrationForm extends Component {
 
     componentDidMount = () => {
         const script = document.createElement('script');
-        script.setAttribute('src',  "https://apis.google.com/js/platform.js");
+        script.setAttribute('src', 'https://apis.google.com/js/platform.js');
         $('head').append(script);
     }
 
@@ -79,10 +80,10 @@ class RegistrationForm extends Component {
                     auth.login(postData.username, postData.password1, (success) => {
                         if (success) {
                             if (this.props.callbackFn) {
-                                this.props.callbackFn()
-                                this.props.closeRegisterModal()
+                                this.props.callbackFn();
+                                this.props.closeRegisterModal();
                             }
-                            else if(this.props.navBarItem){
+                            else if (this.props.navBarItem) {
                                 this.props.closeSignUpModal();
                             } else {
                                 window.location.href = '/';
@@ -252,8 +253,8 @@ class RegistrationForm extends Component {
                     </Col>
                 </FormGroup>
                 <FormGroup>
-                    <Col sm = {9} smOffset = {3}>
-                        <div className="g-signin2" data-onsuccess="onSuccess"></div>
+                    <Col sm={9} smOffset={3}>
+                        <GoogleAuth />
                     </Col>
                 </FormGroup>
             </Form>

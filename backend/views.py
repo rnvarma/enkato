@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from oauth2client import client, crypt
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -300,6 +301,20 @@ class VideoIdData(APIView):
             return Response({
                 'inDatabase': False
             })
+
+class GoogleAuth(APIView):
+    def post(self, request):
+        token = request.POST.get('s');
+        try:
+            idinfo = client.verify_id_token(token, '319492474629-1tkcmu2m5lfcbi9iekd5aojjs631grfv')
+            if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+                raise crypt.AppIdentityError("Wrong issuer.")
+            if idinfo['hd'] != APPS_DOMAIN_NAME:
+                raise crypt.AppIdentityError("Wrong hosted domain.")
+        except crypt.AppIdentityError:
+            console.log("invalid token");
+        userid = idinfo['sub']
+
 
 class YTValidateVideo(APIView):
     def get(self, request, yt_id):

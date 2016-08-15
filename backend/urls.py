@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^1/users/current$', UserViewset.as_view({'get':'retrieve'})),
     url(r'^1/users$', UserViewset.as_view({'get':'list'})),
     url(r'^parseimporttopics$', ParseImportTopics.as_view()),
-    url(r'^1/ytvalidatevideo/(?P<yt_id>[a-zA-Z0-9_.-]+)$', YTValidateVideo.as_view())
+    url(r'^1/ytvalidatevideo/(?P<yt_id>[a-zA-Z0-9_.-]+)$', YTValidateVideo.as_view()),
+    url(r'^googleauth$', GoogleAuth.as_view()),
 ]
 

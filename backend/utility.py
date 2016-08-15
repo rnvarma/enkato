@@ -292,6 +292,9 @@ def parseTopicUploadString(s):
 		topics.append({'time': time, 'name': name})
 	return topics
 
+def storeGoogleAuthId(s):
+	
+
 def youtubeData():
 	params = {
 		'id': 'y78GuOxNz84',

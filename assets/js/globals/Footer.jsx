@@ -25,7 +25,6 @@ class Footer extends Component {
                     </div>
                     <div className="itemsList">
                         <div><a className="item" href="#">How it works</a></div>
-                        //<div><a className="item" href="#">Pricing</a></div>
                         <div><a className="item" href="#">Sign up</a></div>
                     </div>
                 </div>
@@ -35,7 +34,6 @@ class Footer extends Component {
                     </div>
                     <div className="itemsList">
                         <div><a className="item" href="#">How it works</a></div>
-                        //<div><a className="item" href="#">Pricing</a></div>
                         <div><a className="item" href="#">Sign up</a></div>
                     </div>
                 </div>
