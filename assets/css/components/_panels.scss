@@ -88,7 +88,6 @@
 .topicNode {
     @extend .listPanel;
     overflow: hidden;
-    white-space: nowrap;
     text-overflow: ellipsis;
     color: $base-dark;
     padding: 10px 15px;
@@ -117,6 +116,7 @@
         vertical-align: top;
         font-weight: $bold-weight;
         overflow: hidden;
+        width: 75%;
     }
 }
 

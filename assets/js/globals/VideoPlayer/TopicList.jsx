@@ -25,9 +25,7 @@ class TopicNode extends React.Component {
                     {this.props.topic.time_clean}
                 </div>
                 <div className="name">
-                    <ScrollingOverflow
-                        text={this.props.topic.name}
-                        elementSize={"80%"}/>
+                    {this.props.topic.name}
                 </div>
             </div>
         );

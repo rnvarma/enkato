@@ -37,6 +37,15 @@ class TopicNode extends Component {
         });
     }
 
+    showPlayer = () => {
+        if ($(".html5-video-player").hasClass("ytp-autohide")) {
+            $(".html5-video-player").removeClass("ytp-autohide");
+        }
+        setTimeout(() => {
+            $(".html5-video-player").addClass("ytp-autohide");
+        }, 3000)
+    }
+
     render() {
         const { topic } = this.props;
         let questions;
@@ -65,15 +74,12 @@ class TopicNode extends Component {
                     className="topicNode"
                     id={((topic.isCurrentTopic && !this.props.showingQuiz) ? 'selectedTopicNode' : '')}
                 >
-                    <a href={`javascript: yt.www.watch.player.seekTo(${topic.time});`}>
+                    <a href={`javascript: yt.www.watch.player.seekTo(${topic.time});`} onClick={this.showPlayer}>
                         <div className="time">
                             {topic.time_clean}
                         </div>
                         <div className="name">
-                            <ScrollingOverflow
-                                text={topic.name}
-                                elementSize={'50%'}
-                            />
+                            {topic.name}
                         </div>
                     </a>
                 </div>

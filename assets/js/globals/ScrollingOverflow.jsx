@@ -19,7 +19,7 @@ export default class TopicNode extends React.Component {
         let parent = elem.parent();
         let parentWidth = parent.width();
         parent.css('width', 'initial');
-        let totalWidth = elem.width() + 15;
+        let totalWidth = elem.width();
         this.setState({
             overflow: totalWidth > parentWidth,
             totalWidth,
