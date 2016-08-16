@@ -17,7 +17,7 @@ function getYTID(url) {
 
 function findInDatabase(ytId, callback) {
     $.ajax({
-        url: `http://127.0.0.1:8000/1/ytvalidatevideo/${ytId}`,
+        url: `https://www.enkato.com/1/ytvalidatevideo/${ytId}`,
         dataType: 'json',
         cache: false,
         success: (data) => {
@@ -33,7 +33,7 @@ function findInDatabase(ytId, callback) {
 
 function getVideoData(videoUUID, callback) {
     $.ajax({
-        url: `http://127.0.0.1:8000/1/v/${videoUUID}`,
+        url: `https://www.enkato.com/1/v/${videoUUID}`,
         dataType: 'json',
         cache: false,
         success: (data) => {

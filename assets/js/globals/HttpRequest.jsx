@@ -3,7 +3,7 @@ import getCookie from 'js/globals/GetCookie';
 module.exports = {
     get: function(url, opt, embed) {
         $.ajax({
-            url: `${embed ? 'http://127.0.0.1:8000' : ''}${url}`,
+            url: `${embed ? 'https://www.enkato.com' : ''}${url}`,
             dataType: 'json',
             cache: opt.cache || false,
             headers: localStorage.token ? {
@@ -21,7 +21,7 @@ module.exports = {
     post: function(url, opt, embed) {
         $.ajax({
             type: 'POST',
-            url: `${embed ? 'http://127.0.0.1:8000' : ''}${url}`,
+            url: `${embed ? 'https://www.enkato.com' : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
                 'Authorization': 'Token ' + localStorage.token
@@ -42,7 +42,7 @@ module.exports = {
     patch: function(url, opt, embed) {
         $.ajax({
             type: 'PATCH',
-            url: `${embed ? 'http://127.0.0.1:8000' : ''}${url}`,
+            url: `${embed ? 'https://www.enkato.com' : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
                 'Authorization': 'Token ' + localStorage.token
@@ -63,7 +63,7 @@ module.exports = {
     delete: function(url, opt, embed) {
         $.ajax({
             type: 'DELETE',
-            url: `${embed ? 'http://127.0.0.1:8000' : ''}${url}`,
+            url: `${embed ? 'https://www.enkato.com' : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
                 'Authorization': 'Token ' + localStorage.token
@@ -84,7 +84,7 @@ module.exports = {
     patch: function(url, opt, embed) {
         $.ajax({
             type: 'PATCH',
-            url: `${embed ? 'http://127.0.0.1:8000' : ''}${url}`,
+            url: `${embed ? 'https://www.enkato.com' : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
                 'Authorization': 'Token ' + localStorage.token

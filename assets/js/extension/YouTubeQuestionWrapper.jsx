@@ -104,7 +104,9 @@ export default class YouTubeQuestionWrapper extends Component {
                             />
                         </Tab>
                         <Tab eventKey={2} title="FAQ" id="faq">
-                            {faq}
+                            <div className="faqList">
+                                {faq}
+                            </div>
                         </Tab>
                     </Tabs>
                 </div>

@@ -6,10 +6,6 @@ from django.http import JsonResponse
 
 from backend.models import *
 
-class SSLPage(View):
-    def get(self, request):
-        return render(request, 'ssl.html')
-
 class JobsPage(View):
     def get(self, request):
         return render(request, 'jobs.html')

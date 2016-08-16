@@ -4,8 +4,36 @@ body {
     }
 }
 
+#masthead-positioner {
+    z-index: 10;
+}
 
 #qaWrapper {
+    .tab-content {
+        padding-top: 0px;
+    }
+
+    .nav.nav-tabs {
+        background-color: $base-dark;
+    }
+
+    .nav-tabs > li {
+        a {
+            color: white;
+            border: none;
+            border-radius: none;
+        }
+    }
+
+    .faqList {
+        background-color: white;
+    }
+
+    &.questionArea {
+        padding: 0px;
+        margin-bottom: 0px;
+    }
+
     .questionBox, .questionEnterResponse {
         &:hover {
             background-color: $blank;
@@ -156,6 +184,8 @@ body {
     }
 
     .topicList {
+        background-color: white;
+
         a {
             .topicNode {
                 border-bottom: 1px solid #EEF1F7;

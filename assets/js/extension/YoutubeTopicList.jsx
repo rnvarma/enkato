@@ -8,6 +8,13 @@ import TakeQuizButton from 'js/globals/videoPlayer/TakeQuizButton';
 import ScrollingOverflow from 'js/globals/ScrollingOverflow';
 import TopicQuestion from 'js/extension/TopicQuestion';
 
+function resizeTopicList() {
+    var windowHeight = $(window).height();
+    var topicListHeight = windowHeight - 171;
+    $(".topicList").height(topicListHeight);
+    $(".faqList").height(topicListHeight);
+}
+
 class TopicNode extends Component {
     static propTypes = {
         topic: PropTypes.object.isRequired,
@@ -17,6 +24,11 @@ class TopicNode extends Component {
 
     state = {
         showQuestions: false,
+    }
+
+    componentDidMount() {
+        resizeTopicList();
+        window.onresize = resizeTopicList;
     }
 
     onToggleQuestions = () => {
