@@ -32,7 +32,6 @@ class GoogleAuth extends Component {
             auth2.signIn();
         }
         this.refreshValues();
-        this.sendIdToken();
     }
 
 
@@ -43,7 +42,10 @@ class GoogleAuth extends Component {
 
     signinChanged = (val) => {
         console.log('Signin state changed to ', val);
-    };
+        if (val === true) {
+            this.sendIdToken();
+        }
+    }
 
     userChanged = (user) => {
         console.log('User now: ', user);
@@ -51,15 +53,17 @@ class GoogleAuth extends Component {
     };
 
     sendIdToken = () => {
-        console.log("sending id token");
+        console.log('sending id token');
+        const idToken = googleUser.getAuthResponse().id_token;
         request.post('/googleauth', {
             data: {
-                s: googleUser.getAuthResponse().id_token;
+                s: idToken,
             },
             success: (data) => {
-                console.log("successfully sent id token");
-            }
-            
+                console.log('successfully sent id token');
+                console.log(data);
+            },
+        });
     }
 
     refreshValues = () => {

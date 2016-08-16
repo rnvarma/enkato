@@ -40,6 +40,7 @@ class CustomUser(models.Model):
     username = models.CharField(max_length=100, default="")
     birthday = models.DateTimeField(blank=True, null=True)
     bio = models.TextField(default="")
+    googleId = models.CharField(max_length = 300, default="")
     # level of education: High School, College, Post-College, etc.
     education_status = models.CharField(max_length=200, default="")
     school_name = models.CharField(max_length=200, default="")

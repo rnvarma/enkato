@@ -303,17 +303,18 @@ class VideoIdData(APIView):
             })
 
 class GoogleAuth(APIView):
-    def post(self, request):
+    def get(self, request):
         token = request.POST.get('s');
         try:
             idinfo = client.verify_id_token(token, '319492474629-1tkcmu2m5lfcbi9iekd5aojjs631grfv')
             if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-                raise crypt.AppIdentityError("Wrong issuer.")
+                console.log("wrong issuer");
             if idinfo['hd'] != APPS_DOMAIN_NAME:
-                raise crypt.AppIdentityError("Wrong hosted domain.")
+                console.log("wrong domain");
         except crypt.AppIdentityError:
             console.log("invalid token");
         userid = idinfo['sub']
+        return Response(userid);
 
 
 class YTValidateVideo(APIView):
