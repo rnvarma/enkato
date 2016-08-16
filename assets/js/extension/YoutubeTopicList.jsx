@@ -52,7 +52,7 @@ class TopicNode extends Component {
             ));
             questionToggle = (
                 <span className="questionToggle">
-                    <Button onClick={this.onToggleQuestions}>Questions</Button>
+                    <Button className="btn-secondary btn btn-default" onClick={this.onToggleQuestions}>Q</Button>
                     <Collapse in={this.state.showQuestions}>
                         <div>{questions}</div>
                     </Collapse>
@@ -60,21 +60,23 @@ class TopicNode extends Component {
             );
         }
         return (
-            <div
-                className="topicNode"
-                id={((topic.isCurrentTopic && !this.props.showingQuiz) ? 'selectedTopicNode' : '')}
-            >
-                <a href={`javascript: yt.www.watch.player.seekTo(${topic.time});`}>
-                    <div className="time">
-                        {topic.time_clean}
-                    </div>
-                    <div className="name">
-                        <ScrollingOverflow
-                            text={topic.name}
-                            elementSize={'50%'}
-                        />
-                    </div>
-                </a>
+            <div className="topicNodeAndQuestions">
+                <div
+                    className="topicNode"
+                    id={((topic.isCurrentTopic && !this.props.showingQuiz) ? 'selectedTopicNode' : '')}
+                >
+                    <a href={`javascript: yt.www.watch.player.seekTo(${topic.time});`}>
+                        <div className="time">
+                            {topic.time_clean}
+                        </div>
+                        <div className="name">
+                            <ScrollingOverflow
+                                text={topic.name}
+                                elementSize={'50%'}
+                            />
+                        </div>
+                    </a>
+                </div>
                 {questionToggle}
             </div>
         );

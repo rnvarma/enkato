@@ -19,7 +19,6 @@ export default class TopicQuestion extends Component {
             <div className="topicQuestion" onClick={this.onClick}>
                 <DotDotDot clamp={2}>
                     <span className="topicQuesitonTitle">{question.title}</span>
-                    <span className="topicQuestionText">{question.text}</span>
                 </DotDotDot>
             </div>
         );
