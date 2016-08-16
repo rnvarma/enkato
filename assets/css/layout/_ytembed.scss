@@ -161,6 +161,29 @@ $closeBtnSize: 34px;
         background-color: white;
     }
 
+    .questionTopicArea {
+        -webkit-box-shadow: inset 1px 1px 5px 0px rgba(0,0,0,0.37);
+        -moz-box-shadow: inset 1px 1px 5px 0px rgba(0,0,0,0.37);
+        box-shadow: inset 1px 1px 5px 0px rgba(0,0,0,0.37);
+
+        background-color: $main-bg-shadow;
+    }
+
+    .topicQuestion {
+        padding: 10px 15px;
+        border-bottom: 1px solid white;
+
+        &:hover {
+            cursor: pointer;
+            background-color: $main-bg-shadow-hover;
+        }
+
+        &:active {
+            cursor: pointer;
+            background-color: $main-bg-shadow-active;
+        }
+    }
+
     &.active {
         left: 0;
 
@@ -208,7 +231,6 @@ $closeBtnSize: 34px;
             background-color: white;
 
             .topicNode {
-                border-bottom: 1px solid #EEF1F7;
                 padding: 10px 15px;
             }
         }

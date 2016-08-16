@@ -42,4 +42,9 @@ $panel-hover-bg: #FBFBFB; // Previously hover-grey
 $panel-active-bg: darken($panel-hover-bg, 2%);
 $deep-panel: darken($panel-active-bg, 1%);
 
+$blue-bg: lighten($base-dark, 50%);
+
 $main-bg-shadow: transparentize($base-dark, 0.8);
+
+$main-bg-shadow-hover: transparentize($base-dark, 0.75);
+$main-bg-shadow-active: transparentize($base-dark, 0.6);

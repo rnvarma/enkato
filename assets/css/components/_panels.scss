@@ -93,6 +93,10 @@
     color: $base-dark;
     padding: 10px 15px;
 
+    &:last-of-type {
+        border-bottom: 1px solid $base-bg !important;
+    }
+
     &#selectedTopicNode {
         background-color: $secondary-accent;
         color: $blank;

@@ -53,7 +53,7 @@ class TopicNode extends Component {
             questionToggle = (
                 <span className="questionToggle">
                     <Button className="btn-secondary btn btn-default" onClick={this.onToggleQuestions}>Q</Button>
-                    <Collapse in={this.state.showQuestions}>
+                    <Collapse className="questionTopicArea" in={this.state.showQuestions}>
                         <div>{questions}</div>
                     </Collapse>
                 </span>
