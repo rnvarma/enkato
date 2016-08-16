@@ -27,8 +27,10 @@ module.exports = {
                 'Authorization': 'Token ' + localStorage.token
             } : {},
             beforeSend: function (xhr) {
-                xhr.withCredentials = true;
-                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                if (!embed) {
+                    xhr.withCredentials = true;
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
             },
             success: function(data){
                 if (opt.success) opt.success(data)
