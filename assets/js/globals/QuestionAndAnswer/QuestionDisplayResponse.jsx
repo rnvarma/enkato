@@ -124,7 +124,7 @@ export default class QuestionDisplayResponse extends Component {
 
         let link;
         const innerLink = (
-            <div>
+            <div className="studentLink">
                 <img role="presentation" src={djangoImageLinkHandler(response.user.image || 'blank_avatar.jpg')} />
                 <span className="studentName">{response.user.first_name} {response.user.last_name}</span>
             </div>
