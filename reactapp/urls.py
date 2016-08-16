@@ -20,8 +20,8 @@ from rest_framework.authtoken.views import obtain_auth_token
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^obtain-auth-token/$', obtain_auth_token),
+    url(r'^admin', admin.site.urls),
+    url(r'^obtain-auth-token$', obtain_auth_token),
     url(r'^', include('analytics.urls')),
     url(r'^', include('authentication.urls')),
     url(r'^', include('backend.urls')),
