@@ -130,7 +130,7 @@ export default class QuestionDisplayResponse extends Component {
             </div>
         );
         if (this.props.embed) {
-            link = <a href={`localhost:8000/userprofile/${response.user.id}`}>{innerLink}</a>;
+            link = <a href={`http://enkato.com/userprofile/${response.user.id}`}>{innerLink}</a>;
         } else {
             link = <Link to={`/userprofile/${response.user.id}`}>{innerLink}</Link>;
         }

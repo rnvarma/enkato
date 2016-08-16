@@ -1,4 +1,6 @@
 body {
+    overflow-x: scroll;
+
     &.topiclist-active {
         margin-left: 25%;
     }

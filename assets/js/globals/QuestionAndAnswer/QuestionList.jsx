@@ -29,7 +29,7 @@ const QuestionList = ({ questions, currentQuestion, showingSeries, setCurrentQue
         return (
             <div
                 key={index}
-                className={`${question.id === currentQuestion.id ? 'selected ' : ''}questionPreview`}
+                className={`${currentQuestion && question.id === currentQuestion.id ? 'selected ' : ''}questionPreview`}
                 onClick={setQuestion}
             >
                 <div className="questionPreviewHeader smallTitle">

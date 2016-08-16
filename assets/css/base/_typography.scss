@@ -1,19 +1,19 @@
-body {
+body:not(#body) {
     font-family: $base-font !important;
     font-size: $base-size;
     color: $base-font-color;
     letter-spacing: $base-spacing;
     font-weight: $base-weight;
-}
+    
+    a {
+        font-weight: $bold-weight;
+        color: $base-dark;
+        cursor: pointer;
 
-a {
-    font-weight: $bold-weight;
-    color: $base-dark;
-    cursor: pointer;
-
-    &:hover, &:active, &:focus {
-        text-decoration: none;
-        outline: 0;
+        &:hover, &:active, &:focus {
+            text-decoration: none;
+            outline: 0;
+        }
     }
 }
 
