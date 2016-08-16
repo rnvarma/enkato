@@ -5,10 +5,17 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 from backend.models import *
 
+
+
 class Register(APIView):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(Register, self).dispatch(request, *args, **kwargs)
+
     def post(self, request):
         username = request.POST.get('username')
         email = request.POST.get('email')
