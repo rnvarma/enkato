@@ -51,6 +51,8 @@ export default class QuestionView extends Component {
 
         if (this.props.currentQuestion !== nextProps.currentQuestion) {
             this.setCurrentQuestion(nextProps.currentQuestion, true);
+        } else if (this.props.currentQuestion) { /* make sure this isn't initial load */
+            this.scrollToQuestionArea();
         }
 
         if (this.props.topicList !== nextProps.topicList) {
@@ -460,12 +462,17 @@ export default class QuestionView extends Component {
     }
 
     scrollToQuestionArea = () => {
+        this.setState({
+            filterTopic: null,
+        }, this.filterQuestions);
         const $questionArea = $('.questionArea');
         const top = $questionArea.offset().top;
-        $('html, body').animate({ scrollTop: top }, 500);
-        const $questionList = $questionArea.find('.questionList');
-        const distanceToScroll = $questionList.children('.selected').offset().top - $questionList.offset().top;
-        $questionList.animate({ scrollTop: $questionList.scrollTop() + distanceToScroll }, 'slow');
+        const distance = Math.abs($(window).scrollTop() - top);
+        $('html, body').animate({ scrollTop: top - 50 }, Math.min(Math.max(distance, 200), 500), () => {
+            const $questionList = $questionArea.find('.questionList');
+            const distanceToScroll = $questionList.children('.selected').offset().top - $questionList.offset().top;
+            $questionList.animate({ scrollTop: $questionList.scrollTop() + distanceToScroll }, Math.min(Math.abs(distanceToScroll) * 2, 500));
+        });
     }
 
     makeQuestionFromFilter = () => {

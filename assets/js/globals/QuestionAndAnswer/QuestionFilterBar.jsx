@@ -73,6 +73,7 @@ export default class QuestionFilterBar extends Component {
             generalOption = <option value="0">General ({generalCount})</option>;
         }
 
+        const filterValue = this.props.filterTopic === null ? 'all' : this.props.filterTopic; 
         return (
             <Row className="questionFilterBar form-inline">
                 {viewAll}
@@ -88,8 +89,8 @@ export default class QuestionFilterBar extends Component {
                 >
                     Unresolved
                 </div>
-                <FormControl onChange={this.props.onTopicChange} componentClass="select">
-                    <option>All Topics</option>
+                <FormControl onChange={this.props.onTopicChange} componentClass="select" value={filterValue}>
+                    <option value="all">All Topics</option>
                     {generalOption}
                     {options}
                 </FormControl>
