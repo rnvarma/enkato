@@ -8,6 +8,7 @@ import Tab from 'react-bootstrap/lib/Tab';
 import RegisterModal from 'js/globals/RegisterModal';
 import YouTubeTopicList from 'js/extension/YouTubeTopicList';
 import QuestionView from 'js/globals/QuestionAndAnswer/QuestionView';
+import TopicQuestion from 'js/extension/TopicQuestion';
 
 export default class YouTubeQuestionWrapper extends Component {
     static propTypes = {
@@ -21,6 +22,7 @@ export default class YouTubeQuestionWrapper extends Component {
         topicListOpen: false,
         topicListWithQuestions: this.props.topicList, /* initial value */
         generalTopicQuestions: [],
+        selectedQuestion: null,
     }
 
     onToggle = () => {
@@ -73,18 +75,36 @@ export default class YouTubeQuestionWrapper extends Component {
         });
     }
 
+    selectQuestion = (question) => {
+        this.setState({
+            selectedQuestion: question,
+        });
+    }
+
     render() {
         const toggle = this.state.topicListOpen ? <FontAwesome name="close" /> : 'Open Topics';
+
+        const faq = this.state.generalTopicQuestions.map(question => (
+            <TopicQuestion
+                key={question.id}
+                question={question}
+                selectQuestion={this.selectQuestion}
+            />
+        ));
+
         return (
             <div className="youtubeWrapper">
                 <div id="topicWrapper" className="youtubeTopicsWrapper">
                     <div className="openCloseBtn" onClick={this.onToggle}>{toggle}</div>
                     <Tabs defaultActiveKey={1} animation={false}>
-                        <Tab eventKey={1} title="Topics">
-                            <YouTubeTopicList topicObjList={this.state.topicListWithQuestions} />
+                        <Tab eventKey={1} title="Topics" id="topics">
+                            <YouTubeTopicList
+                                topicObjList={this.state.topicListWithQuestions}
+                                selectQuestion={this.selectQuestion}
+                            />
                         </Tab>
-                        <Tab eventKey={2} title="FAQ">
-                            lol, send this.state.generalTopicQuestions here
+                        <Tab eventKey={2} title="FAQ" id="faq">
+                            {faq}
                         </Tab>
                     </Tabs>
                 </div>
@@ -99,6 +119,7 @@ export default class YouTubeQuestionWrapper extends Component {
                     topicList={this.props.topicList}
                     openRegisterModal={this.openRegister}
                     passQuestions={this.passQuestions}
+                    currentQuestion={this.state.selectedQuestion}
                     embed
                 />
             </div>
