@@ -46,6 +46,10 @@
     border-top: 2px solid $bg-grey;
     padding: 10px 30px;
 
+    .studentLink {
+        display: inline-block;
+    }
+
     .studentName {
       font-weight: bold;
     }

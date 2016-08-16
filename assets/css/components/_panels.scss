@@ -236,6 +236,10 @@
     .footer {
         border-top: 1px solid $deep-panel;
         padding: 10px $content-padding;
+
+        .studentLink {
+            display: inline-block;
+        }
     }
 
     img {
