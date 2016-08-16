@@ -36,6 +36,7 @@ export default class QuestionView extends Component {
         filterTopic: null,
         addingQuestion: false,
         askQuestionText: '',
+        topicList: this.props.topicList,
     };
 
     componentDidMount() {
@@ -50,6 +51,12 @@ export default class QuestionView extends Component {
 
         if (this.props.currentQuestion !== nextProps.currentQuestion) {
             this.setCurrentQuestion(nextProps.currentQuestion, true);
+        }
+
+        if (this.props.topicList !== nextProps.topicList) {
+            this.setState({
+                topicList: nextProps.topicList,
+            });
         }
     }
 
@@ -153,10 +160,21 @@ export default class QuestionView extends Component {
             topic: newQuestion.topic,
         };
         this.questionData = [...this.questionData, newQuestion];
-        this.setState({
+
+        const newState = {
             questions: this.questionData,
             currentQuestion: newQuestion,
-        }, this.filterQuestions);
+        };
+
+        const index = this.state.topicList.findIndex(topic => topic.real_id === newQuestion.topic_pk);
+        if (index !== -1) {
+            const topicToChange = Object.assign({}, this.state.topicList[index]);
+            topicToChange.question_count += 1;
+            newState.topicList = [...this.state.topicList.slice(0, index), topicToChange, ...this.state.topicList.slice(index + 1)];
+        }
+
+        this.setState(newState, this.filterQuestions);
+
         if (this.props.passQuestions) {
             this.props.passQuestions(this.questionData);
         }
@@ -218,10 +236,21 @@ export default class QuestionView extends Component {
         const question = this.getQuestion(questionId);
         const index = this.questionData.indexOf(question);
         this.questionData.splice(index, 1);
-        this.setState({
+
+        const newState = {
             question: this.questionData,
-            currentQuestion: this.questionData[0],
-        }, this.filterQuestions);
+            currentQuestion: this.questionData[0] || null,
+        };
+
+        const topicIndex = this.state.topicList.findIndex(topic => topic.real_id === question.topic_pk);
+        if (topicIndex !== -1) {
+            const topicToChange = Object.assign({}, this.state.topicList[topicIndex]);
+            topicToChange.question_count -= 1;
+            newState.topicList = [...this.state.topicList.slice(0, topicIndex), topicToChange, ...this.state.topicList.slice(topicIndex + 1)];
+        }
+
+        this.setState(newState, this.filterQuestions);
+
         if (this.props.passQuestions) {
             this.props.passQuestions(this.questionData);
         }
@@ -269,7 +298,10 @@ export default class QuestionView extends Component {
             title: questionNewTitle,
             text: questionNewText,
         };
-        this.setState({ question: this.questionData });
+
+        this.setState({
+            question: this.questionData,
+        });
         if (this.props.passQuestions) {
             this.props.passQuestions(this.questionData);
         }
@@ -369,8 +401,33 @@ export default class QuestionView extends Component {
 
     replaceQuestion = (questionId, newQuestion) => {
         const question = this.getQuestion(questionId);
+
+        const newState = {};
+
+        const oldTopicIndex = this.state.topicList.findIndex(topic => topic.real_id === question.topic_pk);
+        const topicIndex = this.state.topicList.findIndex(topic => topic.real_id === newQuestion.topic_pk);
+        if (oldTopicIndex !== topicIndex) {
+            let arrayToSlice;
+            if (oldTopicIndex !== -1) {
+                const oldTopic = Object.assign({}, this.state.topicList[oldTopicIndex]);
+                oldTopic.question_count -= 1;
+
+                newState.topicList = [...this.state.topicList.slice(0, oldTopicIndex), oldTopic, ...this.state.topicList.slice(oldTopicIndex + 1)];
+                arrayToSlice = newState.topicList;
+            } else {
+                arrayToSlice = this.state.topicList;
+            }
+            if (topicIndex !== -1) {
+                const topicToChange = Object.assign({}, arrayToSlice[topicIndex]);
+                topicToChange.question_count += 1;
+                newState.topicList = [...arrayToSlice.slice(0, topicIndex), topicToChange, ...arrayToSlice.slice(topicIndex + 1)];
+            }
+        }
+
         $.extend(question, newQuestion);
-        this.setState({ questions: this.questionData }, this.filterQuestions);
+        newState.questions = this.questionData;
+
+        this.setState(newState, this.filterQuestions);
         if (this.props.passQuestions) {
             this.props.passQuestions(this.questionData);
         }
@@ -469,7 +526,7 @@ export default class QuestionView extends Component {
                             filterAnswered={this.state.filterAnswered}
                             filterUnanswered={this.state.filterUnanswered}
                             filterTopic={this.state.filterTopic}
-                            topicList={this.props.topicList}
+                            topicList={this.state.topicList}
                             onTopicChange={this.onTopicChange}
                             setFilter={this.setFilter}
                             toggleAnsweredFilter={this.toggleAnsweredFilter}

@@ -6,7 +6,6 @@
     "styleLoaders": ["style", "css", "sass"],
 
     "styles": {
-
         "mixins": true,
 
         "normalize": false,
