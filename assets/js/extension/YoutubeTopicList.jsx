@@ -73,6 +73,7 @@ class TopicNode extends Component {
                 <div
                     className="topicNode"
                     id={((topic.isCurrentTopic && !this.props.showingQuiz) ? 'selectedTopicNode' : '')}
+                    onClick={this.clickTopicHref}
                 >
                     <a href={`javascript: yt.www.watch.player.seekTo(${topic.time});`} onClick={this.showPlayer}>
                         <div className="time">
