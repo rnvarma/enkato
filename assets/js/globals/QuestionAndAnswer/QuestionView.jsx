@@ -463,6 +463,7 @@ export default class QuestionView extends Component {
                     </Row>
                     <div className="titledContainer">
                         <QuestionFilterBar
+                            questionCount={this.state.questions.length}
                             showingSeries={!this.props.videoUUID}
                             filter={this.state.filter}
                             filterAnswered={this.state.filterAnswered}

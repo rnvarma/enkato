@@ -7,6 +7,7 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 
 export default class QuestionFilterBar extends Component {
     static propTypes = {
+        questionCount: PropTypes.number.isRequired,
         showingSeries: PropTypes.bool.isRequired,
         filter: PropTypes.string.isRequired,
         setFilter: PropTypes.func.isRequired,
@@ -55,7 +56,22 @@ export default class QuestionFilterBar extends Component {
             );
         }
 
-        const options = this.props.topicList.map(topic => <option key={topic.real_id} value={topic.real_id}>{topic.name}</option>);
+        const topicsWithQuestions = this.props.topicList.filter(topic => topic.question_count > 0);
+        let questionCount = 0;
+        const options = [];
+        for (let i = 0; i < topicsWithQuestions.length; i++) {
+            questionCount += topicsWithQuestions[i].question_count;
+            options.push(
+                <option key={topicsWithQuestions[i].real_id} value={topicsWithQuestions[i].real_id}>
+                    {topicsWithQuestions[i].name} ({topicsWithQuestions[i].question_count})
+                </option>
+            );
+        }
+        const generalCount = this.props.questionCount - questionCount;
+        let generalOption;
+        if (generalCount) {
+            generalOption = <option value="0">General ({generalCount})</option>;
+        }
 
         return (
             <Row className="questionFilterBar form-inline">
@@ -74,7 +90,7 @@ export default class QuestionFilterBar extends Component {
                 </div>
                 <FormControl onChange={this.props.onTopicChange} componentClass="select">
                     <option>All Topics</option>
-                    <option value="0">General</option>
+                    {generalOption}
                     {options}
                 </FormControl>
                 <div className="filterQuery">

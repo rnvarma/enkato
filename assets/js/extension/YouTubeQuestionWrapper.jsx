@@ -84,30 +84,34 @@ export default class YouTubeQuestionWrapper extends Component {
     render() {
         const toggle = this.state.topicListOpen ? <FontAwesome name="close" /> : 'Open Topics';
 
-        const faq = this.state.generalTopicQuestions.map(question => (
-            <TopicQuestion
-                key={question.id}
-                question={question}
-                selectQuestion={this.selectQuestion}
-            />
-        ));
+        let faqTab;
+        if (this.state.generalTopicQuestions.length > 0) {
+            const faq = this.state.generalTopicQuestions.map(question => (
+                <TopicQuestion
+                    key={question.id}
+                    question={question}
+                    selectQuestion={this.selectQuestion}
+                />
+            ));
+            faqTab = (
+                <Tab tabClassName="faqTab" eventKey={2} title="FAQ">
+                    <div className="faqList">{faq}</div>
+                </Tab>
+            );
+        }
 
         return (
             <div className="youtubeWrapper">
                 <div id="topicWrapper" className="youtubeTopicsWrapper">
                     <div className="openCloseBtn" onClick={this.onToggle}>{toggle}</div>
-                    <Tabs defaultActiveKey={1} animation={false}>
-                        <Tab eventKey={1} title="Topics" id="topics">
+                    <Tabs defaultActiveKey={1} animation={false} id="topic-faq-tabs">
+                        <Tab tabClassName={`${faqTab ? 'split ' : ''}topicsTab`} eventKey={1} title="Topics">
                             <YouTubeTopicList
                                 topicObjList={this.state.topicListWithQuestions}
                                 selectQuestion={this.selectQuestion}
                             />
                         </Tab>
-                        <Tab eventKey={2} title="FAQ" id="faq">
-                            <div className="faqList">
-                                {faq}
-                            </div>
-                        </Tab>
+                        {faqTab}
                     </Tabs>
                 </div>
                 <RegisterModal

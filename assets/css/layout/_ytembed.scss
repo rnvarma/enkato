@@ -143,6 +143,8 @@ body {
     }
 }
 
+$closeBtnSize: 34px;
+
 #topicWrapper {
     position: fixed;
     left: -24%;
@@ -162,8 +164,20 @@ body {
         left: 0;
 
         .openCloseBtn {
-            width: 35px;
+            width: #{$closeBtnSize};
+            left: calc(100% - #{$closeBtnSize});
         }
+    }
+
+    .topicsTab {
+        width: calc(100% - #{$closeBtnSize});
+        &.split {
+            width: calc(50% - #{$closeBtnSize / 2});
+        }
+    }
+
+    .faqTab {
+        width: calc(50% - #{$closeBtnSize / 2});
     }
 
     .openCloseBtn {

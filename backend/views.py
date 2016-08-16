@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.db.models import Count
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -133,6 +134,7 @@ class Serializer(object):
         data["time_clean"] = convert_seconds_to_duration(topic.time)
         data["id"] = topic.uuid
         data['real_id'] = topic.id
+        data['question_count'] = getattr(topic, 'questions__count', None)
         data["isCurrentTopic"] = False  # used in frontend
         data["committed"] = True;
         return data
@@ -261,9 +263,11 @@ class SeriesVideoData(APIView):
 
 
 class VideoData(APIView):
+    """ Used at /1/v/<v_uuid> """
+
     def get(self, request, v_uuid):
         video = Video.objects.get(uuid=v_uuid)
-        topicList = video.topics.all().order_by('time')
+        topicList = list(video.topics.order_by('time').annotate(Count('questions')))
         frontendTList = map(Serializer.serialize_topic, topicList)
         #get QuizList
         quizQs = video.quiz_questions.all()
@@ -274,14 +278,14 @@ class VideoData(APIView):
             'topicList': frontendTList,
             'videoData': Serializer.serialize_video(video),
             'questions': questions,
-            'numQuestions':quizQs.count()
+            'numQuestions': quizQs.count()
         })
 
 class VideoIdData(APIView):
     def get(self, request, v_id):
         try:
             video = Video.objects.get(vid_id=v_id)
-            topicList = video.topics.all().order_by('time')
+            topicList = video.topics.order_by('time').annotate(Count('questions'))
             frontendTList = map(Serializer.serialize_topic, topicList)
             return Response({
                 'inDatabase': True,
@@ -290,7 +294,7 @@ class VideoIdData(APIView):
             })
         except Video.MultipleObjectsReturned:
             video = Video.objects.filter(vid_id=v_id).first()
-            topicList = video.topics.all().order_by('time')
+            topicList = video.topics.order_by('time').annotate(Count('questions'))
             frontendTList = map(Serializer.serialize_topic, topicList)
             return Response({
                 'inDatabase': True,
