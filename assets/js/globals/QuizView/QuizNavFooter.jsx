@@ -1,94 +1,106 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 
 import Button from 'react-bootstrap/lib/Button';
 
 import BottomReviewText from 'js/globals/QuizView/ReviewingQuizView/BottomReviewText';
 
-export default class QuizNavFooter extends React.Component {
-  constructor(props) {
-    super(props);
+export default class QuizNavFooter extends Component {
+    static propTypes = {
+        currentQuestion: PropTypes.number.isRequired,
+        numQuestions: PropTypes.number.isRequired,
+        numQsAnswered: PropTypes.number.isRequired,
+        quizExists: PropTypes.bool.isRequired,
+        reviewMode: PropTypes.bool.isRequired,
+        resultsPage: PropTypes.bool.isRequired,
+        isCorrect: PropTypes.bool.isRequired,
+        submitInfo: PropTypes.func.isRequired,
+        onFinishButton: PropTypes.func.isRequired,
+        nextQuestion: PropTypes.func.isRequired,
+        prevQuestion: PropTypes.func.isRequired,
+        closeModal: PropTypes.func.isRequired,
+    }
 
-    this.submitInfo = this.submitInfo.bind(this);
-  }
-
-  submitInfo(){
-    this.props.submitInfo();
-  }
+    submitInfo = () => {
+        this.props.submitInfo();
+    }
 
     render() {
-        var disableAll = this.props.resultsPage;
-        var rightButton = <div></div>
-        if(this.props.reviewMode && (this.props.currentQuestion == this.props.numQuestions -1)){
+        const disableAll = this.props.resultsPage;
+
+        let rightButton;
+        if (this.props.reviewMode && (this.props.currentQuestion === this.props.numQuestions - 1)) {
             rightButton = (
                 <Button className="finishButton" onClick={this.props.onFinishButton}>
                     Finish
                 </Button>
-            )
+            );
         } else {
             rightButton = (
                 <Button
-                    disabled={(this.props.currentQuestion == this.props.numQuestions -1) || disableAll}
+                    disabled={(this.props.currentQuestion === this.props.numQuestions - 1) || disableAll}
                     className="btn-primary"
-                    onClick={this.props.nextQuestion}>
+                    onClick={this.props.nextQuestion}
+                >
                     Next
                 </Button>
-            )
+            );
         }
 
-      let prevNextBtns;
-      if (this.props.quizExists) {
-        prevNextBtns = (
-          <span>
-            <Button
-              disabled={(this.props.currentQuestion == 0 && !this.props.reviewMode) || disableAll}
-              className="btn-secondary"
-              onClick={this.props.prevQuestion}
-            >
-              Back
-            </Button>
-            {rightButton}
-          </span>
-        );
-      }
-
-      var bottomLeftText = <div></div>
-
-      if(this.props.numQuestions != 0){
-        if(this.props.reviewMode){
-            bottomLeftText = (
-              <BottomReviewText correct={this.props.isCorrect} />
+        let prevNextBtns;
+        if (this.props.quizExists) {
+            prevNextBtns = (
+                <span>
+                    <Button
+                        disabled={(this.props.currentQuestion === 0 && !this.props.reviewMode) || disableAll}
+                        className="btn-secondary"
+                        onClick={this.props.prevQuestion}
+                    >
+                        Back
+                    </Button>
+                    {rightButton}
+                </span>
             );
-        } else if(!disableAll) {
-            if(this.props.numQsAnswered != this.props.numQuestions){
+        }
+
+        let bottomLeftText;
+        if (this.props.numQuestions !== 0) {
+            if (this.props.reviewMode) {
                 bottomLeftText = (
-                    <div className="showNumAnswered smallTitle">
-                        {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
-                    </div>
-                )
-            } else {
-                bottomLeftText = (
-                    <div>
-                        <Button
-                            className="btn-primary"
-                            onClick={this.submitInfo}>
-                            Submit
-                        </Button>
-                    </div>
-                )
+                    <BottomReviewText correct={this.props.isCorrect} />
+                );
+            } else if (!disableAll) {
+                if (this.props.numQsAnswered !== this.props.numQuestions) {
+                    bottomLeftText = (
+                        <div className="showNumAnswered smallTitle">
+                            {this.props.numQsAnswered} OF {this.props.numQuestions} ANSWERED
+                        </div>
+                    );
+                } else {
+                    bottomLeftText = (
+                        <div>
+                            <Button
+                                className="btn-primary"
+                                onClick={this.submitInfo}
+                            >
+                                Submit
+                            </Button>
+                        </div>
+                    );
+                }
             }
         }
-      }
 
-      return (
-        <div className="quizNavFooter">
-          {bottomLeftText}
-          <Button
-            className="btn-secondary"
-            onClick={this.props.closeModal}>
-            Cancel
-          </Button>
-          {prevNextBtns}
-        </div>
-      );
+        return (
+            <div className="quizNavFooter">
+                {bottomLeftText}
+                <Button
+                    className="btn-secondary"
+                    onClick={this.props.closeModal}
+                >
+                    Cancel
+                </Button>
+                {prevNextBtns}
+            </div>
+        );
     }
 }

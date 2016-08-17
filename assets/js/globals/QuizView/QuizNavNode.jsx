@@ -1,13 +1,16 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 
-class QuizNavNode extends React.Component {
-    constructor(props) {
-        super(props);
+export default class QuizNavNode extends Component {
+    static propTypes = {
+        setQuestion: PropTypes.func,
+        active: PropTypes.bool,
+        reviewMode: PropTypes.bool,
+        correct: PropTypes.bool,
+        index: PropTypes.number,
+        order: PropTypes.number,
+    };
 
-        this.onClicked = this.onClicked.bind(this);
-    }
-
-    onClicked() {
+    onClicked = () => {
         this.props.setQuestion(this.props.index);
     }
 
@@ -26,14 +29,3 @@ class QuizNavNode extends React.Component {
         );
     }
 }
-
-QuizNavNode.propTypes = {
-    setQuestion: PropTypes.func,
-    active: PropTypes.bool,
-    reviewMode: PropTypes.bool,
-    correct: PropTypes.bool,
-    index: PropTypes.number,
-    order: PropTypes.number,
-};
-
-export default QuizNavNode;
