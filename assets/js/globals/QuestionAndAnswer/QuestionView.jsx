@@ -468,7 +468,8 @@ export default class QuestionView extends Component {
         const $questionArea = $('.questionArea');
         const top = $questionArea.offset().top;
         const distance = Math.abs($(window).scrollTop() - top);
-        $('html, body').animate({ scrollTop: top - 50 }, Math.min(Math.max(distance, 200), 500), () => {
+        const offset = this.props.embed ? 50 : 0;
+        $('html, body').animate({ scrollTop: top - offset }, Math.min(Math.max(distance, 250), 500), () => {
             const $questionList = $questionArea.find('.questionList');
             const distanceToScroll = $questionList.children('.selected').offset().top - $questionList.offset().top;
             $questionList.animate({ scrollTop: $questionList.scrollTop() + distanceToScroll }, Math.min(Math.abs(distanceToScroll) * 2, 500));
@@ -539,6 +540,7 @@ export default class QuestionView extends Component {
                             toggleAnsweredFilter={this.toggleAnsweredFilter}
                             toggleUnansweredFilter={this.toggleUnansweredFilter}
                             makeQuestionFromFilter={this.makeQuestionFromFilter}
+                            embed={this.props.embed}
                         />
                         <Row className="qaContent">
                             <QuestionList

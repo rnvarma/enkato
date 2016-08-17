@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import moment from 'moment';
 
 import Col from 'react-bootstrap/lib/Col';
-import Row from 'react-bootstrap/lib/Row'; 
+import Row from 'react-bootstrap/lib/Row';
 import Button from 'react-bootstrap/lib/Button';
 
 import auth from 'auth';
@@ -181,12 +181,12 @@ export default class QuestionDisplay extends Component {
         let link;
         const innerLink = (
             <div className="studentLink">
-                <img role="presentation" src={djangoImageLinkHandler(this.props.question.student.image || 'blank_avatar.jpg') } />
+                <img role="presentation" src={djangoImageLinkHandler(this.props.question.student.image || 'blank_avatar.jpg')} />
                 <span className="studentName">{this.props.question.student.first_name} {this.props.question.student.last_name}</span>
             </div>
         );
         if (this.props.embed) {
-            link = <a href={`http://enkato.com/userprofile/${this.props.question.student.id}`}>{innerLink}</a>;
+            link = <a href={`http://enkato.com/userprofile/${this.props.question.student.id}`} target="_blank" rel="noopener noreferrer">{innerLink}</a>;
         } else {
             link = <Link to={`/userprofile/${this.props.question.student.id}`}>{innerLink}</Link>;
         }
