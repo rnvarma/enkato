@@ -39,8 +39,8 @@ QuestionNode.propTypes = {
         choiceList: PropTypes.array.isRequired,
     }).isRequired,
     selectChoice: PropTypes.func.isRequired,
-    selectedAnswer: PropTypes.object.isRequired,
-    currentQuestionResults: PropTypes.object.isRequired,
+    selectedAnswer: PropTypes.number,
+    currentQuestionResults: PropTypes.array.isRequired,
     reviewMode: PropTypes.bool.isRequired,
 };
 

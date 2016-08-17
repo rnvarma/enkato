@@ -15,7 +15,7 @@ export default class QuizForm extends Component {
         resultsPage: PropTypes.bool.isRequired,
         nextVideo: PropTypes.object.isRequired,
         completedQuizInfo: PropTypes.shape({
-            result: PropTypes.object.isRequired,
+            result: PropTypes.array.isRequired,
             numCorrect: PropTypes.number.isRequired,
         }).isRequired,
         showResultsPage: PropTypes.func.isRequired,
