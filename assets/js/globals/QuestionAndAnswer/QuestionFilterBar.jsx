@@ -19,6 +19,7 @@ export default class QuestionFilterBar extends Component {
         toggleAnsweredFilter: PropTypes.func.isRequired,
         toggleUnansweredFilter: PropTypes.func.isRequired,
         makeQuestionFromFilter: PropTypes.func.isRequired,
+        embed: PropTypes.bool,
     }
 
     setFilterFromQuery = (event) => {
@@ -35,24 +36,44 @@ export default class QuestionFilterBar extends Component {
     }
 
     render() {
-        let viewAll;
-        if (!this.props.showingSeries) {
-            viewAll = (
-                <div
-                    className={!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected btn-plain' : 'btn-plain'}
-                    onClick={this.resetFilter}
-                >
-                    View All
-                </div>
-            );
-        } else {
-            viewAll = (
-                <div
-                    className={!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected btn-plain' : 'btn-plain'}
-                    onClick={this.resetFilter}
-                >
-                    View All Series
-                </div>
+        let sortButtons;
+        if (!this.props.embed) {
+            let viewAll;
+            if (!this.props.showingSeries) {
+                viewAll = (
+                    <div
+                        className={!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected btn-plain' : 'btn-plain'}
+                        onClick={this.resetFilter}
+                    >
+                        View All
+                    </div>
+                );
+            } else {
+                viewAll = (
+                    <div
+                        className={!this.props.filter && !this.props.filterAnswered && !this.props.filterUnanswered ? 'selected btn-plain' : 'btn-plain'}
+                        onClick={this.resetFilter}
+                    >
+                        View All Series
+                    </div>
+                );
+            }
+            sortButtons = (
+                <span className="sortButtons">
+                    {viewAll}
+                    <div
+                        className={`${this.props.filterAnswered ? 'selected ' : ''}btn-plain`}
+                        onClick={this.props.toggleAnsweredFilter}
+                    >
+                        Resolved
+                    </div>
+                    <div
+                        className={`${this.props.filterUnanswered ? 'selected ' : ''}btn-plain`}
+                        onClick={this.props.toggleUnansweredFilter}
+                    >
+                        Unresolved
+                    </div>
+                </span>
             );
         }
 
@@ -73,22 +94,10 @@ export default class QuestionFilterBar extends Component {
             generalOption = <option value="0">General ({generalCount})</option>;
         }
 
-        const filterValue = this.props.filterTopic === null ? 'all' : this.props.filterTopic; 
+        const filterValue = this.props.filterTopic === null ? 'all' : this.props.filterTopic;
         return (
             <Row className="questionFilterBar form-inline">
-                {viewAll}
-                <div
-                    className={`${this.props.filterAnswered ? 'selected ' : ''}btn-plain`}
-                    onClick={this.props.toggleAnsweredFilter}
-                >
-                    Resolved
-                </div>
-                <div
-                    className={`${this.props.filterUnanswered ? 'selected ' : ''}btn-plain`}
-                    onClick={this.props.toggleUnansweredFilter}
-                >
-                    Unresolved
-                </div>
+                {sortButtons}
                 <FormControl onChange={this.props.onTopicChange} componentClass="select" value={filterValue}>
                     <option value="all">All Topics</option>
                     {generalOption}
