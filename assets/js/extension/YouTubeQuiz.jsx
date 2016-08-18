@@ -6,6 +6,8 @@ export default class YouTubeQuiz extends Component {
     static propTypes = {
         videoUUID: PropTypes.string.isRequired,
         questions: PropTypes.arrayOf(PropTypes.object).isRequired,
+        quizResponses: PropTypes.arrayOf(PropTypes.object).isRequired,
+        quizCorrect: PropTypes.number.isRequired,
     }
 
     state = {
@@ -40,6 +42,8 @@ export default class YouTubeQuiz extends Component {
                         questions={this.props.questions}
                         displayQuiz={this.state.displayQuiz}
                         closeQuiz={this.closeQuiz}
+                        quizResponses={this.props.quizResponses}
+                        quizCorrect={this.props.quizCorrect}
                     />
                 </div>
             );

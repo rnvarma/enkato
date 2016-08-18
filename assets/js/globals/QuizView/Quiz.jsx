@@ -14,6 +14,8 @@ export default class Quiz extends Component {
         questions: PropTypes.array.isRequired,
         displayQuiz: PropTypes.bool.isRequired,
         closeQuiz: PropTypes.func.isRequired,
+        quizResponses: PropTypes.arrayOf(PropTypes.object).isRequired,
+        quizCorrect: PropTypes.number.isRequired,
     }
 
     state = {
@@ -101,6 +103,8 @@ export default class Quiz extends Component {
         if (this.canSubmit()) {
             submitButton = <Button onClick={this.submit}>Submit</Button>;
         }
+
+        console.log("QUIZ PAST RESPONSES:", this.props.quizResponses, "CORRECT:", this.props.quizCorrect)
 
         return (
             <div className="quiz">

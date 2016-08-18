@@ -108,11 +108,15 @@ function injectExtension(ytId) {
 
             const quizBox = document.createElement('div');
             $('#player').replaceWith(quizBox);
-            console.log(data);
+
+            console.log("OG DATA", data);
+
             render((
                 <YouTubeQuiz
                     videoUUID={videoUUID}
                     questions={data.questions}
+                    quizResponses={data.quiz_results.responses}
+                    quizCorrect={data.quiz_results.correct}
                 />
             ), quizBox);
         });

@@ -369,7 +369,7 @@ class StudentSeriesVideoData(models.Model):
 class StudentSeriesVideoQuizQuestionData(models.Model):
     ssv_data = models.ForeignKey(StudentSeriesVideoData, related_name="quizzes_data")
     quiz_question = models.ForeignKey(QuizQuestion, related_name="responses")
-    answer = models.TextField(default="")
+    answer = models.TextField(default="")  # index?
     is_correct = models.BooleanField(default=False)
     context = models.CharField(max_length=20, default="")  # either diagnostic, post-video, unit, class, etc
     timestamp = models.DateTimeField(default=timezone.now)
