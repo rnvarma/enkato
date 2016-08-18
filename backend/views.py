@@ -56,7 +56,7 @@ class Serializer(object):
         data["total_len"] = sanetizeTime(total_time)
         data["is_creator"] = False if not request else (series.creator == request.user.customuser or request.user.is_superuser)
         data["is_subscribed"] = False if not request else bool(request.user.customuser.student_series.filter(id=series.id).count())
-        return data    
+        return data
 
     @staticmethod
     def serialize_series(series, request=None):
@@ -88,8 +88,8 @@ class Serializer(object):
         data["total_len"] = sanetizeTime(total_time)
         videos = map(lambda sv: sv.video, series_videos)
         data["videos"] = map(Serializer.serialize_video, videos)
-        
-        return data    
+
+        return data
 
     @staticmethod
     def serialize_series_videos(series):
@@ -125,7 +125,7 @@ class Serializer(object):
         data["num_topics"] = video.topics.count()
         data["num_quiz_questions"] = video.quiz_questions.count()
         return data
-        
+
     @staticmethod
     def serialize_topic(topic):
         data = {}
@@ -156,7 +156,7 @@ class Serializer(object):
         data = {}
         data["text"] = choice.choice_text
         data["id"] = choice.id
-        data["is_correct"] = choice.is_correct
+        data["is_correct"] = choice.is_correct  # this seems bad
         return data
 
 
@@ -262,6 +262,18 @@ class SeriesVideoData(APIView):
             })
 
 
+def getCorrectAnswer(choices):
+    #returns index of correct answer
+    #returns -1 if no answer was said to be correct by instructor
+    for i in range(len(choices)):
+        if(hasattr(choices[i], 'is_correct')):  # backwards compatable shit
+            if (choices[i].is_correct):
+                return i
+        elif(choices[i]['is_correct']):
+            return i
+    return -1
+
+
 class VideoData(APIView):
     """ Used at /1/v/<v_uuid> """
 
@@ -272,14 +284,41 @@ class VideoData(APIView):
         #get QuizList
         quizQs = video.quiz_questions.all()
         questions = map(Serializer.serialize_quiz_question, quizQs)
+
+        ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=video.series_video.series)
+        ssvd, _ = StudentSeriesVideoData.objects.prefetch_related('quizzes_data').get_or_create(ss_data=ssd, video=video)
+
+        quizQuestionResults = list(ssvd.quizzes_data.order_by('quiz_question'))
+
+        quizResults = None
+        numberCorrect = None
+        if len(questions) == len(quizQuestionResults):
+            quizResults = []
+            numberCorrect = 0
+            for i, q in enumerate(quizQuestionResults):
+                result = {
+                    'student_answer': int(q.answer),
+                    'correct_answer': getCorrectAnswer(questions[i]['choiceList']),  # requires same order
+                }
+                result['is_correct'] = result['student_answer'] == result['correct_answer']
+                if (result['is_correct']):
+                    numberCorrect += 1
+
+                quizResults.append(result)
+
         return Response({
             'status': True,
             'videoID': video.vid_id,
             'topicList': frontendTList,
             'videoData': Serializer.serialize_video(video),
             'questions': questions,
-            'numQuestions': quizQs.count()
+            'quiz_results': {
+                'responses': quizResults,
+                'correct': numberCorrect
+            },
+            'numQuestions': len(questions)
         })
+
 
 class VideoIdData(APIView):
     def get(self, request, v_id):
@@ -345,13 +384,6 @@ def secondify(time):
         seconds = int(timeL[0])*3600 + int(timeL[1])*60 + int(timeL[2])
     return seconds
 
-def getCorrectAnswer(choices):
-    #returns index of correct answer
-    #returns -1 if no answer was said to be correct by instructor
-    for i in range(len(choices)):
-        if(choices[i].is_correct):
-            return i
-    return -1
 
 class LoadQuizData(APIView):
     def get(self, request, s_id, v_id):
