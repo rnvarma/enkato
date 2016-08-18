@@ -285,26 +285,27 @@ class VideoData(APIView):
         quizQs = video.quiz_questions.all()
         questions = map(Serializer.serialize_quiz_question, quizQs)
 
-        ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=video.series_video.series)
-        ssvd, _ = StudentSeriesVideoData.objects.prefetch_related('quizzes_data').get_or_create(ss_data=ssd, video=video)
-
-        quizQuestionResults = list(ssvd.quizzes_data.order_by('quiz_question'))
-
         quizResults = None
         numberCorrect = None
-        if len(questions) == len(quizQuestionResults):
-            quizResults = []
-            numberCorrect = 0
-            for i, q in enumerate(quizQuestionResults):
-                result = {
-                    'student_answer': int(q.answer),
-                    'correct_answer': getCorrectAnswer(questions[i]['choiceList']),  # requires same order
-                }
-                result['is_correct'] = result['student_answer'] == result['correct_answer']
-                if (result['is_correct']):
-                    numberCorrect += 1
+        if (request.user.is_authenticated()):
+            ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=video.series_video.series)
+            ssvd, _ = StudentSeriesVideoData.objects.prefetch_related('quizzes_data').get_or_create(ss_data=ssd, video=video)
 
-                quizResults.append(result)
+            quizQuestionResults = list(ssvd.quizzes_data.order_by('quiz_question'))
+
+            if len(questions) == len(quizQuestionResults):
+                quizResults = []
+                numberCorrect = 0
+                for i, q in enumerate(quizQuestionResults):
+                    result = {
+                        'student_answer': int(q.answer),
+                        'correct_answer': getCorrectAnswer(questions[i]['choiceList']),  # requires same order
+                    }
+                    result['is_correct'] = result['student_answer'] == result['correct_answer']
+                    if (result['is_correct']):
+                        numberCorrect += 1
+
+                    quizResults.append(result)
 
         return Response({
             'status': True,
