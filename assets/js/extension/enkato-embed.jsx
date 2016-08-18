@@ -3,7 +3,10 @@ import 'css/main.scss';
 import React from 'react';
 import { render } from 'react-dom';
 
+import request from 'js/globals/HttpRequest';
+
 import YouTubeQuestionWrapper from 'js/extension/YouTubeQuestionWrapper';
+import YouTubeQuiz from 'js/extension/YouTubeQuiz';
 
 let url = window.location.href;
 
@@ -27,7 +30,7 @@ function getUrlParameter(sParam) {
 }
 
 function getTYID() {
-    let yt_id = getUrlParameter('v');
+    const yt_id = getUrlParameter('v');
     return yt_id;
 }
 
@@ -36,7 +39,7 @@ function checkURLChangeAndUpdate() {
     if (newURL !== url) {
         if (isYTWatchPage()) {
             const ytId = getTYID();
-            loadExtensionToPage(ytId);
+            injectExtension(ytId);
         }
     }
     url = newURL;
@@ -88,7 +91,7 @@ function getVideoData(videoUUID, callback) {
     });
 }
 
-function loadExtensionToPage(ytId) {
+function injectExtension(ytId) {
     findInDatabase(ytId, ({ videoUUID }) => {
         getVideoData(videoUUID, (data) => {
             const qaBox = document.createElement('div');
@@ -102,6 +105,16 @@ function loadExtensionToPage(ytId) {
                     topicList={data.topicList}
                 />
             ), qaBox);
+
+            const quizBox = document.createElement('div');
+            $('#player').replaceWith(quizBox);
+
+            render((
+                <YouTubeQuiz
+                    videoUUID={videoUUID}
+                    questions={data.questions}
+                />
+            ), quizBox);
         });
     });
 }
@@ -115,13 +128,13 @@ $(document).ready(() => {
 
     if (isYTWatchPage()) {
         const ytId = getTYID();
-        loadExtensionToPage(ytId);
+        injectExtension(ytId);
     }
 
-    (window).addEventListener('spfdone', function (event) {
+    (window).addEventListener('spfdone', () => {
         if (isYTWatchPage()) {
             const ytId = getTYID();
-            loadExtensionToPage(ytId);
+            injectExtension(ytId);
         }
     }, true);
 });
