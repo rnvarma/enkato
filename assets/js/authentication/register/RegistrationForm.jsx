@@ -84,7 +84,7 @@ class RegistrationForm extends Component {
                         } else {
                             browserHistory.push('/login');
                         }
-                    }, this.props.embed);
+                    }, () => { /* unused failure callback.. */ }, this.props.embed);
                 } else {
                     this.setState({
                         errorField: data.field,
