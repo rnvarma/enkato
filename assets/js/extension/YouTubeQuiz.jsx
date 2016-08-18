@@ -25,6 +25,12 @@ export default class YouTubeQuiz extends Component {
         $('video').off('ended');
     }
 
+    closeQuiz = () => {
+        this.setState({
+            displayQuiz: false,
+        });
+    }
+
     render() {
         if (this.props.questions) {
             console.log('qs', this.props.questions);
@@ -32,6 +38,8 @@ export default class YouTubeQuiz extends Component {
                 <div className="youtubeQuiz">
                     <Quiz
                         questions={this.props.questions}
+                        displayQuiz={this.state.displayQuiz}
+                        closeQuiz={this.closeQuiz}
                     />
                 </div>
             );

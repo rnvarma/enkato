@@ -108,7 +108,7 @@ function injectExtension(ytId) {
 
             const quizBox = document.createElement('div');
             $('#player').replaceWith(quizBox);
-
+            console.log(data);
             render((
                 <YouTubeQuiz
                     videoUUID={videoUUID}
