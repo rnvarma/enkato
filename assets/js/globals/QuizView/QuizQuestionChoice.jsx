@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
+import FontAwesome from 'react-fontawesome';
+
 export default class QuizQuestionChoice extends Component {
     static propTypes = {
         choice: PropTypes.shape({
@@ -15,9 +17,11 @@ export default class QuizQuestionChoice extends Component {
     }
 
     render() {
+        const icon = this.props.selected ? 'check-circle-o' : 'circle-o';
         return (
             <div className="quizQuestionChoice" onClick={this.select}>
-                {this.props.selected ? 'x' : 'o'}: {this.props.choice.text}
+                <FontAwesome name={icon} />
+                <span className="text">{this.props.choice.text}</span>
             </div>
         );
     }

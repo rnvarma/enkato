@@ -1,107 +1,88 @@
 import getCookie from 'js/globals/GetCookie';
 
+const embedRoot = 'http://127.0.0.1:8000'; // no trailing slash
+
 module.exports = {
-    get: function(url, opt, embed) {
+    get(url, opt, embed) {
         $.ajax({
-            url: `${embed ? 'https://www.enkato.com' : ''}${url}`,
+            url: `${embed ? embedRoot : ''}${url}`,
             dataType: 'json',
             cache: opt.cache || false,
             headers: localStorage.token ? {
-                'Authorization': 'Token ' + localStorage.token
+                'Authorization': 'Token ' + localStorage.token,
             } : {},
-            success: function(data) {
-                if (opt.success) opt.success(data)
+            success(data) {
+                if (opt.success) opt.success(data);
             },
-            error: function(xhr, status, err) {
-                if (opt.error) opt.error(xhr, status, err)
+            error(xhr, status, err) {
+                if (opt.error) opt.error(xhr, status, err);
                 else console.error(url, status, err.toString());
-            }
+            },
         });
     },
-    post: function(url, opt, embed) {
+    post(url, opt, embed) {
         $.ajax({
             type: 'POST',
-            url: `${embed ? 'https://www.enkato.com' : ''}${url}`,
+            url: `${embed ? embedRoot : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
-                'Authorization': 'Token ' + localStorage.token
+                'Authorization': 'Token ' + localStorage.token,
             } : {},
-            beforeSend: function (xhr) {
+            beforeSend(xhr) {
                 if (!embed) {
                     xhr.withCredentials = true;
-                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
                 }
             },
-            success: function(data){
-                if (opt.success) opt.success(data)
+            success(data) {
+                if (opt.success) opt.success(data);
             },
-            error: function(xhr, status, err) {
-                if (opt.error) opt.error(xhr, status, err)
+            error(xhr, status, err) {
+                if (opt.error) opt.error(xhr, status, err);
                 else console.error(url, status, err.toString());
-            }
-        })
-    },
-    patch: function(url, opt, embed) {
-        $.ajax({
-            type: 'PATCH',
-            url: `${embed ? 'https://www.enkato.com' : ''}${url}`,
-            data: opt.data || {},
-            headers: localStorage.token ? {
-                'Authorization': 'Token ' + localStorage.token
-            } : {},
-            beforeSend: function (xhr) {
-                xhr.withCredentials = true;
-                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
             },
-            success: function(data){
-                if (opt.success) opt.success(data)
-            },
-            error: function(xhr, status, err) {
-                if (opt.error) opt.error(xhr, status, err)
-                else console.error(url, status, err.toString());
-            }
-        })
+        });
     },
-    delete: function(url, opt, embed) {
+    delete(url, opt, embed) {
         $.ajax({
             type: 'DELETE',
-            url: `${embed ? 'https://www.enkato.com' : ''}${url}`,
+            url: `${embed ? embedRoot : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
-                'Authorization': 'Token ' + localStorage.token
+                'Authorization': 'Token ' + localStorage.token,
             } : {},
-            beforeSend: function (xhr) {
+            beforeSend(xhr) {
                 xhr.withCredentials = true;
-                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
             },
-            success: function(data){
-                if (opt.success) opt.success(data)
+            success(data) {
+                if (opt.success) opt.success(data);
             },
-            error: function(xhr, status, err) {
-                if (opt.error) opt.error(xhr, status, err)
+            error(xhr, status, err) {
+                if (opt.error) opt.error(xhr, status, err);
                 else console.error(url, status, err.toString());
-            }
-        })
+            },
+        });
     },
-    patch: function(url, opt, embed) {
+    patch(url, opt, embed) {
         $.ajax({
             type: 'PATCH',
-            url: `${embed ? 'https://www.enkato.com' : ''}${url}`,
+            url: `${embed ? embedRoot : ''}${url}`,
             data: opt.data || {},
             headers: localStorage.token ? {
-                'Authorization': 'Token ' + localStorage.token
+                'Authorization': 'Token ' + localStorage.token,
             } : {},
-            beforeSend: function (xhr) {
+            beforeSend(xhr) {
                 xhr.withCredentials = true;
-                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
             },
-            success: function(data){
-                if (opt.success) opt.success(data)
+            success(data) {
+                if (opt.success) opt.success(data);
             },
-            error: function(xhr, status, err) {
-                if (opt.error) opt.error(xhr, status, err)
+            error(xhr, status, err) {
+                if (opt.error) opt.error(xhr, status, err);
                 else console.error(url, status, err.toString());
-            }
-        })
-    }
-}
+            },
+        });
+    },
+};

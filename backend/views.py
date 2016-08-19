@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.db.models import Count
+from django.db.models.query import Prefetch
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -285,37 +286,42 @@ class VideoData(APIView):
         quizQs = video.quiz_questions.all()
         questions = map(Serializer.serialize_quiz_question, quizQs)
 
-        quizResults = None
-        numberCorrect = None
-        if (request.user.is_authenticated()):
-            ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=video.series_video.series)
-            ssvd, _ = StudentSeriesVideoData.objects.prefetch_related('quizzes_data').get_or_create(ss_data=ssd, video=video)
+        series = video.series_video.series
 
-            quizQuestionResults = list(ssvd.quizzes_data.order_by('quiz_question'))
+        quiz_results = None
+        number_correct = None
+        if request.user.is_authenticated():
+            ssd = StudentSeriesData.objects.filter(user=request.user.customuser, series=series).first()
+            ssvd = StudentSeriesVideoData.objects.filter(ss_data=ssd, video=video) \
+                    .prefetch_related(Prefetch('quizzes_data', queryset=StudentSeriesVideoQuizQuestionData.objects.order_by('quiz_question'))) \
+                    .first()
 
-            if len(questions) == len(quizQuestionResults):
-                quizResults = []
-                numberCorrect = 0
-                for i, q in enumerate(quizQuestionResults):
-                    result = {
-                        'student_answer': int(q.answer),
-                        'correct_answer': getCorrectAnswer(questions[i]['choiceList']),  # requires same order
-                    }
-                    result['is_correct'] = result['student_answer'] == result['correct_answer']
-                    if (result['is_correct']):
-                        numberCorrect += 1
+            if ssd and ssvd:
+                quiz_question_results = list(ssvd.quizzes_data.all())
+                if len(questions) == len(quiz_question_results):
+                    quiz_results = []
+                    number_correct = 0
+                    for i, q in enumerate(quiz_question_results):
+                        result = {
+                            'student_answer': int(q.answer),
+                            'correct_answer': getCorrectAnswer(questions[i]['choiceList']),  # requires same order
+                        }
+                        result['is_correct'] = result['student_answer'] == result['correct_answer']
+                        if (result['is_correct']):
+                            number_correct += 1
 
-                    quizResults.append(result)
+                        quiz_results.append(result)
 
         return Response({
             'status': True,
+            'seriesUUID': series.uuid,
             'videoID': video.vid_id,
             'topicList': frontendTList,
             'videoData': Serializer.serialize_video(video),
             'questions': questions,
             'quiz_results': {
-                'responses': quizResults,
-                'correct': numberCorrect
+                'responses': quiz_results,
+                'correct': number_correct
             },
             'numQuestions': len(questions)
         })

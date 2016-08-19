@@ -6,12 +6,12 @@ export default class YouTubeQuiz extends Component {
     static propTypes = {
         videoUUID: PropTypes.string.isRequired,
         questions: PropTypes.arrayOf(PropTypes.object).isRequired,
-        quizResponses: PropTypes.arrayOf(PropTypes.object).isRequired,
-        quizCorrect: PropTypes.number.isRequired,
+        quizResponses: PropTypes.arrayOf(PropTypes.object),
+        quizCorrect: PropTypes.number,
     }
 
     state = {
-        displayQuiz: true,
+        displayingQuiz: true,
         hasQuizResults: false, /* should be set by props */
     }
 
@@ -39,11 +39,13 @@ export default class YouTubeQuiz extends Component {
             return (
                 <div className="youtubeQuiz">
                     <Quiz
+                        videoUUID={this.props.videoUUID}
                         questions={this.props.questions}
-                        displayQuiz={this.state.displayQuiz}
+                        displayingQuiz={this.state.displayingQuiz}
                         closeQuiz={this.closeQuiz}
                         quizResponses={this.props.quizResponses}
                         quizCorrect={this.props.quizCorrect}
+                        embed
                     />
                 </div>
             );

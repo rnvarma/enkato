@@ -3,7 +3,11 @@ import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
+import request from 'js/globals/HttpRequest';
+
 import QuizQuestion from 'js/globals/QuizView/QuizQuestion';
+import QuizReviewQuestion from 'js/globals/QuizView/QuizReviewQuestion';
+import QuizNavigation from 'js/globals/QuizView/QuizNavigation';
 
 function countNulls(accumulator, element) {
     return element === null ? accumulator + 1 : accumulator;
@@ -11,17 +15,23 @@ function countNulls(accumulator, element) {
 
 export default class Quiz extends Component {
     static propTypes = {
+        videoUUID: PropTypes.string.isRequired,
         questions: PropTypes.array.isRequired,
-        displayQuiz: PropTypes.bool.isRequired,
+        displayingQuiz: PropTypes.bool.isRequired,
         closeQuiz: PropTypes.func.isRequired,
-        quizResponses: PropTypes.arrayOf(PropTypes.object).isRequired,
-        quizCorrect: PropTypes.number.isRequired,
+        quizResponses: PropTypes.arrayOf(PropTypes.object),
+        quizCorrect: PropTypes.number,
+        embed: PropTypes.bool,
     }
 
     state = {
         currentQuestion: 0, /* index */
         currentAnswer: null, /* index */
         answers: new Array(this.props.questions.length).fill(null),
+        reviewingQuiz: false,
+        quizResponses: this.props.quizResponses,
+        quizCorrect: this.props.quizCorrect,
+        updated: false,
     }
 
     componentDidMount() {
@@ -76,6 +86,7 @@ export default class Quiz extends Component {
                     index,
                     ...this.state.answers.slice(this.state.currentQuestion + 1),
                 ],
+                updated: true,
             });
         }
     }
@@ -90,13 +101,27 @@ export default class Quiz extends Component {
         this.props.closeQuiz();
     }
 
-    canSubmit = () => {
-        return this.state.answers.reduce(countNulls, 0) === 0;
-    }
+    canSubmit = () => this.state.updated && !this.state.reviewingQuiz && this.state.answers.reduce(countNulls, 0) === 0;
 
     submit = () => {
-        console.log("submitting quiz");
+        request.post(`/logquiz/s/notnecessary/v/${this.props.videoUUID}`, {
+            data: {
+                selectedAnswers: this.state.answers,
+            },
+            success: (data) => {
+                console.log('successfully posted quiz', data);
+                this.setState({
+                    quizResponses: data.result,
+                    quizCorrect: data.numCorrect,
+                    updated: false,
+                });
+            },
+        }, this.props.embed);
     }
+
+    toggleReview = () => this.setState({
+        reviewingQuiz: !this.state.reviewingQuiz,
+    });
 
     render() {
         let submitButton;
@@ -104,31 +129,67 @@ export default class Quiz extends Component {
             submitButton = <Button onClick={this.submit}>Submit</Button>;
         }
 
-        console.log("QUIZ PAST RESPONSES:", this.props.quizResponses, "CORRECT:", this.props.quizCorrect)
+        console.log('Number CORRECT:', this.state.quizCorrect);
+
+        let question;
+        let reviewButtonText;
+        if (!this.state.reviewingQuiz) {
+            question = (
+                <QuizQuestion
+                    question={this.props.questions[this.state.currentQuestion]}
+                    index={this.state.currentQuestion}
+                    goToChoice={this.goToChoice}
+                    currentAnswer={this.state.currentAnswer}
+                />
+            );
+
+            reviewButtonText = 'Review Quiz';
+        } else {
+            question = (
+                <QuizReviewQuestion
+                    question={this.props.questions[this.state.currentQuestion]}
+                    quizResponse={this.state.quizResponses[this.state.currentQuestion]}
+                    index={this.state.currentQuestion}
+                />
+            );
+
+            reviewButtonText = 'End Review';
+        }
+
+        let reviewButton;
+        if (this.props.quizResponses) {
+            reviewButton = (
+                <Button onClick={this.toggleReview}>
+                    {reviewButtonText}
+                </Button>
+            );
+        }
 
         return (
-            <div className="quiz">
-                <Modal show={true || this.props.displayQuiz} onHide={this.closeQuiz}>
-                    <Modal.Header closeButton>Quiz</Modal.Header>
-                    <Modal.Body>
-                        <QuizQuestion
-                            question={this.props.questions[this.state.currentQuestion]}
-                            index={this.state.currentQuestion}
-                            goToChoice={this.goToChoice}
-                            currentAnswer={this.state.currentAnswer}
-                        />
-                    </Modal.Body>
-                    <Modal.Footer>
-                        {submitButton}
-                        <Button onClick={this.previousQuestion} disabled={this.state.currentQuestion === 0}>
-                            Previous
-                        </Button>
-                        <Button onClick={this.nextQuestion} disabled={this.state.currentQuestion === this.props.questions.length - 1}>
-                            Next
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </div>
+            <Modal show={true || this.props.displayingQuiz} onHide={this.closeQuiz} dialogClassName="quiz">
+                <Modal.Header closeButton>Quiz</Modal.Header>
+                <Modal.Body>
+                    <QuizNavigation
+                        questions={this.props.questions}
+                        quizResponses={this.props.quizResponses}
+                        answers={this.state.answers}
+                        currentQuestion={this.state.currentQuestion}
+                        reviewingQuiz={this.state.reviewingQuiz}
+                        goToQuestion={this.goToQuestion}
+                    />
+                    {question}
+                </Modal.Body>
+                <Modal.Footer>
+                    {reviewButton}
+                    {submitButton}
+                    <Button onClick={this.previousQuestion} disabled={this.state.currentQuestion === 0}>
+                        Previous
+                    </Button>
+                    <Button onClick={this.nextQuestion} disabled={this.state.currentQuestion === this.props.questions.length - 1}>
+                        Next
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         );
     }
 }

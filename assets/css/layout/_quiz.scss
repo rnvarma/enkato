@@ -78,3 +78,68 @@
 .quizQuestionList{
     color:black;
 }
+
+
+// new good shit
+
+.quiz {
+    .quizNavigation {
+        display: inline-block;
+        text-align: center;
+
+        .quizNavigationNode {
+            border: 2px solid black;
+            border-bottom: none;
+            padding: 2px 3px;
+
+            &.selected {
+                font-weight: bold;
+            }
+
+            &.correct {
+                color: $primary-accent;
+            }
+
+            &.incorrect {
+                color: $alert-accent;
+            }
+
+            &.unanswered {
+                background-color: $black-active;
+            }
+
+            &.answered {
+
+            }
+            
+            &:last-child {
+                border-bottom: 2px solid black;
+            }
+        }
+    }
+
+    .quizQuestion {
+        display: inline-block;
+        vertical-align: top;
+        padding: 0 20px;
+
+        .quizQuestionChoice {
+            cursor: pointer;
+            padding: 3px 5px;
+            margin: 5px 0;
+            border-radius: 3px;
+
+            .fa {
+                padding-right: 8px;
+            }
+
+            &.correct {
+                background-color: $primary-accent;
+            }
+
+            &.incorrect {
+                background-color: $alert-accent;
+            }
+        }
+    }
+}

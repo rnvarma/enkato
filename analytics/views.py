@@ -70,10 +70,10 @@ class LogQuiz(APIView):
     def post(self, request, s_id, v_uuid):
         selectedAnswers = request.POST.getlist('selectedAnswers[]')
 
-        s = Series.objects.get(uuid=s_id)
+        v = Video.objects.get(uuid=v_uuid)
+        s = v.series_video.series
         ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=s)
 
-        v = Video.objects.get(uuid=v_uuid)
         ssvd, _ = StudentSeriesVideoData.objects.get_or_create(ss_data=ssd.id,
                                                                video=v)
 
@@ -106,7 +106,9 @@ class LogQuiz(APIView):
             quizData.save()
             result.append({
                 "studentAnswer": student_answer,
+                'student_answer': student_answer,
                 "correctAnswer": correct_answer,
+                'correct_answer': correct_answer,
                 "isCorrect": correct
             })
 

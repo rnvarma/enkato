@@ -60,10 +60,7 @@ function getYTID(url) {
 }
 
 function findInDatabase(ytId, callback) {
-    $.ajax({
-        url: `https://www.enkato.com/1/ytvalidatevideo/${ytId}`,
-        dataType: 'json',
-        cache: false,
+    request.get(`/1/ytvalidatevideo/${ytId}`, {
         success: (data) => {
             if (data.status) {
                 callback(data);
@@ -72,14 +69,11 @@ function findInDatabase(ytId, callback) {
         error: (status, err) => {
             console.error(status, err.toString());
         },
-    });
+    }, true);
 }
 
 function getVideoData(videoUUID, callback) {
-    $.ajax({
-        url: `https://www.enkato.com/1/v/${videoUUID}`,
-        dataType: 'json',
-        cache: false,
+    request.get(`/1/v/${videoUUID}`, {
         success: (data) => {
             if (data.status) {
                 callback(data);
@@ -88,7 +82,7 @@ function getVideoData(videoUUID, callback) {
         error: (status, err) => {
             console.error(status, err.toString());
         },
-    });
+    }, true);
 }
 
 function injectExtension(ytId) {
