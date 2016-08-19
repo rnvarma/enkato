@@ -31,6 +31,7 @@ export default class Quiz extends Component {
         reviewingQuiz: false,
         quizResponses: this.props.quizResponses,
         quizCorrect: this.props.quizCorrect,
+        newQuizData: false,
         updated: false,
     }
 
@@ -113,6 +114,7 @@ export default class Quiz extends Component {
                 this.setState({
                     quizResponses: data.result,
                     quizCorrect: data.numCorrect,
+                    newQuizData: true,
                     updated: false,
                 });
             },
@@ -120,6 +122,7 @@ export default class Quiz extends Component {
     }
 
     toggleReview = () => this.setState({
+        currentQuestion: 0,
         reviewingQuiz: !this.state.reviewingQuiz,
     });
 
@@ -128,8 +131,6 @@ export default class Quiz extends Component {
         if (this.canSubmit()) {
             submitButton = <Button onClick={this.submit}>Submit</Button>;
         }
-
-        console.log('Number CORRECT:', this.state.quizCorrect);
 
         let question;
         let reviewButtonText;
@@ -143,7 +144,7 @@ export default class Quiz extends Component {
                 />
             );
 
-            reviewButtonText = 'Review Quiz';
+            reviewButtonText = this.state.newQuizData ? 'Review Quiz' : 'Review Last Time';
         } else {
             question = (
                 <QuizReviewQuestion
@@ -159,9 +160,15 @@ export default class Quiz extends Component {
         let reviewButton;
         if (this.props.quizResponses) {
             reviewButton = (
-                <Button onClick={this.toggleReview}>
-                    {reviewButtonText}
-                </Button>
+                <span>
+                    <span className="quizCorrect">
+                        {this.state.newQuizData ? '' : 'Last time: '}
+                        {this.state.quizCorrect} of {this.props.questions.length} correct
+                    </span>
+                    <Button onClick={this.toggleReview}>
+                        {reviewButtonText}
+                    </Button>
+                </span>
             );
         }
 

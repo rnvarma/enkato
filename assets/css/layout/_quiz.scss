@@ -91,6 +91,7 @@
             border: 2px solid black;
             border-bottom: none;
             padding: 2px 3px;
+            cursor: pointer;
 
             &.selected {
                 font-weight: bold;
@@ -111,7 +112,7 @@
             &.answered {
 
             }
-            
+
             &:last-child {
                 border-bottom: 2px solid black;
             }
