@@ -11,14 +11,13 @@ export default class YouTubeQuiz extends Component {
     }
 
     state = {
-        displayingQuiz: true,
-        hasQuizResults: false, /* should be set by props */
+        displayingQuiz: false,
     }
 
     componentDidMount() {
         $('video').on('ended', () => {
             this.setState({
-                displayQuiz: true,
+                displayingQuiz: true,
             });
         });
     }
@@ -27,9 +26,9 @@ export default class YouTubeQuiz extends Component {
         $('video').off('ended');
     }
 
-    closeQuiz = () => {
+    toggleQuiz = () => {
         this.setState({
-            displayQuiz: false,
+            displayingQuiz: !this.state.displayingQuiz,
         });
     }
 
@@ -38,11 +37,12 @@ export default class YouTubeQuiz extends Component {
             console.log('qs', this.props.questions);
             return (
                 <div className="youtubeQuiz">
+                    <button onClick={this.toggleQuiz}>open quiz</button>
                     <Quiz
                         videoUUID={this.props.videoUUID}
                         questions={this.props.questions}
                         displayingQuiz={this.state.displayingQuiz}
-                        closeQuiz={this.closeQuiz}
+                        closeQuiz={this.toggleQuiz}
                         quizResponses={this.props.quizResponses}
                         quizCorrect={this.props.quizCorrect}
                         embed

@@ -102,7 +102,9 @@ export default class Quiz extends Component {
         this.props.closeQuiz();
     }
 
-    canSubmit = () => this.state.updated && !this.state.reviewingQuiz && this.state.answers.reduce(countNulls, 0) === 0;
+    /* could cache these results in state and then only change on nextProps results change */    
+    canSubmit = (unanswered = this.state.answers.reduce(countNulls, 0)) => this.state.updated && !this.state.reviewingQuiz && unanswered === 0;
+    canReset = (unanswered = this.state.answers.reduce(countNulls, 0)) => unanswered < this.state.answers.length;
 
     submit = () => {
         request.post(`/logquiz/s/notnecessary/v/${this.props.videoUUID}`, {
@@ -110,7 +112,6 @@ export default class Quiz extends Component {
                 selectedAnswers: this.state.answers,
             },
             success: (data) => {
-                console.log('successfully posted quiz', data);
                 this.setState({
                     quizResponses: data.result,
                     quizCorrect: data.numCorrect,
@@ -126,13 +127,26 @@ export default class Quiz extends Component {
         reviewingQuiz: !this.state.reviewingQuiz,
     });
 
+    resetQuiz = () => this.setState({
+        currentQuestion: 0,
+        currentAnswer: null,
+        answers: new Array(this.props.questions.length).fill(null),
+        reviewingQuiz: false,
+        updated: true,
+    });
+
     render() {
+        console.log("state", this.state);
+
+        const unanswered = this.state.answers.reduce(countNulls, 0);
+
         let submitButton;
-        if (this.canSubmit()) {
+        if (this.canSubmit(unanswered)) {
             submitButton = <Button onClick={this.submit}>Submit</Button>;
         }
 
         let question;
+        let resetButtonText;
         let reviewButtonText;
         if (!this.state.reviewingQuiz) {
             question = (
@@ -145,6 +159,7 @@ export default class Quiz extends Component {
             );
 
             reviewButtonText = this.state.newQuizData ? 'Review Quiz' : 'Review Last Time';
+            resetButtonText = 'Reset Quiz';
         } else {
             question = (
                 <QuizReviewQuestion
@@ -155,10 +170,11 @@ export default class Quiz extends Component {
             );
 
             reviewButtonText = 'End Review';
+            resetButtonText = 'Retake Quiz';
         }
 
         let reviewButton;
-        if (this.props.quizResponses) {
+        if (this.state.quizResponses) {
             reviewButton = (
                 <span>
                     <span className="quizCorrect">
@@ -172,13 +188,22 @@ export default class Quiz extends Component {
             );
         }
 
+        let resetButton;
+        if (this.canReset(unanswered)) {
+            resetButton = (
+                <Button onClick={this.resetQuiz}>
+                    {resetButtonText}
+                </Button>
+            );
+        }
+
         return (
-            <Modal show={true || this.props.displayingQuiz} onHide={this.closeQuiz} dialogClassName="quiz">
+            <Modal show={this.props.displayingQuiz} onHide={this.closeQuiz} dialogClassName="quiz">
                 <Modal.Header closeButton>Quiz</Modal.Header>
                 <Modal.Body>
                     <QuizNavigation
                         questions={this.props.questions}
-                        quizResponses={this.props.quizResponses}
+                        quizResponses={this.state.quizResponses}
                         answers={this.state.answers}
                         currentQuestion={this.state.currentQuestion}
                         reviewingQuiz={this.state.reviewingQuiz}
@@ -187,6 +212,7 @@ export default class Quiz extends Component {
                     {question}
                 </Modal.Body>
                 <Modal.Footer>
+                    {resetButton}
                     {reviewButton}
                     {submitButton}
                     <Button onClick={this.previousQuestion} disabled={this.state.currentQuestion === 0}>

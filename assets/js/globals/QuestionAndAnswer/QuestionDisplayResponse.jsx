@@ -114,7 +114,7 @@ export default class QuestionDisplayResponse extends Component {
         const isOwner = currentUser && currentUser.id === response.user.id;
         const isInstructor = currentUser && currentUser.id === this.props.question.video.creator;
 
-        let responseClass;
+        let responseClass = '';
         if (response.is_instructor) {
             responseClass = 'instructor ';
         } else if (response.endorsed) {

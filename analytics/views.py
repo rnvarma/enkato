@@ -74,8 +74,7 @@ class LogQuiz(APIView):
         s = v.series_video.series
         ssd, _ = StudentSeriesData.objects.get_or_create(user=request.user.customuser, series=s)
 
-        ssvd, _ = StudentSeriesVideoData.objects.get_or_create(ss_data=ssd.id,
-                                                               video=v)
+        ssvd, _ = StudentSeriesVideoData.objects.get_or_create(ss_data=ssd, video=v)
 
         quizQuestions = v.quiz_questions.all()
 
@@ -109,7 +108,8 @@ class LogQuiz(APIView):
                 'student_answer': student_answer,
                 "correctAnswer": correct_answer,
                 'correct_answer': correct_answer,
-                "isCorrect": correct
+                "isCorrect": correct,
+                'is_correct': correct,
             })
 
         ssvd.save()
