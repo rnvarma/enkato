@@ -1,6 +1,6 @@
 import getCookie from 'js/globals/GetCookie';
 
-const embedRoot = 'http://127.0.0.1:8000'; // no trailing slash
+const embedRoot = 'http://127.0.0.1:8000'; //'https://enkato.com'; // no trailing slash
 
 module.exports = {
     get(url, opt, embed) {

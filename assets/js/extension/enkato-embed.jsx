@@ -101,10 +101,8 @@ function injectExtension(ytId) {
             ), qaBox);
 
             const quizBox = document.createElement('div');
-            $('#player').replaceWith(quizBox);
-
-            console.log("OG DATA", data);
-
+            $(quizBox).insertBefore('#player');
+            console.log('test');
             render((
                 <YouTubeQuiz
                     videoUUID={videoUUID}

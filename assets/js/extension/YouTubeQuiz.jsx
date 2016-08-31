@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 
 import Quiz from 'js/globals/QuizView/Quiz';
+import RegisterModal from 'js/globals/RegisterModal';
+import auth from 'auth';
 
 export default class YouTubeQuiz extends Component {
     static propTypes = {
@@ -12,6 +14,8 @@ export default class YouTubeQuiz extends Component {
 
     state = {
         displayingQuiz: false,
+        displayingRegister: false,
+        registerCallback: function empty() { },
     }
 
     componentDidMount() {
@@ -27,22 +31,53 @@ export default class YouTubeQuiz extends Component {
     }
 
     toggleQuiz = () => {
-        this.setState({
-            displayingQuiz: !this.state.displayingQuiz,
-        });
+        if (!this.state.displayingQuiz) {
+            this.openQuiz();
+        } else {
+            this.setState({
+                displayingQuiz: false,
+            });
+        }
     }
+
+    // checks auth before opening
+    openQuiz = () => {
+        if (auth.loggedIn()) {
+            this.setState({
+                displayingQuiz: true,
+            });
+        } else {
+            this.setState({
+                displayingRegister: true,
+                registerCallback: () => {
+                    this.setState({
+                        displayingQuiz: true,
+                    });
+                },
+            });
+        }
+    }
+
+    closeRegisterModal = () => this.setState({
+        displayingRegister: false,
+    });
 
     render() {
         if (this.props.questions) {
-            console.log('qs', this.props.questions);
             return (
-                <div className="youtubeQuiz">
-                    <button onClick={this.toggleQuiz}>open quiz</button>
+                <div className="youtubeQuiz" style={{ height: 0 }}>
+                    <RegisterModal
+                        registerModalOpen={this.state.displayingRegister}
+                        closeRegisterModal={this.closeRegisterModal}
+                        callbackFn={this.state.registerCallback}
+                        embed
+                    />
                     <Quiz
                         videoUUID={this.props.videoUUID}
                         questions={this.props.questions}
                         displayingQuiz={this.state.displayingQuiz}
                         closeQuiz={this.toggleQuiz}
+                        initialShowingSplash={this.props.quizResponses && this.props.quizResponses.length > 0}
                         quizResponses={this.props.quizResponses}
                         quizCorrect={this.props.quizCorrect}
                         embed
@@ -51,6 +86,6 @@ export default class YouTubeQuiz extends Component {
             );
         }
 
-        return <div>loading quiz questions</div>;
+        return <span>loading quiz questions</span>;
     }
 }

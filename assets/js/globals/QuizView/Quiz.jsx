@@ -17,6 +17,7 @@ export default class Quiz extends Component {
     static propTypes = {
         videoUUID: PropTypes.string.isRequired,
         questions: PropTypes.array.isRequired,
+        initialShowingSplash: PropTypes.bool.isRequired,
         displayingQuiz: PropTypes.bool.isRequired,
         closeQuiz: PropTypes.func.isRequired,
         quizResponses: PropTypes.arrayOf(PropTypes.object),
@@ -25,6 +26,7 @@ export default class Quiz extends Component {
     }
 
     state = {
+        showingSplash: this.props.initialShowingSplash,
         currentQuestion: 0, /* index */
         currentAnswer: null, /* index */
         answers: new Array(this.props.questions.length).fill(null),
@@ -38,25 +40,29 @@ export default class Quiz extends Component {
     componentDidMount() {
         // see http://keycode.info/
         $(document).on('keydown', (e) => {
-            if (e.keyCode === 39 || e.keyCode === 78) { // left or p
-                e.preventDefault(); // avoid page scroll
-                this.nextQuestion();
-            } else if (e.keyCode === 37 || e.keyCode === 80) { // right or n
-                e.preventDefault();
-                this.previousQuestion();
-            } else if (e.keyCode === 38) { // up
-                e.preventDefault(); // avoid page scroll
-                this.previousChoice();
-            } else if (e.keyCode === 40) {
-                e.preventDefault();
-                this.nextChoice();
-            } else if (49 <= e.keyCode && e.keyCode <= 57) { // 1-9 keys
-                e.preventDefault(); // avoid video time segment jumps
-                this.goToChoice(e.keyCode - 49);
-            } else if (e.keyCode === 13) { // enter
-                e.preventDefault();
-                if (this.canSubmit()) {
-                    this.submit();
+            if (this.props.displayingQuiz) {
+                if (e.keyCode === 39 || e.keyCode === 78) { // left or p
+                    e.preventDefault(); // avoid page scroll
+                    this.nextQuestion();
+                } else if (e.keyCode === 37 || e.keyCode === 80) { // right or n
+                    e.preventDefault();
+                    this.previousQuestion();
+                } else if (!this.state.reviewingQuiz) {
+                    if (e.keyCode === 38) { // up
+                        e.preventDefault(); // avoid page scroll
+                        this.previousChoice();
+                    } else if (e.keyCode === 40) {
+                        e.preventDefault();
+                        this.nextChoice();
+                    } else if (49 <= e.keyCode && e.keyCode <= 57) { // 1-9 keys
+                        e.preventDefault(); // avoid video time segment jumps
+                        this.goToChoice(e.keyCode - 49);
+                    } else if (e.keyCode === 13) { // enter
+                        e.preventDefault();
+                        if (this.canSubmit()) {
+                            this.submit();
+                        }
+                    }
                 }
             }
         });
@@ -102,12 +108,12 @@ export default class Quiz extends Component {
         this.props.closeQuiz();
     }
 
-    /* could cache these results in state and then only change on nextProps results change */    
+    /* could cache these results in state and then only change on nextProps results change */
     canSubmit = (unanswered = this.state.answers.reduce(countNulls, 0)) => this.state.updated && !this.state.reviewingQuiz && unanswered === 0;
     canReset = (unanswered = this.state.answers.reduce(countNulls, 0)) => unanswered < this.state.answers.length;
 
     submit = () => {
-        request.post(`/logquiz/s/notnecessary/v/${this.props.videoUUID}`, {
+        request.post(`/logquiz/s/blank/v/${this.props.videoUUID}`, {
             data: {
                 selectedAnswers: this.state.answers,
             },
@@ -117,6 +123,7 @@ export default class Quiz extends Component {
                     quizCorrect: data.numCorrect,
                     newQuizData: true,
                     updated: false,
+                    showingSplash: true,
                 });
             },
         }, this.props.embed);
@@ -133,73 +140,94 @@ export default class Quiz extends Component {
         answers: new Array(this.props.questions.length).fill(null),
         reviewingQuiz: false,
         updated: true,
+        showingSplash: false,
     });
 
+    toggleSplash = () => this.setState({
+        showingSplash: !this.state.showingSplash,
+    })
+
     render() {
-        console.log("state", this.state);
+        let modalBody;
+        let modalFooter;
+        if (this.state.showingSplash && !this.state.reviewingQuiz) {
+            if (this.state.newQuizData) {
+                modalBody = (
+                    <Modal.Body>
+                        {this.state.newQuizData ? 'Y' : 'Last time: y'}ou answered {this.state.quizCorrect} of {this.state.quizResponses.length} correctly.
+                    </Modal.Body>
+                );
+            } else {
+                modalBody = (
+                    <Modal.Body>
+                        You answered {this.state.quizCorrect} of {this.state.quizResponses.length}
+                    </Modal.Body>
+                );
+            }
 
-        const unanswered = this.state.answers.reduce(countNulls, 0);
-
-        let submitButton;
-        if (this.canSubmit(unanswered)) {
-            submitButton = <Button onClick={this.submit}>Submit</Button>;
-        }
-
-        let question;
-        let resetButtonText;
-        let reviewButtonText;
-        if (!this.state.reviewingQuiz) {
-            question = (
-                <QuizQuestion
-                    question={this.props.questions[this.state.currentQuestion]}
-                    index={this.state.currentQuestion}
-                    goToChoice={this.goToChoice}
-                    currentAnswer={this.state.currentAnswer}
-                />
+            modalFooter = (
+                <Modal.Footer>
+                    <Button onClick={this.toggleReview}>Review {this.state.newQuizData ? 'Quiz' : 'Last Time'}</Button>
+                    <Button onClick={this.toggleSplash}>Retake Quiz</Button>
+                </Modal.Footer>
             );
-
-            reviewButtonText = this.state.newQuizData ? 'Review Quiz' : 'Review Last Time';
-            resetButtonText = 'Reset Quiz';
         } else {
-            question = (
-                <QuizReviewQuestion
-                    question={this.props.questions[this.state.currentQuestion]}
-                    quizResponse={this.state.quizResponses[this.state.currentQuestion]}
-                    index={this.state.currentQuestion}
-                />
-            );
+            const unanswered = this.state.answers.reduce(countNulls, 0);
 
-            reviewButtonText = 'End Review';
-            resetButtonText = 'Retake Quiz';
-        }
+            let submitButton;
+            if (this.canSubmit(unanswered)) {
+                submitButton = <Button onClick={this.submit}>Submit</Button>;
+            }
 
-        let reviewButton;
-        if (this.state.quizResponses) {
-            reviewButton = (
-                <span>
-                    <span className="quizCorrect">
-                        {this.state.newQuizData ? '' : 'Last time: '}
-                        {this.state.quizCorrect} of {this.props.questions.length} correct
+            let question;
+            let resetButtonText;
+            let reviewButtonText;
+            if (!this.state.reviewingQuiz) {
+                question = (
+                    <QuizQuestion
+                        question={this.props.questions[this.state.currentQuestion]}
+                        index={this.state.currentQuestion}
+                        goToChoice={this.goToChoice}
+                        currentAnswer={this.state.currentAnswer}
+                    />
+                );
+
+                reviewButtonText = this.state.newQuizData ? 'Review Quiz' : 'Review Last Time';
+                resetButtonText = 'Reset Quiz';
+            } else {
+                question = (
+                    <QuizReviewQuestion
+                        question={this.props.questions[this.state.currentQuestion]}
+                        quizResponse={this.state.quizResponses[this.state.currentQuestion]}
+                        index={this.state.currentQuestion}
+                    />
+                );
+
+                reviewButtonText = 'End Review';
+                resetButtonText = 'Retake Quiz';
+            }
+
+            let reviewButton;
+            if (this.state.quizResponses) {
+                reviewButton = (
+                    <span>
+                        <Button onClick={this.toggleReview}>
+                            {reviewButtonText}
+                        </Button>
                     </span>
-                    <Button onClick={this.toggleReview}>
-                        {reviewButtonText}
+                );
+            }
+
+            let resetButton;
+            if (this.canReset(unanswered) || this.state.reviewingQuiz) {
+                resetButton = (
+                    <Button onClick={this.resetQuiz}>
+                        {resetButtonText}
                     </Button>
-                </span>
-            );
-        }
+                );
+            }
 
-        let resetButton;
-        if (this.canReset(unanswered)) {
-            resetButton = (
-                <Button onClick={this.resetQuiz}>
-                    {resetButtonText}
-                </Button>
-            );
-        }
-
-        return (
-            <Modal show={this.props.displayingQuiz} onHide={this.closeQuiz} dialogClassName="quiz">
-                <Modal.Header closeButton>Quiz</Modal.Header>
+            modalBody = (
                 <Modal.Body>
                     <QuizNavigation
                         questions={this.props.questions}
@@ -211,6 +239,9 @@ export default class Quiz extends Component {
                     />
                     {question}
                 </Modal.Body>
+            );
+
+            modalFooter = (
                 <Modal.Footer>
                     {resetButton}
                     {reviewButton}
@@ -222,6 +253,14 @@ export default class Quiz extends Component {
                         Next
                     </Button>
                 </Modal.Footer>
+            );
+        }
+
+        return (
+            <Modal show={this.props.displayingQuiz} onHide={this.closeQuiz} dialogClassName="quiz">
+                <Modal.Header closeButton>Quiz</Modal.Header>
+                {modalBody}
+                {modalFooter}
             </Modal>
         );
     }
